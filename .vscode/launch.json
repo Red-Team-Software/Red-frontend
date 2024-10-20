@@ -1,0 +1,12 @@
+{
+	"version": "1.0.0",
+	"configurations": [
+		{
+			"name": "[DEV] GoDeli",
+			"request": "launch",
+			"type": "dart",
+			"args": ["--target", "lib/main.dart"],
+			"program": "lib/main.dart"
+		}
+	]
+}
