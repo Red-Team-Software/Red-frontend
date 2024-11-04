@@ -1,3 +1,2 @@
-
-export 'package:myapp/presentation/screens/Cart/cart_screen.dart';
-export  'package:myapp/presentation/screens/Home/home_screen.dart';
+export 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
+export 'package:GoDeli/presentation/screens/Home/home_screen.dart';

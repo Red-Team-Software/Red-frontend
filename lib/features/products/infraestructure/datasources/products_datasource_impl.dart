@@ -1,13 +1,11 @@
+import 'package:GoDeli/feature/product/domain/datasource/products_datasource.dart';
+import 'package:GoDeli/feature/product/domain/product.dart';
 
-import 'package:myapp/feature/product/domain/datasource/products_datasource.dart';
-import 'package:myapp/feature/product/domain/product.dart';
-
-class ProductsDatasourceImpl implements ProductsDatasource{
-
+class ProductsDatasourceImpl implements ProductsDatasource {
   @override
   Future<Product> getProductById(String id) {
     // TODO: implement getProductById
-    
+
     throw UnimplementedError();
   }
 

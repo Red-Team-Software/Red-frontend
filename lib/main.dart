@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/presentation/core/router/app_router.dart';
-import 'package:myapp/presentation/core/theme/theme.dart';
+import 'package:GoDeli/presentation/core/router/app_router.dart';
+import 'package:GoDeli/presentation/core/theme/theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const GoDeli());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GoDeli extends StatelessWidget {
+  const GoDeli({super.key});
 
   // This widget is the root of your application.
   @override
@@ -20,4 +20,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

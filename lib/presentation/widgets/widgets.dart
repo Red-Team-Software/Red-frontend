@@ -1,2 +1,1 @@
-export 'package:myapp/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
-
+export 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';

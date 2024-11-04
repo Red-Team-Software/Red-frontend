@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/presentation/widgets/custom_bottom_navigation_bar/bottom_navigation_center_icon.dart';
-import 'package:myapp/presentation/widgets/custom_bottom_navigation_bar/bottom_navigation_decorator.dart';
+import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/bottom_navigation_center_icon.dart';
+import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/bottom_navigation_decorator.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({super.key});
@@ -18,7 +18,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
         children: [
           CustomPaint(
             size: Size(size.width, 80),
-            painter: BNBCustomPainter(backgroundColor: theme.brightness == Brightness.dark ? Colors.black : Colors.white),
+            painter: BNBCustomPainter(
+                backgroundColor: theme.brightness == Brightness.dark
+                    ? Colors.black
+                    : Colors.white),
           ),
           Positioned(
               bottom: 48,

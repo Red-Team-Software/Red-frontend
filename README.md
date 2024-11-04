@@ -1,4 +1,4 @@
-# myapp
+# GoDeli
 
 A new Flutter project.
 

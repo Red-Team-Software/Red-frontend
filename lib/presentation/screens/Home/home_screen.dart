@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:myapp/presentation/widgets/widgets.dart';
+import 'package:GoDeli/presentation/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String name = 'home_screen';
@@ -27,7 +27,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -38,26 +37,31 @@ class HomeScreen extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               child: Flex(
-                direction: Axis.vertical, 
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                Flex(direction: Axis.horizontal, children: [
-                  const Text('Get your ', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w300)),
-                  Text(
-                    'groceries',
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: colors.primary,
-                        fontWeight: FontWeight.bold),
-                  )
-                ]),
-                const Text('delivered quikly', style: TextStyle(fontSize: 40, fontWeight: FontWeight.w300),)
-              ]),
+                  direction: Axis.vertical,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flex(direction: Axis.horizontal, children: [
+                      const Text('Get your ',
+                          style: TextStyle(
+                              fontSize: 40, fontWeight: FontWeight.w300)),
+                      Text(
+                        'groceries',
+                        style: TextStyle(
+                            fontSize: 40,
+                            color: colors.primary,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ]),
+                    const Text(
+                      'delivered quikly',
+                      style:
+                          TextStyle(fontSize: 40, fontWeight: FontWeight.w300),
+                    )
+                  ]),
             ),
           ],
         ),
       ),
-
       bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
