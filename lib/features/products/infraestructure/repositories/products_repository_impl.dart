@@ -1,5 +1,5 @@
-import 'package:GoDeli/feature/product/domain/product.dart';
-import 'package:GoDeli/feature/product/domain/repositories/products_repository.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 
 class ProductsRepositoryImpl implements ProductsRepository {
   @override

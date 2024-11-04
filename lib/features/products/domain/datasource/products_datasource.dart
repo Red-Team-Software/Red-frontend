@@ -1,4 +1,4 @@
-import 'package:GoDeli/feature/product/domain/product.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
 
 abstract class ProductsDatasource {
   Future<Product> getProductById(String id);
