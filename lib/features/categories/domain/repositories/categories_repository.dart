@@ -1,8 +1,6 @@
+import 'package:GoDeli/features/categories/domain/category.dart';
+import 'package:GoDeli/features/common/domain/result.dart';
 
-import 'package:shopping_cart/features/categories/domain/entities/category.dart';
-import 'package:shopping_cart/features/common/result.dart';
-
-abstract class CategoriesRepository {
-  Future<Result<List<Category>>> getCategories(
-      {});
+abstract class ICategoriesRepository {
+  Future<Result<List<Category>>> getCategories();
 }

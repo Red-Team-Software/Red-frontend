@@ -1,5 +1,5 @@
-import 'package:GoDeli/feature/product/domain/datasource/products_datasource.dart';
-import 'package:GoDeli/feature/product/domain/product.dart';
+import 'package:GoDeli/features/products/domain/datasource/products_datasource.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
 
 class ProductsDatasourceImpl implements ProductsDatasource {
   @override

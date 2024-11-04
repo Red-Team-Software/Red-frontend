@@ -1,13 +1,14 @@
+import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:bloc/bloc.dart';
+import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:equatable/equatable.dart';
-import 'package:shopping_cart/features/categories/domain/repositories/categories_repository.dart';
 
 part 'categories_event.dart';
 part 'categories_state.dart';
 
 class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
 
-  final CategoriesRepository categoryRepository;
+  final ICategoriesRepository categoryRepository;
 
   CategoriesBloc({required this.categoryRepository})
       : super(const CategoriesState()) {
@@ -28,7 +29,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   void _onCategoryIsEmpty(
       CategoriesIsEmpty event, Emitter<CategoriesState> emit) {
     emit(state.copyWith(
-      status: CategoriesStatus.categoriesLoaded,
+      status: CategoriesStatus.allLoaded,
     ));
   }
 
@@ -47,7 +48,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
   }
 
   Future<void> loadNextPage() async {
-    if (state.isLastPage || state.isLoading || state.isError) return;
+    if (state.status == CategoriesStatus.allLoaded || state.status == CategoriesStatus.loading || state.status==CategoriesStatus.error) return;
     add(const CategoriesLoading());
 
     final res = await categoryRepository.getCategories();

@@ -6,7 +6,6 @@ class BottomNavigationCenterIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final colors = Theme.of(context).colorScheme;
 
     return Center(
@@ -15,9 +14,8 @@ class BottomNavigationCenterIcon extends StatelessWidget {
         child: FloatingActionButton(
           elevation: 8,
           backgroundColor: colors.primary,
-          onPressed: (){
+          onPressed: () {
             context.push('/cart');
-            print('clicked');
           },
           shape: const CircleBorder(),
           child: const Icon(Icons.shopify, size: 40),

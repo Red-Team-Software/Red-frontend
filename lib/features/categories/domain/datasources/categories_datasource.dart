@@ -1,6 +1,5 @@
-import 'package:gymnastic_center/domain/entities/categories/category.dart';
+import 'package:GoDeli/features/categories/domain/category.dart';
 
-abstract class CategoriesDatasource {
-  Future<List<Category>> getCategories(
-      {});
+abstract class ICategoriesDatasource {
+  Future<List<Category>> getCategories();
 }

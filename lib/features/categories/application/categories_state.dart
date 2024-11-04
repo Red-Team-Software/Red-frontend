@@ -1,8 +1,6 @@
 part of 'categories_bloc.dart';
 
-
-enum CategoriesStatus { loading, error, loaded, categoriesLoaded }
-
+enum CategoriesStatus { loading, error, loaded, allLoaded }
 
 class CategoriesState extends Equatable {
   final List<Category> categories;
@@ -19,19 +17,18 @@ class CategoriesState extends Equatable {
 
   CategoriesState copyWith({
     List<Category>? categories,
-    CategoriesStatus? status;
-    int? page;
-    int? perPage;
+    CategoriesStatus? status,
+    int? page,
+    int? perPage,
   }) {
     return CategoriesState(
-        categories: categories ?? this.categories,
-        status: status ?? this.status,
-        page: page ?? this.page,
-        perPage: perPage ?? this.perPage,
+      categories: categories ?? this.categories,
+      status: status ?? this.status,
+      page: page ?? this.page,
+      perPage: perPage ?? this.perPage,
     );
   }
 
   @override
-  List<Object> get props =>
-      [categories, status, page, perPage];
+  List<Object> get props => [categories, status, page, perPage];
 }

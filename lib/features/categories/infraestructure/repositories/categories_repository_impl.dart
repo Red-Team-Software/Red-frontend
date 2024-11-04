@@ -1,8 +1,10 @@
+import 'package:GoDeli/features/categories/domain/category.dart';
+import 'package:GoDeli/features/categories/domain/datasources/categories_datasource.dart';
+import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
+import 'package:GoDeli/features/common/domain/result.dart';
 
-
-
-class CategoriesRespositoryImpl implements CategoriesRepository {
-  final CategoriesDatasourceImpl categoryDatasource;
+class CategoriesRespositoryImpl implements ICategoriesRepository {
+  final ICategoriesDatasource categoryDatasource;
 
   CategoriesRespositoryImpl({required this.categoryDatasource});
 
