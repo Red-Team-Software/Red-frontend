@@ -14,7 +14,7 @@ class CategoriesRespositoryImpl implements ICategoriesRepository {
       final categories = await categoryDatasource.getCategories();
       return Result<List<Category>>.success(categories);
     } catch (error, _) {
-      return Result<List<Category>>.fail(error as Exception);
+      return Result<List<Category>>.makeError(error as Exception);
     }
   }
 }

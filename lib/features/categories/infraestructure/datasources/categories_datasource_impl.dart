@@ -7,22 +7,21 @@ List<Category> categories = [
       id: '1',
       name: 'Electronics',
       icon:
-          'https://t3.ftcdn.net/jpg/05/12/04/44/240_F_512044433_p0KqZnsAENoQ5avPXt9rn3YU5JeeYeC3.jpg'),
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuv4A_auLKEOA236YRTj1YRNWg03Uqvr1bLg&s'),
   Category(
       id: '2',
       name: 'Food',
       icon:
-          'https://t3.ftcdn.net/jpg/05/12/04/44/240_F_512044433_p0KqZnsAENoQ5avPXt9rn3YU5JeeYeC3.jpg'),
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStOB26e6FqhS8YWtkvN0L3cbFpupGF5VN8XA&s'),
   Category(
       id: '3',
-      name: 'Otra',
+      name: 'Bebidas',
       icon:
-          'https://t3.ftcdn.net/jpg/05/12/04/44/240_F_512044433_p0KqZnsAENoQ5avPXt9rn3YU5JeeYeC3.jpg'),
+          'https://png.pngtree.com/png-vector/20190627/ourmid/pngtree-cocktail-icon-design-png-image_1514503.jpg'),
   Category(
       id: '4',
-      name: 'Otra',
-      icon:
-          'https://t3.ftcdn.net/jpg/05/12/04/44/240_F_512044433_p0KqZnsAENoQ5avPXt9rn3YU5JeeYeC3.jpg'),
+      name: 'Ropa',
+      icon: 'https://cdn-icons-png.flaticon.com/512/1381/1381792.png'),
   Category(
       id: '5',
       name: 'Otra',
