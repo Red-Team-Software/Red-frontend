@@ -1,6 +1,8 @@
+
+import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
 
-abstract class ProductsRepository {
-  Future<Product> getProductById(String id);
-  Future<List<Product>> getProducts();
+abstract class IProductsRepository {
+  Future<Result<Product>> getProductById(String id);
+  Future<Result<List<Product>>> getProducts();
 }

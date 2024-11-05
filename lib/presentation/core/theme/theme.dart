@@ -27,17 +27,17 @@ class AppTheme {
         }),
         accentColor: accentColor,
         errorColor: Colors.red,
-        backgroundColor:  isDarkMode ? darkBackgroundColor : lightBackgroundColor,
+        backgroundColor:
+            isDarkMode ? darkBackgroundColor : lightBackgroundColor,
         brightness: isDarkMode ? Brightness.dark : Brightness.light,
       ),
       fontFamily: 'Roboto',
-
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
         centerTitle: false,
-        iconTheme: IconThemeData(color: isDarkMode ? Colors.white : darkIcons, size: 24),
-        ),
-      
+        iconTheme: IconThemeData(
+            color: isDarkMode ? Colors.white : darkIcons, size: 24),
+      ),
       brightness: isDarkMode ? Brightness.dark : Brightness.light,
     );
   }
