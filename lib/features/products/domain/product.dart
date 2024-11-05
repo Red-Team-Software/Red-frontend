@@ -1,3 +1,4 @@
+
 class Product {
   final String id;
   final String name;
@@ -17,5 +18,3 @@ class Product {
     this.tags,
   });
 }
-
-
