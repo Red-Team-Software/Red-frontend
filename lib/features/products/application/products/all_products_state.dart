@@ -30,6 +30,5 @@ class AllProductsState extends Equatable {
   }
 
   @override
-  // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [products, status, page, perPage];
 }

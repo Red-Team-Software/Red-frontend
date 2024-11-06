@@ -1,10 +1,11 @@
-import 'package:GoDeli/features/categories/domain/category.dart';
+import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/config/injector/injector.dart';
-import 'package:GoDeli/presentation/widgets/widgets.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/categories/application/categories_bloc.dart';
+import 'package:GoDeli/config/injector/injector.dart';
+import 'package:GoDeli/presentation/widgets/widgets.dart';
+import 'package:GoDeli/presentation/screens/Home/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String name = 'home_screen';
@@ -80,82 +81,24 @@ class _HomeScreenView extends StatelessWidget {
                       height: 16,
                     ),
                     BlocProvider(
-                      create: (_) => getIt<CategoriesBloc>()..loadNextPage(),
-                      child: const _CaregoriesCarrusel(),
-                    )
+                      create: (_) =>
+                          getIt<CategoriesBloc>()..fetchCategoriesPaginated(),
+                      child: const CaregoriesCarrusel(),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    BlocProvider(
+                      create: (_) =>
+                          getIt<AllProductsBloc>()..fetchProductsPaginated(),
+                      child: const CardBundleCarrusel(),
+                    ),
                   ]),
             ),
           ],
         ),
       ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
-    );
-  }
-}
-
-class _CaregoriesCarrusel extends StatelessWidget {
-  const _CaregoriesCarrusel();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return SizedBox(
-      height: 72,
-      child: BlocBuilder<CategoriesBloc, CategoriesState>(
-          builder: (context, state) {
-        if (state.status == CategoriesStatus.loading &&
-            state.categories.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (state.status == CategoriesStatus.error) {
-          return const Center(
-            child: Text('Algo inesperado paso',
-                style: TextStyle(color: Colors.red)),
-          );
-        }
-
-        return ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: state.categories.length,
-          itemBuilder: (BuildContext context, int index) {
-            Category currentCategory = state.categories[index];
-            return GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 72,
-                margin: EdgeInsets.only(
-                  left: 16,
-                  right: index == state.categories.length - 1 ? 15 : 0,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Card(
-                  elevation: 5,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 24,
-                        width: 24,
-                        child: Image.network(currentCategory.icon),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        currentCategory.name,
-                        style: const TextStyle(
-                            fontSize: 10, fontWeight: FontWeight.w800),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      }),
     );
   }
 }

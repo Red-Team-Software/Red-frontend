@@ -5,8 +5,8 @@ class AppTheme {
   final Color primaryColor = const Color(0xFFFF0000);
   final Color accentColor = const Color(0xFFFFADAD);
   final Color darkIcons = const Color(0xFF1E1E1E);
-  final Color lightBackgroundColor = const Color.fromARGB(255, 242, 244, 247);
-  final Color darkBackgroundColor = const Color.fromARGB(255, 33, 33, 33);
+  final Color lightBackgroundColor = const Color(0xFFF2F4F7);
+  final Color darkBackgroundColor = const Color(0xFF1E1E1E);
 
   AppTheme({this.isDarkMode = false});
 
@@ -31,6 +31,7 @@ class AppTheme {
             isDarkMode ? darkBackgroundColor : lightBackgroundColor,
         brightness: isDarkMode ? Brightness.dark : Brightness.light,
       ),
+      scaffoldBackgroundColor: isDarkMode? darkBackgroundColor: lightBackgroundColor,
       fontFamily: 'Roboto',
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.transparent,
@@ -39,6 +40,7 @@ class AppTheme {
             color: isDarkMode ? Colors.white : darkIcons, size: 24),
       ),
       brightness: isDarkMode ? Brightness.dark : Brightness.light,
+      
     );
   }
 }

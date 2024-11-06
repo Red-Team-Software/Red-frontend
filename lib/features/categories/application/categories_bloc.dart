@@ -47,7 +47,7 @@ class CategoriesBloc extends Bloc<CategoriesEvent, CategoriesState> {
     ));
   }
 
-  Future<void> loadNextPage() async {
+  Future<void> fetchCategoriesPaginated() async {
     if (state.status == CategoriesStatus.allLoaded || state.status == CategoriesStatus.loading || state.status==CategoriesStatus.error) return;
     add(const CategoriesLoading());
 
