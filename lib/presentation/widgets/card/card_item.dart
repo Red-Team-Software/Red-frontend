@@ -13,11 +13,15 @@ class CardItem extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Card(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(24))
+        ),
         color: theme.brightness == Brightness.dark ? Colors.grey[800] : Colors.white,
         elevation: 8,
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           Padding(
-            padding: const EdgeInsets.only(top: 8, left: 12, right: 12),
+            padding: const EdgeInsets.only(top: 6, left: 12, right: 12),
             child: SizedBox(
               height: 110,
               width: 200,
@@ -28,7 +32,7 @@ class CardItem extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 1, left: 20, right: 20),
+            padding: const EdgeInsets.only(top: 4, left: 20, right: 20),
             child: Flex(
               direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -44,7 +48,7 @@ class CardItem extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 1, left: 20, right: 20),
+            padding: const EdgeInsets.only(top: 2, left: 20, right: 20),
             child: Text(
               current.description,
               maxLines: 2,
@@ -58,7 +62,7 @@ class CardItem extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 4),
             child: Flex(
               direction: Axis.horizontal, 
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
