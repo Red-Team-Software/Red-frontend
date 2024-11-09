@@ -12,15 +12,25 @@ class CardBundleCarrusel extends StatelessWidget {
 
     final theme = Theme.of(context);    
     return SizedBox(
-      height: 288,
+      height: 292,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            'Bundle Offers',
-            style: TextStyle(
-                color: theme.brightness==Brightness.dark?Colors.white:Colors.black, fontWeight: FontWeight.bold, fontSize: 32),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                'Bundle Offers',
+                style: TextStyle(
+                    color: theme.brightness==Brightness.dark?Colors.white:Colors.black, fontWeight: FontWeight.bold, fontSize: 32),
+              ),
+              GestureDetector(
+                onTap: (){ },
+                child: Text('view all', textAlign: TextAlign.end, style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),)
+              ),
+            ],
           ),
           Expanded(
             child: BlocBuilder<AllProductsBloc, AllProductsState>(

@@ -24,6 +24,16 @@ final appRouter = GoRouter(
       name: AuthPage.name,
       routes: const [],
       builder: (context, state) => const AuthPage(),
-    )
+    ),
+    GoRoute(
+      path: '/search',
+      name: SearchScreen.name,
+      builder: (context, state) => const SearchScreen(),
+    ),
+    GoRoute(
+      path: '/categories',
+      name: CategoriesScreen.name,
+      builder: (context, state) => const CategoriesScreen(),
+    ),
   ],
 );

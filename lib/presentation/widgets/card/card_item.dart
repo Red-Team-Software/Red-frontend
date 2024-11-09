@@ -28,7 +28,8 @@ class CardItem extends StatelessWidget {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.network(
-                      current.imageUrl.isNotEmpty ? current.imageUrl[0] : '')),
+                      current.imageUrl.isNotEmpty ? current.imageUrl[0] : '',
+                      fit: BoxFit.fill,)),
             ),
           ),
           Padding(
@@ -62,7 +63,7 @@ class CardItem extends StatelessWidget {
           ),
 
           Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 4),
+            padding: const EdgeInsets.only(left: 20, right: 8, bottom: 4),
             child: Flex(
               direction: Axis.horizontal, 
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -73,13 +74,13 @@ class CardItem extends StatelessWidget {
                 ),
                 IconButton.filled(
                   onPressed: () {},
-                  icon: Icon(Icons.add, size: 20, color: theme.colorScheme.primary),
+                  icon: Icon(Icons.add, size: 16, weight:16, color: theme.colorScheme.primary),
                   style: IconButton.styleFrom(
                     backgroundColor: theme.colorScheme.secondary,
                     padding: const EdgeInsets.all(0.5),
-                    minimumSize: const Size(16, 20), // Tamaño del cuadrado pequeño
+                    minimumSize: const Size(16, 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6), // Bordes redondeados
+                      borderRadius: BorderRadius.circular(6), 
                     ),
                   ),
                 )

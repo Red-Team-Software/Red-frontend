@@ -56,7 +56,7 @@ class _HomeScreenView extends StatelessWidget {
           return CustomScrollView(
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.only(top: 32, left: 8, right: 8),
+                padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
                 sliver: SliverList(
                   delegate: SliverChildListDelegate(
                     [
@@ -71,7 +71,7 @@ class _HomeScreenView extends StatelessWidget {
                               Text('groceries',style: TextStyle(fontSize: 40, color: theme.colorScheme.primary, fontWeight: FontWeight.bold),)
                             ]),
                           const Text('delivered quikly', style:TextStyle(fontSize: 40, fontWeight: FontWeight.w100),),
-                          const SizedBox(height: 16,),
+                          const SizedBox(height: 8,),
 
                           BlocProvider(
                             create: (_) =>
@@ -88,7 +88,9 @@ class _HomeScreenView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text('Popular', 
-                                style: TextStyle(color: theme.brightness == Brightness.dark?Colors.white:Colors.black, fontWeight: FontWeight.bold, fontSize: 32),)
+                                style: TextStyle(color: theme.brightness == Brightness.dark?Colors.white:Colors.black, fontWeight: FontWeight.bold, fontSize: 32),
+                              ),
+                              GestureDetector(onTap: (){ },child: Text('view all', textAlign: TextAlign.end, style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),)),                                
                             ],
                           )
                         ],),

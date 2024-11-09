@@ -4,5 +4,6 @@ import 'package:GoDeli/features/products/domain/product.dart';
 
 abstract class IProductsRepository {
   Future<Result<Product>> getProductById(String id);
-  Future<Result<List<Product>>> getProducts();
+  Future<Result<List<Product>>> getProducts({int page = 1, int perPage = 10}
+  );
 }

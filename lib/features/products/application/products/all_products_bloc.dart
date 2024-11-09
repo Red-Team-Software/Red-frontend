@@ -51,7 +51,10 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
         state.status == ProductsStatus.error) return;
     add(const ProductsLoading());
 
-    final res = await productsRepository.getProducts();
+    final res = await productsRepository.getProducts(
+      page: state.page,
+      perPage: state.perPage,
+    );
 
     if (res.isSuccessful()) {
       final products = res.getValue();

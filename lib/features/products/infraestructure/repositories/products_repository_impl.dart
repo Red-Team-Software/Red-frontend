@@ -16,9 +16,9 @@ class ProductsRepositoryImpl implements IProductsRepository {
   }
 
   @override
-  Future<Result<List<Product>>> getProducts() async {
+  Future<Result<List<Product>>> getProducts({int page = 1, int perPage = 10}) async {
     try {
-      final products = await productsDatasource.getProducts();
+      final products = await productsDatasource.getProducts(page: page, perPage: perPage);
       return Result<List<Product>>.success(products);
     } catch (error, _) {
       return Result<List<Product>>.makeError(error as Exception);

@@ -16,7 +16,7 @@ class CustomItemProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      color: Colors.grey[300],
+      color: theme.brightness==Brightness.dark?  Colors.grey[800]: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(16))
       ),
@@ -26,30 +26,32 @@ class CustomItemProduct extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
-              width:80, height: 80, 
+              width: 64,
+              height: 64,
               child: ClipRRect(
               borderRadius: BorderRadius.circular(8.00),
-              child: Image.network(current.imageUrl.isNotEmpty ? current.imageUrl[0] : '')),
+              child: Image.network(
+                current.imageUrl.isNotEmpty ? current.imageUrl[0] : '',
+                fit: BoxFit.cover,
+              ),),
             ),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(current.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87)),
+                  Text(current.name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: theme.brightness==Brightness.dark?Colors.white:Colors.black54),),
                   Text(current.description, maxLines: 1, overflow: TextOverflow.clip,),
                 ],
               ),),
-            Flex(
-              direction: Axis.vertical,
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text('\$${current.price}', style: const TextStyle(fontWeight: FontWeight.bold),),
-                const SizedBox(height: 4.00,),
+                Text('\$${current.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
                 IconButton.filled(
                   onPressed: () {},
-                  icon: const Icon(Icons.add, size: 24, color: Colors.white),
+                  icon: const Icon(Icons.add, size: 20, color: Colors.white),
                   style: IconButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,
                     padding: const EdgeInsets.all(0.5),

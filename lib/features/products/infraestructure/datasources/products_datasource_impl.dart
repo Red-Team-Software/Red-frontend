@@ -37,7 +37,8 @@ class ProductsDatasourceImpl implements IProductsDatasource {
   }
 
   @override
-  Future<List<Product>> getProducts() async{
+  Future<List<Product>> getProducts({int page = 1, int perPage = 10}) async{
+    // print('Page ${page} and perPage ${perPage}');
     await  Future.delayed(const Duration(seconds:2));
 
     return mockProducts;

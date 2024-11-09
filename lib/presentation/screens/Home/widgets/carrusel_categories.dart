@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/categories/application/categories_bloc.dart';
@@ -15,7 +16,7 @@ class CaregoriesCarrusel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          GestureDetector(onTap: (){ },child: Text('Ver mas', textAlign: TextAlign.end, style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),)),
+          GestureDetector(onTap: ()=>context.push('/categories') ,child: Text('view all', textAlign: TextAlign.end, style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),)),
           Expanded(
             child: BlocBuilder<CategoriesBloc, CategoriesState>(
               builder: (context, state) {
