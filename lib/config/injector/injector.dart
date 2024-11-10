@@ -3,6 +3,7 @@ import 'package:GoDeli/features/categories/application/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
 import 'package:GoDeli/features/categories/infraestructure/repositories/categories_repository_impl.dart';
+import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
@@ -27,6 +28,8 @@ class Injector {
 
     getIt.registerFactory<IProductsRepository>(() => productsRepository);
     getIt.registerFactory<AllProductsBloc>(()=> AllProductsBloc(productsRepository: productsRepository));
+    getIt.registerFactory<ProductDetailsBloc>(()=> ProductDetailsBloc(productsRepository: productsRepository));
+
 
     getIt.registerSingleton(() => CartBloc());
 
