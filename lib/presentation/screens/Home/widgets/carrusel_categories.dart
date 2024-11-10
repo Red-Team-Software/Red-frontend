@@ -28,24 +28,21 @@ class CaregoriesCarrusel extends StatelessWidget {
                     child: Text('Algo inesperado paso', style: TextStyle(color: Colors.red)),
                   );
                 }
-                return ListView.builder(
+                return ListView.separated(
                   scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) => const SizedBox(width: 16),
                   itemCount: state.categories.length,
                   itemBuilder: (BuildContext context, int index) {
                     Category currentCategory = state.categories[index];
                     return GestureDetector(
                       onTap: () {},
-                      child: Container(
+                      child: SizedBox(
                         width: 80,
-                        margin: EdgeInsets.only(
-                          left: 16,
-                          right: index == state.categories.length - 1 ? 15 : 0,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
                         child: Card(
                           elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

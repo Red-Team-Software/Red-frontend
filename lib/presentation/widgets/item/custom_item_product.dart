@@ -46,9 +46,9 @@ class CustomItemProduct extends StatelessWidget {
               ),),
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text('\$${current.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                const SizedBox(height: 4.00),
                 IconButton.filled(
                   onPressed: () {},
                   icon: const Icon(Icons.add, size: 24, color: Colors.white),

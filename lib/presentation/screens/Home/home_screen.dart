@@ -136,7 +136,7 @@ class _HomeScreenView extends StatelessWidget {
                   );
                 }
                 return SliverPadding(
-                          padding: const EdgeInsets.only(left: 16.00, right: 16.00),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           sliver: SliverList(
                             delegate: SliverChildBuilderDelegate(
                               (BuildContext context, int index) {
