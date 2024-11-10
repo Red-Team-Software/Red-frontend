@@ -67,14 +67,16 @@ class _HomeScreenView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RichText(
-                        text: const TextSpan(
+                        text: TextSpan(
                             text: 'Get your',
                             style: TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.w100,
-                              color: Colors.black,
+                              color: theme.brightness == Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
                             ),
-                            children: [
+                            children: const [
                               TextSpan(
                                   text: ' groceries',
                                   style: TextStyle(

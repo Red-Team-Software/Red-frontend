@@ -2,7 +2,8 @@ import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:flutter/material.dart';
 
 class CardItem extends StatelessWidget {
-  const CardItem({super.key, 
+  const CardItem({
+    super.key,
     required this.current,
   });
 
@@ -14,12 +15,13 @@ class CardItem extends StatelessWidget {
 
     return Card(
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(24))
-        ),
-        color: theme.brightness == Brightness.dark ? Colors.grey[800] : Colors.white,
+            borderRadius: BorderRadius.all(Radius.circular(24))),
+        color: theme.brightness == Brightness.dark
+            ? Colors.grey[800]
+            : Colors.white,
         elevation: 8,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+        child:
+            Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
           Padding(
             padding: const EdgeInsets.only(top: 6, left: 12, right: 12),
             child: SizedBox(
@@ -28,8 +30,9 @@ class CardItem extends StatelessWidget {
               child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
                   child: Image.network(
-                      current.imageUrl.isNotEmpty ? current.imageUrl[0] : '',
-                      fit: BoxFit.fill,)),
+                    current.imageUrl.isNotEmpty ? current.imageUrl[0] : '',
+                    fit: BoxFit.fill,
+                  )),
             ),
           ),
           Padding(
@@ -61,33 +64,38 @@ class CardItem extends StatelessWidget {
                       : Colors.black87),
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.only(left: 20, right: 8, bottom: 4),
             child: Flex(
-              direction: Axis.horizontal, 
+              direction: Axis.horizontal,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                    '\$ ${current.price}', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12, color: theme.brightness ==Brightness.dark? Colors.white:Colors.black),
+                  '\$ ${current.price}',
+                  style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 12,
+                      color: theme.brightness == Brightness.dark
+                          ? Colors.white
+                          : Colors.black),
                 ),
                 IconButton.filled(
                   onPressed: () {},
-                  icon: Icon(Icons.add, size: 16, weight:16, color: theme.colorScheme.primary),
+                  icon: Icon(Icons.add,
+                      size: 16, weight: 16, color: theme.colorScheme.primary),
                   style: IconButton.styleFrom(
                     backgroundColor: theme.colorScheme.secondary,
                     padding: const EdgeInsets.all(0.5),
                     minimumSize: const Size(16, 16),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6), 
+                      borderRadius: BorderRadius.circular(6),
                     ),
                   ),
                 )
               ],
             ),
           )
-
         ]));
   }
 }
