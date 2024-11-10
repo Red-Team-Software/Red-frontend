@@ -51,11 +51,11 @@ class CustomItemProduct extends StatelessWidget {
                 Text('\$${current.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
                 IconButton.filled(
                   onPressed: () {},
-                  icon: const Icon(Icons.add, size: 20, color: Colors.white),
+                  icon: const Icon(Icons.add, size: 24, color: Colors.white),
                   style: IconButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,
                     padding: const EdgeInsets.all(0.5),
-                    minimumSize: const Size(20, 20),
+                    minimumSize: const Size(24, 24),
                   ),
                 )
               ],
