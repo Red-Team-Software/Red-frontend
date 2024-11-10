@@ -17,7 +17,7 @@ List<Category> categories = [
       id: '3',
       name: 'Bebidas',
       icon:
-          'https://png.pngtree.com/png-vector/20190627/ourmid/pngtree-cocktail-icon-design-png-image_1514503.jpg'),
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUZgbTDkQnOaT6Sc-zDk0B0sBCnast2TzpBA&s'),
   Category(
       id: '4',
       name: 'Ropa',

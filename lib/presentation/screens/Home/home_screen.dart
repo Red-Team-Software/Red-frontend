@@ -44,19 +44,7 @@ class _HomeScreenView extends StatelessWidget {
           ],
         ),
       ),
-      body: BlocBuilder<AllProductsBloc, AllProductsState>(
-          builder: (context, state) {
-        if (state.status == ProductsStatus.loading && state.products.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state.status == ProductsStatus.error) {
-          return const Center(
-            child: Text('Algo inesperado paso',
-                style: TextStyle(color: Colors.red)),
-          );
-        }
-
-        return CustomScrollView(
+      body:CustomScrollView(
           slivers: [
             SliverPadding(
               padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
@@ -132,21 +120,37 @@ class _HomeScreenView extends StatelessWidget {
                 ]),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.only(left: 16.00, right: 16.00),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (BuildContext context, int index) {
-                    Product current = state.products[index];
-                    return CustomItemProduct(current: current, theme: theme);
-                  },
-                  childCount: state.products.length,
-                ),
-              ),
+            BlocBuilder<AllProductsBloc,AllProductsState>(
+              builder: (context, state) {
+                if (state.status == ProductsStatus.loading && state.products.isEmpty) {
+                  return const SliverFillRemaining(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (state.status == ProductsStatus.error) {
+                  return const SliverFillRemaining(
+                    child: Center(
+                      child: Text('Algo inesperado paso',
+                          style: TextStyle(color: Colors.red)),
+                    ),
+                  );
+                }
+                return SliverPadding(
+                          padding: const EdgeInsets.only(left: 16.00, right: 16.00),
+                          sliver: SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                Product current = state.products[index];
+                                return CustomItemProduct(current: current, theme: theme);
+                              },
+                              childCount: state.products.length,
+                            ),
+                          ),
+                        );
+              },
             ),
           ],
-        );
-      }),
+        ),
       bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
