@@ -6,47 +6,58 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CartScreen extends StatelessWidget {
-
   static const String name = 'cart_screen';
 
   const CartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-
     final colors = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: ()=> context.pop(),
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-        title: const Text(
-          'Cart',
-          style: TextStyle(
-            fontSize: 30, 
-            fontWeight: FontWeight.bold
-          ),
-        ),
-        actions: <Widget>[
-          Text(
-            '${context.watch<CartBloc>().state.totalItems} items', 
-            style: TextStyle(
-              color: colors.primary,
-              fontSize: 18, 
-              fontWeight: FontWeight.bold
-            ),
-          ),
-          const SizedBox(width: 8,)
-        ],
-      ),
-
-      body: _CartView(),
+    return BlocProvider(
+      create: (context) => CartBloc(),
+      child: _CartScreen(colors: colors),
     );
   }
 }
 
+class _CartScreen extends StatelessWidget {
+  const _CartScreen({
+    super.key,
+    required this.colors,
+  });
+
+  final ColorScheme colors;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => context.pop(),
+          icon: const Icon(Icons.arrow_back_ios),
+        ),
+        title: const Text(
+          'Cart',
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+        actions: <Widget>[
+          Text(
+            '${context.watch<CartBloc>().state.totalItems} items',
+            style: TextStyle(
+                color: colors.primary,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(
+            width: 8,
+          )
+        ],
+      ),
+      body: _CartView(),
+    );
+  }
+}
 
 class _CartView extends StatelessWidget {
   @override
@@ -54,11 +65,8 @@ class _CartView extends StatelessWidget {
     final cartBloc = context.watch<CartBloc>();
 
     final cart = cartBloc.state.cart;
-   
-   
+
     final colors = Theme.of(context).colorScheme;
-
-
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,32 +99,27 @@ class _CartView extends StatelessWidget {
             onPressed: () {
               //TODO: Aquí iría la lógica para aplicar un cupón de descuento
 
-
               //! Ejemplo de cómo agregar un producto al carrito
               final prod = Product(
-                id: '4',
-                name: 'producto4',
-                price: 10,
-                quantity: 1,
-                description: 'descripcion1'
-              );
+                  id: '4',
+                  name: 'producto4',
+                  price: 10,
+                  quantity: 1,
+                  description: 'descripcion1');
 
               cartBloc.add(AddProduct(prod));
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.local_offer, color: colors.primary),
-                const SizedBox(width: 8),
-                Text(
-                  'Apply coupon',
-                  style: TextStyle(
-                    color: colors.primary,
-                    fontSize: 16,
-                  ),
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(Icons.local_offer, color: colors.primary),
+              const SizedBox(width: 8),
+              Text(
+                'Apply coupon',
+                style: TextStyle(
+                  color: colors.primary,
+                  fontSize: 16,
                 ),
-              ]
-            ),
+              ),
+            ]),
           ),
         ),
         //? Resumen de la compra
@@ -134,18 +137,16 @@ class _CartView extends StatelessWidget {
                   const Text(
                     'Subtotal',
                     style: TextStyle(
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 4, 4, 4),
-                      fontWeight: FontWeight.bold
-                    ),
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 4, 4, 4),
+                        fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '\$${cartBloc.state.subtotal.toStringAsFixed(2)}',
                     style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold
-                    ),
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -194,25 +195,24 @@ class _CartView extends StatelessWidget {
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: () {
-                  cartBloc.add(ClearCart());
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: colors.primary, // Color de fondo del botón
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                  onPressed: () {
+                    cartBloc.add(ClearCart());
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: colors.primary, // Color de fondo del botón
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                ),
-                child: const Text(
-                  'Proceed to checkout',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              )
+                  child: const Text(
+                    'Proceed to checkout',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ))
             ],
           ),
         )
