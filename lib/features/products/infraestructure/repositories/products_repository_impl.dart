@@ -10,9 +10,13 @@ class ProductsRepositoryImpl implements IProductsRepository {
   ProductsRepositoryImpl({required this.productsDatasource});
 
   @override
-  Future<Result<Product>> getProductById(String id) {
-    // TODO: implement getProductById
-    throw UnimplementedError();
+  Future<Result<Product>> getProductById(String id) async {
+    try {
+      final product = await productsDatasource.getProductById(id);
+      return Result<Product>.success(product);
+    } catch (error, _) {
+      return Result<Product>.makeError(error as Exception);
+    }
   }
 
   @override

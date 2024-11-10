@@ -31,9 +31,7 @@ final List<Product> mockProducts = [
 class ProductsDatasourceImpl implements IProductsDatasource {
   @override
   Future<Product> getProductById(String id) {
-    // TODO: implement getProductById
-
-    throw UnimplementedError();
+    return Future.value(mockProducts.firstWhere((element) => element.id == id));
   }
 
   @override
