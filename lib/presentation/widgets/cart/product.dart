@@ -10,30 +10,26 @@ class ProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final cartBloc = context.watch<CartBloc>();
 
     final colors = Theme.of(context).colorScheme;
 
-
     return Slidable(
       endActionPane: ActionPane(
-        motion: ScrollMotion(),
-        extentRatio: 0.25,
-        openThreshold: 0.3,
-        
-        children: [
-          SlidableAction(
-            onPressed: (context) {
-              cartBloc.add(RemoveProduct(product));
-            },
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-            label: 'Delete',
-          )
-        ]
-      ),
+          motion: ScrollMotion(),
+          extentRatio: 0.25,
+          openThreshold: 0.3,
+          children: [
+            SlidableAction(
+              onPressed: (context) {
+                cartBloc.add(RemoveProduct(product));
+              },
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: 'Delete',
+            )
+          ]),
       child: Container(
         margin: const EdgeInsets.all(8.0),
         padding: const EdgeInsets.all(8.0),
@@ -75,7 +71,8 @@ class ProductWidget extends StatelessWidget {
                       color: Colors.black,
                     ),
                   ),
-                  const SizedBox(width: 8), // Espacio entre la imagen y el texto
+                  const SizedBox(
+                      width: 8), // Espacio entre la imagen y el texto
                   Text(
                     product.description,
                     style: TextStyle(
@@ -98,7 +95,9 @@ class ProductWidget extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                const SizedBox(width:16), // Espacio entre el precio y el control de cantidad
+                const SizedBox(
+                    width:
+                        16), // Espacio entre el precio y el control de cantidad
                 // Control de cantidad
                 Container(
                   decoration: BoxDecoration(
@@ -107,21 +106,29 @@ class ProductWidget extends StatelessWidget {
                   height: 35,
                   child: Row(
                     children: [
-                      
-                      QuantityButton(cartBloc: cartBloc, product: product, icon: Icons.remove_circle, color: colors.primary, onPressed: () {
-                        cartBloc.add(RemoveOneQuantityProduct(product));
-                      }),
+                      QuantityButton(
+                          isMinus: true,
+                          product: product,
+                          icon: Icons.remove_circle,
+                          color: colors.primary,
+                          onPressed: () {
+                            cartBloc.add(RemoveOneQuantityProduct(product));
+                          }),
                       Text(
                         '${product.quantity}', // Aquí muestra la cantidad actual
                         style: const TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
                         ),
-      
                       ),
-                      QuantityButton(cartBloc: cartBloc, product: product, icon: Icons.add_circle, color: colors.primary, onPressed: () {
-                        cartBloc.add(AddOneQuantityProduct(product));
-                      }),
+                      QuantityButton(
+                          isMinus: false,
+                          product: product,
+                          icon: Icons.add_circle,
+                          color: colors.primary,
+                          onPressed: () {
+                            cartBloc.add(AddOneQuantityProduct(product));
+                          }),
                     ],
                   ),
                 )
@@ -138,17 +145,15 @@ class ProductWidget extends StatelessWidget {
 
 class QuantityButton extends StatelessWidget {
   const QuantityButton({
-    super.key,
-    required this.cartBloc,
-    required this.product,
-    required this.icon,
-    required this.onPressed,
-    required this.color
-  });
+      super.key,
+      required this.product,
+      required this.icon,
+      required this.onPressed,
+      required this.color,
+      required this.isMinus
+    });
 
-
-
-  final CartBloc cartBloc;
+  final bool isMinus;
   final Product product;
   final IconData icon;
   final Function() onPressed;
@@ -156,9 +161,12 @@ class QuantityButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (product.quantity == 1 && isMinus) {
+      return IconButton(
+          icon: Icon(icon, color: Colors.grey, size: 20), onPressed: null);
+    }
+
     return IconButton(
-      icon: Icon(icon, color: Colors.red, size: 20),
-      onPressed: onPressed
-    );
+        icon: Icon(icon, color: Colors.red, size: 20), onPressed: onPressed);
   }
 }
