@@ -25,6 +25,14 @@ class CartState extends Equatable {
     return cart.products.length + (cart.bundles?.length ?? 0);
   }
 
+  CartState copyWith({
+    Cart? cart,
+  }) {
+    return CartState(
+      cart: cart ?? this.cart,
+    );
+  }
+
   @override
   List<Object> get props => [ cart ];
 }

@@ -1,5 +1,7 @@
+import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/cart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ProductWidget extends StatelessWidget {
@@ -8,6 +10,12 @@ class ProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final cartBloc = context.watch<CartBloc>();
+
+    final colors = Theme.of(context).colorScheme;
+
+
     return Slidable(
       endActionPane: ActionPane(
         motion: ScrollMotion(),
@@ -17,7 +25,7 @@ class ProductWidget extends StatelessWidget {
         children: [
           SlidableAction(
             onPressed: (context) {
-              // onRemove(); // Llama a la función para eliminar el producto
+              cartBloc.add(RemoveProduct(product));
             },
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
@@ -81,7 +89,6 @@ class ProductWidget extends StatelessWidget {
               ),
             ),
             Column(
-      
               children: [
                 Text(
                   '\$${product.price}',
@@ -100,12 +107,10 @@ class ProductWidget extends StatelessWidget {
                   height: 35,
                   child: Row(
                     children: [
-                      IconButton(
-                        icon: const Icon(Icons.remove_circle, color: Colors.red, size: 20),
-                        onPressed: () {
-                          // Lógica para disminuir la cantidad
-                        },
-                      ),
+                      
+                      QuantityButton(cartBloc: cartBloc, product: product, icon: Icons.remove_circle, color: colors.primary, onPressed: () {
+                        cartBloc.add(RemoveOneQuantityProduct(product));
+                      }),
                       Text(
                         '${product.quantity}', // Aquí muestra la cantidad actual
                         style: const TextStyle(
@@ -114,12 +119,9 @@ class ProductWidget extends StatelessWidget {
                         ),
       
                       ),
-                      IconButton(
-                        icon: const Icon(Icons.add_circle, color: Colors.red, size: 20),
-                        onPressed: () {
-                          // Lógica para aumentar la cantidad
-                        },
-                      ),
+                      QuantityButton(cartBloc: cartBloc, product: product, icon: Icons.add_circle, color: colors.primary, onPressed: () {
+                        cartBloc.add(AddOneQuantityProduct(product));
+                      }),
                     ],
                   ),
                 )
@@ -134,17 +136,29 @@ class ProductWidget extends StatelessWidget {
   }
 }
 
-//* Por si quiero usar dissmisable
-// Dismissible(
-//       key: Key(product.id.toString()), // Una clave única para cada producto
-//       direction: DismissDirection.endToStart,
-//       background: Container(
-//         color: Colors.red,
-//         alignment: Alignment.centerRight,
-//         padding: EdgeInsets.symmetric(horizontal: 20),
-//         child: Icon(Icons.delete, color: Colors.white),
-//       ),
-//       onDismissed: (direction) {
-//         // onRemove(); // Llama a la función para eliminar el producto
-//       },
-//       child: Container(
+class QuantityButton extends StatelessWidget {
+  const QuantityButton({
+    super.key,
+    required this.cartBloc,
+    required this.product,
+    required this.icon,
+    required this.onPressed,
+    required this.color
+  });
+
+
+
+  final CartBloc cartBloc;
+  final Product product;
+  final IconData icon;
+  final Function() onPressed;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(icon, color: Colors.red, size: 20),
+      onPressed: onPressed
+    );
+  }
+}

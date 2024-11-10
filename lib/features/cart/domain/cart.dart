@@ -14,6 +14,22 @@ class Product {
     required this.quantity,
     required this.description,
   });
+
+  Product copyWith({
+    String? id,
+    String? name,
+    double? price,
+    int? quantity,
+    String? description,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      price: price ?? this.price,
+      quantity: quantity ?? this.quantity,
+      description: description ?? this.description,
+    );
+  }
 }
 
 class Bundle {

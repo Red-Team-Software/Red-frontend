@@ -1,4 +1,5 @@
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/domain/cart.dart';
 import 'package:GoDeli/presentation/widgets/cart/product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,7 +31,7 @@ class CartScreen extends StatelessWidget {
         ),
         actions: <Widget>[
           Text(
-            '${context.read<CartBloc>().state.totalItems} items', 
+            '${context.watch<CartBloc>().state.totalItems} items', 
             style: TextStyle(
               color: colors.primary,
               fontSize: 18, 
@@ -53,6 +54,11 @@ class _CartView extends StatelessWidget {
     final cartBloc = context.watch<CartBloc>();
 
     final cart = cartBloc.state.cart;
+   
+   
+    final colors = Theme.of(context).colorScheme;
+
+
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,16 +90,28 @@ class _CartView extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               //TODO: Aquí iría la lógica para aplicar un cupón de descuento
+
+
+              //! Ejemplo de cómo agregar un producto al carrito
+              final prod = Product(
+                id: '4',
+                name: 'producto4',
+                price: 10,
+                quantity: 1,
+                description: 'descripcion1'
+              );
+
+              cartBloc.add(AddProduct(prod));
             },
-            child: const Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.local_offer, color: Colors.red),
-                SizedBox(width: 8),
+                Icon(Icons.local_offer, color: colors.primary),
+                const SizedBox(width: 8),
                 Text(
                   'Apply coupon',
                   style: TextStyle(
-                    color: Colors.red,
+                    color: colors.primary,
                     fontSize: 16,
                   ),
                 ),
@@ -177,10 +195,10 @@ class _CartView extends StatelessWidget {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  // Aquí iría la lógica para proceder al checkout
+                  cartBloc.add(ClearCart());
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red, // Color de fondo del botón
+                  backgroundColor: colors.primary, // Color de fondo del botón
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
