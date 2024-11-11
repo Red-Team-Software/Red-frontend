@@ -1,5 +1,8 @@
+import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class CustomItemProduct extends StatelessWidget {
@@ -14,6 +17,10 @@ class CustomItemProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final cartBloc = context.watch<CartBloc>();
+    
+
     return Card(
       elevation: 4,
       color: theme.brightness==Brightness.dark?  Colors.grey[800]: Colors.white,
@@ -50,7 +57,21 @@ class CustomItemProduct extends StatelessWidget {
                 Text('\$${current.price}', style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4.00),
                 IconButton.filled(
-                  onPressed: () {},
+                  onPressed: () {
+                    ProductCart productCart = ProductCart(
+                      id: current.id,
+                      name: current.name,
+                      price: current.price,
+                      quantity: 1,
+                      description: current.description,
+                      imageUrl: current.imageUrl,
+                    );
+
+                    print('ProductCart: ${productCart.toString()}');
+                    cartBloc.add(AddProduct(productCart));
+                    print(context.read<CartBloc>().state.products);
+
+                  },
                   icon: const Icon(Icons.add, size: 24, color: Colors.white),
                   style: IconButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,

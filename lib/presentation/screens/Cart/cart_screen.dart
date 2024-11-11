@@ -1,6 +1,5 @@
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
-import 'package:GoDeli/features/cart/domain/cart.dart';
-import 'package:GoDeli/presentation/widgets/cart/product.dart';
+import 'package:GoDeli/presentation/screens/Cart/widgets/custom_cart_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -14,16 +13,12 @@ class CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    return BlocProvider(
-      create: (context) => CartBloc(),
-      child: _CartScreen(colors: colors),
-    );
+    return _CartScreen(colors: colors);
   }
 }
 
 class _CartScreen extends StatelessWidget {
   const _CartScreen({
-    super.key,
     required this.colors,
   });
 
@@ -64,7 +59,7 @@ class _CartView extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartBloc = context.watch<CartBloc>();
 
-    final cart = cartBloc.state.cart;
+    final cart = cartBloc.state;
 
     final colors = Theme.of(context).colorScheme;
 
@@ -72,13 +67,40 @@ class _CartView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         //? Lista de productos
-        Expanded(
-            child: ListView.builder(
-                itemCount: cartBloc.state.totalItems,
-                itemBuilder: (context, index) {
-                  final product = cart.products[index];
-                  return ProductWidget(product: product);
-                })),
+        Expanded(child: BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            if (cartBloc.state.totalItems == 0) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.shopping_cart,
+                      size: 100,
+                      color: Colors.grey[400],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Your cart is empty',
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return ListView.builder(
+                  itemCount: cartBloc.state.totalItems,
+                  itemBuilder: (context, index) {
+                    final product = cart.products[index];
+                    return ProductWidget(product: product);
+                  });
+            }
+          },
+        )),
         Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -98,16 +120,6 @@ class _CartView extends StatelessWidget {
           child: TextButton(
             onPressed: () {
               //TODO: Aquí iría la lógica para aplicar un cupón de descuento
-
-              //! Ejemplo de cómo agregar un producto al carrito
-              final prod = Product(
-                  id: '4',
-                  name: 'producto4',
-                  price: 10,
-                  quantity: 1,
-                  description: 'descripcion1');
-
-              cartBloc.add(AddProduct(prod));
             },
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Icon(Icons.local_offer, color: colors.primary),

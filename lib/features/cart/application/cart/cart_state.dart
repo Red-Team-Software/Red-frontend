@@ -1,16 +1,19 @@
 part of 'cart_bloc.dart';
 
 class CartState extends Equatable {
+  final List<ProductCart> products;
+  final List<Bundle> bundles;
+  final double discount = 0.0;
   
-  final Cart cart;
 
   const CartState({
-    required this.cart,
+    this.products = const [],
+    this.bundles = const [],
   });
   
   double get subtotal {
     double subtotal = 0;
-    for (var product in cart.products) {
+    for (var product in products) {
       subtotal += product.price * product.quantity;
     }
 
@@ -18,22 +21,24 @@ class CartState extends Equatable {
   }
 
   double get total {
-    return subtotal - cart.discount;
+    return subtotal - discount;
   }
 
   int get totalItems {
-    return cart.products.length + (cart.bundles?.length ?? 0);
+    return products.length + bundles.length ;
   }
 
   CartState copyWith({
-    Cart? cart,
+    List<ProductCart>? products,
+    List<Bundle>? bundles,
   }) {
     return CartState(
-      cart: cart ?? this.cart,
+      products: products ?? this.products,
+      bundles: bundles ?? this.bundles,
     );
   }
 
   @override
-  List<Object> get props => [ cart ];
+  List<Object> get props => [ products, bundles ];
 }
 

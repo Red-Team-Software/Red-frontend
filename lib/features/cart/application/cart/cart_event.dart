@@ -10,7 +10,7 @@ sealed class CartEvent extends Equatable {
 class ClearCart extends CartEvent {}
 
 class AddProduct extends CartEvent {
-  final Product product;
+  final ProductCart product;
 
   const AddProduct(this.product);
 
@@ -19,7 +19,7 @@ class AddProduct extends CartEvent {
 }
 
 class RemoveProduct extends CartEvent {
-  final Product product;
+  final ProductCart product;
 
   const RemoveProduct(this.product);
 
@@ -28,7 +28,7 @@ class RemoveProduct extends CartEvent {
 }
 
 class AddOneQuantityProduct extends CartEvent {
-  final Product product;
+  final ProductCart product;
 
   const AddOneQuantityProduct(this.product);
 
@@ -37,7 +37,7 @@ class AddOneQuantityProduct extends CartEvent {
 }
 
 class RemoveOneQuantityProduct extends CartEvent {
-  final Product product;
+  final ProductCart product;
 
   const RemoveOneQuantityProduct(this.product);
 

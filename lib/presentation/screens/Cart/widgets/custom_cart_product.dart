@@ -1,12 +1,12 @@
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
-import 'package:GoDeli/features/cart/domain/cart.dart';
+import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ProductWidget extends StatelessWidget {
-  final Product product;
-  const ProductWidget({Key? key, required this.product}) : super(key: key);
+  final ProductCart product;
+  const ProductWidget({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +16,8 @@ class ProductWidget extends StatelessWidget {
 
     return Slidable(
       endActionPane: ActionPane(
-          motion: ScrollMotion(),
+          motion: const ScrollMotion(),
           extentRatio: 0.25,
-          openThreshold: 0.3,
           children: [
             SlidableAction(
               onPressed: (context) {
@@ -154,7 +153,7 @@ class QuantityButton extends StatelessWidget {
     });
 
   final bool isMinus;
-  final Product product;
+  final ProductCart product;
   final IconData icon;
   final Function() onPressed;
   final Color color;

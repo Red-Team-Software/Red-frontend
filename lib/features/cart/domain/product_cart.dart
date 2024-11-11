@@ -1,35 +1,39 @@
 
+import 'package:GoDeli/features/products/domain/product.dart';
 
-class Product {
-  final String id;
-  final String name;
-  final double price;
+class ProductCart extends Product {
   final int quantity;
-  final String description;
 
-  Product({
-    required this.id,
-    required this.name,
-    required this.price,
+  ProductCart({
+    required super.id,
+    required super.name,
+    required super.price,
     required this.quantity,
-    required this.description,
+    required super.description,
+    required super.imageUrl,
   });
 
-  Product copyWith({
+
+  ProductCart copyWith({
     String? id,
     String? name,
     double? price,
     int? quantity,
     String? description,
+    List<String>? imageUrl,
   }) {
-    return Product(
+    return ProductCart(
       id: id ?? this.id,
       name: name ?? this.name,
       price: price ?? this.price,
       quantity: quantity ?? this.quantity,
       description: description ?? this.description,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
+
+  @override
+  List<Object?> get props => [id, name, price, quantity, description, imageUrl];
 }
 
 class Bundle {
@@ -45,11 +49,3 @@ class Bundle {
     required this.stock,
   });
 } 
-
-class Cart {
-  final List<Product> products;
-  final List<Bundle>? bundles;
-  final double discount = 0.0;
-
-  Cart({required this.products, this.bundles});
-}
