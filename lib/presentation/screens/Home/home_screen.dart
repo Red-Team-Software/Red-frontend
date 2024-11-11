@@ -64,14 +64,14 @@ class _HomeScreenView extends StatelessWidget {
                                   ? Colors.white
                                   : Colors.black,
                             ),
-                            children: const [
+                            children:  [
                               TextSpan(
                                   text: ' groceries',
                                   style: TextStyle(
                                       fontSize: 40,
-                                      color: Colors.red,
+                                      color: theme.colorScheme.primary,
                                       fontWeight: FontWeight.bold)),
-                              TextSpan(
+                              const TextSpan(
                                 text: ' delivered quikly',
                               ),
                             ]),

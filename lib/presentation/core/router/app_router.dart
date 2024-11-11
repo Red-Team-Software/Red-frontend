@@ -32,5 +32,11 @@ final appRouter = GoRouter(
       name: CategoriesScreen.name,
       builder: (context, state) => const CategoriesScreen(),
     ),
+    GoRoute(
+        path: '/product/:idProduct',
+        name: ProductScreen.name,
+        builder: (context, state) =>
+            ProductScreen(idProduct: state.pathParameters['idProduct'] ?? ''),
+      ),
   ],
 );
