@@ -1,3 +1,4 @@
+import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
@@ -13,8 +14,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<AllProductsBloc>()..fetchProductsPaginated(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => getIt<CategoriesBloc>()..fetchCategoriesPaginated()),
+        BlocProvider(create: (_) => getIt<AllProductsBloc>()..fetchProductsPaginated()),
+        BlocProvider(create: (context) => getIt<CartBloc>())
+      ],
       child: const _HomeScreenView(),
     );
   }

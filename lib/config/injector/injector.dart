@@ -31,7 +31,7 @@ class Injector {
     getIt.registerFactory<ProductDetailsBloc>(()=> ProductDetailsBloc(productsRepository: productsRepository));
 
 
-    getIt.registerSingleton(() => CartBloc());
+    getIt.registerSingleton<CartBloc>(CartBloc());
 
   }
 }

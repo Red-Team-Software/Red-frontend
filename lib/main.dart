@@ -4,14 +4,28 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/presentation/core/router/app_router.dart';
 import 'package:GoDeli/presentation/core/theme/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:GoDeli/config/injector/injector.dart';
 
 void main() async {
   // Register Blocs in service locator
   Injector().setUp();
 
-  runApp(const GoDeli());
+  runApp(const BlocsProviders());
 }
+
+class BlocsProviders extends StatelessWidget {
+  const BlocsProviders({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<CartBloc>() ),
+      ],
+      child: const GoDeli(),
+    );
+  }
+}
+
 
 class GoDeli extends StatelessWidget {
   const GoDeli({super.key});
