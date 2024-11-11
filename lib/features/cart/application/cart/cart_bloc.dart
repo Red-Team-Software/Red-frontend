@@ -21,7 +21,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _addProduct(AddProduct event, Emitter<CartState> emit) {
     final newProducts = List<ProductCart>.from(state.products);
-    if (!newProducts.contains(event.product)) {
+    if (!newProducts.any((element) => element.id == event.product.id)) {
       newProducts.add(event.product);
     } 
 
