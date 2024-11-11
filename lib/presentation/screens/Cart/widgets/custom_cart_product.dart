@@ -47,14 +47,15 @@ class ProductWidget extends StatelessWidget {
         child: Row(
           children: [
             // Imagen del producto (puede ser un icono o una imagen de red)
-            Container(
-              width: 60,
-              height: 60,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(8),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image(
+                image: NetworkImage(product.imageUrl[0]),
+                width: 60,
+                height: 60,
+                fit: BoxFit.cover,
+                
               ),
-              child: Icon(Icons.image, size: 40, color: Colors.grey[500]),
             ),
             const SizedBox(width: 8), // Espacio entre la imagen y el texto
             // Información del producto
