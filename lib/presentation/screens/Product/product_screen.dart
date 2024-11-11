@@ -1,3 +1,5 @@
+import 'dart:ui';
+import 'package:go_router/go_router.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
@@ -43,101 +45,145 @@ class _ProductView extends StatelessWidget {
             ),
           );
         }
-        return Stack(fit: StackFit.loose, clipBehavior: Clip.none, children: [
-          Image.network(
-            state.product.imageUrl[0],
+        return Stack(children: [
+          SizedBox(
             width: double.infinity,
-            fit: BoxFit.cover,
             height: 300,
-          ),
-          Positioned(
-            top: 250,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(48),
-                    topRight: Radius.circular(48),
-                  ),
-                  color: theme.scaffoldBackgroundColor),
-              height: double.infinity,
+            child: Image.network(
+              state.product.imageUrl[0],
+              fit: BoxFit.cover,
             ),
           ),
-          Positioned(
-            top: 280,
-            child: Container(
-              padding: const EdgeInsets.only(right: 32, left: 32),
+          _buttonArrow(context),
+          _scrollableDetails(state, theme)
+        ]);
+      })),
+    );
+  }
+
+  Widget _buttonArrow(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        context.pop();
+      },
+      child: Container(
+          clipBehavior: Clip.hardEdge,
+          margin: const EdgeInsets.all(16),
+          height: 40,
+          width: 40,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Center(
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                ),
+                child: const Icon(
+                  Icons.arrow_back_ios,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          )),
+    );
+  }
+
+  Widget _scrollableDetails(ProductDetailsState state, ThemeData theme) {
+    return DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.7,
+        maxChildSize: 1.0,
+        builder: (context, scrollController) {
+          return Container(
+              padding: const EdgeInsets.all(16),
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
+                ),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    state.product.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                    ),
+                  Flex(
+                      direction: Axis.vertical,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.product.name,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 40,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        RichText(
+                          text: TextSpan(
+                              text: state.product.price.toString(),
+                              style: const TextStyle(
+                                  fontSize: 32, fontWeight: FontWeight.bold),
+                              children: const [
+                                TextSpan(
+                                    text: ' / piece',
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.normal))
+                              ]),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Categories',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                        // TODO: hacer los tags estos
+                        const Text(
+                          'TODO: tags de categorias',
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Description',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                        Text(
+                          state.product.description,
+                          style: const TextStyle(
+                            fontSize: 16,
+                          ),
+                        ),
+                      ]),
+                  const SizedBox(
+                    height: 16,
                   ),
-                  const SizedBox(height: 8),
-                  RichText(
-                    text: TextSpan(
-                        text: state.product.price.toString(),
-                        style: const TextStyle(
-                            fontSize: 32, fontWeight: FontWeight.bold),
-                        children: const [
-                          TextSpan(
-                              text: ' / piece',
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.normal))
-                        ]),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Categories',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                  // TODO: hacer los tags estos
-                  const Text(
-                    'TODO: tags de categorias',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Description',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                  Text(
-                    state.product.description,
-                    style: const TextStyle(
-                      fontSize: 16,
-                    ),
-                  ),
-
-                  const SizedBox(height: 16,),
-
                   ElevatedButton(
-                    onPressed: () { },
+                    onPressed: () {},
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary, // Color de fondo del botón
+                      backgroundColor: theme.colorScheme.primary,
                       shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(24),
                       ),
-                      padding: const EdgeInsets.symmetric( vertical: 16, horizontal: 52), 
+                      padding: const EdgeInsets.symmetric(vertical: 24),
                     ),
                     child: const Center(
                       child: Text(
                         'Add to Cart',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
@@ -145,11 +191,7 @@ class _ProductView extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
-            ),
-          ),
-        ]);
-      })),
-    );
+              ));
+        });
   }
 }

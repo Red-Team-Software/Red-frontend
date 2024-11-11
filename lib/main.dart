@@ -1,9 +1,13 @@
+import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/presentation/core/router/app_router.dart';
 import 'package:GoDeli/presentation/core/theme/theme.dart';
 
 void main() async {
+  // Initialize environment variables
+  await Environment.initEnvironment();
+
   // Register Blocs in service locator
   Injector().setUp();
 
