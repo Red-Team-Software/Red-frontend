@@ -8,9 +8,11 @@ import 'package:GoDeli/features/products/application/products/all_products_bloc.
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
 import 'package:GoDeli/features/products/infraestructure/repositories/products_repository_impl.dart';
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
+final dio = Dio();
 
 class Injector {
   void setUp() {
@@ -24,14 +26,14 @@ class Injector {
 
     //? inicializando las dependencias de modulo productos
     final productsDatasource = ProductsDatasourceImpl();
-    final productsRepository = ProductsRepositoryImpl(productsDatasource: productsDatasource);
+    final productsRepository =
+        ProductsRepositoryImpl(productsDatasource: productsDatasource);
 
     getIt.registerFactory<IProductsRepository>(() => productsRepository);
-    getIt.registerFactory<AllProductsBloc>(()=> AllProductsBloc(productsRepository: productsRepository));
-    getIt.registerFactory<ProductDetailsBloc>(()=> ProductDetailsBloc(productsRepository: productsRepository));
-
-
+    getIt.registerFactory<AllProductsBloc>(
+        () => AllProductsBloc(productsRepository: productsRepository));
+    getIt.registerFactory<ProductDetailsBloc>(
+        () => ProductDetailsBloc(productsRepository: productsRepository));
     getIt.registerSingleton<CartBloc>(CartBloc());
-
   }
 }

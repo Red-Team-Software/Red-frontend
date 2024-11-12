@@ -6,7 +6,8 @@
 			"request": "launch",
 			"type": "dart",
 			"args": ["--target", "lib/main.dart"],
-			"program": "lib/main.dart"
+			"program": "lib/main.dart",
+			"flutterMode": "debug"
 		}
 	]
 }
