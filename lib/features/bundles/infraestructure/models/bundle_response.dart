@@ -3,7 +3,7 @@ class BundleResponse {
   final String name;
   final String description;
   final List<String> images;
-  final double price;
+  final int price;
   final String currency;
   final int? weigth;
   final String? measurement;
@@ -16,10 +16,17 @@ class BundleResponse {
       required this.price,
       required this.currency,
       this.weigth,
-      this.measurement
-      });
+      this.measurement});
 
-  factory BundleResponse.fromJson(Map<String, dynamic> json){
-    return BundleResponse(id: json['id'], name: json['name'], description: json['description'], images: json['images'] != null ? List<String>.from(json['images'].map((img)=>img)) : [], price: json['price'], currency: json['currency']);
+  factory BundleResponse.fromJson(Map<String, dynamic> json) {
+    return BundleResponse(
+        id: json['id'],
+        name: json['name'],
+        description: json['description'],
+        images: json['images'] != null
+            ? List<String>.from(json['images'].map((img) => img))
+            : [],
+        price: json['price'],
+        currency: json['currency']);
   }
 }

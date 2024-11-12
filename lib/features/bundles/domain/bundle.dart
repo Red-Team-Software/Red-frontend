@@ -3,7 +3,7 @@ class Bundle {
   final String name;
   final String description;
   final List<String> imageUrl;
-  final double price;
+  final int price;
   final String currency;
   final int? weigth;
   final String? measurement;
@@ -16,6 +16,5 @@ class Bundle {
       required this.price,
       required this.currency,
       this.weigth,
-      this.measurement
-      });
+      this.measurement});
 }
