@@ -213,11 +213,11 @@ class _ProductView extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 2,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
         ),
         builder: (context) {
           return Container(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(top: 32, bottom: 16, left: 16, right: 16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [

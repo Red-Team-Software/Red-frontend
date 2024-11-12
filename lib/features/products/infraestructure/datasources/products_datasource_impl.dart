@@ -58,7 +58,6 @@ class ProductsDatasourceImpl implements IProductsDatasource {
       final productRes = ProductResponse.fromJson(product);
       products.add(ProductMapper.productToDomian(productRes));
     }
-    print(products);
 
     return products;
   }
