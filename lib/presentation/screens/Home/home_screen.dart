@@ -44,114 +44,114 @@ class _HomeScreenView extends StatelessWidget {
           ],
         ),
       ),
-      body:CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  Flex(
-                    direction: Axis.vertical,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                            text: 'Get your',
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w100,
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                Flex(
+                  direction: Axis.vertical,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: 'Get your',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.w100,
+                            color: theme.brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          children: [
+                            TextSpan(
+                                text: ' groceries',
+                                style: TextStyle(
+                                    fontSize: 40,
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.bold)),
+                            const TextSpan(
+                              text: ' delivered quikly',
+                            ),
+                          ]),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    BlocProvider(
+                      create: (_) =>
+                          getIt<CategoriesBloc>()..fetchCategoriesPaginated(),
+                      child: const CaregoriesCarrusel(),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const CardBundleCarrusel(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Popular',
+                          style: TextStyle(
                               color: theme.brightness == Brightness.dark
                                   ? Colors.white
                                   : Colors.black,
-                            ),
-                            children:  [
-                              TextSpan(
-                                  text: ' groceries',
-                                  style: TextStyle(
-                                      fontSize: 40,
-                                      color: theme.colorScheme.primary,
-                                      fontWeight: FontWeight.bold)),
-                              const TextSpan(
-                                text: ' delivered quikly',
-                              ),
-                            ]),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      BlocProvider(
-                        create: (_) =>
-                            getIt<CategoriesBloc>()..fetchCategoriesPaginated(),
-                        child: const CaregoriesCarrusel(),
-                      ),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      const CardBundleCarrusel(),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Popular',
-                            style: TextStyle(
-                                color: theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 32),
-                          ),
-                          GestureDetector(
-                              onTap: () {},
-                              child: Text(
-                                'view all',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                    color: theme.colorScheme.primary,
-                                    fontWeight: FontWeight.w700),
-                              )),
-                        ],
-                      )
-                    ],
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32),
+                        ),
+                        GestureDetector(
+                            onTap: () {},
+                            child: Text(
+                              'view all',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.w700),
+                            )),
+                      ],
+                    )
+                  ],
+                ),
+              ]),
+            ),
+          ),
+          BlocBuilder<AllProductsBloc, AllProductsState>(
+            builder: (context, state) {
+              if (state.status == ProductsStatus.loading &&
+                  state.products.isEmpty) {
+                return const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (state.status == ProductsStatus.error) {
+                return const SliverFillRemaining(
+                  child: Center(
+                    child: Text('Algo inesperado paso',
+                        style: TextStyle(color: Colors.red)),
                   ),
-                ]),
-              ),
-            ),
-            BlocBuilder<AllProductsBloc,AllProductsState>(
-              builder: (context, state) {
-                if (state.status == ProductsStatus.loading && state.products.isEmpty) {
-                  return const SliverFillRemaining(
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
-                if (state.status == ProductsStatus.error) {
-                  return const SliverFillRemaining(
-                    child: Center(
-                      child: Text('Algo inesperado paso',
-                          style: TextStyle(color: Colors.red)),
-                    ),
-                  );
-                }
-                return SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          sliver: SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                Product current = state.products[index];
-                                return CustomItemProduct(current: current, theme: theme);
-                              },
-                              childCount: state.products.length,
-                            ),
-                          ),
-                        );
-              },
-            ),
-          ],
-        ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
+                );
+              }
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      Product current = state.products[index];
+                      return CustomItemProduct(current: current, theme: theme);
+                    },
+                    childCount: state.products.length,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }
