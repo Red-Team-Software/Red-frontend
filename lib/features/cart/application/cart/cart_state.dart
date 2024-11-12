@@ -14,7 +14,7 @@ class CartState extends Equatable {
   double get subtotal {
     double subtotal = 0;
     for (var product in products) {
-      subtotal += product.price * product.quantity;
+      subtotal += product.product.price * product.quantity;
     }
 
     return subtotal;

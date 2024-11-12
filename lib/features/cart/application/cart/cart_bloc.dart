@@ -21,7 +21,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _addProduct(AddProduct event, Emitter<CartState> emit) {
     final newProducts = List<ProductCart>.from(state.products);
-    if (!newProducts.any((element) => element.id == event.product.id)) {
+    if (!newProducts.any((element) => element.product.id == event.product.product.id)) {
       newProducts.add(event.product);
     } 
 
@@ -37,7 +37,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _addOneQuantityProduct(AddOneQuantityProduct event, Emitter<CartState> emit) {
     final newProducts = List<ProductCart>.from(state.products);
-    final index = newProducts.indexWhere((element) => element.id == event.product.id);
+    final index = newProducts.indexWhere((element) => element.product.id == event.product.product.id);
     newProducts[index] = event.product.copyWith(quantity: event.product.quantity + 1);
 
     emit(CartState(products: newProducts));
@@ -45,7 +45,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _removeOneQuantityProduct(RemoveOneQuantityProduct event, Emitter<CartState> emit) {
     final newProducts = List<ProductCart>.from(state.products);
-    final index = newProducts.indexWhere((element) => element.id == event.product.id);
+    final index = newProducts.indexWhere((element) => element.product.id == event.product.product.id);
     newProducts[index] = event.product.copyWith(quantity: event.product.quantity - 1);
 
     emit(CartState(products: newProducts));

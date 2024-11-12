@@ -59,12 +59,8 @@ class CustomItemProduct extends StatelessWidget {
                 IconButton.filled(
                   onPressed: () {
                     ProductCart productCart = ProductCart(
-                      id: current.id,
-                      name: current.name,
-                      price: current.price,
+                      product: current,
                       quantity: 1,
-                      description: current.description,
-                      imageUrl: current.imageUrl,
                     );
 
                     print('ProductCart: ${productCart.toString()}');

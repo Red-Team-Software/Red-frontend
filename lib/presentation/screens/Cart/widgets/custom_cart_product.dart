@@ -50,7 +50,7 @@ class ProductWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image(
-                image: NetworkImage(product.imageUrl[0]),
+                image: NetworkImage(product.product.imageUrl[0]),
                 width: 60,
                 height: 60,
                 fit: BoxFit.cover,
@@ -64,7 +64,7 @@ class ProductWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.name,
+                    product.product.name,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -74,7 +74,7 @@ class ProductWidget extends StatelessWidget {
                   const SizedBox(
                       width: 8), // Espacio entre la imagen y el texto
                   Text(
-                    product.description,
+                    product.product.description,
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.grey[700],
@@ -88,7 +88,7 @@ class ProductWidget extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  '\$${product.price}',
+                  '\$${product.product.price}',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
