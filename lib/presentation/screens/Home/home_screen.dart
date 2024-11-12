@@ -152,7 +152,6 @@ class _HomeScreenView extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
 }
