@@ -1,4 +1,4 @@
-import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:flutter/material.dart';
 
 class CardItem extends StatelessWidget {
@@ -7,7 +7,7 @@ class CardItem extends StatelessWidget {
     required this.current,
   });
 
-  final Product current;
+  final Bundle current;
 
   @override
   Widget build(BuildContext context) {
