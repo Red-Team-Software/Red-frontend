@@ -2,7 +2,7 @@ class ProductResponse {
   final String id;
   final String name;
   final String description;
-  final int price;
+  final double price;
   final String currency;
   final List<String> images;
 
