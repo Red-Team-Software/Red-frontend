@@ -1,7 +1,7 @@
+import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
+import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
-import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
 
 class CardBundleCarrusel extends StatelessWidget {
@@ -40,13 +40,13 @@ class CardBundleCarrusel extends StatelessWidget {
                   )),
             ],
           ),
-          Expanded(child: BlocBuilder<AllProductsBloc, AllProductsState>(
+          Expanded(child: BlocBuilder<AllBundlesBloc, AllBundlesState>(
               builder: (context, state) {
-            if (state.status == ProductsStatus.loading &&
-                state.products.isEmpty) {
+            if (state.status == BundlesStatus.loading &&
+                state.bundles.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
-            if (state.status == ProductsStatus.error) {
+            if (state.status == BundlesStatus.error) {
               return const Center(
                 child: Text('Algo inesperado paso',
                     style: TextStyle(color: Colors.red)),
@@ -54,9 +54,9 @@ class CardBundleCarrusel extends StatelessWidget {
             }
             return ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: state.products.length,
+              itemCount: state.bundles.length,
               itemBuilder: (BuildContext context, int index) {
-                Product current = state.products[index];
+                Bundle current = state.bundles[index];
                 return GestureDetector(
                   onTap: () {},
                   child: CardItem(current: current),

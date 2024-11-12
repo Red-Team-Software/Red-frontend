@@ -1,3 +1,7 @@
+import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
+import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
+import 'package:GoDeli/features/bundles/infraestructure/datasources/bundles_datasource_impl.dart';
+import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repository_impl.dart';
 import 'package:GoDeli/features/categories/application/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
@@ -33,5 +37,11 @@ class Injector {
         () => AllProductsBloc(productsRepository: productsRepository));
     getIt.registerFactory<ProductDetailsBloc>(
         () => ProductDetailsBloc(productsRepository: productsRepository));
+
+    //? inicializando las dependencias de modulo combos
+    final bundleDatasource = BundlesDatasourceImpl();
+    final bundleRepository = BundleRepositoryImpl(bundleDatasource: bundleDatasource);
+    getIt.registerFactory<IBundleRepository>(()=> bundleRepository);
+    getIt.registerFactory<AllBundlesBloc>(()=> AllBundlesBloc(bundleRepository: bundleRepository));
   }
 }
