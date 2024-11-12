@@ -101,7 +101,10 @@ class _CartView extends StatelessWidget {
             }
           },
         )),
+        //? Resumen de la compra
+        if (cartBloc.state.totalItems > 0)
         Container(
+          padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: const BorderRadius.only(
@@ -117,32 +120,26 @@ class _CartView extends StatelessWidget {
               ),
             ],
           ),
-          child: TextButton(
-            onPressed: () {
-              //TODO: Aquí iría la lógica para aplicar un cupón de descuento
-            },
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(Icons.local_offer, color: colors.primary),
-              const SizedBox(width: 8),
-              Text(
-                'Apply coupon',
-                style: TextStyle(
-                  color: colors.primary,
-                  fontSize: 16,
-                ),
-              ),
-            ]),
-          ),
-        ),
-        //? Resumen de la compra
-        Container(
-          padding: const EdgeInsets.all(16.0),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              TextButton(
+                onPressed: () {
+                  //TODO: Aquí iría la lógica para aplicar un cupón de descuento
+                },
+                child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Icon(Icons.local_offer, color: colors.primary),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Apply coupon',
+                    style: TextStyle(
+                      color: colors.primary,
+                      fontSize: 16,
+                    ),
+                  ),
+                ]),
+              ),
+              const SizedBox(height: 8.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
