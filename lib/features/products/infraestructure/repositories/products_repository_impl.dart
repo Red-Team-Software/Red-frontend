@@ -25,7 +25,7 @@ class ProductsRepositoryImpl implements IProductsRepository {
       final products = await productsDatasource.getProducts(page: page, perPage: perPage);
       return Result<List<Product>>.success(products);
     } catch (error, _) {
-      return Result<List<Product>>.makeError(error as Exception);
+      return Result<List<Product>>.makeError(Exception('El error es este: ${error.toString()}'));
     }
   }
 }
