@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:GoDeli/presentation/widgets/widgets.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String name = 'home_screen';
@@ -62,7 +61,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
 }
