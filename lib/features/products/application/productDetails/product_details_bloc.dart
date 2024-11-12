@@ -6,33 +6,33 @@ import 'package:equatable/equatable.dart';
 part 'product_details_event.dart';
 part 'product_details_state.dart';
 
+final initialProduct =
+    Product(id: '', name: '', description: '', price: 0, imageUrl: ['']);
 
-final initialProduct = Product(
-  id: '',
-  name: '',
-  description: '',
-  price: 0.0,
-  imageUrl: ['']
-);
-class ProductDetailsBloc extends Bloc<ProductDetailsEvent, ProductDetailsState> {
+class ProductDetailsBloc
+    extends Bloc<ProductDetailsEvent, ProductDetailsState> {
   final IProductsRepository productsRepository;
-  
-  ProductDetailsBloc({required this.productsRepository}) :
-    super( ProductDetailsState(product: initialProduct)) {
+
+  ProductDetailsBloc({required this.productsRepository})
+      : super(ProductDetailsState(product: initialProduct)) {
     on<ProductLoaded>(_onProductLoaded);
     on<LoadingStarted>(_onLoadingStarted);
     on<ErrorOnProductLoading>(_onErrorOnProductLoading);
   }
 
-  void _onProductLoaded(ProductLoaded event, Emitter<ProductDetailsState> emit) {
-    emit(state.copyWith(status: ProductDetailsStatus.loaded, product: event.product));
+  void _onProductLoaded(
+      ProductLoaded event, Emitter<ProductDetailsState> emit) {
+    emit(state.copyWith(
+        status: ProductDetailsStatus.loaded, product: event.product));
   }
 
-  void _onLoadingStarted(LoadingStarted event, Emitter<ProductDetailsState> emit) {
+  void _onLoadingStarted(
+      LoadingStarted event, Emitter<ProductDetailsState> emit) {
     emit(state.copyWith(status: ProductDetailsStatus.loading));
   }
 
-  void _onErrorOnProductLoading(ErrorOnProductLoading event, Emitter<ProductDetailsState> emit) {
+  void _onErrorOnProductLoading(
+      ErrorOnProductLoading event, Emitter<ProductDetailsState> emit) {
     emit(state.copyWith(status: ProductDetailsStatus.error));
   }
 
@@ -48,6 +48,4 @@ class ProductDetailsBloc extends Bloc<ProductDetailsEvent, ProductDetailsState> 
     }
     add(ErrorOnProductLoading());
   }
-
 }
-

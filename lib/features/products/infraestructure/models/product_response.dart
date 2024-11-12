@@ -2,7 +2,7 @@ class ProductResponse {
   final String id;
   final String name;
   final String description;
-  final double price;
+  final int price;
   final String currency;
   final List<String> images;
 
@@ -22,7 +22,9 @@ class ProductResponse {
       description: json['description'],
       price: (json['price'] as num).toDouble(),  
       currency: json['currency'],
-      images: json['images'] != null ? List<String>.from(json['images'].map((img)=>img)) : [],
+      images: json['images'] != null
+          ? List<String>.from(json['images'].map((img) => img))
+          : [],
     );
   }
 }
