@@ -4,11 +4,12 @@ class CartState extends Equatable {
   final List<ProductCart> products;
   final List<Bundle> bundles;
   final double discount = 0.0;
-  
+  final String? errorMessage;
 
   const CartState({
     this.products = const [],
     this.bundles = const [],
+    this.errorMessage,
   });
   
   double get subtotal {

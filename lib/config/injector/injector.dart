@@ -2,6 +2,9 @@ import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dar
 import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
 import 'package:GoDeli/features/bundles/infraestructure/datasources/bundles_datasource_impl.dart';
 import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repository_impl.dart';
+import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/infraestructure/datasources/isar_local_storage_datasource.dart';
+import 'package:GoDeli/features/cart/infraestructure/repositories/local_storage_repository_impl.dart';
 import 'package:GoDeli/features/categories/application/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
@@ -43,5 +46,10 @@ class Injector {
     final bundleRepository = BundleRepositoryImpl(bundleDatasource: bundleDatasource);
     getIt.registerFactory<IBundleRepository>(()=> bundleRepository);
     getIt.registerFactory<AllBundlesBloc>(()=> AllBundlesBloc(bundleRepository: bundleRepository));
+    
+    //? inicializando las dependencias de modulo carrito
+    final datasource = IsarLocalStorageDatasource();
+    LocalStorageRepositoryImpl repository = LocalStorageRepositoryImpl( dataSource: datasource );
+    getIt.registerSingleton<CartBloc>(CartBloc(repository: repository ));
   }
 }

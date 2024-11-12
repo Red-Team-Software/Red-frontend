@@ -10,7 +10,7 @@ packages:
     source: hosted
     version: "61.0.0"
   analyzer:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: analyzer
       sha256: ea3d8652bda62982addfd92fdc2d0214e5f82e43325104990d4f4c4a2a313562
@@ -322,7 +322,7 @@ packages:
     dependency: "direct dev"
     description:
       name: flutter_lints
-      sha256: "5398f14efa795ffb7a33e9b6a08798b26a180edac4ad7db3f231e40f82ce11e1"
+      sha256: "9e8c3858111da373efc5aa341de011d9bd23e2c5c5e0c62bccf32438e192d7b1"
       url: "https://pub.dev"
     source: hosted
     version: "3.0.2"
@@ -484,10 +484,10 @@ packages:
     dependency: transitive
     description:
       name: lints
-      sha256: "3315600f3fb3b135be672bf4a178c55f274bebe368325ae18462c89ac1e3b413"
+      sha256: cbf8d4b858bb0134ef3ef87841abdf8d63bfc255c266b7bf6b39daa1085c4290
       url: "https://pub.dev"
     source: hosted
-    version: "5.0.0"
+    version: "3.0.0"
   logging:
     dependency: transitive
     description:
@@ -711,7 +711,7 @@ packages:
       sha256: "54e8dc865349059ebe7f163d6acce7c89eb958b8047e6d6e80ce93b13d7c9e60"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.0"
+    version: "0.4.0"
   pubspec_parse:
     dependency: transitive
     description:
@@ -853,7 +853,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.4"
-<<<<<<< HEAD
   time:
     dependency: transitive
     description:
@@ -870,8 +869,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.1"
-=======
->>>>>>> a5ec94053b2c6b0403c04e138897ed19f2d435f6
   typed_data:
     dependency: transitive
     description:
@@ -932,7 +929,7 @@ packages:
     dependency: transitive
     description:
       name: win32
-      sha256: "68d1e89a91ed61ad9c370f9f8b6effed9ae5e0ede22a270bdfa6daf79fc2290a"
+      sha256: "84ba388638ed7a8cb3445a320c8273136ab2631cd5f2c57888335504ddab1bc2"
       url: "https://pub.dev"
     source: hosted
     version: "5.8.0"
@@ -962,8 +959,4 @@ packages:
     version: "3.1.2"
 sdks:
   dart: ">=3.5.0 <4.0.0"
-<<<<<<< HEAD
   flutter: ">=3.24.0"
-=======
-  flutter: ">=3.19.0"
->>>>>>> a5ec94053b2c6b0403c04e138897ed19f2d435f6

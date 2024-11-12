@@ -1,9 +1,5 @@
 import 'package:GoDeli/features/products/domain/product.dart';
-import 'package:isar/isar.dart';
 
-// part 'product_cart.g.dart';
-
-@collection
 class ProductCart {
 
   final Product product;
