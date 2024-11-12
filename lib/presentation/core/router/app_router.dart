@@ -36,5 +36,16 @@ final appRouter = GoRouter(
       name: AuthPage.name,
       builder: (context, state) => const AuthPage(),
     ),
+    GoRoute(
+      path: '/categories',
+      name: CategoriesScreen.name,
+      builder: (context, state) => const CategoriesScreen(),
+    ),
+    GoRoute(
+      path: '/product/:idProduct',
+      name: ProductScreen.name,
+      builder: (context, state) =>
+          ProductScreen(idProduct: state.pathParameters['idProduct'] ?? ''),
+    ),
   ],
 );

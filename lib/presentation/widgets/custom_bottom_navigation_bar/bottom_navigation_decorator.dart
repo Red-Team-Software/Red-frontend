@@ -73,6 +73,8 @@ class _CustomIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSelected = currentIndex == index;
 
+    final theme = Theme.of(context);
+
     return GestureDetector(
       onTap: () => onItemTapped(index),
       child: Stack(
