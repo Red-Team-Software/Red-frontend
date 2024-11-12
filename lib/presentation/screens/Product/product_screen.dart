@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,7 +57,7 @@ class _ProductView extends StatelessWidget {
             ),
           ),
           _buttonArrow(context),
-          _scrollableDetails(state, theme)
+          _scrollableDetails(state.product, theme)
         ]);
       })),
     );
@@ -94,7 +96,7 @@ class _ProductView extends StatelessWidget {
     );
   }
 
-  Widget _scrollableDetails(ProductDetailsState state, ThemeData theme) {
+  Widget _scrollableDetails(Product product, ThemeData theme) {
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
       minChildSize: 0.68,
@@ -120,7 +122,7 @@ class _ProductView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        state.product.name,
+                        product.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -129,14 +131,14 @@ class _ProductView extends StatelessWidget {
                       const SizedBox(height: 8),
                       RichText(
                         text: TextSpan(
-                          text: state.product.price.toString(),
+                          text: product.price.toString(),
                           style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
-                          children: const [
+                          children: [
                             TextSpan(
-                              text: ' / piece',
+                              text: '${product.currency} / piece',
                               style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.normal,
@@ -167,7 +169,7 @@ class _ProductView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        state.product.description,
+                        product.description,
                         style: const TextStyle(
                           fontSize: 16,
                         ),
@@ -179,7 +181,7 @@ class _ProductView extends StatelessWidget {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  _showModal(context);
+                  _showModal(context, theme, product);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: theme.colorScheme.primary,
@@ -206,45 +208,53 @@ class _ProductView extends StatelessWidget {
     );
   }
 
-  Future<dynamic> _showModal(BuildContext context) => showModalBottomSheet(
+  Future<dynamic> _showModal(BuildContext context, ThemeData theme, Product product) => showModalBottomSheet(
         context: context,
+        backgroundColor: Colors.white,
+        elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
         builder: (context) {
-          return Padding(
+          return Container(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  'Add More Products',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Flex(
+                  direction: Axis.horizontal,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // Lógica para agregar un producto
-                      },
-                      child: Text('Add One'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Lógica para agregar más productos
-                      },
-                      child: Text('Add Multiple'),
-                    ),
+                    Text('Price: ${product.price} ${product.currency}', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+                    
+                    CustomCartActionButton()
                   ],
                 ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Add to Cart',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
               ],
             ),
           );
         },
       );
 }
+
