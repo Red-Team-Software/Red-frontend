@@ -86,7 +86,7 @@ class _ProductView extends StatelessWidget {
                 child: const Icon(
                   Icons.arrow_back_ios,
                   size: 20,
-                  color: Colors.white,
+                  color: Colors.black45,
                 ),
               ),
             ),
@@ -96,102 +96,155 @@ class _ProductView extends StatelessWidget {
 
   Widget _scrollableDetails(ProductDetailsState state, ThemeData theme) {
     return DraggableScrollableSheet(
-        initialChildSize: 0.7,
-        minChildSize: 0.7,
-        maxChildSize: 1.0,
-        builder: (context, scrollController) {
-          return Container(
-              padding: const EdgeInsets.all(16),
-              clipBehavior: Clip.hardEdge,
-              decoration: BoxDecoration(
-                color: theme.scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
+      initialChildSize: 0.7,
+      minChildSize: 0.68,
+      maxChildSize: 0.75,
+      builder: (context, scrollController) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: theme.scaffoldBackgroundColor,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(40),
+              topRight: Radius.circular(40),
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        state.product.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      RichText(
+                        text: TextSpan(
+                          text: state.product.price.toString(),
+                          style: const TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          children: const [
+                            TextSpan(
+                              text: ' / piece',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Categories',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      ),
+                      // TODO: hacer los tags estos
+                      const Text(
+                        'TODO: tags de categorias',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Description',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
+                        ),
+                      ),
+                      Text(
+                        state.product.description,
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Flex(
-                      direction: Axis.vertical,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          state.product.name,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        RichText(
-                          text: TextSpan(
-                              text: state.product.price.toString(),
-                              style: const TextStyle(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                              children: const [
-                                TextSpan(
-                                    text: ' / piece',
-                                    style: TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.normal))
-                              ]),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Categories',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        ),
-                        // TODO: hacer los tags estos
-                        const Text(
-                          'TODO: tags de categorias',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Description',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
-                        ),
-                        Text(
-                          state.product.description,
-                          style: const TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ]),
-                  const SizedBox(
-                    height: 16,
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  _showModal(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.colorScheme.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(24),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 24),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Add to Cart',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                  padding: const EdgeInsets.symmetric(vertical: 24),
+                ),
+                child: const Center(
+                  child: Text(
+                    'Add to Cart',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
-                ],
-              ));
-        });
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
+
+  Future<dynamic> _showModal(BuildContext context) => showModalBottomSheet(
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Add More Products',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Lógica para agregar un producto
+                      },
+                      child: Text('Add One'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Lógica para agregar más productos
+                      },
+                      child: Text('Add Multiple'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      );
 }

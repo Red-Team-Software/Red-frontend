@@ -22,7 +22,7 @@ class ProductResponse {
       description: json['description'],
       price: json['price'],
       currency: json['currency'],
-      images: List<String>.from(json['images']),
+      images: json['images'] != null ? List<String>.from(json['images'].map((img)=>img)) : [],
     );
   }
 }
