@@ -56,3 +56,15 @@ android {
 flutter {
     source = "../.."
 }
+
+
+dependencies {
+    // Importa la BoM de Firebase para manejar las versiones de manera coherente
+    implementation platform('com.google.firebase:firebase-bom:33.5.1')
+
+    // Agrega cualquier producto de Firebase que necesites
+    implementation 'com.google.firebase:firebase-messaging'
+    // Puedes agregar más dependencias de Firebase aquí según lo necesites
+}
+
+apply plugin: 'com.google.gms.google-services'
