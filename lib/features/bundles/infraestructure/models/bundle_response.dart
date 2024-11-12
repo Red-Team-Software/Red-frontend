@@ -3,7 +3,7 @@ class BundleResponse {
   final String name;
   final String description;
   final List<String> images;
-  final int price;
+  final double price;
   final String currency;
   final int? weigth;
   final String? measurement;
@@ -26,7 +26,7 @@ class BundleResponse {
         images: json['images'] != null
             ? List<String>.from(json['images'].map((img) => img))
             : [],
-        price: json['price'],
+        price: (json['price'] as num).toDouble(),
         currency: json['currency']);
   }
 }

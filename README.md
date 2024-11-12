@@ -4,6 +4,14 @@ A new Flutter project.
 
 ## Getting Started
 
+# Dev
+
+1. Copiar env.template y llenar las variables de entorno
+2. Si hay cambios en entidades de Isar, hay que ejecutar el comando
+```
+flutter pub run build_runner build
+```
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:

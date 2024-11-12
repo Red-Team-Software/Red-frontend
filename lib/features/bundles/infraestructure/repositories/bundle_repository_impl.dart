@@ -25,10 +25,8 @@ class BundleRepositoryImpl implements IBundleRepository {
       final bundles = await bundleDatasource.getBundlesPaginated(
           page: page, perPage: perPage);
       return Result<List<Bundle>>.success(bundles);
-    } catch (error, _) {
-      print("El error");
-      print(error);
-      return Result<List<Bundle>>.makeError(error as Exception);
+    } catch (error) {
+      return Result<List<Bundle>>.makeError(Exception(error.toString()));
     }
   }
 }

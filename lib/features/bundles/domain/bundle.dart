@@ -3,7 +3,7 @@ class Bundle {
   final String name;
   final String description;
   final List<String> imageUrl;
-  final int price;
+  final double price;
   final String currency;
   final int? weigth;
   final String? measurement;
