@@ -4,7 +4,8 @@ import 'package:GoDeli/features/cart/domain/product_cart.dart';
 
 abstract class LocalStorageDataSource {
   
-  Future<List<ProductCart>> getCartItems();
+  Future<List<ProductCart>> getCartProducts();
+  Future<List<BundleCart>> getCartBundles();
   Future<void> clearCart();
   // Products 
   Future<void> addProductToCart(ProductCart product);

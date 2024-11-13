@@ -42,10 +42,9 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
     });
   }
 
-  @override
-  Future<List<ProductCart>> getCartItems() async {
+ @override
+  Future<List<ProductCart>> getCartProducts() async {
     final isar = await db;
-
     // Obtén todos los ProductCartEntity almacenados en la base de datos
     final productCartEntities = await isar.productCartEntitys.where().findAll();
 
@@ -59,6 +58,13 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
         .map((entity) => ProductCartEntityMapper().mapProductCartToDomain(entity))
         .toList();
 
+    print('Product cart: $cartProducts');
+    return cartProducts;
+  }
+
+  @override
+  Future<List<BundleCart>> getCartBundles() async {
+    final isar = await db;
     // Obtén todos los BundleCartEntity almacenados en la base de datos
     final bundleCartEntities = await isar.bundleCartEntitys.where().findAll();
 
@@ -72,11 +78,8 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
         .map((entity) => BundleCartEntityMapper().mapBundleCartToDomain(entity))
         .toList();
 
-    // Retorna la lista combinada de ProductCart y BundleCart
-    dynamic cart = [...cartProducts, ...cartBundles];
-
-
-    return cart;
+    print('Bundle cart: $cartBundles');
+    return cartBundles;
   }
 
   @override

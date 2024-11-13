@@ -20,8 +20,13 @@ class LocalStorageRepositoryImpl extends LocalStorageRepository {
   }
 
   @override
+  Future<List<BundleCart>> getCartBundles() {
+    return dataSource.getCartBundles();
+  }
+
+  @override
   Future<List<ProductCart>> getCartProducts() {
-    return dataSource.getCartItems();
+    return dataSource.getCartProducts();
   }
 
   @override

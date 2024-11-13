@@ -4,6 +4,8 @@ import 'package:GoDeli/features/cart/domain/product_cart.dart';
 abstract class LocalStorageRepository {
   
   Future<List<ProductCart>> getCartProducts();
+  Future<List<BundleCart>> getCartBundles();
+  
   Future<void> clearCart();
   // Products
   Future<void> addProductToCart(ProductCart product);

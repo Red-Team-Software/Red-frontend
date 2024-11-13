@@ -41,6 +41,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   } catch (e) {
     emit(const CartState(products: [], errorMessage: "Error al cargar el carrito"));
   }
+
+  try {
+    // Cargar los paquetes del carrito desde el repositorio
+    final cartBundles = await repository.getCartBundles();
+    // Emitir el nuevo estado con los paquetes cargados
+    emit(state.copyWith(bundles: cartBundles));
+  } catch (e) {
+    emit(const CartState(bundles: [], errorMessage: "Error al cargar el carrito"));
+  }
 }
 
 
