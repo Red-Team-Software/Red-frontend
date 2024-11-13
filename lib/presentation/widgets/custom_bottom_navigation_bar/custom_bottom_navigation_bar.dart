@@ -1,9 +1,21 @@
+import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_item.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/bottom_navigation_center_icon.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/bottom_navigation_decorator.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
-  const CustomBottomNavigationBar({super.key});
+  const CustomBottomNavigationBar({
+    super.key,
+    required this.items1,
+    required this.items2,
+    required this.currentIndex,
+    required this.onItemTapped,
+  });
+
+  final List<CustomBottomNavigationItem> items1;
+  final List<CustomBottomNavigationItem> items2;
+  final int currentIndex;
+  final ValueChanged<int> onItemTapped;
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +31,23 @@ class CustomBottomNavigationBar extends StatelessWidget {
           CustomPaint(
             size: Size(size.width, 80),
             painter: BNBCustomPainter(
-                backgroundColor: theme.brightness == Brightness.dark
-                    ? Colors.black
-                    : Colors.white),
+              backgroundColor: theme.brightness == Brightness.dark
+                  ? Colors.black
+                  : Colors.white,
+            ),
           ),
           Positioned(
-              bottom: 48,
-              left: (size.width - 70) / 2,
-              child: const BottomNavigationCenterIcon()),
-          BottomNavigationDecoration(size: size, currentIndex: 0)
+            bottom: 45,
+            left: (size.width - 70) / 2,
+            child: const BottomNavigationCenterIcon(),
+          ),
+          BottomNavigationDecoration(
+            size: size,
+            items1: items1,
+            items2: items2,
+            currentIndex: currentIndex,
+            onItemTapped: onItemTapped,
+          ),
         ],
       ),
     );
@@ -37,7 +57,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
 class BNBCustomPainter extends CustomPainter {
   final Color backgroundColor;
 
-  BNBCustomPainter({super.repaint, required this.backgroundColor});
+  BNBCustomPainter({required this.backgroundColor});
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
@@ -55,14 +76,14 @@ class BNBCustomPainter extends CustomPainter {
     path.quadraticBezierTo(size.width * 0.80, 0, size.width, 0);
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
-    path.lineTo(0, 20);
+    path.close();
 
     canvas.drawShadow(path, Colors.black, 5, true);
     canvas.drawPath(path, paint);
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
   }
 }
