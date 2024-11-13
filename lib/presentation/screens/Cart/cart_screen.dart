@@ -101,7 +101,12 @@ class _CartView extends StatelessWidget {
                       cartBloc.state.totalProducts,
                       (index) {
                         final product = cartBloc.state.products[index];
-                        return ProductWidget(product: product);
+                        return Column(
+                          children: [
+                            ProductWidget(product: product),
+                            const Divider(),
+                          ],
+                        );
                       },
                     ),
                   ],
@@ -110,7 +115,12 @@ class _CartView extends StatelessWidget {
                       cartBloc.state.totalBundles,
                       (index) {
                         final bundle = cartBloc.state.bundles[index];
-                        return BundleWidget(bundle: bundle);
+                        return Column(
+                          children: [
+                            BundleWidget(bundle: bundle),
+                            const Divider(),
+                          ],
+                        );
                       },
                     ),
                   ],

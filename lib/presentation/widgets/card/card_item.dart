@@ -14,7 +14,6 @@ class CardItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final cartBloc = context.watch<CartBloc>();
 
     final theme = Theme.of(context);
@@ -25,7 +24,7 @@ class CardItem extends StatelessWidget {
         elevation: 8.0,
         borderRadius: BorderRadius.circular(16),
         child: Container(
-          height: 304, 
+          height: 300,
           width: 220,
           padding: const EdgeInsets.all(8.0),
           decoration: BoxDecoration(
@@ -39,8 +38,7 @@ class CardItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 height: 110,
                 width: double.infinity,
                 child: ClipRRect(
@@ -48,6 +46,15 @@ class CardItem extends StatelessWidget {
                   child: Image.network(
                     current.imageUrl.isNotEmpty ? current.imageUrl[0] : '',
                     fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: Colors.grey,
+                          size: 40,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
@@ -73,8 +80,7 @@ class CardItem extends StatelessWidget {
                 ),
               ),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   current.description,
                   maxLines: 2,
@@ -96,6 +102,8 @@ class CardItem extends StatelessWidget {
                         fontSize: 14,
                       ),
                     ),
+                    
+                    if(!cartBloc.isBundleInCart(BundleCart(bundle: current, quantity: 1)))
                     IconButton.filled(
                       onPressed: () {
                         final bundleCart = BundleCart(
@@ -103,20 +111,54 @@ class CardItem extends StatelessWidget {
                           quantity: 1,
                         );
                         cartBloc.add(AddBundle(bundleCart));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Row(
+                              children: [
+                                const Icon(
+                                  Icons.check_box,
+                                  color: Colors.green,
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    '${current.name} added to cart!',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            duration: const Duration(seconds: 2),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            margin: EdgeInsets.fromLTRB(16, 0, 16, 36),
+                            elevation: 100,
+                          ),
+                        );
                       },
                       icon: Icon(Icons.add,
-                          size: 16,
-                          weight: 16,
-                          color: theme.colorScheme.primary),
+                          size: 16, weight: 16, color: Colors.white),
                       style: IconButton.styleFrom(
-                        backgroundColor: theme.colorScheme.secondary,
-                        padding: const EdgeInsets.all(0.5),
-                        minimumSize: const Size(18, 18),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
+                      backgroundColor: theme.colorScheme.primary,
+                      padding: const EdgeInsets.all(2),
+                      minimumSize: const Size(24, 24),
+                  
                       ),
-                    )
+                    ) else
+                    IconButton.filled(
+                      onPressed: null,
+                      icon: const Icon(Icons.check, size: 24, color: Colors.black),
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.all(2),
+                        minimumSize: const Size(24, 24),
+                        shape: CircleBorder(side: BorderSide(color: Colors.black, width: 0.3)),
+                      ),
+                    ),
+
                   ],
                 ),
               ),

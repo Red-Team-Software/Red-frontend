@@ -99,7 +99,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   _addBundle(AddBundle event, Emitter<CartState> emit) {
     final newBundles = List<BundleCart>.from(state.bundles);
-    if (!_isBundleInCart(event.bundle)) {
+    if (!isBundleInCart(event.bundle)) {
       newBundles.add(event.bundle);
       repository.addBundleToCart(event.bundle);
     }
@@ -138,7 +138,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     return state.products.any((element) => element.product.id == product.product.id);
   }
 
-  bool _isBundleInCart(BundleCart bundle) {
+  bool isBundleInCart(BundleCart bundle) {
     return state.bundles.any((element) => element.bundle.id == bundle.bundle.id);
   }
 
