@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
@@ -89,7 +88,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final newBundles = List<BundleCart>.from(state.bundles);
     if (!newBundles.any((element) => element.bundle.id == event.bundle.bundle.id)) {
       newBundles.add(event.bundle);
-      // repository.addBundleToCart(event.bundle);
+      repository.addBundleToCart(event.bundle);
     }
 
     emit(state.copyWith(bundles: newBundles));
@@ -98,7 +97,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   _removeBundle(RemoveBundle event, Emitter<CartState> emit) {
     final newBundles = List<BundleCart>.from(state.bundles);
     newBundles.remove(event.bundle);
-    // repository.removeBundleFromCart(event.bundle);
+    repository.removeBundleFromCart(event.bundle);
 
     emit(state.copyWith(bundles: newBundles));
   }
@@ -107,7 +106,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final newBundles = List<BundleCart>.from(state.bundles);
     final index = newBundles.indexWhere((element) => element.bundle.id == event.bundle.bundle.id);
     newBundles[index] = event.bundle.copyWith(quantity: event.bundle.quantity +  event.quantity);
-    // repository.updateBundleQuantity(event.bundle.bundle.id, event.bundle.quantity + event.quantity);
+    repository.updateBundleQuantity(event.bundle.bundle.id, event.bundle.quantity + event.quantity);
 
     emit(state.copyWith(bundles: newBundles));
   }
@@ -116,7 +115,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     final newBundles = List<BundleCart>.from(state.bundles);
     final index = newBundles.indexWhere((element) => element.bundle.id == event.bundle.bundle.id);
     newBundles[index] = event.bundle.copyWith(quantity: event.bundle.quantity -  event.quantity);
-    // repository.updateBundleQuantity(event.bundle.bundle.id, event.bundle.quantity -  event.quantity);
+    repository.updateBundleQuantity(event.bundle.bundle.id, event.bundle.quantity - event.quantity);
 
     emit(state.copyWith(bundles: newBundles));
   }

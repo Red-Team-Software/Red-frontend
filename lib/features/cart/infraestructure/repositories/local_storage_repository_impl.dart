@@ -1,3 +1,4 @@
+import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/datasource/local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/cart/domain/repositories/local_storage_repository.dart';
@@ -20,7 +21,7 @@ class LocalStorageRepositoryImpl extends LocalStorageRepository {
 
   @override
   Future<List<ProductCart>> getCartProducts() {
-    return dataSource.getCartProducts();
+    return dataSource.getCartItems();
   }
 
   @override
@@ -31,5 +32,20 @@ class LocalStorageRepositoryImpl extends LocalStorageRepository {
   @override
   Future<void> updateProductQuantity(String productId, int newQuantity) {
     return dataSource.updateProductQuantity(productId, newQuantity);
+  }
+
+  @override
+  Future<void> addBundleToCart(BundleCart bundle) {
+    return dataSource.addBundleToCart(bundle);
+  }
+
+  @override
+  Future<void> removeBundleFromCart(BundleCart bundle) {
+    return dataSource.removeBundleFromCart(bundle);
+  }
+
+  @override
+  Future<void> updateBundleQuantity(String bundleId, int newQuantity) {
+    return dataSource.updateBundleQuantity(bundleId, newQuantity);
   }
 }
