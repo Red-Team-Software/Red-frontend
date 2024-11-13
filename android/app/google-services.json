@@ -1,29 +1,29 @@
 {
-  "project_info": {
-    "project_number": "19957505202",
-    "project_id": "godeli-24ab6",
-    "storage_bucket": "godeli-24ab6.firebasestorage.app"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:19957505202:android:7b297f5538151edab23dab",
-        "android_client_info": {
-          "package_name": "com.example.GoDeli"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDtuEVHEVkRDgOAJcdaYVmoSLP9FnG61Ac"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+	"project_info": {
+		"project_number": "1085482529354",
+		"project_id": "red-team-backend",
+		"storage_bucket": "red-team-backend.firebasestorage.app"
+	},
+	"client": [
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:1085482529354:android:7563a49eb9175e12672cb3",
+				"android_client_info": {
+					"package_name": "red_team.frontend.movil"
+				}
+			},
+			"oauth_client": [],
+			"api_key": [
+				{
+					"current_key": "AIzaSyBtMdHCpoE2GMeJqsVKV-sRr6hYvvl4LZk"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": []
+				}
+			}
+		}
+	],
+	"configuration_version": "1"
 }
