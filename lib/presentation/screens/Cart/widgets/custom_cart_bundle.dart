@@ -1,12 +1,12 @@
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
-import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class ProductWidget extends StatelessWidget {
-  final ProductCart product;
-  const ProductWidget({super.key, required this.product});
+class BundleWidget extends StatelessWidget {
+  final BundleCart bundle;
+  const BundleWidget({super.key, required this.bundle});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ProductWidget extends StatelessWidget {
             children: [
               SlidableAction(
                 onPressed: (context) {
-                  cartBloc.add(RemoveProduct(product));
+                  cartBloc.add(RemoveBundle(bundle));
                 },
                 backgroundColor: Colors.red,
                 foregroundColor: Colors.white,
@@ -55,7 +55,7 @@ class ProductWidget extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image(
-                  image: NetworkImage(product.product.imageUrl[0]),
+                  image: NetworkImage(bundle.bundle.imageUrl[0]),
                   width: 60,
                   height: 60,
                   fit: BoxFit.cover,
@@ -68,7 +68,7 @@ class ProductWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.product.name,
+                      bundle.bundle.name,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -78,7 +78,7 @@ class ProductWidget extends StatelessWidget {
                     const SizedBox(
                         width: 8), // Espacio entre la imagen y el texto
                     Text(
-                      product.product.description,
+                      bundle.bundle.description,
                       style: TextStyle(
                         fontSize: 12,
                         color: Colors.grey[700],
@@ -92,7 +92,7 @@ class ProductWidget extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    '\$${product.product.price}',
+                    '\$${bundle.bundle.price}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -112,14 +112,14 @@ class ProductWidget extends StatelessWidget {
                       children: [
                         QuantityButton(
                             isMinus: true,
-                            product: product,
+                            product: bundle,
                             icon: Icons.remove_circle,
                             color: colors.primary,
                             onPressed: () {
-                              cartBloc.add(RemoveQuantityProduct(product,1));
+                              cartBloc.add(RemoveQuantityBundle(bundle,1));
                             }),
                         Text(
-                          '${product.quantity}', // Aquí muestra la cantidad actual
+                          '${bundle.quantity}', // Aquí muestra la cantidad actual
                           style: const TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -127,11 +127,11 @@ class ProductWidget extends StatelessWidget {
                         ),
                         QuantityButton(
                             isMinus: false,
-                            product: product,
+                            product: bundle,
                             icon: Icons.add_circle,
                             color: colors.primary,
                             onPressed: () {
-                              cartBloc.add(AddQuantityProduct(product,1));
+                              cartBloc.add(AddQuantityBundle(bundle,1));
                             }),
                       ],
                     ),
@@ -158,7 +158,7 @@ class QuantityButton extends StatelessWidget {
       required this.isMinus});
 
   final bool isMinus;
-  final ProductCart product;
+  final BundleCart product;
   final IconData icon;
   final Function() onPressed;
   final Color color;

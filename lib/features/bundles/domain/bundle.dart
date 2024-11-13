@@ -1,4 +1,6 @@
-class Bundle {
+import 'package:equatable/equatable.dart';
+
+class Bundle extends Equatable {
   final String id;
   final String name;
   final String description;
@@ -17,4 +19,16 @@ class Bundle {
       required this.currency,
       this.weigth,
       this.measurement});
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        description,
+        imageUrl,
+        price,
+        currency,
+        weigth,
+        measurement
+      ];
 }
