@@ -59,12 +59,16 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 
   void _addProduct(AddProduct event, Emitter<CartState> emit) {
+
     final newProducts = List<ProductCart>.from(state.products);
-    if (!newProducts.any((element) => element.product.id == event.product.product.id)) {
+
+    if (!isProductInCart(event.product)) {
       newProducts.add(event.product);
       repository.addProductToCart(event.product);
-    } 
+    }
+
     emit(state.copyWith(products: newProducts));
+  
   }
 
   void _removeProduct(RemoveProduct event, Emitter<CartState> emit) {
@@ -77,7 +81,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _addQuantityProduct(AddQuantityProduct event, Emitter<CartState> emit) {
     final newProducts = List<ProductCart>.from(state.products);
-    final index = newProducts.indexWhere((element) => element.product.id == event.product.product.id);
+    final index = _getProductIndex(event.product);
     newProducts[index] = event.product.copyWith(quantity: event.product.quantity +  event.quantity);
     repository.updateProductQuantity(event.product.product.id, event.product.quantity + event.quantity);
     emit(state.copyWith(products: newProducts));
@@ -85,7 +89,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _removeQuantityProduct(RemoveQuantityProduct event, Emitter<CartState> emit) {
     final newProducts = List<ProductCart>.from(state.products);
-    final index = newProducts.indexWhere((element) => element.product.id == event.product.product.id);
+    final index = _getProductIndex(event.product);
     newProducts[index] = event.product.copyWith(quantity: event.product.quantity -  event.quantity);
     repository.updateProductQuantity(event.product.product.id, event.product.quantity -  event.quantity);
 
@@ -95,7 +99,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   _addBundle(AddBundle event, Emitter<CartState> emit) {
     final newBundles = List<BundleCart>.from(state.bundles);
-    if (!newBundles.any((element) => element.bundle.id == event.bundle.bundle.id)) {
+    if (!_isBundleInCart(event.bundle)) {
       newBundles.add(event.bundle);
       repository.addBundleToCart(event.bundle);
     }
@@ -113,7 +117,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   _addQuantityBundle(AddQuantityBundle event, Emitter<CartState> emit) {
     final newBundles = List<BundleCart>.from(state.bundles);
-    final index = newBundles.indexWhere((element) => element.bundle.id == event.bundle.bundle.id);
+    final index = _getBundleIndex(event.bundle);
     newBundles[index] = event.bundle.copyWith(quantity: event.bundle.quantity +  event.quantity);
     repository.updateBundleQuantity(event.bundle.bundle.id, event.bundle.quantity + event.quantity);
 
@@ -122,11 +126,27 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   
   _removeQuantityBundle(RemoveQuantityBundle event, Emitter<CartState> emit) {
     final newBundles = List<BundleCart>.from(state.bundles);
-    final index = newBundles.indexWhere((element) => element.bundle.id == event.bundle.bundle.id);
+    final index = _getBundleIndex(event.bundle);
     newBundles[index] = event.bundle.copyWith(quantity: event.bundle.quantity -  event.quantity);
     repository.updateBundleQuantity(event.bundle.bundle.id, event.bundle.quantity - event.quantity);
 
     emit(state.copyWith(bundles: newBundles));
   }
 
+
+  bool isProductInCart(ProductCart product) {
+    return state.products.any((element) => element.product.id == product.product.id);
+  }
+
+  bool _isBundleInCart(BundleCart bundle) {
+    return state.bundles.any((element) => element.bundle.id == bundle.bundle.id);
+  }
+
+  int _getProductIndex(ProductCart product) {
+    return state.products.indexWhere((element) => element.product.id == product.product.id);
+  }
+
+  int _getBundleIndex(BundleCart bundle) {
+    return state.bundles.indexWhere((element) => element.bundle.id == bundle.bundle.id);
+  }
 }
