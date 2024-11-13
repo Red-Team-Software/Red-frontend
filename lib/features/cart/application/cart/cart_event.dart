@@ -29,20 +29,60 @@ class RemoveProduct extends CartEvent {
   List<Object> get props => [product];
 }
 
-class AddOneQuantityProduct extends CartEvent {
+class AddQuantityProduct extends CartEvent {
   final ProductCart product;
-
-  const AddOneQuantityProduct(this.product);
+  final int quantity;
+  const AddQuantityProduct(this.product, this.quantity);
 
   @override
   List<Object> get props => [product];
 }
 
-class RemoveOneQuantityProduct extends CartEvent {
+class RemoveQuantityProduct extends CartEvent {
   final ProductCart product;
 
-  const RemoveOneQuantityProduct(this.product);
+  final int quantity;
+
+  const RemoveQuantityProduct(this.product, this.quantity);
 
   @override
   List<Object> get props => [product];
+}
+
+class AddBundle extends CartEvent {
+  final BundleCart bundle;
+
+  const AddBundle(this.bundle);
+
+  @override
+  List<Object> get props => [bundle];
+}
+
+class RemoveBundle extends CartEvent {
+  final BundleCart bundle;
+
+  const RemoveBundle(this.bundle);
+
+  @override
+  List<Object> get props => [bundle];
+}
+
+class AddQuantityBundle extends CartEvent {
+  final BundleCart bundle;
+  final int quantity;
+  const AddQuantityBundle(this.bundle, this.quantity);
+
+  @override
+  List<Object> get props => [bundle];
+}
+
+class RemoveQuantityBundle extends CartEvent {
+  final BundleCart bundle;
+
+  final int quantity;
+
+  const RemoveQuantityBundle(this.bundle, this.quantity);
+
+  @override
+  List<Object> get props => [bundle];
 }
