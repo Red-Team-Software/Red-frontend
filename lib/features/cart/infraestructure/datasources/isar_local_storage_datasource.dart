@@ -11,7 +11,6 @@ import 'package:GoDeli/features/cart/infraestructure/models/product_cart_entity.
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/features/products/infraestructure/mappers/product_entity_mapper.dart';
 import 'package:GoDeli/features/products/infraestructure/models/product_entity.dart';
-import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
