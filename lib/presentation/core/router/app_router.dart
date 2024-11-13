@@ -1,6 +1,7 @@
 import 'package:GoDeli/presentation/core/router/index.dart';
 import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
+import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/view/auth_page.dart';
 import 'package:GoDeli/presentation/screens/profile/view/profile_page.dart';
 import 'package:GoDeli/presentation/screens/search/view/search_page.dart';
@@ -12,10 +13,11 @@ final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
-      path: '/',
-      name: IndexPage.name,
-      builder: (context, state) => const IndexPage(),
-    ),
+        path: '/',
+        // name: IndexPage.name,
+        // builder: (context, state) => const IndexPage(),
+        name: OrderSummaryScreen.name,
+        builder: (context, state) => const OrderSummaryScreen()),
     GoRoute(
       path: '/search',
       name: SearchPage.name,
