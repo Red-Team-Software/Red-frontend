@@ -4,12 +4,14 @@ class AddressCard extends StatelessWidget {
   final String title;
   final String address;
   final bool isSelected;
+  final VoidCallback onSelect;
 
   const AddressCard({
     super.key,
     required this.title,
     required this.address,
     required this.isSelected,
+    required this.onSelect,
   });
 
   @override
@@ -31,6 +33,7 @@ class AddressCard extends StatelessWidget {
             // TODO: Lógica para editar dirección
           },
         ),
+        onTap: onSelect,
       ),
     );
   }

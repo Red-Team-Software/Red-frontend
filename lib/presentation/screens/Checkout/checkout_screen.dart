@@ -1,9 +1,14 @@
+import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
+import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
 import 'widgets/shipping_address_section.dart';
 import 'widgets/delivery_time_section.dart';
 import 'widgets/payment_method_section.dart';
 import 'widgets/order_summary_section.dart';
+import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
 
 class CheckoutScreen extends StatelessWidget {
   static const String name = 'checkout_screen';
@@ -12,22 +17,25 @@ class CheckoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: CustomAppBar(
-          cartItemCount: 3), // Ejemplo de 3 artículos en el carrito
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ShippingAddressSection(),
-            SizedBox(height: 16),
-            DeliveryTimeSection(),
-            SizedBox(height: 16),
-            PaymentMethodSection(),
-            SizedBox(height: 16),
-            OrderSummarySection(),
-          ],
+    return BlocProvider(
+      create: (context) => CheckoutBloc(cartBloc: context.read<CartBloc>())
+        ..add(LoadCheckoutData()),
+      child: const Scaffold(
+        appBar: CustomAppBar(cartItemCount: 3),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ShippingAddressSection(),
+              SizedBox(height: 16),
+              DeliveryTimeSection(),
+              SizedBox(height: 16),
+              PaymentMethodSection(),
+              SizedBox(height: 16),
+              OrderSummarySection(),
+            ],
+          ),
         ),
       ),
     );
