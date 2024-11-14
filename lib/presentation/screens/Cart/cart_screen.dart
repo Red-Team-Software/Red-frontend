@@ -1,4 +1,5 @@
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/presentation/screens/Cart/widgets/custom_cart_bundle.dart';
 import 'package:GoDeli/presentation/screens/Cart/widgets/custom_cart_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -92,12 +93,39 @@ class _CartView extends StatelessWidget {
                 ),
               );
             } else {
-              return ListView.builder(
-                  itemCount: cartBloc.state.totalItems,
-                  itemBuilder: (context, index) {
-                    final product = cart.products[index];
-                    return ProductWidget(product: product);
-                  });
+              return ListView(
+                padding: const EdgeInsets.all(8.0),
+                children: [
+                  if (cartBloc.state.totalProducts > 0) ...[
+                    ...List.generate(
+                      cartBloc.state.totalProducts,
+                      (index) {
+                        final product = cartBloc.state.products[index];
+                        return Column(
+                          children: [
+                            ProductWidget(product: product),
+                            const Divider(),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                  if (cartBloc.state.totalBundles > 0) ...[
+                    ...List.generate(
+                      cartBloc.state.totalBundles,
+                      (index) {
+                        final bundle = cartBloc.state.bundles[index];
+                        return Column(
+                          children: [
+                            BundleWidget(bundle: bundle),
+                            const Divider(),
+                          ],
+                        );
+                      },
+                    ),
+                  ],
+                ],
+              );
             }
           },
         )),

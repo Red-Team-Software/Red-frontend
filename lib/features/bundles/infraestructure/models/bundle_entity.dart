@@ -1,6 +1,11 @@
-import 'package:equatable/equatable.dart';
+import 'package:isar/isar.dart';
 
-class Bundle extends Equatable {
+part 'bundle_entity.g.dart';
+
+@collection
+class BundleEntity {
+  Id? isarId;
+
   final String id;
   final String name;
   final String description;
@@ -10,7 +15,7 @@ class Bundle extends Equatable {
   final int? weigth;
   final String? measurement;
 
-  Bundle(
+  BundleEntity(
       {required this.id,
       required this.name,
       required this.description,
@@ -19,16 +24,4 @@ class Bundle extends Equatable {
       required this.currency,
       this.weigth,
       this.measurement});
-
-  @override
-  List<Object?> get props => [
-        id,
-        name,
-        description,
-        imageUrl,
-        price,
-        currency,
-        weigth,
-        measurement
-      ];
 }
