@@ -29,9 +29,12 @@ class OrderSummaryScreen extends StatelessWidget {
           const SizedBox(height: 16),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Items',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Items',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           Expanded(

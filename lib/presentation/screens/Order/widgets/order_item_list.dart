@@ -18,6 +18,36 @@ class OrderItemList extends StatelessWidget {
         quantity: 1),
     ProductCart(
         product: Product(
+            id: '7',
+            name: 'Tuerca',
+            price: 900,
+            imageUrl: const [
+              'https://europer.cl/wp-content/uploads/2020/07/a4-tuerca.jpg'
+            ],
+            description: 'Pack 2 Kg'),
+        quantity: 1),
+    ProductCart(
+        product: Product(
+            id: '7',
+            name: 'Tuerca',
+            price: 900,
+            imageUrl: const [
+              'https://europer.cl/wp-content/uploads/2020/07/a4-tuerca.jpg'
+            ],
+            description: 'Pack 2 Kg'),
+        quantity: 1),
+    ProductCart(
+        product: Product(
+            id: '7',
+            name: 'Tuerca',
+            price: 900,
+            imageUrl: const [
+              'https://europer.cl/wp-content/uploads/2020/07/a4-tuerca.jpg'
+            ],
+            description: 'Pack 2 Kg'),
+        quantity: 1),
+    ProductCart(
+        product: Product(
             id: '2',
             name: 'Tuerca',
             price: 550,
