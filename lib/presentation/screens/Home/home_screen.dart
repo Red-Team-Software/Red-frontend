@@ -8,10 +8,15 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const String name = 'home_screen';
   const HomeScreen({super.key});
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -26,9 +31,13 @@ class HomeScreen extends StatelessWidget {
           create: (_) =>getIt<CategoriesBloc>()..fetchCategoriesPaginated(),
         )
       ],
-      child: const _HomeScreenView(),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).primaryColor,
+        body: buildDrawer()),
     );
   }
+
+  Widget buildDrawer() => const SafeArea(child: DrawerWidget());
 }
 
 class _HomeScreenView extends StatelessWidget {
