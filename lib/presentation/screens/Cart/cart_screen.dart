@@ -235,7 +235,7 @@ class _CartView extends StatelessWidget {
                 const SizedBox(height: 16.0),
                 ElevatedButton(
                     onPressed: () {
-                      cartBloc.add(ClearCart());
+                      context.push("/checkout");
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor:

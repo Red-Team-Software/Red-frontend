@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderSummarySection extends StatelessWidget {
   const OrderSummarySection({super.key});
@@ -63,7 +64,7 @@ class OrderSummarySection extends StatelessWidget {
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              // TODO: Lógica para proceder al pago
+              context.push('/order/${2}');
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: colors.primary,

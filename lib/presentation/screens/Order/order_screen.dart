@@ -5,8 +5,9 @@ import 'widgets/order_summary_details.dart';
 
 class OrderSummaryScreen extends StatelessWidget {
   static const String name = 'order_summary_screen';
+  final String idOrder;
 
-  const OrderSummaryScreen({super.key});
+  const OrderSummaryScreen({super.key, required this.idOrder});
 
   @override
   Widget build(BuildContext context) {

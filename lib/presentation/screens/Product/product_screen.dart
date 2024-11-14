@@ -181,7 +181,7 @@ class _ProductView extends StatelessWidget {
                           fontSize: 24,
                         ),
                       ),
-                      Wrap(
+                      const Wrap(
                         spacing: 8,
                         // children: product.categories
                         // .map((category) => Chip(label: Text(category)))

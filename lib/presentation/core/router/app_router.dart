@@ -14,11 +14,10 @@ final appRouter = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
-        path: '/',
-        // name: IndexPage.name,
-        // builder: (context, state) => const IndexPage(),
-        name: CheckoutScreen.name,
-        builder: (context, state) => const CheckoutScreen()),
+      path: '/',
+      name: IndexPage.name,
+      builder: (context, state) => const IndexPage(),
+    ),
     GoRoute(
       path: '/search',
       name: SearchPage.name,
@@ -50,5 +49,16 @@ final appRouter = GoRouter(
       builder: (context, state) =>
           ProductScreen(idProduct: state.pathParameters['idProduct'] ?? ''),
     ),
+    GoRoute(
+      path: "/checkout",
+      name: CheckoutScreen.name,
+      builder: (context, state) => const CheckoutScreen(),
+    ),
+    GoRoute(
+      path: "/order/:idOrder",
+      name: OrderSummaryScreen.name,
+      builder: (context, state) =>
+          OrderSummaryScreen(idOrder: state.pathParameters['idProduct'] ?? ''),
+    )
   ],
 );
