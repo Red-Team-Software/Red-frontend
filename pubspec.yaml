@@ -45,6 +45,11 @@ dependencies:
   mason_cli: ^0.1.0-dev.55
   path_provider: ^2.1.5
   firebase_messaging: ^15.1.4
+  google_maps_flutter: ^2.9.0
+  geocoding: ^3.0.0
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  http: ^1.2.2
 
 dev_dependencies:
   analyzer: ^5.13.0
