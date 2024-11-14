@@ -22,6 +22,9 @@ class CheckoutState extends Equatable {
     this.errorMessage = '',
   });
 
+  // Nuevo getter para calcular el total de items en el carrito
+  int get cartItemsCount => products.length + bundles.length;
+
   CheckoutState copyWith({
     List<ProductCart>? products,
     List<BundleCart>? bundles,
