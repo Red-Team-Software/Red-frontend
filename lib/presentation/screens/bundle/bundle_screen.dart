@@ -1,31 +1,30 @@
+import 'package:GoDeli/features/bundles/application/bundle_details/bundle_details_bloc.dart';
+import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
-import 'package:GoDeli/features/cart/domain/product_cart.dart';
-import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:card_swiper/card_swiper.dart';
 
-class ProductScreen extends StatelessWidget {
-  static const String name = 'details_product_screen';
+class BundleScreen extends StatelessWidget {
+  static const String name = 'details_bundle_screen';
 
-  final String idProduct;
-  const ProductScreen({super.key, required this.idProduct});
+  final String idBundle;
+  const BundleScreen({super.key, required this.idBundle});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ProductDetailsBloc>()..getProductById(idProduct),
-      child: const _ProductView(),
+      create: (_) => getIt<BundleDetailsBloc>()..getBundleById(idBundle),
+      child: const _BundleView(),
     );
   }
 }
 
-class _ProductView extends StatelessWidget {
-  const _ProductView();
+class _BundleView extends StatelessWidget {
+  const _BundleView();
 
   @override
   Widget build(BuildContext context) {
@@ -33,14 +32,14 @@ class _ProductView extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
+        body: BlocBuilder<BundleDetailsBloc, BundleDetailsState>(
           builder: (context, state) {
             switch (state.status) {
-              case ProductDetailsStatus.loading:
-              case ProductDetailsStatus.initial:
+              case BundleDetailsStatus.loading:
+              case BundleDetailsStatus.initial:
                 return const Center(child: CircularProgressIndicator());
 
-              case ProductDetailsStatus.error:
+              case BundleDetailsStatus.error:
                 return const Center(
                   child: Text(
                     'Ups! Something went wrong',
@@ -48,7 +47,7 @@ class _ProductView extends StatelessWidget {
                   ),
                 );
 
-              case ProductDetailsStatus.loaded:
+              case BundleDetailsStatus.loaded:
                 return Stack(
                   children: [
                     SizedBox(
@@ -56,7 +55,7 @@ class _ProductView extends StatelessWidget {
                       height: 300,
                       child: Stack(
                         children: [
-                          ImagesCarrusel(images: state.product.imageUrl),
+                          ImagesCarrusel(images: state.bundle.imageUrl),
                           Positioned(
                             top: 0,
                             left: 0,
@@ -75,11 +74,29 @@ class _ProductView extends StatelessWidget {
                               ),
                             ),
                           ),
+                          Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Container(
+                              height: 100,
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [
+                                    Colors.black54,
+                                    Colors.transparent,
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                     _buttonArrow(context),
-                    _scrollableDetails(context, state.product, theme)
+                    _scrollableDetails(context, state.bundle, theme)
                   ],
                 );
             }
@@ -93,18 +110,18 @@ class _ProductView extends StatelessWidget {
     return Positioned(
       top: 16,
       left: 16,
-      child: InkWell(
-        onTap: () => context.pop(),
-        child: Center(
+      child: Center(
+        child: InkWell(
+          onTap: () => context.pop(),
           child: Container(
-            padding:
-                const EdgeInsets.only(left: 16, right: 8, top: 6, bottom: 6),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child:
-                const Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
+            ),
           ),
         ),
       ),
@@ -112,7 +129,7 @@ class _ProductView extends StatelessWidget {
   }
 
   Widget _scrollableDetails(
-      BuildContext context, Product product, ThemeData theme) {
+      BuildContext context, Bundle bundle, ThemeData theme) {
     final cartBloc = context.watch<CartBloc>();
 
     return DraggableScrollableSheet(
@@ -138,7 +155,7 @@ class _ProductView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        product.name,
+                        bundle.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
@@ -146,7 +163,7 @@ class _ProductView extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${product.price} ${product.currency} / piece',
+                        '${bundle.price} ${bundle.currency} / piece',
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -175,7 +192,7 @@ class _ProductView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        product.description,
+                        bundle.description,
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],
@@ -184,9 +201,9 @@ class _ProductView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               if (!cartBloc
-                  .isProductInCart(ProductCart(product: product, quantity: 1)))
+                  .isBundleInCart(BundleCart(bundle: bundle, quantity: 1)))
                 ElevatedButton(
-                  onPressed: () => _showModal(context, theme, product),
+                  onPressed: () => _showModal(context, theme, bundle),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: theme.colorScheme.primary,
                     shape: RoundedRectangleBorder(
@@ -206,7 +223,7 @@ class _ProductView extends StatelessWidget {
                   ),
                 ),
               if (cartBloc
-                  .isProductInCart(ProductCart(product: product, quantity: 1)))
+                  .isBundleInCart(BundleCart(bundle: bundle, quantity: 1)))
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 24),
@@ -237,7 +254,7 @@ class _ProductView extends StatelessWidget {
   }
 
   Future<dynamic> _showModal(
-      BuildContext context, ThemeData theme, Product product) {
+      BuildContext context, ThemeData theme, Bundle bundle) {
     int quantity = 1;
     return showModalBottomSheet(
       context: context,
@@ -258,7 +275,7 @@ class _ProductView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Price: ${product.price * quantity} ${product.currency}',
+                        'Price: ${bundle.price * quantity} ${bundle.currency}',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -305,9 +322,9 @@ class _ProductView extends StatelessWidget {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      final prodCart =
-                          ProductCart(product: product, quantity: quantity);
-                      context.read<CartBloc>().add(AddProduct(prodCart));
+                      final bundleCart =
+                          BundleCart(bundle: bundle, quantity: quantity);
+                      context.read<CartBloc>().add(AddBundle(bundleCart));
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
@@ -337,5 +354,3 @@ class _ProductView extends StatelessWidget {
     );
   }
 }
-
-

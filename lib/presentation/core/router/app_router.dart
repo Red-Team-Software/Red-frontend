@@ -4,6 +4,7 @@ import 'package:GoDeli/presentation/screens/Checkout/checkout_screen.dart';
 import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/view/auth_page.dart';
+import 'package:GoDeli/presentation/screens/bundle/bundle_screen.dart';
 import 'package:GoDeli/presentation/screens/profile/view/profile_page.dart';
 import 'package:GoDeli/presentation/screens/search/view/search_page.dart';
 import 'package:go_router/go_router.dart';
@@ -48,6 +49,12 @@ final appRouter = GoRouter(
       name: ProductScreen.name,
       builder: (context, state) =>
           ProductScreen(idProduct: state.pathParameters['idProduct'] ?? ''),
+    ),
+    GoRoute(
+      path: '/bundle/:idBundle',
+      name: BundleScreen.name,
+      builder: (context, state) =>
+          BundleScreen(idBundle: state.pathParameters['idBundle'] ?? ''),
     ),
     GoRoute(
       path: "/checkout",
