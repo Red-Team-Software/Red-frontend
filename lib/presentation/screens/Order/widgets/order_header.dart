@@ -1,8 +1,9 @@
+import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:flutter/material.dart';
 
 class OrderHeader extends StatelessWidget {
-  final OrderSummary orderSummary;
+  final Order orderSummary;
 
   const OrderHeader({super.key, required this.orderSummary});
 
@@ -113,7 +114,7 @@ class OrderHeader extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                'Lat: ${orderSummary.orderDirection.latitude.toString()} | Lon: ${orderSummary.orderDirection.longitude.toString()}',
+                orderSummary.orderCreatedDate,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],

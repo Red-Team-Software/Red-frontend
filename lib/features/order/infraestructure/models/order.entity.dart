@@ -1,4 +1,6 @@
 import 'package:GoDeli/features/bundles/infraestructure/models/bundle_entity.dart';
+import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
+import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/products/infraestructure/models/product_entity.dart';
 
 class OrderEntity {
@@ -8,8 +10,8 @@ class OrderEntity {
   final double totalAmount;
   final String currency;
   final OrderDirectionEntity orderDirection;
-  final List<ProductEntity> products;
-  final List<BundleEntity> bundles;
+  final List<ProductCart> products;
+  final List<BundleCart> bundles;
   final String? orderReceivedDate;
   final OrderPaymentEntity orderPayment;
 
@@ -27,25 +29,42 @@ class OrderEntity {
   });
 
   factory OrderEntity.fromJson(dynamic json) {
-    if (json is Map<String, dynamic>) {
-      return OrderEntity(
-        id: json['id'] as String,
-        orderState: json['orderState'] as String,
-        orderCreatedDate: json['orderCreatedDate'] as String,
-        totalAmount: (json['totalAmount'] as num).toDouble(),
-        currency: json['currency'] as String,
-        orderDirection: OrderDirectionEntity.fromJson(json['orderDirection']),
-        products: (json['products'] as List)
-            .map((product) => ProductEntity.fromJson(product))
-            .toList(),
-        bundles: (json['bundles'] as List)
-            .map((bundle) => BundleEntity.fromJson(bundle))
-            .toList(),
-        orderReceivedDate: json['orderReciviedDate'] as String?,
-        orderPayment: OrderPaymentEntity.fromJson(json['orderPayment']),
-      );
-    } else {
-      throw Exception('Invalid JSON format for OrderEntity');
+    try {
+      // Verifica que el JSON sea del tipo esperado
+      if (json is Map<String, dynamic>) {
+        print('Parsing OrderEntity from JSON...');
+
+        // Depuración de valores clave
+        print('ID: ${json['id']}');
+        print('State: ${json['orderState']}');
+        print('Products: ${json['products']}');
+        print('Bundles: ${json['bundles']}');
+
+        return OrderEntity(
+          id: json['id'] as String,
+          orderState: json['orderState'] as String,
+          orderCreatedDate: json['orderCreatedDate'] as String,
+          totalAmount: (json['totalAmount'] as num).toDouble(),
+          currency: json['currency'] as String,
+          orderDirection: OrderDirectionEntity.fromJson(json['orderDirection']),
+          products: (json['products'] as List? ?? [])
+              .map((product) => ProductCart.fromJson(product))
+              .toList(),
+          bundles: (json['bundles'] as List? ?? [])
+              .map((bundle) => BundleCart.fromJson(bundle))
+              .toList(),
+          orderReceivedDate: json['orderReciviedDate'] as String?,
+          orderPayment: OrderPaymentEntity.fromJson(json['orderPayment']),
+        );
+      } else {
+        print('Invalid JSON type: ${json.runtimeType}');
+        throw Exception('Invalid JSON format for OrderEntity');
+      }
+    } catch (e, stackTrace) {
+      // Log detallado del error y el stack trace para depuración
+      print('Error parsing OrderEntity: $e');
+      print('StackTrace: $stackTrace');
+      throw Exception('Error parsing OrderEntity: $e');
     }
   }
 }

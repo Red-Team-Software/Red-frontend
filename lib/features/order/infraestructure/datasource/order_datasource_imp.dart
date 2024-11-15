@@ -31,9 +31,19 @@ class OrderDatasourceImpl implements IOrderDatasource {
         "bundles": bundles,
         "products": products,
       });
-      return Result.success(
-          OrderMapper.mapEntityToDomain(OrderEntity.fromJson(response)));
-    } catch (e) {
+
+      // Aquí extraemos el data del Response.
+      final responseData = response.data;
+
+      // Verificamos si el data es un Map antes de procesarlo.
+      if (responseData is Map<String, dynamic>) {
+        print('Response data: $responseData');
+        return Result.success(
+            OrderMapper.mapEntityToDomain(OrderEntity.fromJson(responseData)));
+      } else {
+        throw Exception('Invalid response format from backend');
+      }
+    } catch (e, stackTrace) {
       if (e is DioException) {
         // Log detallado del error de Dio
         print('Error de payment: ${e.message}');
@@ -45,7 +55,8 @@ class OrderDatasourceImpl implements IOrderDatasource {
       } else {
         print('Error inesperado: $e');
       }
-      return Result.makeError(e as Exception);
+      print('StackTrace: $stackTrace');
+      throw Exception('Error processing payment: $e');
     }
   }
 }

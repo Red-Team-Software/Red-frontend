@@ -24,6 +24,12 @@ class CheckoutScreen extends StatelessWidget {
       create: (context) => CheckoutBloc(
         cartBloc: context.read<CartBloc>(),
         orderRepository: getIt<IOrderRepository>(),
+        onOrderCreated: (order) {
+          GoRouter.of(context).push(
+            '/order/${order.id}',
+            extra: order, // Pasar la orden completa
+          );
+        },
       )..add(LoadCheckoutData()),
       child: Scaffold(
         appBar: AppBar(

@@ -17,14 +17,8 @@ class OrderMapper {
         latitude: entity.orderDirection.latitude,
         longitude: entity.orderDirection.longitude,
       ),
-      products: entity.products
-          .map((productEntity) =>
-              ProductEntityMapper.mapProductToDomain(productEntity))
-          .toList(),
-      bundles: entity.bundles
-          .map((bundleEntity) =>
-              BundleEntityMapper.mapBundleToDomain(bundleEntity))
-          .toList(),
+      products: entity.products,
+      bundles: entity.bundles,
       orderReceivedDate: entity.orderReceivedDate,
       orderPayment: OrderPayment(
         paymentMethod: entity.orderPayment.paymentMethod,

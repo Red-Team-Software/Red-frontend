@@ -1,5 +1,8 @@
+import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
+import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'checkout_event.dart';
 import 'checkout_state.dart';
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
@@ -8,8 +11,12 @@ import 'package:GoDeli/features/checkout/domain/address.dart';
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final CartBloc cartBloc;
   final IOrderRepository orderRepository;
+  final void Function(Order order) onOrderCreated;
 
-  CheckoutBloc({required this.cartBloc, required this.orderRepository})
+  CheckoutBloc(
+      {required this.cartBloc,
+      required this.orderRepository,
+      required this.onOrderCreated})
       : super(const CheckoutState()) {
     on<LoadCheckoutData>(_onLoadCheckoutData);
     on<SelectAddress>(_onSelectAddress);
@@ -72,10 +79,10 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       products: event.products,
     );
 
-    print(result);
-
     if (result.isSuccessful()) {
+      final order = result.getValue();
       emit(state.copyWith(isProcessing: false));
+      onOrderCreated(order);
     } else {
       emit(
           state.copyWith(isProcessing: false, errorMessage: 'Payment failed.'));

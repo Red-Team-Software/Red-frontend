@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:GoDeli/features/checkout/domain/address.dart';
+import 'package:flutter/material.dart';
 
 abstract class CheckoutEvent extends Equatable {
   const CheckoutEvent();
@@ -45,6 +46,7 @@ class ProcessPayment extends CheckoutEvent {
   final String address;
   final List<Map<String, dynamic>> bundles;
   final List<Map<String, dynamic>> products;
+  final BuildContext context;
 
   const ProcessPayment({
     required this.amount,
@@ -54,6 +56,7 @@ class ProcessPayment extends CheckoutEvent {
     required this.address,
     required this.bundles,
     required this.products,
+    required this.context,
   });
 
   @override

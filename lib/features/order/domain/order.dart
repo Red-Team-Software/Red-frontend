@@ -11,8 +11,8 @@ class Order extends Equatable {
   final double totalAmount;
   final String currency;
   final OrderDirection orderDirection;
-  final List<Product> products;
-  final List<Bundle> bundles;
+  final List<ProductCart> products;
+  final List<BundleCart> bundles;
   final String? orderReceivedDate;
   final OrderPayment orderPayment;
 

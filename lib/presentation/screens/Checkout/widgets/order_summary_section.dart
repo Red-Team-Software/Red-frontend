@@ -87,6 +87,7 @@ class OrderSummarySection extends StatelessWidget {
                                     'quantity': product.quantity
                                   })
                               .toList(),
+                          context: context,
                         ),
                       );
                 },
