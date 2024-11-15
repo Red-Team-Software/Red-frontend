@@ -58,7 +58,7 @@ final appRouter = GoRouter(
       path: "/order/:idOrder",
       name: OrderSummaryScreen.name,
       builder: (context, state) =>
-          OrderSummaryScreen(idOrder: state.pathParameters['idProduct'] ?? ''),
+          OrderSummaryScreen(idOrder: state.pathParameters['idOrder'] ?? ''),
     )
   ],
 );

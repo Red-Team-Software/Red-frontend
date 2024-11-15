@@ -72,6 +72,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       products: event.products,
     );
 
+    print(result);
+
     if (result.isSuccessful()) {
       emit(state.copyWith(isProcessing: false));
     } else {

@@ -1,9 +1,8 @@
-
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/bundles/infraestructure/models/bundle_entity.dart';
 
 class BundleEntityMapper {
-  BundleEntity mapBundleToEntity(Bundle bundle) {
+  static BundleEntity mapBundleToEntity(Bundle bundle) {
     return BundleEntity(
       id: bundle.id,
       name: bundle.name,
@@ -14,7 +13,7 @@ class BundleEntityMapper {
     );
   }
 
-  Bundle mapBundleToDomain(BundleEntity entity) {
+  static Bundle mapBundleToDomain(BundleEntity entity) {
     return Bundle(
       id: entity.id,
       name: entity.name,

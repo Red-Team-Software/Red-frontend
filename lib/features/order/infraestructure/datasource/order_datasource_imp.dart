@@ -1,4 +1,8 @@
+import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/order/domain/datasource/order_datasource.dart';
+import 'package:GoDeli/features/order/domain/order.dart';
+import 'package:GoDeli/features/order/infraestructure/mappers/order_mapper.dart';
+import 'package:GoDeli/features/order/infraestructure/models/order.entity.dart';
 import 'package:dio/dio.dart';
 
 import 'package:GoDeli/config/constants/enviroments.dart';
@@ -7,7 +11,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
   final Dio dio = Dio(BaseOptions(baseUrl: '${Environment.backendApi}/order'));
 
   @override
-  Future<void> processPayment({
+  Future<Result<Order>> processPayment({
     required double amount,
     required String currency,
     required String paymentMethod,
@@ -18,7 +22,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
   }) async {
     print("llego 2");
     try {
-      final res = await dio.post('/payment', data: {
+      final response = await dio.post('/payment', data: {
         "amount": amount.toInt(),
         "currency": currency,
         "paymentMethod": paymentMethod,
@@ -27,8 +31,8 @@ class OrderDatasourceImpl implements IOrderDatasource {
         "bundles": bundles,
         "products": products,
       });
-      print("rest");
-      print(res);
+      return Result.success(
+          OrderMapper.mapEntityToDomain(OrderEntity.fromJson(response)));
     } catch (e) {
       if (e is DioException) {
         // Log detallado del error de Dio
@@ -41,6 +45,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
       } else {
         print('Error inesperado: $e');
       }
+      return Result.makeError(e as Exception);
     }
   }
 }

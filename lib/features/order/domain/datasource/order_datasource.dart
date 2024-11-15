@@ -1,5 +1,8 @@
+import 'package:GoDeli/features/common/domain/result.dart';
+import 'package:GoDeli/features/order/domain/order.dart';
+
 abstract class IOrderDatasource {
-  Future<void> processPayment({
+  Future<Result<Order>> processPayment({
     required double amount,
     required String currency,
     required String paymentMethod,

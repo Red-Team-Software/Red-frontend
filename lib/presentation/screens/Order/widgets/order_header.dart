@@ -34,7 +34,7 @@ class OrderHeader extends StatelessWidget {
               Flexible(
                 child: Text(
                   'Order #${orderSummary.id}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -48,8 +48,8 @@ class OrderHeader extends StatelessWidget {
               const SizedBox(width: 8), // Espacio entre los textos
               Flexible(
                 child: Text(
-                  '${orderSummary.orderState}',
-                  style: TextStyle(
+                  orderSummary.orderState,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF0E650E),
@@ -81,7 +81,7 @@ class OrderHeader extends StatelessWidget {
           ),
           Text(
             orderSummary.orderPayment.paymentMethod,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.black,
             ),

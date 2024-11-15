@@ -1,6 +1,9 @@
 import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/order/domain/datasource/order_datasource.dart';
+import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/order/infraestructure/mappers/order_mapper.dart';
+import 'package:GoDeli/features/order/infraestructure/models/order.entity.dart';
 
 class OrderRepositoryImpl implements IOrderRepository {
   final IOrderDatasource datasource;
@@ -8,7 +11,7 @@ class OrderRepositoryImpl implements IOrderRepository {
   OrderRepositoryImpl({required this.datasource});
 
   @override
-  Future<Result<void>> processPayment({
+  Future<Result<Order>> processPayment({
     required double amount,
     required String currency,
     required String paymentMethod,
@@ -18,8 +21,7 @@ class OrderRepositoryImpl implements IOrderRepository {
     required List<Map<String, dynamic>> products,
   }) async {
     try {
-      print("llego");
-      final data = await datasource.processPayment(
+      final order = await datasource.processPayment(
         amount: amount,
         currency: currency,
         paymentMethod: paymentMethod,
@@ -28,8 +30,8 @@ class OrderRepositoryImpl implements IOrderRepository {
         bundles: bundles,
         products: products,
       );
-      print("data");
-      return Result.success("Good");
+
+      return order;
     } catch (e) {
       print("error en el rerpo");
       print(e);
