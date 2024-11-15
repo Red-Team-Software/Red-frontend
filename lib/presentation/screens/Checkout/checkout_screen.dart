@@ -1,6 +1,8 @@
+import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
+import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -19,8 +21,10 @@ class CheckoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CheckoutBloc(cartBloc: context.read<CartBloc>())
-        ..add(LoadCheckoutData()),
+      create: (context) => CheckoutBloc(
+        cartBloc: context.read<CartBloc>(),
+        orderRepository: getIt<IOrderRepository>(),
+      )..add(LoadCheckoutData()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
@@ -78,20 +82,27 @@ class CheckoutScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: const SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ShippingAddressSection(),
-              SizedBox(height: 16),
-              DeliveryTimeSection(),
-              SizedBox(height: 16),
-              PaymentMethodSection(),
-              SizedBox(height: 16),
-              OrderSummarySection(),
-            ],
-          ),
+        body: BlocBuilder<CheckoutBloc, CheckoutState>(
+          builder: (context, state) {
+            if (state.isProcessing) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return const SingleChildScrollView(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ShippingAddressSection(),
+                  SizedBox(height: 16),
+                  DeliveryTimeSection(),
+                  SizedBox(height: 16),
+                  PaymentMethodSection(),
+                  SizedBox(height: 16),
+                  OrderSummarySection(),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

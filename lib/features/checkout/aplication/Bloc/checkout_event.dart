@@ -36,3 +36,34 @@ class SelectPaymentMethod extends CheckoutEvent {
 }
 
 class ProceedToCheckout extends CheckoutEvent {}
+
+class ProcessPayment extends CheckoutEvent {
+  final double amount;
+  final String currency;
+  final String paymentMethod;
+  final String stripePaymentMethod;
+  final String address;
+  final List<Map<String, dynamic>> bundles;
+  final List<Map<String, dynamic>> products;
+
+  const ProcessPayment({
+    required this.amount,
+    required this.currency,
+    required this.paymentMethod,
+    required this.stripePaymentMethod,
+    required this.address,
+    required this.bundles,
+    required this.products,
+  });
+
+  @override
+  List<Object?> get props => [
+        amount,
+        currency,
+        paymentMethod,
+        stripePaymentMethod,
+        address,
+        bundles,
+        products
+      ];
+}
