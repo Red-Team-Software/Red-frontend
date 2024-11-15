@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,7 +56,7 @@ class _ProductView extends StatelessWidget {
                       height: 300,
                       child: Stack(
                         children: [
-                          _ImagesCarrusel(images: state.product.imageUrl),
+                          ImagesCarrusel(images: state.product.imageUrl),
                           Positioned(
                             top: 0,
                             left: 0,
@@ -337,41 +338,4 @@ class _ProductView extends StatelessWidget {
   }
 }
 
-class _ImagesCarrusel extends StatelessWidget {
-  final List<String> images;
-  final double height = 300.0;
 
-  const _ImagesCarrusel({required this.images});
-
-  @override
-  Widget build(BuildContext context) {
-    if (images.length == 1) {
-      return SizedBox(
-        height: height,
-        width: double.infinity,
-        child: Image.network(
-          images[0],
-          fit: BoxFit.fill,
-        ),
-      );
-    }
-
-    return SizedBox(
-      height: height,
-      width: double.infinity,
-      child: Swiper(
-        itemBuilder: (BuildContext context, int index) {
-          return Image.network(
-            images[index],
-            fit: BoxFit.fill,
-          );
-        },
-        itemHeight: height,
-        itemCount: images.length,
-        pagination: const SwiperPagination(
-          alignment: Alignment.topCenter,
-        ),
-      ),
-    );
-  }
-}

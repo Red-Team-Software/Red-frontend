@@ -2,6 +2,7 @@ import 'package:GoDeli/features/bundles/application/bundle_details/bundle_detail
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
+import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
 import 'package:go_router/go_router.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,12 +55,7 @@ class _BundleView extends StatelessWidget {
                       height: 300,
                       child: Stack(
                         children: [
-                          Image.network(
-                            state.bundle.imageUrl[0],
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 300,
-                          ),
+                          ImagesCarrusel(images: state.bundle.imageUrl),
                           Positioned(
                             top: 0,
                             left: 0,
