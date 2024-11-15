@@ -13,9 +13,11 @@ class BundlesDatasourceImpl implements IBundleDatasource{
 
 
   @override
-  Future<Bundle> getBundleById(String id) {
-    // TODO: implement getBundleById
-    throw UnimplementedError();
+  Future<Bundle> getBundleById(String id) async {
+    final res = await dio.get('', queryParameters: {'id': id});
+
+    final bunRes = BundleResponse.fromJson(res.data);
+    return BundleMapper.bundleToDomian(bunRes);
   }
 
   @override
