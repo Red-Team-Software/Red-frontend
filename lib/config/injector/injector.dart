@@ -10,6 +10,9 @@ import 'package:GoDeli/features/categories/application/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
 import 'package:GoDeli/features/categories/infraestructure/repositories/categories_repository_impl.dart';
+import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/order/infraestructure/datasource/order_datasource_imp.dart';
+import 'package:GoDeli/features/order/infraestructure/repositories/order_repository_imp.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
@@ -24,6 +27,7 @@ final dio = Dio();
 class Injector {
   void setUp() {
     //? inicializando las dependencias de modulo categorias
+
     final categoryDatasource = CategoriesDatasourceImpl();
     final categoriesRepository =
         CategoriesRespositoryImpl(categoryDatasource: categoryDatasource);
@@ -44,14 +48,25 @@ class Injector {
 
     //? inicializando las dependencias de modulo combos
     final bundleDatasource = BundlesDatasourceImpl();
-    final bundleRepository = BundleRepositoryImpl(bundleDatasource: bundleDatasource);
-    getIt.registerFactory<IBundleRepository>(()=> bundleRepository);
-    getIt.registerFactory<AllBundlesBloc>(()=> AllBundlesBloc(bundleRepository: bundleRepository));
-    getIt.registerFactory<BundleDetailsBloc>(()=> BundleDetailsBloc(bundleRepository: bundleRepository));
+    final bundleRepository =
+        BundleRepositoryImpl(bundleDatasource: bundleDatasource);
+    getIt.registerFactory<IBundleRepository>(() => bundleRepository);
+    getIt.registerFactory<AllBundlesBloc>(
+        () => AllBundlesBloc(bundleRepository: bundleRepository));
+    getIt.registerFactory<BundleDetailsBloc>(
+        () => BundleDetailsBloc(bundleRepository: bundleRepository));
 
     //? inicializando las dependencias de modulo carrito
     final datasource = IsarLocalStorageDatasource();
-    LocalStorageRepositoryImpl repository = LocalStorageRepositoryImpl( dataSource: datasource );
-    getIt.registerSingleton<CartBloc>(CartBloc(repository: repository ));
+    LocalStorageRepositoryImpl repository =
+        LocalStorageRepositoryImpl(dataSource: datasource);
+    getIt.registerSingleton<CartBloc>(CartBloc(repository: repository));
+
+    //? Iiniciando las dependencias de modulo de orden
+
+    final orderDatasource = OrderDatasourceImpl();
+    final orderRepository = OrderRepositoryImpl(datasource: orderDatasource);
+
+    getIt.registerFactory<IOrderRepository>(() => orderRepository);
   }
 }

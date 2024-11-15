@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:GoDeli/features/checkout/domain/address.dart';
+import 'package:flutter/material.dart';
 
 abstract class CheckoutEvent extends Equatable {
   const CheckoutEvent();
@@ -36,3 +37,36 @@ class SelectPaymentMethod extends CheckoutEvent {
 }
 
 class ProceedToCheckout extends CheckoutEvent {}
+
+class ProcessPayment extends CheckoutEvent {
+  final double amount;
+  final String currency;
+  final String paymentMethod;
+  final String stripePaymentMethod;
+  final String address;
+  final List<Map<String, dynamic>> bundles;
+  final List<Map<String, dynamic>> products;
+  final BuildContext context;
+
+  const ProcessPayment({
+    required this.amount,
+    required this.currency,
+    required this.paymentMethod,
+    required this.stripePaymentMethod,
+    required this.address,
+    required this.bundles,
+    required this.products,
+    required this.context,
+  });
+
+  @override
+  List<Object?> get props => [
+        amount,
+        currency,
+        paymentMethod,
+        stripePaymentMethod,
+        address,
+        bundles,
+        products
+      ];
+}

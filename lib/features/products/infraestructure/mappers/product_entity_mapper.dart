@@ -1,9 +1,9 @@
 // Convierte Product (Dominio) a ProductEntity (Infraestructura)
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/features/products/infraestructure/models/product_entity.dart';
+
 class ProductEntityMapper {
-  
-  ProductEntity mapProductToEntity(Product product) {
+  static mapProductToEntity(Product product) {
     return ProductEntity(
       id: product.id,
       name: product.name,
@@ -19,7 +19,7 @@ class ProductEntityMapper {
   }
 
   // Convierte ProductEntity (Infraestructura) a Product (Dominio)
-  Product mapProductToDomain(ProductEntity entity) {
+  static Product mapProductToDomain(ProductEntity entity) {
     return Product(
       id: entity.id,
       name: entity.name,

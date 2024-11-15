@@ -1,8 +1,9 @@
+import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:flutter/material.dart';
 
 class OrderHeader extends StatelessWidget {
-  final OrderSummary orderSummary;
+  final Order orderSummary;
 
   const OrderHeader({super.key, required this.orderSummary});
 
@@ -34,7 +35,7 @@ class OrderHeader extends StatelessWidget {
               Flexible(
                 child: Text(
                   'Order #${orderSummary.id}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
@@ -48,8 +49,8 @@ class OrderHeader extends StatelessWidget {
               const SizedBox(width: 8), // Espacio entre los textos
               Flexible(
                 child: Text(
-                  '${orderSummary.orderState}',
-                  style: TextStyle(
+                  orderSummary.orderState,
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF0E650E),
@@ -81,7 +82,7 @@ class OrderHeader extends StatelessWidget {
           ),
           Text(
             orderSummary.orderPayment.paymentMethod,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.black,
             ),
@@ -113,7 +114,7 @@ class OrderHeader extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                'Lat: ${orderSummary.orderDirection.latitude.toString()} | Lon: ${orderSummary.orderDirection.longitude.toString()}',
+                orderSummary.orderCreatedDate,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],

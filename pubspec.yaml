@@ -45,6 +45,11 @@ dependencies:
   mason_cli: ^0.1.0-dev.55
   path_provider: ^2.1.5
   firebase_messaging: ^15.1.4
+  google_maps_flutter: ^2.9.0
+  geocoding: ^3.0.0
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+  http: ^1.2.2
   card_swiper: ^3.0.1
 
 dev_dependencies:
@@ -57,7 +62,6 @@ dev_dependencies:
   flutter_launcher_icons: "^0.14.1"
   flutter_native_splash: ^2.4.2
 
-
 flutter_native_splash:
   color: "#ffffff"
   android_12:
@@ -65,13 +69,11 @@ flutter_native_splash:
     color: "#ffffff"
   web: false
 
-
 flutter_launcher_icons:
   android: "launcher_icon"
   image_path: "images/icon.png"
   adaptive_icon_background: "#ffffff"
   adaptive_icon_foreground: "images/icon_foreground.png"
-  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

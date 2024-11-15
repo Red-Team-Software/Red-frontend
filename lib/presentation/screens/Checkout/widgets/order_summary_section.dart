@@ -1,7 +1,9 @@
+import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
+import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class OrderSummarySection extends StatelessWidget {
   const OrderSummarySection({super.key});
@@ -62,25 +64,50 @@ class OrderSummarySection extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16.0),
-          ElevatedButton(
-            onPressed: () {
-              context.push('/order/${2}');
+          BlocBuilder<CheckoutBloc, CheckoutState>(
+            builder: (context, state) {
+              return ElevatedButton(
+                onPressed: () {
+                  context.read<CheckoutBloc>().add(
+                        ProcessPayment(
+                          amount: cartBloc.state.total,
+                          currency: 'usd',
+                          paymentMethod: "card",
+                          stripePaymentMethod: 'pm_card_threeDSecureOptional',
+                          address: state.selectedAddress?.location ?? '',
+                          bundles: cartBloc.state.bundles
+                              .map((bundle) => {
+                                    'id': bundle.bundle.id,
+                                    'quantity': bundle.quantity
+                                  })
+                              .toList(),
+                          products: cartBloc.state.products
+                              .map((product) => {
+                                    'id': product.product.id,
+                                    'quantity': product.quantity
+                                  })
+                              .toList(),
+                          context: context,
+                        ),
+                      );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: colors.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                ),
+                child: const Text(
+                  'Checkout',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: colors.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-            ),
-            child: const Text(
-              'Checkout',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
           ),
         ],
       ),

@@ -3,6 +3,10 @@ import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'address_card.dart';
 
 class ShippingAddressSection extends StatelessWidget {
@@ -95,9 +99,14 @@ class ShippingAddressSection extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            location,
-                            style: const TextStyle(fontSize: 16),
+                          Expanded(
+                            child: Text(
+                              location,
+                              style: const TextStyle(fontSize: 16),
+                              overflow:
+                                  TextOverflow.ellipsis, // Limita el texto
+                              maxLines: 1,
+                            ),
                           ),
                           const Icon(Icons.map, color: Colors.black),
                         ],
@@ -140,8 +149,55 @@ class ShippingAddressSection extends StatelessWidget {
   }
 
   Future<String?> _selectLocationOnMap(BuildContext context) async {
-    // Implementación del selector de mapa
-    // Retorna una dirección o coordenadas según la selección del usuario
-    return 'Selected Location';
+    LatLng? selectedLocation;
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => Scaffold(
+        appBar: AppBar(title: const Text('Select Location')),
+        body: FlutterMap(
+          options: MapOptions(
+            initialCenter:
+                const LatLng(10.4833333, -66.83333333), // Ubicación inicial
+            initialZoom: 13.0,
+            onTap: (tapPosition, latLng) {
+              selectedLocation = latLng;
+              Navigator.pop(context);
+            },
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+              userAgentPackageName:
+                  'com.example.app', // Ajusta el nombre del paquete
+              subdomains: const ['a', 'b', 'c'],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (selectedLocation != null) {
+      final locationName = await _getLocationName(selectedLocation!);
+      return locationName;
+    }
+
+    return null;
+  }
+
+  Future<String?> _getLocationName(LatLng latLng) async {
+    final url = Uri.parse(
+      'https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latLng.latitude}&lon=${latLng.longitude}',
+    );
+
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return data['display_name'] ?? 'Unknown location';
+    } else {
+      print('Error al obtener la dirección: ${response.statusCode}');
+      return null;
+    }
   }
 }
