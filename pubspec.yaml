@@ -45,6 +45,7 @@ dependencies:
   mason_cli: ^0.1.0-dev.55
   path_provider: ^2.1.5
   firebase_messaging: ^15.1.4
+  card_swiper: ^3.0.1
 
 dev_dependencies:
   analyzer: ^5.13.0

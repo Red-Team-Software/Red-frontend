@@ -6,6 +6,7 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:card_swiper/card_swiper.dart';
 
 class ProductScreen extends StatelessWidget {
   static const String name = 'details_product_screen';
@@ -54,12 +55,7 @@ class _ProductView extends StatelessWidget {
                       height: 300,
                       child: Stack(
                         children: [
-                          Image.network(
-                            state.product.imageUrl[0],
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: 300,
-                          ),
+                          _ImagesCarrusel(images: state.product.imageUrl),
                           Positioned(
                             top: 0,
                             left: 0,
@@ -70,24 +66,6 @@ class _ProductView extends StatelessWidget {
                                 gradient: LinearGradient(
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
-                                  colors: [
-                                    Colors.black54,
-                                    Colors.transparent,
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            child: Container(
-                              height: 100,
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
                                   colors: [
                                     Colors.black54,
                                     Colors.transparent,
@@ -114,18 +92,18 @@ class _ProductView extends StatelessWidget {
     return Positioned(
       top: 16,
       left: 16,
-      child: Center(
-        child: InkWell(
-          onTap: () => context.pop(),
+      child: InkWell(
+        onTap: () => context.pop(),
+        child: Center(
           child: Container(
+            padding:
+                const EdgeInsets.only(left: 16, right: 8, top: 6, bottom: 6),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
-            ),
+            child:
+                const Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
           ),
         ),
       ),
@@ -355,6 +333,45 @@ class _ProductView extends StatelessWidget {
           },
         );
       },
+    );
+  }
+}
+
+class _ImagesCarrusel extends StatelessWidget {
+  final List<String> images;
+  final double height = 300.0;
+
+  const _ImagesCarrusel({required this.images});
+
+  @override
+  Widget build(BuildContext context) {
+    if (images.length == 1) {
+      return SizedBox(
+        height: height,
+        width: double.infinity,
+        child: Image.network(
+          images[0],
+          fit: BoxFit.fill,
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: height,
+      width: double.infinity,
+      child: Swiper(
+        itemBuilder: (BuildContext context, int index) {
+          return Image.network(
+            images[index],
+            fit: BoxFit.fill,
+          );
+        },
+        itemHeight: height,
+        itemCount: images.length,
+        pagination: const SwiperPagination(
+          alignment: Alignment.topCenter,
+        ),
+      ),
     );
   }
 }
