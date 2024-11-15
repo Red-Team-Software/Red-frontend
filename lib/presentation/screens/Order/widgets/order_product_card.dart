@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 
-class OrderItemCard extends StatelessWidget {
+class OrderProductCard extends StatelessWidget {
   final ProductCart item;
 
-  const OrderItemCard({super.key, required this.item});
+  const OrderProductCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
