@@ -26,7 +26,9 @@ class BundleResponse {
         images: json['images'] != null
             ? List<String>.from(json['images'].map((img) => img))
             : [],
-        price: (json['price'] as num).toDouble(),
+        price: json['price'] is double
+          ? json['price']
+          : double.tryParse(json['price'].toString()) ?? 0.0, // Maneja casos de String o null
         currency: json['currency']);
   }
 }
