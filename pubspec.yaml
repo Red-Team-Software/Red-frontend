@@ -53,6 +53,24 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   isar_generator: ^3.1.0+1
+  flutter_launcher_icons: "^0.14.1"
+  flutter_native_splash: ^2.4.2
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  android_12:
+    image: images/logo.png
+    color: "#ffffff"
+  web: false
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "images/icon.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "images/icon_foreground.png"
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
