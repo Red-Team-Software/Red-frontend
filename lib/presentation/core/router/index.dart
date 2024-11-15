@@ -17,7 +17,7 @@ class _IndexPageState extends State<IndexPage> {
   int _pageIndex = 0;
 
   final pages = [
-    const HomeScreen(),
+    HomeScreen(),
     const SearchPage(),
     const CartScreen(),
     const ProfilePage(),
