@@ -1,4 +1,8 @@
 import 'package:GoDeli/presentation/core/router/index.dart';
+import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
+import 'package:GoDeli/presentation/screens/Checkout/checkout_screen.dart';
+import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
+import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/view/auth_page.dart';
 import 'package:GoDeli/presentation/screens/profile/view/profile_page.dart';
 import 'package:GoDeli/presentation/screens/search/view/search_page.dart';
@@ -45,5 +49,16 @@ final appRouter = GoRouter(
       builder: (context, state) =>
           ProductScreen(idProduct: state.pathParameters['idProduct'] ?? ''),
     ),
+    GoRoute(
+      path: "/checkout",
+      name: CheckoutScreen.name,
+      builder: (context, state) => const CheckoutScreen(),
+    ),
+    GoRoute(
+      path: "/order/:idOrder",
+      name: OrderSummaryScreen.name,
+      builder: (context, state) =>
+          OrderSummaryScreen(idOrder: state.pathParameters['idProduct'] ?? ''),
+    )
   ],
 );

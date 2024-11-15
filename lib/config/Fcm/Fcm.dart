@@ -1,9 +1,15 @@
+import 'package:GoDeli/features/notification/infracestructure/datasources/notification_datasource.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 void configureFCM() async {
-  // Obtener el token (opcional para pruebas)
   final fcmToken = await FirebaseMessaging.instance.getToken();
   print("FCM Token: $fcmToken");
+
+  if (fcmToken != null) {
+    // Llamar al servicio para guardar el token en el backend
+    final notificationDatasource = NotificationDatasource();
+    await notificationDatasource.saveToken(fcmToken);
+  }
 
   // Suscribir al tema
   await FirebaseMessaging.instance.subscribeToTopic('productos');
