@@ -70,6 +70,7 @@ class DrawerWidget extends StatelessWidget {
   Widget buildDrawerItems() => Column(
         children: DrawerItems.all
             .map((item) => ListTile(
+                  enableFeedback: true,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                   leading: Icon(
                     item.icon,

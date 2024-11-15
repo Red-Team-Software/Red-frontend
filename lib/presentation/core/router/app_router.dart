@@ -1,6 +1,4 @@
 import 'package:GoDeli/presentation/core/router/index.dart';
-import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
-import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/view/auth_page.dart';
 import 'package:GoDeli/presentation/screens/profile/view/profile_page.dart';
 import 'package:GoDeli/presentation/screens/search/view/search_page.dart';

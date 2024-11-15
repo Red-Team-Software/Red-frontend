@@ -30,9 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void openDrawer() => setState(() {
-        xOffset = 230;
-        yOffset = 150;
-        scaleFactor = 0.6;
+        xOffset = context.size!.width * 0.55;
+        yOffset = context.size!.height * 0.25;
+        scaleFactor = 0.75;
         isDrawerOpen = true;
       });
 
