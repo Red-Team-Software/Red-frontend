@@ -54,6 +54,7 @@ class CustomItemProduct extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       current.name,
@@ -87,7 +88,7 @@ class CustomItemProduct extends StatelessWidget {
                         product: current,
                         quantity: 1,
                       );
-
+    
                       cartBloc.add(AddProduct(productCart));
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -124,7 +125,7 @@ class CustomItemProduct extends StatelessWidget {
                         backgroundColor: Colors.white,
                         padding: const EdgeInsets.all(2),
                         minimumSize: const Size(24, 24),
-                        shape: CircleBorder(side: BorderSide(color: Colors.black, width: 0.3)),
+                        shape: const CircleBorder(side: BorderSide(color: Colors.black, width: 0.3)),
                       ),
                     ),
                   )
