@@ -1,5 +1,6 @@
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'dart:convert';
@@ -17,6 +18,44 @@ class DirectionComponent extends StatefulWidget {
 class _DirectionComponentState extends State<DirectionComponent> {
   LatLng? _selectedLocation; // Para almacenar latitud y longitud
   String _selectedAddress = "Select Location"; // Para almacenar el nombre de la dirección
+  LatLng _currentLocation = const LatLng(10.4833333, -66.83333333); // Ubicación inicial
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCurrentLocation();
+  }
+
+  Future<void> _fetchCurrentLocation() async {
+    try {
+      // Solicitar permisos de ubicación
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        setState(() {
+          _selectedAddress = "Location permission denied";
+        });
+        return;
+      }
+
+      // Obtener la posición actual
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      final LatLng currentLatLng =
+          LatLng(position.latitude, position.longitude);
+
+
+      setState(() {
+        _currentLocation = currentLatLng;
+      });
+    } catch (e) {
+      setState(() {
+        _selectedAddress = "Failed to fetch location";
+      });
+    }
+  }
+
 
   Future<void> _selectLocationOnMap(BuildContext context) async {
     LatLng? location;
@@ -31,7 +70,7 @@ class _DirectionComponentState extends State<DirectionComponent> {
         ),
         body: FlutterMap(
           options: MapOptions(
-            initialCenter: const LatLng(10.4833333, -66.83333333),
+            initialCenter: _currentLocation,
             initialZoom: 18.0,
             onTap: (tapPosition, latLng) {
               location = latLng;
@@ -119,6 +158,22 @@ class _DirectionComponentState extends State<DirectionComponent> {
           _selectedAddress,
           textAlign: TextAlign.center,
           style: const TextStyle(fontSize: 16, color: Colors.grey),
+        ),
+        const SizedBox(height: 20),
+        TextField(
+          decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelText: "Address Name",
+            hintText: "Insert this address name",
+            labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+            hintStyle: const TextStyle(
+                color: Colors.grey, fontWeight: FontWeight.normal),
+            filled: true,
+            border: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            suffixIcon: const Icon(Icons.pin_drop),
+          ),
         ),
         const SizedBox(height: 20),
         // Botones
