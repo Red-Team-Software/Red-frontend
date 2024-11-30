@@ -18,6 +18,7 @@ import 'package:GoDeli/features/products/application/products/all_products_bloc.
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
 import 'package:GoDeli/features/products/infraestructure/repositories/products_repository_impl.dart';
+import 'package:GoDeli/presentation/screens/Search/bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 
@@ -55,6 +56,9 @@ class Injector {
         () => AllBundlesBloc(bundleRepository: bundleRepository));
     getIt.registerFactory<BundleDetailsBloc>(
         () => BundleDetailsBloc(bundleRepository: bundleRepository));
+
+    //? inicializando las dependencias de modulo search
+    getIt.registerFactory<SearchBloc>(()=>SearchBloc(productsRepository, bundleRepository));
 
     //? inicializando las dependencias de modulo carrito
     final datasource = IsarLocalStorageDatasource();

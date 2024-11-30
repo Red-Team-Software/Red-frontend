@@ -3,6 +3,7 @@ import 'package:GoDeli/features/products/domain/datasource/products_datasource.d
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/features/products/infraestructure/mappers/product_mapper.dart';
 import 'package:GoDeli/features/products/infraestructure/models/product_response.dart';
+import 'package:GoDeli/features/products/infraestructure/models/search_response.dart';
 import 'package:dio/dio.dart';
 
 // final List<Product> mockProducts = [
@@ -58,6 +59,29 @@ class ProductsDatasourceImpl implements IProductsDatasource {
       final productRes = ProductResponse.fromJson(product);
       products.add(ProductMapper.productToDomian(productRes));
     }
+
+    return products;
+  }
+  
+  @override
+  Future<List<Product>> searchProducts({int page = 1, int perPage = 10, required String term}) async {
+
+    print('term: $term');
+    final res = await dio.get('/all-product-bundle', queryParameters: {
+      'page': page,
+      'perPage': perPage,
+      'term': term,
+    });
+
+    print(res);
+    final List<Product> products = [];
+
+    final productRes = SearchResponse.fromJson(res.data);
+    
+    for (var product in productRes.product) {
+      products.add(ProductMapper.productToDomian(product));
+    }
+
 
     return products;
   }

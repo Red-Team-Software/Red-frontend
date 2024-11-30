@@ -1,34 +1,36 @@
 part of 'search_bloc.dart';
 
-/// {@template search_state}
-/// SearchState description
-/// {@endtemplate}
+enum SearchStatus { initial, loading, loaded, error }
+
 class SearchState extends Equatable {
-  /// {@macro search_state}
+
+  final SearchStatus status;
+  final List<Product> products;
+  final List<Bundle> bundles;
+  
   const SearchState({
-    this.customProperty = 'Default Value',
+    this.status = SearchStatus.initial,
+    this.products = const [],
+    this.bundles = const [],
   });
 
-  /// A description for customProperty
-  final String customProperty;
-
   @override
-  List<Object> get props => [customProperty];
+  List<Object> get props => [status, products, bundles];
 
-  /// Creates a copy of the current SearchState with property changes
   SearchState copyWith({
-    String? customProperty,
+    SearchStatus? status,
+    List<Product>? products,
+    List<Bundle>? bundles,
   }) {
     return SearchState(
-      customProperty: customProperty ?? this.customProperty,
+      status: status ?? this.status,
+      products: products ?? this.products,
+      bundles: bundles ?? this.bundles,
     );
   }
 }
 
-/// {@template search_initial}
-/// The initial state of SearchState
-/// {@endtemplate}
+
 class SearchInitial extends SearchState {
-  /// {@macro search_initial}
   const SearchInitial() : super();
 }
