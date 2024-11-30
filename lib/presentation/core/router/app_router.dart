@@ -5,7 +5,7 @@ import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:GoDeli/presentation/screens/Checkout/checkout_screen.dart';
 import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
-import 'package:GoDeli/presentation/screens/auth/view/auth_page.dart';
+import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
 import 'package:GoDeli/presentation/screens/bundle/bundle_screen.dart';
 import 'package:GoDeli/presentation/screens/profile/view/profile_page.dart';
 import 'package:GoDeli/presentation/screens/search/view/search_page.dart';
@@ -39,8 +39,8 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/auth',
-      name: AuthPage.name,
-      builder: (context, state) => const AuthPage(),
+      name: AuthScreen.name,
+      builder: (context, state) => const AuthScreen(),
     ),
     GoRoute(
       path: '/categories',
