@@ -5,8 +5,19 @@ import 'dart:io';
 
 class ProfileComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
+  final void Function(File) onChangeImage;
+  final void Function(String) onChangeFullname;
+  final void Function(String) onChangePhoneCode;
+  final void Function(String) onChangePhone;
 
-  const ProfileComponent({super.key, required this.onChangeIndex});
+  const ProfileComponent({
+    super.key, 
+    required this.onChangeIndex,
+    required this.onChangeImage,
+    required this.onChangeFullname,
+    required this.onChangePhoneCode,
+    required this.onChangePhone,
+  });
 
   @override
   State<ProfileComponent> createState() => _ProfileComponentState();
@@ -14,6 +25,12 @@ class ProfileComponent extends StatefulWidget {
 
 class _ProfileComponentState extends State<ProfileComponent> {
   File? _selectedImage; // Variable para almacenar la imagen seleccionada
+  String selectedPhoneCode = '0414'; // Valor inicial del Dropdown
+  String fullname = '';
+  String phone = '';
+  
+  String? fullnameError;
+  String? phoneError;
 
   final ImagePicker _picker = ImagePicker(); // Instancia de ImagePicker
 
@@ -31,9 +48,26 @@ class _ProfileComponentState extends State<ProfileComponent> {
     }
   }
 
+  bool validateFullname(String value) {
+    final hasNoNumbers = !RegExp(r'[0-9]').hasMatch(value);
+    return value.length > 2 && hasNoNumbers;
+  }
+
+  bool validatePhone(String value) {
+    final isNumeric = RegExp(r'^\d+$').hasMatch(value);
+    return value.length == 7 && isNumeric;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+
+    bool isNextButtonEnabled() {
+      return fullname.isNotEmpty &&
+          phone.isNotEmpty &&
+          fullnameError == null &&
+          phoneError == null;
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -54,7 +88,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
           children: [
             // Imagen o Placeholder circular
             CircleAvatar(
-              radius: 50,
+              radius: 80,
               backgroundImage: _selectedImage != null
                   ? FileImage(_selectedImage!) as ImageProvider
                   : null,
@@ -91,10 +125,19 @@ class _ProfileComponentState extends State<ProfileComponent> {
         ),
         const SizedBox(height: 20),
         TextField(
+          onChanged: (value) {
+            setState(() {
+              fullname = value;
+              fullnameError = validateFullname(value)
+                  ? null
+                  : "Fullname must have more than 2 letters and no numbers";
+            });
+          },
           decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: "Fullname",
             hintText: "Insert your Fullname",
+            errorText: fullnameError,
             labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             hintStyle: const TextStyle(
                 color: Colors.grey, fontWeight: FontWeight.normal),
@@ -116,9 +159,13 @@ class _ProfileComponentState extends State<ProfileComponent> {
               ),
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: DropdownButton<String>(
-                value: '0414', // Valor inicial
+                value: selectedPhoneCode, // Valor inicial
                 onChanged: (String? newValue) {
-                  // Lógica para manejar el cambio de valor
+                  if (newValue != null) {
+                    setState(() {
+                      selectedPhoneCode = newValue;
+                    });
+                  }
                 },
                 items: <String>[
                   '0414',
@@ -142,10 +189,21 @@ class _ProfileComponentState extends State<ProfileComponent> {
             const SizedBox(width: 10),
             Expanded(
               child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    phone = value;
+                    setState(() {
+                      phoneError = validatePhone(phone)
+                          ? null
+                          : "Phone must be numeric and 7 digits";
+                    });
+                  });
+                },
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelText: "Phone",
                   hintText: "Insert your phone number",
+                  errorText: phoneError,
                   labelStyle: const TextStyle(fontWeight: FontWeight.bold),
                   hintStyle: const TextStyle(
                       color: Colors.grey, fontWeight: FontWeight.normal),
@@ -170,9 +228,17 @@ class _ProfileComponentState extends State<ProfileComponent> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {
-              widget.onChangeIndex(3); // Cambiar a la pantalla de login
-            },
+            onPressed: isNextButtonEnabled()
+                ? () {
+                    if( _selectedImage != null){
+                      widget.onChangeImage(_selectedImage!);
+                    }
+                    widget.onChangeFullname(fullname);
+                    widget.onChangePhoneCode(selectedPhoneCode);
+                    widget.onChangePhone(phone);
+                    widget.onChangeIndex(3);
+                  }
+                : null,
             child: const Text(
               "Next",
               style: TextStyle(fontSize: 18, color: Colors.white),

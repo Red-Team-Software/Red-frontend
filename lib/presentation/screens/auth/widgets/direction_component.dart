@@ -1,15 +1,24 @@
-import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class DirectionComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
+  final void Function(LatLng) onChangeLocation;
+  final void Function(String) onChangeAddressName;
+  final Future<void> Function() onFinished;
 
-  const DirectionComponent({super.key, required this.onChangeIndex});
+
+  const DirectionComponent({
+    super.key, 
+    required this.onChangeIndex,
+    required this.onChangeLocation,
+    required this.onChangeAddressName,
+    required this.onFinished,
+  });
 
   @override
   _DirectionComponentState createState() => _DirectionComponentState();
@@ -18,6 +27,9 @@ class DirectionComponent extends StatefulWidget {
 class _DirectionComponentState extends State<DirectionComponent> {
   LatLng? _selectedLocation; // Para almacenar latitud y longitud
   String _selectedAddress = "Select Location"; // Para almacenar el nombre de la dirección
+  String _currentAddressName = ''; // Para almacenar el nombre de la dirección
+  String? addressNameError;
+
   LatLng _currentLocation = const LatLng(10.4833333, -66.83333333); // Ubicación inicial
 
   @override
@@ -113,6 +125,12 @@ class _DirectionComponentState extends State<DirectionComponent> {
     }
   }
 
+  bool isFinishButtonEnabled() {
+    return _selectedLocation != null &&
+        _currentAddressName.isNotEmpty &&
+        addressNameError == null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
@@ -161,10 +179,19 @@ class _DirectionComponentState extends State<DirectionComponent> {
         ),
         const SizedBox(height: 20),
         TextField(
+          onChanged: (value) {
+            setState(() {
+              _currentAddressName = value;
+              addressNameError = value.isNotEmpty
+                  ? null
+                  : "Please provide a name for this address";
+            });
+          },
           decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: "Address Name",
             hintText: "Insert this address name",
+            errorText: addressNameError,
             labelStyle: const TextStyle(fontWeight: FontWeight.bold),
             hintStyle: const TextStyle(
                 color: Colors.grey, fontWeight: FontWeight.normal),
@@ -187,14 +214,15 @@ class _DirectionComponentState extends State<DirectionComponent> {
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: _selectedLocation != null
-                ? () {
-                    // TODO: Guardar la dirección en tu backend o base de datos
-                    print(
-                        'Lat: ${_selectedLocation?.latitude}, Lng: ${_selectedLocation?.longitude}');
-                    print('Address: $_selectedAddress');
-                  }
-                : null,
+            onPressed: isFinishButtonEnabled()
+        ? () {
+            if (_selectedLocation != null) {
+              widget.onChangeLocation(_selectedLocation!); // ¡Sin errores ahora!
+              widget.onChangeAddressName(_currentAddressName);
+              widget.onFinished(); // Llama al registro en AuthScreen
+            }
+          }
+        : null,
             child: const Text(
               "Finish",
               style: TextStyle(fontSize: 18, color: Colors.white),
