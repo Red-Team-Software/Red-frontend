@@ -1,15 +1,14 @@
-import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:GoDeli/features/categories/application/categories_bloc.dart';
-import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
-import 'package:GoDeli/presentation/screens/Home/widgets/widgets.dart';
+import 'widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String name = 'home_screen';
+
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -107,92 +106,79 @@ class HomeScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => getIt<AllProductsBloc>()..fetchProductsPaginated(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<AllBundlesBloc>()..fetchBundlesPaginated(),
-        ),
-        BlocProvider(
-          create: (_) => getIt<CategoriesBloc>()..fetchCategoriesPaginated(),
-        )
-      ],
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          leading: IconButton(
-            onPressed: openDrawer,
-            icon: const Icon(
-              Icons.grid_view_outlined,
-              size: 48,
-            ),
-          ),
-          title: const Flex(
-            direction: Axis.vertical,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Deliver to',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Text('Direccion Ejemplo: Guarenas, Miranda',
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
-            ],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: openDrawer,
+          icon: const Icon(
+            Icons.grid_view_outlined,
+            size: 48,
           ),
         ),
-        body: CustomScrollView(
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  Flex(
-                    direction: Axis.vertical,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RichText(
-                        text: TextSpan(
-                            text: 'Get your',
-                            style: TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.w100,
-                              color: theme.brightness == Brightness.dark
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                            children: [
-                              TextSpan(
-                                  text: ' groceries',
-                                  style: TextStyle(
-                                      fontSize: 40,
-                                      color: theme.colorScheme.primary,
-                                      fontWeight: FontWeight.bold)),
-                              const TextSpan(
-                                text: ' delivered quikly',
-                              ),
-                            ]),
-                      ),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      const CaregoriesCarrusel(),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      const CardBundleCarrusel(),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      const _CarruselItems(),
-                    ],
-                  ),
-                ]),
-              ),
-            ),
-          
-          
+        title: const Flex(
+          direction: Axis.vertical,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Deliver to',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text('Direccion Ejemplo: Guarenas, Miranda',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400)),
           ],
         ),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 24, left: 8, right: 8),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                Flex(
+                  direction: Axis.vertical,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: 'Get your',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.w100,
+                            color: theme.brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                          children: [
+                            TextSpan(
+                                text: ' groceries',
+                                style: TextStyle(
+                                    fontSize: 40,
+                                    color: theme.colorScheme.primary,
+                                    fontWeight: FontWeight.bold)),
+                            const TextSpan(
+                              text: ' delivered quikly',
+                            ),
+                          ]),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    const CaregoriesCarrusel(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const CardBundleCarrusel(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const _CarruselItems(),
+                  ],
+                ),
+              ]),
+            ),
+          ),
+        
+        
+        ],
       ),
     );
   }
@@ -250,8 +236,8 @@ class _CarruselItems extends StatelessWidget {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   mainAxisSpacing: 16,
-                  crossAxisSpacing: 4,
-                  childAspectRatio: 0.28 // Ajusta el aspecto para que ocupe todo el ancho
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 0.25 // Ajusta el aspecto para que ocupe todo el ancho
                 ),
                 itemCount: state.products.length,
                 itemBuilder: (BuildContext context, int index) {

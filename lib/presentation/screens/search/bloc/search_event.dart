@@ -4,10 +4,11 @@ sealed class SearchEvent {
   const SearchEvent();
 }
 
-
-class CustomSearchEvent extends SearchEvent {
+class SearchQueryChangedEvent extends SearchEvent {
   final String query;
-  const CustomSearchEvent({required this.query});
+  const SearchQueryChangedEvent(
+    this.query,
+  );
 }
 
 class ErrorSearchEvent extends SearchEvent {
@@ -22,7 +23,12 @@ class LoadingSearchEvent extends SearchEvent {
 }
 
 class LoadedSearchEvent extends SearchEvent {
-  const LoadedSearchEvent();
+  final List<Product> products;
+  final List<Bundle> bundles;
+  const LoadedSearchEvent({
+    required this.products,
+    required this.bundles,
+  });
 }
 
 class ResetSearchEvent extends SearchEvent {

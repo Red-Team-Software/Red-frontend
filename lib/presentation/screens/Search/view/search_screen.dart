@@ -9,7 +9,10 @@ class SearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SearchView();
+    return BlocProvider(
+      create: (context) => getIt<SearchBloc>(),
+      child: const SearchView(),
+    );
   }
 }
 
@@ -22,9 +25,7 @@ class SearchView extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Search'),
         ),
-        body: BlocProvider(
-          create: (context) => getIt<SearchBloc>(),
-          child: const SearchBody(),
-        ));
+        body: const SearchBody(),
+        );
   }
 }
