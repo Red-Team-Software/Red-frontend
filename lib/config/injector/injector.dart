@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:GoDeli/features/bundles/application/bundle_details/bundle_details_bloc.dart';
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
@@ -10,6 +12,8 @@ import 'package:GoDeli/features/categories/application/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
 import 'package:GoDeli/features/categories/infraestructure/repositories/categories_repository_impl.dart';
+import 'package:GoDeli/features/common/infrastructure/http_service.dart';
+import 'package:GoDeli/features/common/infrastructure/dio_http_service_impl.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/order/infraestructure/datasource/order_datasource_imp.dart';
 import 'package:GoDeli/features/order/infraestructure/repositories/order_repository_imp.dart';
@@ -26,6 +30,11 @@ final dio = Dio();
 
 class Injector {
   void setUp() {
+
+    //? inicializando las dependencias de modulo comun
+    final httpService = DioHttpServiceImpl();
+    getIt.registerSingleton<IHttpService>(httpService);
+
     //? inicializando las dependencias de modulo categorias
 
     final categoryDatasource = CategoriesDatasourceImpl();
