@@ -1,6 +1,6 @@
 import 'package:GoDeli/features/bundles/application/bundle_details/bundle_details_bloc.dart';
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
 import 'package:go_router/go_router.dart';

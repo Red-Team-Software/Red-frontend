@@ -1,4 +1,4 @@
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/config/Fcm/Fcm.dart';
 import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:flutter/material.dart';

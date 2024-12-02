@@ -5,7 +5,7 @@ import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dar
 import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
 import 'package:GoDeli/features/bundles/infraestructure/datasources/bundles_datasource_impl.dart';
 import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repository_impl.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/infraestructure/datasources/isar_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/infraestructure/repositories/local_storage_repository_impl.dart';
 import 'package:GoDeli/features/categories/application/categories_bloc.dart';
