@@ -15,7 +15,7 @@ import '../../screens/screen.dart';
 
 final appRouter = GoRouter(
   debugLogDiagnostics: true,
-  initialLocation: '/',
+  initialLocation: '/auth',
   routes: [
     GoRoute(
       path: '/',

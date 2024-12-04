@@ -1,8 +1,10 @@
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/presentation/core/drawer/drawer_items.dart';
+import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class DrawerWidget extends StatelessWidget {
   final VoidCallback closeDrawer;
@@ -68,7 +70,7 @@ class DrawerWidget extends StatelessWidget {
         onPressed: () {
           authBloc.add(LogoutEvent());
           cartBloc.add(ClearCart());
-            // Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+          context.push('/auth');
         },
         backgroundColor: Colors.transparent,
         label: const Text('Logout'),

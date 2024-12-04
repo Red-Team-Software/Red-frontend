@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
+import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/direction_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/login_component.dart';
@@ -8,32 +9,17 @@ import 'package:GoDeli/presentation/screens/auth/widgets/profile_component.dart'
 import 'package:GoDeli/presentation/screens/profile/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 
-class AuthScreen extends StatelessWidget {
-  static const String name = 'auth_screen';
+class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
-
-  static Route<dynamic> route() {
-    return MaterialPageRoute<dynamic>(builder: (_) => const AuthScreen());
-  }
-
+  static const String name = 'auth_page';
   @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: AuthView(),
-    );
-  }
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class AuthView extends StatefulWidget {
-  const AuthView({super.key});
-
-  @override
-  State<AuthView> createState() => _AuthViewState();
-}
-
-class _AuthViewState extends State<AuthView> {
+class _AuthScreenState extends State<AuthScreen> {
   int _currentIndex = 0; // Inicialmente mostrar el LoginComponent
   bool _isMovingRight = true;
 
@@ -53,81 +39,92 @@ class _AuthViewState extends State<AuthView> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthBloc authBloc = context.watch<AuthBloc>();
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is Authenticated) {
+          // Navegar a la pantalla principal cuando esté autenticado
+          context.push('/');
+        } else if (state is AuthError) {
+          // Mostrar un mensaje de error si hay un problema de autenticación
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message)),
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthLoading) {
+          // Mostrar un indicador de carga mientras se procesa la autenticación
+          return const Center(child: CircularProgressIndicator());
+        }
 
+        // Construir la vista normal si no está en estado de carga
+        return _buildAuthScreen(context);
+      },
+    );
+  }
+
+  Widget _buildAuthScreen(BuildContext context) {
     void onChangeIndex(int newIndex) {
       setState(() {
-        _isMovingRight = newIndex >
-            _currentIndex; // Verifica si se está moviendo a la derecha
-        _currentIndex = newIndex; // Cambia al nuevo índice
+        _isMovingRight = newIndex > _currentIndex;
+        _currentIndex = newIndex;
       });
     }
 
     Future<void> handleLogin() async {
-      print("Logging in with:");
-      print("Email: $email");
-      print("Password: $password");
-      // Aquí puedes añadir la lógica para hacer una petición al backend
-      authBloc.add(LoginEvent(email, password));
+      context.read<AuthBloc>().add(LoginEvent(email, password));
     }
 
     Future<void> handleRegister() async {
-      // Simulación del registro
-      print('Registering user...');
-      print('Email: $email');
-      print('Password: $password');
-      print('Image: ${selectedImage?.path}');
-      print('Fullname: $fullname');
-      print('Phone: $phoneCode $phone');
-      print('Location: $selectedLocation');
-      print('Address Name: $addressName');
       final realPhone = '$phoneCode$phone';
-      // Aquí puedes integrar la lógica de la API para registrar al usuario.
-      authBloc.add(RegisterEvent(
-          email: email,
-          password: password,
-          fullName: fullname,
-          phoneNumber: realPhone,
-          addressName: addressName,
-          latitude: selectedLocation!.latitude,
-          longitude: selectedLocation!.longitude));
-      print('Registrado');
+      context.read<AuthBloc>().add(
+            RegisterEvent(
+              email: email,
+              password: password,
+              fullName: fullname,
+              phoneNumber: realPhone,
+              addressName: addressName,
+              latitude: selectedLocation!.latitude,
+              longitude: selectedLocation!.longitude,
+            ),
+          );
     }
 
     final screens = [
       LoginComponent(
-        onChangeIndex: onChangeIndex, // Cambiar al índice de registro
+        onChangeIndex: onChangeIndex,
         onHandleLogin: handleLogin,
         onChangeEmail: (value) {
           email = value;
-          print('Texto que no aparece');
         },
         onChangePassword: (password) => this.password = password,
       ),
       EmailPassComponent(
-          onChangeIndex: onChangeIndex, // Cambiar al índice de login
-          onChangeEmail: (email) => this.email = email,
-          onChangePassword: (password) =>
-              {this.password = password, print(this.password)}),
+        onChangeIndex: onChangeIndex,
+        onChangeEmail: (email) => this.email = email,
+        onChangePassword: (password) => this.password = password,
+      ),
       ProfileComponent(
-          onChangeIndex: onChangeIndex, // Cambiar al índice de login
-          onChangeImage: (image) => this.selectedImage = image,
-          onChangeFullname: (fullname) => this.fullname = fullname,
-          onChangePhoneCode: (phoneCode) => this.phoneCode = phoneCode,
-          onChangePhone: (phone) => this.phone = phone),
+        onChangeIndex: onChangeIndex,
+        onChangeImage: (image) => this.selectedImage = image,
+        onChangeFullname: (fullname) => this.fullname = fullname,
+        onChangePhoneCode: (phoneCode) => this.phoneCode = phoneCode,
+        onChangePhone: (phone) => this.phone = phone,
+      ),
       DirectionComponent(
         onChangeIndex: onChangeIndex,
         onFinished: handleRegister,
         onChangeLocation: (location) => selectedLocation = location as LatLng,
         onChangeAddressName: (addressName) => addressName = addressName,
-      )
+      ),
     ];
 
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Center(child: screens[_currentIndex]),
-    ));
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Center(child: screens[_currentIndex]),
+      ),
+    );
   }
 }
 

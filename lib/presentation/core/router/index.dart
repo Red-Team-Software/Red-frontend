@@ -20,7 +20,7 @@ class _IndexPageState extends State<IndexPage> {
   final pages = [
     HomeScreen(),
     const SearchPage(),
-    const AuthScreen(),
+    const ProfilePage(),
     const ProfilePage(),
   ];
 
