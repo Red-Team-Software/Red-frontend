@@ -11,16 +11,15 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
- 
   final LoginUseCase loginUseCase;
   final RegisterUseCase registerUseCase;
   final LogoutUseCase logoutUseCase;
- 
-  AuthBloc({
-    required this.loginUseCase,
-    required this.registerUseCase,
-    required this.logoutUseCase
-  }) : super(AuthState()) {
+
+  AuthBloc(
+      {required this.loginUseCase,
+      required this.registerUseCase,
+      required this.logoutUseCase})
+      : super(AuthState()) {
     on<LoginEvent>(_onLoginEvent);
     on<RegisterEvent>(_onRegisterEvent);
     on<LogoutEvent>(_onLogoutEvent);
@@ -28,8 +27,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onLoginEvent(LoginEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    final res = await loginUseCase.execute(LoginDto(event.email, event.password));
-    if(res.isSuccessful()){
+    final res =
+        await loginUseCase.execute(LoginDto(event.email, event.password));
+    if (res.isSuccessful()) {
       emit(Authenticated(res.getValue()));
       print('User: ${res.getValue().fullName}');
     } else {
@@ -39,8 +39,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _onRegisterEvent(RegisterEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    final res = await registerUseCase.execute(RegisterDto(email: event.email, password: event.password, name: event.fullName, phone: event.phoneNumber));
-    if(res.isSuccessful()){
+    final res = await registerUseCase.execute(RegisterDto(
+        email: event.email,
+        password: event.password,
+        name: event.fullName,
+        phone: event.phoneNumber));
+    if (res.isSuccessful()) {
       emit(Authenticated(res.getValue()));
     } else {
       emit(AuthError('Registering failed'));
@@ -50,7 +54,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onLogoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final res = await logoutUseCase.execute(null);
-    if(res.isSuccessful()){
+    if (res.isSuccessful()) {
       emit(UnAuthenticated());
       print('Deslogueado');
     } else {

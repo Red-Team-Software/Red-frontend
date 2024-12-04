@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:latlong2/latlong.dart';
 
-
 class AuthScreen extends StatelessWidget {
   static const String name = 'auth_screen';
   const AuthScreen({super.key});
@@ -35,8 +34,6 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
-
-  
   int _currentIndex = 0; // Inicialmente mostrar el LoginComponent
   bool _isMovingRight = true;
 
@@ -58,7 +55,7 @@ class _AuthViewState extends State<AuthView> {
   Widget build(BuildContext context) {
     final AuthBloc authBloc = context.watch<AuthBloc>();
 
-    void _onChangeIndex(int newIndex) {
+    void onChangeIndex(int newIndex) {
       setState(() {
         _isMovingRight = newIndex >
             _currentIndex; // Verifica si se está moviendo a la derecha
@@ -66,17 +63,15 @@ class _AuthViewState extends State<AuthView> {
       });
     }
 
-    Future<void> _handleLogin() async {
+    Future<void> handleLogin() async {
       print("Logging in with:");
       print("Email: $email");
       print("Password: $password");
       // Aquí puedes añadir la lógica para hacer una petición al backend
       authBloc.add(LoginEvent(email, password));
-
     }
 
-
-    Future<void> _handleRegister() async {
+    Future<void> handleRegister() async {
       // Simulación del registro
       print('Registering user...');
       print('Email: $email');
@@ -86,13 +81,23 @@ class _AuthViewState extends State<AuthView> {
       print('Phone: $phoneCode $phone');
       print('Location: $selectedLocation');
       print('Address Name: $addressName');
+      final realPhone = '$phoneCode$phone';
       // Aquí puedes integrar la lógica de la API para registrar al usuario.
+      authBloc.add(RegisterEvent(
+          email: email,
+          password: password,
+          fullName: fullname,
+          phoneNumber: realPhone,
+          addressName: addressName,
+          latitude: selectedLocation!.latitude,
+          longitude: selectedLocation!.longitude));
+      print('Registrado');
     }
 
     final screens = [
       LoginComponent(
-        onChangeIndex: _onChangeIndex, // Cambiar al índice de registro
-        onHandleLogin: _handleLogin,
+        onChangeIndex: onChangeIndex, // Cambiar al índice de registro
+        onHandleLogin: handleLogin,
         onChangeEmail: (value) {
           email = value;
           print('Texto que no aparece');
@@ -100,19 +105,19 @@ class _AuthViewState extends State<AuthView> {
         onChangePassword: (password) => this.password = password,
       ),
       EmailPassComponent(
-          onChangeIndex: _onChangeIndex, // Cambiar al índice de login
+          onChangeIndex: onChangeIndex, // Cambiar al índice de login
           onChangeEmail: (email) => this.email = email,
           onChangePassword: (password) =>
               {this.password = password, print(this.password)}),
       ProfileComponent(
-          onChangeIndex: _onChangeIndex, // Cambiar al índice de login
+          onChangeIndex: onChangeIndex, // Cambiar al índice de login
           onChangeImage: (image) => this.selectedImage = image,
           onChangeFullname: (fullname) => this.fullname = fullname,
           onChangePhoneCode: (phoneCode) => this.phoneCode = phoneCode,
           onChangePhone: (phone) => this.phone = phone),
       DirectionComponent(
-        onChangeIndex: _onChangeIndex,
-        onFinished: _handleRegister,
+        onChangeIndex: onChangeIndex,
+        onFinished: handleRegister,
         onChangeLocation: (location) => selectedLocation = location as LatLng,
         onChangeAddressName: (addressName) => addressName = addressName,
       )

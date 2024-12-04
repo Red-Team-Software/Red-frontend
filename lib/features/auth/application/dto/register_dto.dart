@@ -18,6 +18,7 @@ class RegisterDto {
       'password': password,
       'name': name,
       'phone': phone,
+      'type': 'CLIENT'
     };
   }
 }

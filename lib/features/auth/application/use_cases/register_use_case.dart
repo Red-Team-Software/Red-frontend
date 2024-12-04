@@ -17,10 +17,12 @@ class RegisterUseCase implements IUseCase<RegisterDto, User> {
   Future<Result<User>> execute(RegisterDto dto) async {
     final registerResult = await _authRepository.register(dto);
     if (!registerResult.isSuccessful()) {
+      'Failed to register: ${registerResult.getError()}';
       return Result.makeError(registerResult.getError());
     }
     final loginResult = await _authRepository.login(LoginDto(dto.email, dto.password));
     if (!loginResult.isSuccessful()) {
+      'Failed to login: ${loginResult.getError()}';
       return Result.makeError(loginResult.getError());
     }
     await _authLocalStorageRepository.saveToken(loginResult.getValue().token);
