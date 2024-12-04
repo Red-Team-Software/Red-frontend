@@ -4,6 +4,7 @@ import 'package:GoDeli/features/auth/application/datasources/auth_datasource.dar
 import 'package:GoDeli/features/auth/application/datasources/auth_local_storage_datasource.dart';
 import 'package:GoDeli/features/auth/application/repositories/auth_local_storage_repository.dart';
 import 'package:GoDeli/features/auth/application/repositories/auth_repository.dart';
+import 'package:GoDeli/features/auth/application/use_cases/log_out_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/login_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/register_use_case.dart';
 import 'package:GoDeli/features/auth/infrastructure/datasource/auth_datasource.dart';
@@ -45,6 +46,12 @@ class Injector {
     final isarLocalStorage = IsarLocalStorage();
     getIt.registerSingleton<IsarLocalStorage>(isarLocalStorage);
 
+    //? inicializando las dependencias de modulo carrito
+    final cartDatasource = CartIsarLocalStorageDatasource(isarLocalStorage);
+    CartLocalStorageRepositoryImpl cartRepository =
+        CartLocalStorageRepositoryImpl(dataSource: cartDatasource);
+    getIt.registerSingleton<CartBloc>(CartBloc(repository: cartRepository));
+
     //? inicializando las dependencias de modulo autenticacion
     final IAuthDataSource authDataSource = AuthDatasource(httpService);
     final IAuthRepository authRepository = AuthRepository(authDataSource);
@@ -56,9 +63,11 @@ class Injector {
         LoginUseCase(authRepository, authLocalStorageRepository);
     final RegisterUseCase registerUseCase =
         RegisterUseCase(authRepository, authLocalStorageRepository);
+    final LogoutUseCase logoutUseCase =
+        LogoutUseCase(httpService, authLocalStorageRepository, cartRepository);
     getIt.registerSingleton<IAuthRepository>(authRepository);
     getIt.registerFactory<AuthBloc>(() =>
-        AuthBloc(loginUseCase: loginUseCase, registerUseCase: registerUseCase));
+        AuthBloc(loginUseCase: loginUseCase, registerUseCase: registerUseCase, logoutUseCase: logoutUseCase));
 
     final token = await authLocalStorageRepository.getToken();
     if (token != '') {
@@ -95,11 +104,7 @@ class Injector {
     getIt.registerFactory<BundleDetailsBloc>(
         () => BundleDetailsBloc(bundleRepository: bundleRepository));
 
-    //? inicializando las dependencias de modulo carrito
-    final datasource = CartIsarLocalStorageDatasource(isarLocalStorage);
-    CartLocalStorageRepositoryImpl repository =
-        CartLocalStorageRepositoryImpl(dataSource: datasource);
-    getIt.registerSingleton<CartBloc>(CartBloc(repository: repository));
+    
 
     //? Iiniciando las dependencias de modulo de orden
 

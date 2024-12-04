@@ -45,4 +45,5 @@ class AuthDatasource implements IAuthDataSource {
       return Result.makeError(Exception('Failed to register: ${e.toString()}'));
     }
   }
+  
 }

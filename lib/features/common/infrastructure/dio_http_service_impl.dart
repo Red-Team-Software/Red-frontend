@@ -42,5 +42,10 @@ class DioHttpServiceImpl<T> implements IHttpService {
   dynamic getHeaders() {
     return _dio.options.headers;
   }
+
+  @override
+  void removeHeader(String key) {
+    _dio.options.headers.remove(key);
+  }
   //TODO: Implementar el manejo de errores
 }

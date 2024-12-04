@@ -12,6 +12,5 @@ import 'package:GoDeli/features/common/domain/result.dart';
 abstract class IAuthRepository {
   Future<Result<LoginResponse>> login(LoginDto loginDto);
   Future<Result<RegisterResponse>> register(RegisterDto registerDto);
-  // Future<Result<User>> logout();
   // Future<Result<User>> getCurrentUser();
 }

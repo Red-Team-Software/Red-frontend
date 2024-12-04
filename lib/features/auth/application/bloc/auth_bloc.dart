@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/auth/application/dto/login_dto.dart';
 import 'package:GoDeli/features/auth/application/dto/register_dto.dart';
+import 'package:GoDeli/features/auth/application/use_cases/log_out_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/login_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/register_use_case.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
@@ -13,13 +14,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
  
   final LoginUseCase loginUseCase;
   final RegisterUseCase registerUseCase;
+  final LogoutUseCase logoutUseCase;
  
   AuthBloc({
     required this.loginUseCase,
     required this.registerUseCase,
+    required this.logoutUseCase
   }) : super(AuthState()) {
     on<LoginEvent>(_onLoginEvent);
     on<RegisterEvent>(_onRegisterEvent);
+    on<LogoutEvent>(_onLogoutEvent);
   }
 
   void _onLoginEvent(LoginEvent event, Emitter<AuthState> emit) async {
@@ -40,6 +44,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Authenticated(res.getValue()));
     } else {
       emit(AuthError('Registering failed'));
+    }
+  }
+
+  void _onLogoutEvent(LogoutEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final res = await logoutUseCase.execute(null);
+    if(res.isSuccessful()){
+      emit(UnAuthenticated());
+      print('Deslogueado');
+    } else {
+      emit(AuthError('Logout failed'));
     }
   }
 

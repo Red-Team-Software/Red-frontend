@@ -7,5 +7,4 @@ import 'package:GoDeli/features/common/domain/result.dart';
 abstract class IAuthDataSource {
   Future<Result<LoginResponse>> login(LoginDto loginDto);
   Future<Result<RegisterResponse>> register(RegisterDto registerDto);
-
 }
