@@ -6,9 +6,9 @@ import 'package:GoDeli/presentation/screens/auth/widgets/direction_component.dar
 import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/login_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/profile_component.dart';
-import 'package:GoDeli/presentation/screens/profile/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 

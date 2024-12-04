@@ -7,7 +7,7 @@ import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
 import 'package:GoDeli/presentation/screens/bundle/bundle_screen.dart';
-import 'package:GoDeli/presentation/screens/profile/view/profile_page.dart';
+import 'package:GoDeli/presentation/screens/profile/profile_page.dart';
 import 'package:GoDeli/presentation/screens/search/view/search_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -34,8 +34,8 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/profile',
-      name: ProfilePage.name,
-      builder: (context, state) => const ProfilePage(),
+      name: ProfileScreen.name,
+      builder: (context, state) => const ProfileScreen(),
     ),
     GoRoute(
       path: '/auth',
