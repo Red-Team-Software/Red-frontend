@@ -31,4 +31,10 @@ class BundleResponse {
           : double.tryParse(json['price'].toString()) ?? 0.0, // Maneja casos de String o null
         currency: json['currency']);
   }
+
+  static List<BundleResponse> fromJsonList(List<dynamic> jsonList) {
+    return jsonList
+        .map((json) => BundleResponse.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
 }

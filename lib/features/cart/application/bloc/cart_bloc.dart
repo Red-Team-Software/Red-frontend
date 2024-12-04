@@ -1,8 +1,8 @@
 
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
-import 'package:GoDeli/features/cart/domain/repositories/local_storage_repository.dart';
-import 'package:GoDeli/features/cart/infraestructure/repositories/local_storage_repository_impl.dart';
+import 'package:GoDeli/features/cart/domain/repositories/cart_local_storage_repository.dart';
+import 'package:GoDeli/features/cart/infraestructure/repositories/cart_local_storage_repository_impl.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -11,7 +11,7 @@ part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   
-  final LocalStorageRepository repository;
+  final CartLocalStorageRepository repository;
   
   CartBloc({ required this.repository }) : super(const CartState()) {
 

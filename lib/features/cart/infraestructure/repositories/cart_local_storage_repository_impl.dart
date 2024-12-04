@@ -1,13 +1,13 @@
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
-import 'package:GoDeli/features/cart/domain/datasource/local_storage_datasource.dart';
+import 'package:GoDeli/features/cart/domain/datasource/cart_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
-import 'package:GoDeli/features/cart/domain/repositories/local_storage_repository.dart';
+import 'package:GoDeli/features/cart/domain/repositories/cart_local_storage_repository.dart';
 
-class LocalStorageRepositoryImpl extends LocalStorageRepository {
+class CartLocalStorageRepositoryImpl extends CartLocalStorageRepository {
   //! Aqui iria el manejador de local storage
-  final LocalStorageDataSource dataSource;
+  final CartLocalStorageDataSource dataSource;
 
-  LocalStorageRepositoryImpl({required this.dataSource});
+  CartLocalStorageRepositoryImpl({required this.dataSource});
 
   @override
   Future<void> addProductToCart(ProductCart product) {

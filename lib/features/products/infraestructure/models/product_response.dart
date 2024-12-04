@@ -29,4 +29,10 @@ class ProductResponse {
           : [],
     );
   }
+
+  static List<ProductResponse> fromJsonList(List<dynamic> jsonList) {
+    return jsonList
+        .map((json) => ProductResponse.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
 }

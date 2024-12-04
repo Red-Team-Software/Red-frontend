@@ -1,5 +1,7 @@
+import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
@@ -39,6 +41,7 @@ class _LoginComponentState extends State<LoginComponent> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -58,7 +61,8 @@ class _LoginComponentState extends State<LoginComponent> {
           onChanged: (value) {
             setState(() {
               email = value;
-              emailError = validateEmail(email) ? null : "Invalid email address";
+              emailError =
+                  validateEmail(email) ? null : "Invalid email address";
               widget.onChangeEmail(email);
             });
           },
@@ -109,7 +113,8 @@ class _LoginComponentState extends State<LoginComponent> {
           alignment: Alignment.centerRight,
           child: TextButton(
             onPressed: () {
-              // TODO: Implement forgot password functionality
+              
+
             },
             child: Text(
               "Forgot password?",

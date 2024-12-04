@@ -1,8 +1,9 @@
+import 'package:GoDeli/config/locar_storage/isar_local_storage.dart';
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/bundles/infraestructure/mappers/bundle_entity_mapper.dart';
 import 'package:GoDeli/features/bundles/infraestructure/models/bundle_entity.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
-import 'package:GoDeli/features/cart/domain/datasource/local_storage_datasource.dart';
+import 'package:GoDeli/features/cart/domain/datasource/cart_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/cart/infraestructure/mappers/bundle_cart_entity_mapper.dart';
 import 'package:GoDeli/features/cart/infraestructure/mappers/product_cart_entity_mapper.dart';
@@ -12,35 +13,15 @@ import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/features/products/infraestructure/mappers/product_entity_mapper.dart';
 import 'package:GoDeli/features/products/infraestructure/models/product_entity.dart';
 import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 
-class IsarLocalStorageDatasource extends LocalStorageDataSource {
-  late Future<Isar> db;
+class CartIsarLocalStorageDatasource extends CartLocalStorageDataSource {
+  final IsarLocalStorage _isarLocalStorage;
 
-  IsarLocalStorageDatasource() {
-    db = openIsar();
-  }
-
-  Future<Isar> openIsar() async {
-    // Verifica si ya existe una instancia abierta
-    final existingInstance = Isar.getInstance();
-    if (existingInstance != null) {
-      return Future.value(existingInstance);
-    }
-
-    final dir = await getApplicationDocumentsDirectory();
-    // Si no hay instancia abierta, abre una nueva
-    return await Isar.open([
-      ProductCartEntitySchema,
-      ProductEntitySchema,
-      BundleEntitySchema,
-      BundleCartEntitySchema
-    ], directory: dir.path);
-  }
+  CartIsarLocalStorageDatasource(this._isarLocalStorage);
 
   @override
   Future<void> clearCart() async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
     await isar.writeTxn(() async {
       await isar.productCartEntitys.clear();
       await isar.bundleCartEntitys.clear();
@@ -49,7 +30,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
   @override
   Future<List<ProductCart>> getCartProducts() async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
     // Obtén todos los ProductCartEntity almacenados en la base de datos
     final productCartEntities = await isar.productCartEntitys.where().findAll();
 
@@ -70,7 +51,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
   @override
   Future<List<BundleCart>> getCartBundles() async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
     // Obtén todos los BundleCartEntity almacenados en la base de datos
     final bundleCartEntities = await isar.bundleCartEntitys.where().findAll();
 
@@ -104,7 +85,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
   @override
   Future<void> updateProductQuantity(String productId, int newQuantity) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     // Busca el ProductCartEntity por el ID del producto
     final productCartEntity = await isar.productCartEntitys
@@ -125,7 +106,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
   @override
   Future<void> removeProductFromCart(ProductCart product) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     // Obtén el ProductEntity correspondiente al producto en ProductCart
     final productEntity = await _getProductById(product.product.id);
@@ -148,7 +129,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
   }
 
   Future<ProductEntity?> _getProductById(String productId) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
     return await isar.productEntitys.filter().idEqualTo(productId).findFirst();
   }
 
@@ -162,7 +143,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
     // Si no existe, mapea y guarda un nuevo ProductEntity
     final newProductEntity = ProductEntityMapper.mapProductToEntity(product);
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     await isar.writeTxn(() async {
       await isar.productEntitys.put(newProductEntity);
@@ -173,7 +154,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
   Future<void> _saveProductCartEntity(
       ProductCartEntity productCartEntity) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     await isar.writeTxn(() async {
       await isar.productCartEntitys.put(productCartEntity);
@@ -183,7 +164,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
   }
 
   Future<BundleEntity?> _getBundleById(String bundleId) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
     return await isar.bundleEntitys.filter().idEqualTo(bundleId).findFirst();
   }
 
@@ -197,7 +178,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
     // Si no existe, mapea y guarda un nuevo BundleEntity
     final newBundleEntity = BundleEntityMapper.mapBundleToEntity(bundle);
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     await isar.writeTxn(() async {
       await isar.bundleEntitys.put(newBundleEntity);
@@ -207,7 +188,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
   }
 
   Future<void> _saveBundleCartEntity(BundleCartEntity bundleCartEntity) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     await isar.writeTxn(() async {
       await isar.bundleCartEntitys.put(bundleCartEntity);
@@ -234,7 +215,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
   @override
   Future<void> removeBundleFromCart(BundleCart bundle) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     // Obtén el BundleEntity correspondiente al bundle en BundleCart
     final bundleEntity = await _getBundleById(bundle.bundle.id);
@@ -258,7 +239,7 @@ class IsarLocalStorageDatasource extends LocalStorageDataSource {
 
   @override
   Future<void> updateBundleQuantity(String bundleId, int newQuantity) async {
-    final isar = await db;
+    final Isar isar = await _isarLocalStorage.db;
 
     // Busca el BundleCartEntity por el ID del bundle
     final bundleCartEntity = await isar.bundleCartEntitys

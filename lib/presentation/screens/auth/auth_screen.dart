@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/direction_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/login_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/profile_component.dart';
+import 'package:GoDeli/presentation/screens/profile/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:latlong2/latlong.dart';
@@ -33,6 +35,8 @@ class AuthView extends StatefulWidget {
 }
 
 class _AuthViewState extends State<AuthView> {
+
+  
   int _currentIndex = 0; // Inicialmente mostrar el LoginComponent
   bool _isMovingRight = true;
 
@@ -52,6 +56,8 @@ class _AuthViewState extends State<AuthView> {
 
   @override
   Widget build(BuildContext context) {
+    final AuthBloc authBloc = context.watch<AuthBloc>();
+
     void _onChangeIndex(int newIndex) {
       setState(() {
         _isMovingRight = newIndex >
@@ -65,6 +71,8 @@ class _AuthViewState extends State<AuthView> {
       print("Email: $email");
       print("Password: $password");
       // Aquí puedes añadir la lógica para hacer una petición al backend
+      authBloc.add(LoginEvent(email, password));
+
     }
 
 
