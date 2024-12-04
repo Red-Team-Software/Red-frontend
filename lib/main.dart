@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/config/Fcm/Fcm.dart';
 import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:GoDeli/features/categories/application/categories_bloc.dart';
@@ -20,7 +21,7 @@ void main() async {
   configureFCM();
 
   // Register Blocs in service locator
-  Injector().setUp();
+  await Injector().setUp();
 
   runApp(const BlocsProviders());
 }
@@ -38,8 +39,8 @@ class BlocsProviders extends StatelessWidget {
 
         BlocProvider(create: (context) => getIt<AllBundlesBloc>()..fetchBundlesPaginated(),),
 
-        BlocProvider(create: (context) => getIt<CategoriesBloc>()..fetchCategoriesPaginated(),
-        )
+        BlocProvider(create: (context) => getIt<CategoriesBloc>()..fetchCategoriesPaginated(),),
+        BlocProvider(create: (context) => getIt<AuthBloc>() ),
       ],
       child: const GoDeli(),
     );

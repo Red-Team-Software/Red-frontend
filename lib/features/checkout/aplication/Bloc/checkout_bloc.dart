@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'checkout_event.dart';
 import 'checkout_state.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/checkout/domain/address.dart';
 
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {

@@ -3,7 +3,7 @@ import 'package:GoDeli/features/products/domain/product.dart';
 import '../models/product_response.dart';
 
 class ProductMapper {
-  static Product productToDomian(ProductResponse json) {
+  static Product productToDomain(ProductResponse json) {
     return Product(
       id: json.id,
       name: json.name,
@@ -12,5 +12,9 @@ class ProductMapper {
       currency: json.currency,
       imageUrl: json.images,
     );
+  }
+
+   static List<Product> productListToDomain(List<ProductResponse> responses) {
+    return responses.map((response) => productToDomain(response)).toList();
   }
 }

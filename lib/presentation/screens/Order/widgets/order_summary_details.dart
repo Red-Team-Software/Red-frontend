@@ -1,7 +1,7 @@
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderSummaryDetails extends StatelessWidget {
