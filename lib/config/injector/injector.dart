@@ -4,6 +4,7 @@ import 'package:GoDeli/features/auth/application/datasources/auth_datasource.dar
 import 'package:GoDeli/features/auth/application/datasources/auth_local_storage_datasource.dart';
 import 'package:GoDeli/features/auth/application/repositories/auth_local_storage_repository.dart';
 import 'package:GoDeli/features/auth/application/repositories/auth_repository.dart';
+import 'package:GoDeli/features/auth/application/use_cases/check_auth_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/log_out_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/login_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/register_use_case.dart';
@@ -59,20 +60,22 @@ class Injector {
         IsarAuthLocalStorageDatasource(isarLocalStorage);
     final IAuthLocalStorageRepository authLocalStorageRepository =
         IsarAuthLocalStorageRepository(authLocalStorageDataSource);
+    
+    //? Buscando el token en el almacenamiento local
+    
+
     final LoginUseCase loginUseCase =
         LoginUseCase(authRepository, authLocalStorageRepository);
     final RegisterUseCase registerUseCase =
         RegisterUseCase(authRepository, authLocalStorageRepository);
     final LogoutUseCase logoutUseCase =
         LogoutUseCase(httpService, authLocalStorageRepository, cartRepository);
+    final CheckAuthUseCase checkAuthUseCase =
+        CheckAuthUseCase(httpService, authLocalStorageRepository);
     getIt.registerSingleton<IAuthRepository>(authRepository);
     getIt.registerFactory<AuthBloc>(() =>
-        AuthBloc(loginUseCase: loginUseCase, registerUseCase: registerUseCase, logoutUseCase: logoutUseCase));
+        AuthBloc(loginUseCase: loginUseCase, registerUseCase: registerUseCase, logoutUseCase: logoutUseCase, checkAuthUseCase: checkAuthUseCase));
 
-    final token = await authLocalStorageRepository.getToken();
-    if (token != '') {
-      httpService.addHeader('Authorization', 'Bearer $token');
-    }
 
     //? inicializando las dependencias de modulo categorias
 
