@@ -1,14 +1,15 @@
+import 'package:GoDeli/features/bundles/infraestructure/models/bundle_response.dart';
 import 'package:GoDeli/features/products/infraestructure/models/product_response.dart';
 
 class SearchResponse {
-    List<ProductResponse> product;
+    List<ProductResponse> products;
 
     SearchResponse({
-        required this.product,
+        required this.products,
     });
 
     factory SearchResponse.fromJson(Map<String, dynamic> json) => SearchResponse(
-        product: List<ProductResponse>.from(json["product"].map((x) => ProductResponse.fromJson(x))),
+        products: List<ProductResponse>.from(json["product"].map((x) => ProductResponse.fromJson(x))),
     );
 
 }

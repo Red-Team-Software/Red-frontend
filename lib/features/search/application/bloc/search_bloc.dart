@@ -51,15 +51,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     add(const LoadingSearchEvent());
 
     final productsRes = await productsRepository.searchProducts(term: query);
+    final bundlesRes = await bundleRepository.searchBundles(term: query);
 
-    if (productsRes.isSuccessful()) {
-
+    if (productsRes.isSuccessful() && bundlesRes.isSuccessful()) {
       final products = productsRes.getValue();
-      add(LoadedSearchEvent(products: products, bundles: []));
-      print('Products state: ${state.products}');
-      
+      final bundles = bundlesRes.getValue();
+      add(LoadedSearchEvent(products: products, bundles: bundles));      
     } else {
-      add(ErrorSearchEvent(productsRes.getError().toString()));
+      if (!productsRes.isSuccessful()) add(ErrorSearchEvent(productsRes.getError().toString()));
+      if (!bundlesRes.isSuccessful()) add(ErrorSearchEvent(bundlesRes.getError().toString()));
     }
   }
 }

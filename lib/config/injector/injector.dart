@@ -34,6 +34,7 @@ import 'package:GoDeli/features/products/application/products/all_products_bloc.
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
 import 'package:GoDeli/features/products/infraestructure/repositories/products_repository_impl.dart';
+import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/application/use_cases/get_user_use_case.dart';
 import 'package:GoDeli/features/user/domain/datasources/user_datasource.dart';

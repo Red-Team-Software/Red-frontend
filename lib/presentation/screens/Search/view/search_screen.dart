@@ -1,5 +1,5 @@
 import 'package:GoDeli/config/injector/injector.dart';
-import 'package:GoDeli/presentation/screens/Search/bloc/bloc.dart';
+import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/search/widgets/search_body.dart';
 

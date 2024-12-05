@@ -1,5 +1,3 @@
-
-
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/bundles/domain/datasources/bundle_datasource.dart';
 import 'package:GoDeli/features/bundles/infraestructure/mappers/bundle_mapper.dart';
@@ -33,11 +31,6 @@ class BundlesDatasourceImpl implements IBundleDatasource{
           'page': page,
           'perPage': perPage,
         });
-    
-    // final res = await dio.get('/all', queryParameters: {
-    //   'page': page,
-    //   'perPage': perPage,
-    // });
 
     final List<Bundle> bundles = [];
 
@@ -45,6 +38,28 @@ class BundlesDatasourceImpl implements IBundleDatasource{
       bundles.add(BundleMapper.bundleToDomian(bun));
     }
 
+    return bundles;
+  }
+  
+  @override
+  Future<List<Bundle>> searchBundles({int page = 1, int perPage = 10, required String term}) async{
+
+    final resBundles = await _httpService.request(
+        '/bundle/all-name', 'GET', (json) => BundleResponse.fromJsonList(json),
+        queryParameters: {
+          'page': page,
+          'perPage': perPage,
+          'term': term
+        });
+
+    // print(res);
+    final List<Bundle> bundles = [];
+    
+    if(resBundles.isSuccessful()) {
+      for (var bun in resBundles.getValue()) {
+        bundles.add(BundleMapper.bundleToDomian(bun));
+      }
+    }
     return bundles;
   }
 }

@@ -228,7 +228,7 @@ class _CarruselItems extends StatelessWidget {
             );
           }
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 2),
             child: SizedBox(
               height: 200, // Ajusta la altura según tus necesidades
               child: GridView.builder(
@@ -237,7 +237,7 @@ class _CarruselItems extends StatelessWidget {
                   crossAxisCount: 2,
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 8,
-                  childAspectRatio: 0.25 // Ajusta el aspecto para que ocupe todo el ancho
+                  childAspectRatio: 0.28 // Ajusta el aspecto para que ocupe todo el ancho
                 ),
                 itemCount: state.products.length,
                 itemBuilder: (BuildContext context, int index) {
