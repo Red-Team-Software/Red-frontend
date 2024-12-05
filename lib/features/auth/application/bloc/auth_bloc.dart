@@ -79,6 +79,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
   }
-
-  //Todo: Add in the injectors
 }
