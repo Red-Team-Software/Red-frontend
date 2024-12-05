@@ -12,8 +12,15 @@ import 'address_card.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:geolocator/geolocator.dart';
 
-class ShippingAddressSection extends StatelessWidget {
+class ShippingAddressSection extends StatefulWidget {
   const ShippingAddressSection({super.key});
+
+  @override
+  _ShippingAddressSectionState createState() => _ShippingAddressSectionState();
+}
+
+class _ShippingAddressSectionState extends State<ShippingAddressSection> {
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +47,21 @@ class ShippingAddressSection extends StatelessWidget {
               );
             }),
             TextButton(
-              onPressed: () => _showAddAddressModal(context, checkoutBloc),
+              onPressed: _isLoading
+                  ? null
+                  : () => _showAddAddressModal(context, checkoutBloc),
               child: const Text(
                 'Add new address',
                 style: TextStyle(color: Colors.red),
               ),
             ),
+            if (_isLoading)
+              const Center(
+                child: Text(
+                  'Obtaining current location...',
+                  style: TextStyle(color: Colors.red, fontSize: 16),
+                ),
+              ),
           ],
         );
       },
@@ -90,15 +106,17 @@ class ShippingAddressSection extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       GestureDetector(
-                        onTap: () async {
-                          final selectedLocation =
-                              await _selectLocationOnMap(context);
-                          if (selectedLocation != null) {
-                            setState(() {
-                              location = selectedLocation;
-                            });
-                          }
-                        },
+                        onTap: _isLoading
+                            ? null
+                            : () async {
+                                final selectedLocation =
+                                    await _selectLocationOnMap(context);
+                                if (selectedLocation != null) {
+                                  setState(() {
+                                    location = selectedLocation;
+                                  });
+                                }
+                              },
                         child: Container(
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
@@ -163,43 +181,64 @@ class ShippingAddressSection extends StatelessWidget {
   Future<String?> _selectLocationOnMap(BuildContext context) async {
     LatLng? selectedLocation;
 
+    setState(() {
+      _isLoading = true;
+    });
+
     // Check location permissions
-    if (await Permission.location.request().isGranted) {
+    if (await Permission.location.isGranted) {
+      print("Location permission already granted");
       // Fetch current device location
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       selectedLocation = LatLng(position.latitude, position.longitude);
     } else {
-      // Show modal requesting location permission
-      bool? permissionGranted = await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Location Permission'),
-          content: const Text(
-              'This app needs location access to show your current location on the map.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Deny'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Allow'),
-            ),
-          ],
-        ),
-      );
+      print("Requesting location permission");
+      // Request location permission
+      if (await Permission.location.request().isGranted) {
+        print("Location permission granted");
+        // Fetch current device location
+        Position position = await Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.high);
+        selectedLocation = LatLng(position.latitude, position.longitude);
+      } else {
+        // Show modal requesting location permission
+        bool? permissionGranted = await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Location Permission'),
+            content: const Text(
+                'This app needs location access to show your current location on the map.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Deny'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Allow'),
+              ),
+            ],
+          ),
+        );
 
-      if (permissionGranted == true) {
-        // Request location permission again
-        if (await Permission.location.request().isGranted) {
-          // Fetch current device location
-          Position position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          selectedLocation = LatLng(position.latitude, position.longitude);
+        if (permissionGranted == true) {
+          print("User allowed location permission");
+          // Request location permission again
+          if (await Permission.location.request().isGranted) {
+            print("Location permission granted after user allowed");
+            // Fetch current device location
+            Position position = await Geolocator.getCurrentPosition(
+                desiredAccuracy: LocationAccuracy.high);
+            selectedLocation = LatLng(position.latitude, position.longitude);
+          }
         }
       }
     }
+
+    setState(() {
+      _isLoading = false;
+    });
 
     // Hide system UI elements
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -222,7 +261,8 @@ class ShippingAddressSection extends StatelessWidget {
         body: FlutterMap(
           options: MapOptions(
             initialCenter: selectedLocation ??
-                const LatLng(10.4833333, -66.83333333), // Ubicación inicial
+                const LatLng(10.4833333,
+                    -66.83333333), // Center on user-provided location
             initialZoom: 13.0,
             onTap: (tapPosition, latLng) {
               selectedLocation = latLng;
@@ -235,7 +275,7 @@ class ShippingAddressSection extends StatelessWidget {
             TileLayer(
               urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
               userAgentPackageName:
-                  'com.example.app', // Ajusta el nombre del paquete
+                  'com.example.app', // Adjust the package name
               subdomains: const ['a', 'b', 'c'],
             ),
           ],
