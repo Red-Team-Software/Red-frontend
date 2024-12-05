@@ -60,86 +60,95 @@ class ShippingAddressSection extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
+      isScrollControlled: true,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setState) {
-            return Container(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    decoration: const InputDecoration(
-                      labelText: 'Address Title',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        title = value;
-                      });
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  GestureDetector(
-                    onTap: () async {
-                      final selectedLocation =
-                          await _selectLocationOnMap(context);
-                      if (selectedLocation != null) {
-                        setState(() {
-                          location = selectedLocation;
-                        });
-                      }
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(8),
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Address Title',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            title = value;
+                          });
+                        },
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              location,
-                              style: const TextStyle(fontSize: 16),
-                              overflow:
-                                  TextOverflow.ellipsis, // Limita el texto
-                              maxLines: 1,
-                            ),
-                          ),
-                          const Icon(Icons.map, color: Colors.black),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: title.isNotEmpty && location != 'Select on map'
-                        ? () {
-                            bloc.add(AddNewAddress(title, location));
-                            Navigator.pop(context);
+                      const SizedBox(height: 16),
+                      GestureDetector(
+                        onTap: () async {
+                          final selectedLocation =
+                              await _selectLocationOnMap(context);
+                          if (selectedLocation != null) {
+                            setState(() {
+                              location = selectedLocation;
+                            });
                           }
-                        : null,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  location,
+                                  style: const TextStyle(fontSize: 16),
+                                  overflow:
+                                      TextOverflow.ellipsis, // Limita el texto
+                                  maxLines: 1,
+                                ),
+                              ),
+                              const Icon(Icons.map, color: Colors.black),
+                            ],
+                          ),
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      minimumSize:
-                          const Size.fromHeight(48), // Ocupa todo el ancho
-                    ),
-                    child: const Text(
-                      'Save Address',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed:
+                            title.isNotEmpty && location != 'Select on map'
+                                ? () {
+                                    bloc.add(AddNewAddress(title, location));
+                                    Navigator.pop(context);
+                                  }
+                                : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          minimumSize:
+                              const Size.fromHeight(48), // Ocupa todo el ancho
+                        ),
+                        child: const Text(
+                          'Save Address',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             );
           },
