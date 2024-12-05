@@ -7,7 +7,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'address_card.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:geolocator/geolocator.dart';
 
 class ShippingAddressSection extends StatelessWidget {
   const ShippingAddressSection({super.key});
@@ -160,18 +163,71 @@ class ShippingAddressSection extends StatelessWidget {
   Future<String?> _selectLocationOnMap(BuildContext context) async {
     LatLng? selectedLocation;
 
+    // Check location permissions
+    if (await Permission.location.request().isGranted) {
+      // Fetch current device location
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      selectedLocation = LatLng(position.latitude, position.longitude);
+    } else {
+      // Show modal requesting location permission
+      bool? permissionGranted = await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Location Permission'),
+          content: const Text(
+              'This app needs location access to show your current location on the map.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Deny'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Allow'),
+            ),
+          ],
+        ),
+      );
+
+      if (permissionGranted == true) {
+        // Request location permission again
+        if (await Permission.location.request().isGranted) {
+          // Fetch current device location
+          Position position = await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          selectedLocation = LatLng(position.latitude, position.longitude);
+        }
+      }
+    }
+
+    // Hide system UI elements
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) => Scaffold(
-        appBar: AppBar(title: const Text('Select Location')),
+        appBar: AppBar(
+          title: const Text('Select Location'),
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              // Restore system UI elements
+              SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+              Navigator.pop(context);
+            },
+          ),
+        ),
         body: FlutterMap(
           options: MapOptions(
-            initialCenter:
+            initialCenter: selectedLocation ??
                 const LatLng(10.4833333, -66.83333333), // Ubicación inicial
             initialZoom: 13.0,
             onTap: (tapPosition, latLng) {
               selectedLocation = latLng;
+              // Restore system UI elements
+              SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
               Navigator.pop(context);
             },
           ),
@@ -186,6 +242,9 @@ class ShippingAddressSection extends StatelessWidget {
         ),
       ),
     );
+
+    // Restore system UI elements if the user dismisses the bottom sheet without selecting a location
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
     if (selectedLocation != null) {
       final locationName = await _getLocationName(selectedLocation!);
