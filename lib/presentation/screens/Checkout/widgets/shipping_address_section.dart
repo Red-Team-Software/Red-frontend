@@ -20,8 +20,6 @@ class ShippingAddressSection extends StatefulWidget {
 }
 
 class _ShippingAddressSectionState extends State<ShippingAddressSection> {
-  bool _isLoading = false;
-
   @override
   Widget build(BuildContext context) {
     final checkoutBloc = context.read<CheckoutBloc>();
@@ -47,21 +45,12 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
               );
             }),
             TextButton(
-              onPressed: _isLoading
-                  ? null
-                  : () => _showAddAddressModal(context, checkoutBloc),
+              onPressed: () => _showAddAddressModal(context, checkoutBloc),
               child: const Text(
                 'Add new address',
                 style: TextStyle(color: Colors.red),
               ),
             ),
-            if (_isLoading)
-              const Center(
-                child: Text(
-                  'Obtaining current location...',
-                  style: TextStyle(color: Colors.red, fontSize: 16),
-                ),
-              ),
           ],
         );
       },
@@ -72,6 +61,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
       BuildContext context, CheckoutBloc bloc) async {
     String title = '';
     String location = 'Select on map';
+    bool isLoading = false;
 
     await showModalBottomSheet(
       context: context,
@@ -106,9 +96,12 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                       ),
                       const SizedBox(height: 16),
                       GestureDetector(
-                        onTap: _isLoading
+                        onTap: isLoading
                             ? null
                             : () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
                                 final selectedLocation =
                                     await _selectLocationOnMap(context);
                                 if (selectedLocation != null) {
@@ -116,6 +109,9 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                                     location = selectedLocation;
                                   });
                                 }
+                                setState(() {
+                                  isLoading = false;
+                                });
                               },
                         child: Container(
                           padding: const EdgeInsets.all(16),
@@ -135,11 +131,20 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                                   maxLines: 1,
                                 ),
                               ),
-                              const Icon(Icons.map, color: Colors.black),
+                              Icon(Icons.map,
+                                  color: isLoading ? Colors.grey : Colors.red),
                             ],
                           ),
                         ),
                       ),
+                      if (isLoading)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 16),
+                          child: Text(
+                            'Obtaining current location...',
+                            style: TextStyle(color: Colors.red, fontSize: 16),
+                          ),
+                        ),
                       const SizedBox(height: 16),
                       ElevatedButton(
                         onPressed:
@@ -180,10 +185,6 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
 
   Future<String?> _selectLocationOnMap(BuildContext context) async {
     LatLng? selectedLocation;
-
-    setState(() {
-      _isLoading = true;
-    });
 
     // Check location permissions
     if (await Permission.location.isGranted) {
@@ -236,10 +237,6 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
       }
     }
 
-    setState(() {
-      _isLoading = false;
-    });
-
     // Hide system UI elements
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
@@ -260,9 +257,8 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
         ),
         body: FlutterMap(
           options: MapOptions(
-            initialCenter: selectedLocation ??
-                const LatLng(10.4833333,
-                    -66.83333333), // Center on user-provided location
+            initialCenter:
+                selectedLocation ?? const LatLng(10.4833333, -66.83333333),
             initialZoom: 13.0,
             onTap: (tapPosition, latLng) {
               selectedLocation = latLng;
@@ -274,8 +270,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
           children: [
             TileLayer(
               urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-              userAgentPackageName:
-                  'com.example.app', // Adjust the package name
+              userAgentPackageName: 'com.example.app',
               subdomains: const ['a', 'b', 'c'],
             ),
           ],
