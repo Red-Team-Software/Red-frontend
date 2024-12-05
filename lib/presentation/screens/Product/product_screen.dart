@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +34,17 @@ class _ProductView extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        body: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
+        body: BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
+          listener: (context, state) {
+            if (state.status == ProductDetailsStatus.error) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Ups! Something went wrong'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            }
+          },
           builder: (context, state) {
             switch (state.status) {
               case ProductDetailsStatus.loading:
@@ -153,19 +164,28 @@ class _ProductView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      const Text(
-                        'Categories',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
-                      const Wrap(
-                        spacing: 8,
-                        // children: product.categories
-                        // .map((category) => Chip(label: Text(category)))
-                        // .toList(),
-                      ),
+                      product.categories.isNotEmpty
+                          ? Flex(
+                              direction: Axis.vertical,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Categories',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                Wrap(
+                                  spacing: 8,
+                                  children: product.categories
+                                      .map((category) =>
+                                          Chip(label: Text(category.name)))
+                                      .toList(),
+                                ),
+                              ],
+                            )
+                          : Container(),
                       const SizedBox(height: 16),
                       const Text(
                         'Description',
@@ -337,5 +357,3 @@ class _ProductView extends StatelessWidget {
     );
   }
 }
-
-

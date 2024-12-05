@@ -11,10 +11,16 @@ class ProductMapper {
       price: json.price,
       currency: json.currency,
       imageUrl: json.images,
+      expirationDate: json.caducityDate,
+      weigth: json.weigth,
+      measurement: json.measurement,
+      inStock: json.stock,
+      promotions: json.promotion,
+      categories: json.categories
     );
   }
 
-   static List<Product> productListToDomain(List<ProductResponse> responses) {
+  static List<Product> productListToDomain(List<ProductResponse> responses) {
     return responses.map((response) => productToDomain(response)).toList();
   }
 }
