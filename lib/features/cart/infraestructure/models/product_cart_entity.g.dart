@@ -41,7 +41,7 @@ const ProductCartEntitySchema = CollectionSchema(
   getId: _productCartEntityGetId,
   getLinks: _productCartEntityGetLinks,
   attach: _productCartEntityAttach,
-  version: '3.1.0+1',
+  version: '3.1.8',
 );
 
 int _productCartEntityEstimateSize(

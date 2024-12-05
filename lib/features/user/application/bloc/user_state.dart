@@ -7,7 +7,11 @@ class UserState extends Equatable {
   List<Object> get props => [];
 }
 
-final class UserSuccess extends UserState {}
+final class UserSuccess extends UserState {
+  final User user;
+
+  UserSuccess(this.user);
+}
 
 final class UserLoading extends UserState {}
 

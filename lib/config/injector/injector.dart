@@ -34,13 +34,18 @@ import 'package:GoDeli/features/products/application/products/all_products_bloc.
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
 import 'package:GoDeli/features/products/infraestructure/repositories/products_repository_impl.dart';
-import 'package:GoDeli/presentation/screens/Search/bloc/bloc.dart';
+import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
+import 'package:GoDeli/features/user/application/use_cases/get_user_use_case.dart';
+import 'package:GoDeli/features/user/domain/datasources/user_datasource.dart';
+import 'package:GoDeli/features/user/domain/repositories/user_repository.dart';
+import 'package:GoDeli/features/user/infrastructure/datasources/user_datasource_impl.dart';
+import 'package:GoDeli/features/user/infrastructure/repositories/user_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
 class Injector {
-  Future<void> setUp() async {
+Future<void> setUp() async {
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
     getIt.registerSingleton<IHttpService>(httpService);
@@ -60,11 +65,7 @@ class Injector {
     final IAuthLocalStorageDataSource authLocalStorageDataSource =
         IsarAuthLocalStorageDatasource(isarLocalStorage);
     final IAuthLocalStorageRepository authLocalStorageRepository =
-        IsarAuthLocalStorageRepository(authLocalStorageDataSource);
-    
-    //? Buscando el token en el almacenamiento local
-    
-
+        IsarAuthLocalStorageRepository(authLocalStorageDataSource);    
     final LoginUseCase loginUseCase =
         LoginUseCase(authRepository, authLocalStorageRepository);
     final RegisterUseCase registerUseCase =
@@ -73,13 +74,19 @@ class Injector {
         LogoutUseCase(httpService, authLocalStorageRepository, cartRepository);
     final CheckAuthUseCase checkAuthUseCase =
         CheckAuthUseCase(httpService, authLocalStorageRepository);
-    getIt.registerSingleton<IAuthRepository>(authRepository);
+    // getIt.registerSingleton<IAuthRepository>(authRepository);
     getIt.registerFactory<AuthBloc>(() =>
         AuthBloc(loginUseCase: loginUseCase, registerUseCase: registerUseCase, logoutUseCase: logoutUseCase, checkAuthUseCase: checkAuthUseCase));
 
 
-    //? inicializando las dependencias de modulo categorias
+    //? inicializando las dependencias de modulo usuario
+    final IUserDatasource userDatasource = UserDatasourceImpl(httpService);
+    final IUserRepository userRepository = UserRepositoryImpl(userDatasource);
+    final GetUserUseCase getUserUseCase = GetUserUseCase(userRepository);
+    getIt.registerFactory<UserBloc>(() => UserBloc(getUserUseCase: getUserUseCase));
 
+
+    //? inicializando las dependencias de modulo categorias
     final categoryDatasource = CategoriesDatasourceImpl();
     final categoriesRepository =
         CategoriesRespositoryImpl(categoryDatasource: categoryDatasource);
