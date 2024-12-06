@@ -23,12 +23,42 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             "orderState": "ongoing",
             "orderCreatedDate": "2024-12-06",
             "totalAmount": 61.27,
+            "orderPayment": {
+              "paymetAmount": 61.27,
+              "paymentCurrency": "usd",
+              "payementMethod": "card"
+            },
+            "orderDirection": {"lat": 10.4399, "long": -66.89275},
             "products": [
-              {"name": "Coca-Cola", "quantity": 2},
-              {"name": "Pepsi", "quantity": 1}
+              {
+                "id": "1",
+                "nombre": "Coca-Cola",
+                "descripcion": "Soda",
+                "price": 1.5,
+                "images": ["image1.jpg"],
+                "currency": "usd",
+                "quantity": 2
+              },
+              {
+                "id": "2",
+                "nombre": "Pepsi",
+                "descripcion": "Soda",
+                "price": 1.5,
+                "images": ["image2.jpg"],
+                "currency": "usd",
+                "quantity": 1
+              }
             ],
             "bundles": [
-              {"name": "Bundle 1", "quantity": 1}
+              {
+                "id": "1",
+                "nombre": "Bundle 1",
+                "descripcion": "Bundle description",
+                "price": 10.0,
+                "currency": "usd",
+                "images": ["bundle1.jpg"],
+                "quantity": 1
+              }
             ]
           },
           {
@@ -36,8 +66,22 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             "orderState": "delivered",
             "orderCreatedDate": "2024-12-05",
             "totalAmount": 25.99,
+            "orderPayment": {
+              "paymetAmount": 25.99,
+              "paymentCurrency": "usd",
+              "payementMethod": "card"
+            },
+            "orderDirection": {"lat": 10.4399, "long": -66.89275},
             "products": [
-              {"name": "Burger", "quantity": 2},
+              {
+                "id": "3",
+                "nombre": "Burger",
+                "descripcion": "Food",
+                "price": 5.0,
+                "images": ["burger.jpg"],
+                "currency": "usd",
+                "quantity": 2
+              }
             ],
             "bundles": []
           },
@@ -46,16 +90,64 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             "orderState": "cancelled",
             "orderCreatedDate": "2024-12-04",
             "totalAmount": 12.50,
+            "orderPayment": {
+              "paymetAmount": 12.50,
+              "paymentCurrency": "usd",
+              "payementMethod": "card"
+            },
+            "orderDirection": {"lat": 10.4399, "long": -66.89275},
             "products": [],
             "bundles": [
-              {"name": "Combo 1", "quantity": 2},
-              {"name": "Combo 2", "quantity": 1}
+              {
+                "id": "2",
+                "nombre": "Combo 1",
+                "descripcion": "Combo description",
+                "price": 6.0,
+                "currency": "usd",
+                "images": ["combo1.jpg"],
+                "quantity": 2
+              },
+              {
+                "id": "3",
+                "nombre": "Combo 2",
+                "descripcion": "Combo description",
+                "price": 6.5,
+                "currency": "usd",
+                "images": ["combo2.jpg"],
+                "quantity": 1
+              }
             ]
           },
+          {
+            "orderId": "8739a4a6-fd5c-4a66-9768-297193c1555d",
+            "orderState": "canceled",
+            "orderCreatedDate": "2024-12-06",
+            "totalAmount": 15.8,
+            "orderPayment": {
+              "paymetAmount": 15.8,
+              "paymentCurrency": "usd",
+              "payementMethod": "card"
+            },
+            "orderDirection": {"lat": 10.4399, "long": -66.89275},
+            "products": [
+              {
+                "id": "4",
+                "nombre": "Cachito de jamon de sousa",
+                "descripcion": "Food",
+                "price": 3.0,
+                "images": ["cachito.jpg"],
+                "currency": "usd",
+                "quantity": 5
+              }
+            ],
+            "bundles": []
+          }
         ]
       });
       emit(OrdersLoadSuccess(orders: orders, selectedTab: 'Active'));
     } catch (e) {
+      print("jijija");
+      print(e);
       emit(OrdersLoadFailure(error: e.toString()));
     }
   }

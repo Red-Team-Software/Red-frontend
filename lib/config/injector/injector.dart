@@ -30,6 +30,7 @@ import 'package:GoDeli/features/common/infrastructure/dio_http_service_impl.dart
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/order/infraestructure/datasource/order_datasource_imp.dart';
 import 'package:GoDeli/features/order/infraestructure/repositories/order_repository_imp.dart';
+import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
@@ -170,5 +171,8 @@ class Injector {
     final taxShippingRepository =
         TaxShippingRepositoryImpl(datasource: taxShippingDatasource);
     getIt.registerFactory<ITaxShippinRepository>(() => taxShippingRepository);
+
+    //? inicializando las dependencias de modulo ordenes
+    getIt.registerFactory<OrdersBloc>(() => OrdersBloc());
   }
 }

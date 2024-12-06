@@ -3,6 +3,8 @@ import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:GoDeli/features/categories/application/categories_bloc.dart';
+import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
+import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,8 @@ class BlocsProviders extends StatelessWidget {
         ),
         BlocProvider(create: (context) => getIt<AuthBloc>()),
         BlocProvider(create: (context) => getIt<UserBloc>()),
+        BlocProvider(
+            create: (context) => getIt<OrdersBloc>()..add(OrdersLoaded())),
       ],
       child: const GoDeli(),
     );

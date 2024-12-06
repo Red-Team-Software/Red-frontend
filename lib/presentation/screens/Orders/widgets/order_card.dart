@@ -1,21 +1,14 @@
+import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
+import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:flutter/material.dart';
+import 'package:GoDeli/features/orders/domain/orders.dart';
 
 class OrderCard extends StatelessWidget {
-  final String orderState;
-  final String orderId;
-  final double totalAmount;
-  final String orderCreatedDate;
-  final List<dynamic> products;
-  final List<dynamic> bundles;
+  final OrderItem orderItem;
 
   const OrderCard({
     super.key,
-    required this.orderState,
-    required this.orderId,
-    required this.totalAmount,
-    required this.orderCreatedDate,
-    required this.products,
-    required this.bundles,
+    required this.orderItem,
   });
 
   @override
@@ -31,14 +24,14 @@ class OrderCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Date: $orderCreatedDate',
+                  'Date: ${orderItem.orderCreatedDate}',
                   style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
                 Text(
-                  'Total: \$${totalAmount.toStringAsFixed(2)}',
+                  'Total: \$${orderItem.totalAmount.toStringAsFixed(2)}',
                   style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -48,7 +41,7 @@ class OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Order: $orderId',
+              'Order: ${orderItem.orderId}',
               style: const TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 8),
@@ -69,32 +62,39 @@ class OrderCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            _buildItemList(), // Build the product and bundle list
+            _buildItemList(orderItem.products,
+                orderItem.bundles), // Build the product and bundle list
             const SizedBox(height: 8),
             Text(
-              'Status: $orderState',
+              'Status: ${orderItem.orderState}',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: orderState == 'ongoing'
+                color: orderItem.orderState == 'ongoing'
                     ? Colors.green
-                    : (orderState == 'delivered' ? Colors.black : Colors.red),
+                    : (orderItem.orderState == 'delivered'
+                        ? Colors.black
+                        : Colors.red),
               ),
             ),
             const SizedBox(height: 8),
-            _buildActionButton(context), // Build the action buttons
+            _buildActionButton(
+                context, orderItem.orderState), // Build the action buttons
           ],
         ),
       ),
     );
   }
 
-  // This method creates a list of product and bundle details based on the given constraints
-  Widget _buildItemList() {
-    final List<Map<String, dynamic>> allItems = [...products, ...bundles];
+  Widget _buildItemList(List<ProductCart> products, List<BundleCart> bundles) {
+    final List<Map<String, dynamic>> allItems = [
+      ...products.map((product) =>
+          {'name': product.product.name, 'quantity': product.quantity}),
+      ...bundles.map(
+          (bundle) => {'name': bundle.bundle.name, 'quantity': bundle.quantity})
+    ];
     const int maxItemsToShow = 3;
 
-    // If total items are less than or equal to 3, show all; otherwise, limit to 3
     final List<Map<String, dynamic>> displayedItems =
         allItems.length <= maxItemsToShow
             ? allItems
@@ -113,8 +113,7 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  // This function conditionally renders the buttons based on order state
-  Widget _buildActionButton(BuildContext context) {
+  Widget _buildActionButton(BuildContext context, String orderState) {
     switch (orderState) {
       case 'ongoing':
         return Row(
@@ -159,22 +158,18 @@ class OrderCard extends StatelessWidget {
     }
   }
 
-  // Handle Cancel Order button click
   void _cancelOrder(BuildContext context) {
     // Implement cancel order logic here
   }
 
-  // Handle Track Order button click
   void _trackOrder(BuildContext context) {
     // Implement track order logic here
   }
 
-  // Handle Reorder Item button click
   void _reOrderItem(BuildContext context) {
     // Implement reorder item logic here
   }
 
-  // Handle Report Problem button click
   void _reportProblem(BuildContext context) {
     // Implement report problem logic here
   }

@@ -40,27 +40,32 @@ class OrderItem {
   });
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
-    return OrderItem(
-      orderId: json['orderId'] as String,
-      orderState: json['orderState'] as String,
-      orderCreatedDate: json['orderCreatedDate'] as String,
-      totalAmount: (json['totalAmount'] as num).toDouble(),
-      orderReceivedDate: json['orderReceivedDate'] as String?,
-      orderPayment: OrderPayment(
-        paymentMethod: json['orderPayment']['payementMethod'] as String,
-        currency: json['orderPayment']['paymentCurrency'] as String,
-        amount: (json['orderPayment']['paymetAmount'] as num).toDouble(),
-      ),
-      orderDirection: OrderDirection(
-        latitude: json['orderDirection']['lat'] as double,
-        longitude: json['orderDirection']['long'] as double,
-      ),
-      products: (json['products'] as List)
-          .map((product) => ProductCart.fromJson(product))
-          .toList(),
-      bundles: (json['bundles'] as List)
-          .map((bundle) => BundleCart.fromJson(bundle))
-          .toList(),
-    );
+    try {
+      return OrderItem(
+        orderId: json['orderId'] as String,
+        orderState: json['orderState'] as String,
+        orderCreatedDate: json['orderCreatedDate'] as String,
+        totalAmount: (json['totalAmount'] as num).toDouble(),
+        orderReceivedDate: "",
+        orderPayment: OrderPayment(
+          paymentMethod: json['orderPayment']['payementMethod'] as String,
+          currency: json['orderPayment']['paymentCurrency'] as String,
+          amount: (json['orderPayment']['paymetAmount'] as num).toDouble(),
+        ),
+        orderDirection: OrderDirection(
+          latitude: json['orderDirection']['lat'] as double,
+          longitude: json['orderDirection']['long'] as double,
+        ),
+        products: (json['products'] as List)
+            .map((product) => ProductCart.fromJson(product))
+            .toList(),
+        bundles: (json['bundles'] as List)
+            .map((bundle) => BundleCart.fromJson(bundle))
+            .toList(),
+      );
+    } catch (e) {
+      print('Error parsing OrderItem: $e');
+      rethrow;
+    }
   }
 }
