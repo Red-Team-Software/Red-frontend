@@ -14,9 +14,6 @@ class OrderSummarySection extends StatelessWidget {
     final checkoutBloc = context.watch<CheckoutBloc>();
     final colors = Theme.of(context).colorScheme;
 
-    // Remove LoadCheckoutData event dispatch
-    // context.read<CheckoutBloc>().add(LoadCheckoutData());
-
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -142,7 +139,7 @@ class OrderSummarySection extends StatelessWidget {
                 onPressed: () {
                   context.read<CheckoutBloc>().add(
                         ProcessPayment(
-                          paymentId: "To be decided",
+                          paymentId: "feb39169-bc63-4814-9ac2-f8f98fe0a328",
                           //amount: cartBloc.state.total,
                           currency: 'usd',
                           paymentMethod: "card",
