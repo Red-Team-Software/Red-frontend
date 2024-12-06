@@ -6,6 +6,7 @@ import 'dart:convert';
 class ProfileAddressCard extends StatefulWidget {
   final String id;
   final String addressName;
+  final String address;
   final double latitude;
   final double longitude;
   final bool isFavorite;
@@ -17,6 +18,7 @@ class ProfileAddressCard extends StatefulWidget {
     super.key,
     required this.id,
     required this.addressName,
+    required this.address,
     required this.latitude,
     required this.longitude,
     required this.isFavorite,
@@ -37,7 +39,8 @@ class _ProfileAddressCardState extends State<ProfileAddressCard> {
   void initState() {
     super.initState();
     _isFavorite = widget.isFavorite;
-    _getAddressName(); // Obtener el nombre de la dirección cuando se inicializa
+    _addressName = widget.address;
+    if (_addressName.isEmpty) _getAddressName(); // Obtener el nombre de la dirección cuando se inicializa
   }
 
   Future<void> _getAddressName() async {

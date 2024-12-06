@@ -341,6 +341,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           longitude: direction.longitude.toDouble(),
                           isFavorite: direction.isFavorite,
                           id: direction.id,
+                          address: direction.address,
                           onFavoriteChanged: (id, isFavorite) async {
                             print('Favorite changed');
                           },
@@ -354,6 +355,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                   initialLocation: LatLng(
                                       direction.latitude.toDouble(),
                                       direction.longitude.toDouble()),
+                                      initialLocationName: direction.address,
                                   onFinished: (location, name, isUpdate) async {
                                     Navigator.pop(context);
                                     // update the address

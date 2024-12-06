@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 class AddressModal extends StatefulWidget {
   final Future<void> Function(LatLng, String, bool) onFinished;
   final LatLng? initialLocation; // Optional initial location for update
+  final String? initialLocationName;
   final String? initialAddressName;
 
   const AddressModal({
@@ -15,6 +16,7 @@ class AddressModal extends StatefulWidget {
     required this.onFinished,
     this.initialLocation,
     this.initialAddressName,
+    this.initialLocationName,
   });
 
   @override
@@ -38,11 +40,13 @@ class _AddressModalState extends State<AddressModal> {
     super.initState();
     if (widget.initialLocation != null) {
       _selectedLocation = widget.initialLocation;
-      _selectedLocationName = '';
+      _selectedLocationName = widget.initialLocationName ?? "";
       _currentLocation = widget.initialLocation!;
       addressNameTextController.text = widget.initialAddressName ?? '';
-      _fetchInitialLocationName();
-      
+      if(widget.initialLocationName == null) {
+        print('Fetching initial location name');
+        _fetchInitialLocationName();
+      }
     } else {
       _fetchCurrentLocation();
     } 
