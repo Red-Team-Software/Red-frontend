@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
-import 'package:GoDeli/features/categories/application/categories_bloc.dart';
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';

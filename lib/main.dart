@@ -2,9 +2,10 @@ import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dar
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/config/constants/enviroments.dart';
-import 'package:GoDeli/features/categories/application/categories_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
+import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,8 @@ class BlocsProviders extends StatelessWidget {
         BlocProvider(create: (context) => getIt<AuthBloc>()),
         BlocProvider(create: (context) => getIt<UserBloc>()),
         BlocProvider(
-            create: (context) => getIt<OrdersBloc>()..add(OrdersLoaded())),
+            create: (context) =>
+                getIt<OrdersBloc>()..add(const OrdersLoaded())),
       ],
       child: const GoDeli(),
     );

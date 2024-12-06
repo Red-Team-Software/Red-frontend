@@ -64,8 +64,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _buildAuthScreen(BuildContext context) {
-    final ImageCropper recort = ImageCropper();
-
     Future<Uint8List?> compressFile(String file) async {
       return await FlutterImageCompress.compressWithFile(
         file,
@@ -77,27 +75,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Future<String> converToBase64(Uint8List bytes) async {
       return base64Encode(bytes);
-    }
-
-    Future<String?> recortImage(String pathImage) async {
-      final CroppedFile? croppedFile = await recort.cropImage(
-          aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 2),
-          sourcePath: pathImage,
-          compressQuality: 100,
-          uiSettings: [
-            IOSUiSettings(),
-            AndroidUiSettings(
-              cropGridColor: Colors.transparent,
-              cropFrameColor: Colors.transparent,
-              hideBottomControls: true,
-              cropStyle: CropStyle.circle,
-            ),
-          ]);
-
-      if (croppedFile == null) return null;
-      final bytes = await compressFile(croppedFile.path);
-      if (bytes == null) return null;
-      return converToBase64(bytes);
     }
 
     void onChangeIndex(int newIndex) {
@@ -112,8 +89,15 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Future<void> handleRegister() async {
       final realPhone = '$phoneCode$phone';
-      final image =
-          selectedImage != null ? await recortImage(selectedImage!.path) : null;
+      String? image;
+      if (selectedImage != null) {
+        final compressedImage = await compressFile(selectedImage!.path);
+        image = compressedImage != null
+            ? await converToBase64(compressedImage)
+            : null;
+      } else {
+        image = null;
+      }
       final addressDto = AddUserDirectionListDto(
         directions: [
           AddUserDirectionDto(
@@ -165,24 +149,17 @@ class _AuthScreenState extends State<AuthScreen> {
     ];
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Center(child: screens[_currentIndex]),
+        body: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Center(
+        child: SingleChildScrollView(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top,
+              bottom: MediaQuery.of(context).viewInsets.bottom +
+                  20.0, // Ajuste para el teclado
+            ),
+            child: screens[_currentIndex]),
       ).animate().fadeIn(duration: 500.ms),
-    );
+    ));
   }
 }
-
-//? Animaciones
-// Center(
-// child: AnimatedSwitcher(
-//             duration: const Duration(milliseconds: 500),
-//             transitionBuilder: (child, animation) {
-//               return _isMovingRight
-//                   ? SlideInRight(child: child) // Animación al deslizarse hacia la derecha
-//                   : SlideInLeft(child: child); // Animación al deslizarse hacia la izquierda
-//             },
-//             child:
-//                 screens[_currentIndex], // Renderiza el widget actual/ Mostrar el componente según el índice
-//         ),
-//       ),
