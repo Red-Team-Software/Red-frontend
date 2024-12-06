@@ -6,6 +6,7 @@ import 'package:GoDeli/features/user/application/use_cases/delete_user_direction
 import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'checkout_event.dart';
 import 'checkout_state.dart';
@@ -55,8 +56,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           ? <Address>[] // Lista vacía de direcciones
           : directions.map<Address>((direction) {
               // Si necesitas mapear las direcciones a Address, lo harías aquí
-              return Address(direction.addressName, direction.address,
-                  direction.latitude, direction.longitude);
+              return Address(direction.id, direction.addressName,
+                  direction.address, direction.latitude, direction.longitude);
             }).toList();
 
       // Actualiza el estado con las direcciones obtenidas
@@ -99,7 +100,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       if (resDirections.isSuccessful()) {
         final directions = resDirections.getValue();
         final addresses = directions.map<Address>((direction) {
-          return Address(direction.addressName, direction.address,
+          return Address(direction.id, direction.addressName, direction.address,
               direction.latitude, direction.longitude);
         }).toList();
 
@@ -161,7 +162,39 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   void _onRemoveAddress(
       RemoveAddressEvent event, Emitter<CheckoutState> emit) async {
     // Remove address from the database
-    // emit(CheckoutState with updated addresses);
+    emit(state.copyWith(isProcessing: true));
+    final res = await deleteUserDirectionUseCase
+        .execute(DeleteUpdateUserDirectionListDto(directions: [
+      DeleteUpdateUserDirectionDto(
+        id: event.address.id,
+        name: event.address.title,
+        favorite: false,
+        lat: event.address.lat,
+        lng: event.address.lng,
+      )
+    ]));
+
+    if (res.isSuccessful()) {
+      final resDirections = await getUserDirectionsUseCase.execute(null);
+
+      if (resDirections.isSuccessful()) {
+        final directions = resDirections.getValue();
+        final addresses = directions.map<Address>((direction) {
+          return Address(direction.id, direction.addressName, direction.address,
+              direction.latitude, direction.longitude);
+        }).toList();
+
+        emit(state.copyWith(
+          addresses: addresses,
+          selectedAddress: addresses.isNotEmpty ? addresses.first : null,
+        ));
+      } else {
+        emit(state.copyWith(
+          errorMessage: 'Failed to fetch addresses.',
+        ));
+      }
+    }
+    emit(state.copyWith(isProcessing: false));
   }
 
   void _onUpdateAddress(
