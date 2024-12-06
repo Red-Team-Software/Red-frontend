@@ -1,6 +1,6 @@
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

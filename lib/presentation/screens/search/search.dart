@@ -1,3 +1,2 @@
-export 'bloc/bloc.dart';
-export 'view/search_page.dart';
+export 'view/search_screen.dart';
 export 'widgets/widgets.dart';
