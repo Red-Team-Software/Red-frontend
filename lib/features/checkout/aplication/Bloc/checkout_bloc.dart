@@ -5,6 +5,7 @@ import 'package:GoDeli/features/user/application/use_cases/add_user_direction_us
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
+import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'checkout_event.dart';
 import 'checkout_state.dart';
@@ -43,7 +44,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   Future<void> _onLoadCheckoutData(
       LoadCheckoutData event, Emitter<CheckoutState> emit) async {
     final cartState = cartBloc.state;
-
+    emit(state.copyWith(isProcessing: true));
     final resDirections = await getUserDirectionsUseCase.execute(null);
 
     if (resDirections.isSuccessful()) {
@@ -71,21 +72,49 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         errorMessage: 'Failed to fetch addresses.',
       ));
     }
+    emit(state.copyWith(isProcessing: false));
   }
 
   void _onSelectAddress(SelectAddress event, Emitter<CheckoutState> emit) {
     emit(state.copyWith(selectedAddress: event.address));
   }
 
-  void _onAddNewAddress(AddNewAddress event, Emitter<CheckoutState> emit) {
-    final newAddress =
-        Address(event.title, event.location, event.lat, event.lng);
-    final updatedAddresses = List<Address>.from(state.addresses)
-      ..add(newAddress);
-    emit(state.copyWith(
-      addresses: updatedAddresses,
-      selectedAddress: newAddress,
+  Future _onAddNewAddress(
+      AddNewAddress event, Emitter<CheckoutState> emit) async {
+    emit(state.copyWith(isProcessing: true));
+    final res = await addUserDirectionUseCase.execute(AddUserDirectionListDto(
+      directions: [
+        AddUserDirectionDto(
+          name: event.title,
+          favorite: false, // Assuming default value
+          lat: event.lat,
+          lng: event.lng,
+        )
+      ],
     ));
+
+    if (res.isSuccessful()) {
+      final resDirections = await getUserDirectionsUseCase.execute(null);
+
+      if (resDirections.isSuccessful()) {
+        final directions = resDirections.getValue();
+        final addresses = directions.map<Address>((direction) {
+          return Address(direction.addressName, direction.address,
+              direction.latitude, direction.longitude);
+        }).toList();
+
+        emit(state.copyWith(
+          addresses: addresses,
+          selectedAddress: addresses.isNotEmpty ? addresses.first : null,
+        ));
+      } else {
+        emit(state.copyWith(
+          errorMessage: 'Failed to fetch addresses.',
+        ));
+      }
+    }
+
+    emit(state.copyWith(isProcessing: false));
   }
 
   void _onSelectPaymentMethod(
