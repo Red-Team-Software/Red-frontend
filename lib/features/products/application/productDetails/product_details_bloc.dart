@@ -6,7 +6,7 @@ import 'package:equatable/equatable.dart';
 part 'product_details_event.dart';
 part 'product_details_state.dart';
 
-final initialProduct =
+const initialProduct =
     Product(id: '', name: '', description: '', price: 0, imageUrl: ['']);
 
 class ProductDetailsBloc
@@ -14,7 +14,7 @@ class ProductDetailsBloc
   final IProductsRepository productsRepository;
 
   ProductDetailsBloc({required this.productsRepository})
-      : super(ProductDetailsState(product: initialProduct)) {
+      : super(const ProductDetailsState(product: initialProduct)) {
     on<ProductLoaded>(_onProductLoaded);
     on<LoadingStarted>(_onLoadingStarted);
     on<ErrorOnProductLoading>(_onErrorOnProductLoading);
@@ -47,5 +47,6 @@ class ProductDetailsBloc
       return;
     }
     add(ErrorOnProductLoading());
+    return;
   }
 }

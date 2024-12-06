@@ -35,6 +35,7 @@ import 'package:GoDeli/features/products/application/products/all_products_bloc.
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
 import 'package:GoDeli/features/products/infraestructure/repositories/products_repository_impl.dart';
+import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
@@ -51,7 +52,7 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 class Injector {
-  Future<void> setUp() async {
+Future<void> setUp() async {
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
     getIt.registerSingleton<IHttpService>(httpService);
@@ -139,6 +140,9 @@ class Injector {
         () => AllBundlesBloc(bundleRepository: bundleRepository));
     getIt.registerFactory<BundleDetailsBloc>(
         () => BundleDetailsBloc(bundleRepository: bundleRepository));
+
+    //? inicializando las dependencias de modulo search
+    getIt.registerFactory<SearchBloc>(()=>SearchBloc(productsRepository, bundleRepository));
 
     //? Iiniciando las dependencias de modulo de orden
 

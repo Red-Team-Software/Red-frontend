@@ -1,8 +1,6 @@
-import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
-import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
 import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
-import 'package:GoDeli/presentation/screens/search/view/search_page.dart';
+import 'package:GoDeli/presentation/screens/Search/search.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_item.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +16,8 @@ class _IndexPageState extends State<IndexPage> {
   int _pageIndex = 0;
 
   final pages = [
-    HomeScreen(),
-    const SearchPage(),
+    const HomeScreen(),
+    const SearchScreen(),
     const ProfileScreen(),
     const ProfileScreen(),
   ];

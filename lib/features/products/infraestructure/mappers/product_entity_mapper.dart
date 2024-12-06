@@ -12,8 +12,7 @@ class ProductEntityMapper {
       imageUrl: product.imageUrl,
       currency: product.currency,
       expirationDate: product.expirationDate,
-      tags: product.tags,
-      weigth: product.weigth,
+      weigth: product.weigth?.toInt(),
       measurement: product.measurement,
     );
   }
@@ -28,8 +27,7 @@ class ProductEntityMapper {
       imageUrl: entity.imageUrl,
       currency: entity.currency,
       expirationDate: entity.expirationDate,
-      tags: entity.tags,
-      weigth: entity.weigth,
+      weigth: entity.weigth?.toDouble(),
       measurement: entity.measurement,
     );
   }
