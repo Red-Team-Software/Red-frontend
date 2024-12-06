@@ -1,6 +1,5 @@
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
-import 'package:GoDeli/config/Fcm/Fcm.dart';
 import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ void main() async {
   await Environment.initEnvironment();
   await Firebase.initializeApp();
 
-  configureFCM();
 
   // Register Blocs in service locator
   await Injector().setUp();

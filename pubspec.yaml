@@ -59,6 +59,9 @@ dependencies:
   animate_do: ^3.3.4
   geolocator: ^9.0.2
   animations: ^2.0.6
+  flutter_animate: ^4.0.3
+  image_cropper: ^8.0.2
+  flutter_image_compress: ^2.3.0
   
 dev_dependencies:
   analyzer: ^5.13.0

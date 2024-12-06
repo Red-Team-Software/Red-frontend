@@ -1,3 +1,4 @@
+import 'package:GoDeli/config/Fcm/Fcm.dart';
 import 'package:GoDeli/features/auth/application/datasources/auth_datasource.dart';
 import 'package:GoDeli/features/auth/application/dto/login_dto.dart';
 import 'package:GoDeli/features/auth/application/dto/register_dto.dart';
@@ -24,6 +25,8 @@ class AuthDatasource implements IAuthDataSource {
       }
       final token = response.getValue().token;
       _httpService.addHeader('Authorization', 'Bearer $token');
+      configureFCM(_httpService);
+
       return Result.success(response.getValue());
   }
 
