@@ -217,7 +217,7 @@ class _DirectionComponentState extends State<DirectionComponent> {
             onPressed: isFinishButtonEnabled()
         ? () {
             if (_selectedLocation != null) {
-              widget.onChangeLocation(_selectedLocation!); // ¡Sin errores ahora!
+              widget.onChangeLocation(_selectedLocation!);
               widget.onChangeAddressName(_currentAddressName);
               widget.onFinished(); // Llama al registro en AuthScreen
             }

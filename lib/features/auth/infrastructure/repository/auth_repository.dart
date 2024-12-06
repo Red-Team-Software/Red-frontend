@@ -13,12 +13,13 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<Result<LoginResponse>> login(LoginDto loginDto) async {
-    try {
+
       final response = await _authDataSource.login(loginDto);
+      
+      if (!response.isSuccessful()){
+        return Result.makeError(Exception('Failed to login: ${response.getError()}'));
+      }
       return Result.success(response.getValue());
-    } catch (e) {
-      return Result.makeError(Exception('Failed to login: ${e.toString()}'));
-    }
   }
 
   @override

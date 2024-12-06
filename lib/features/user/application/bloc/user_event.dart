@@ -10,21 +10,37 @@ class UserEvent extends Equatable {
 class GetUserEvent extends UserEvent {}
 
 class UpdateUserEvent extends UserEvent {
-  final String? name;
-  final String? email;
-  final String? phone;
-  final String? password;
-  final String? image;
+  final UpdateUserDto updateUserDto;
 
 
   const UpdateUserEvent({
-    this.name,
-    this.email,
-    this.phone,
-    this.password,
-    this.image
+    required this.updateUserDto,
   });
 
   // @override
-  // List<Object> get props => [name, email, phone, password];
+  // List<Object?> get props => [name, email, phone, password, image];
+}
+
+class AddUserDirectionEvent extends UserEvent {
+  final AddUserDirectionListDto userDirection;
+
+  const AddUserDirectionEvent({
+    required this.userDirection,
+  });
+}
+
+class DeleteUserDirectionEvent extends UserEvent {
+  final DeleteUpdateUserDirectionListDto userDirection;
+
+  const DeleteUserDirectionEvent({
+    required this.userDirection,
+  });
+}
+
+class UpadateUserDirectionEvent extends UserEvent {
+  final DeleteUpdateUserDirectionListDto userDirection;
+
+  const UpadateUserDirectionEvent({
+    required this.userDirection,
+  });
 }
