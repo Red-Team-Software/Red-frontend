@@ -109,6 +109,8 @@ class _ProfileScreenState extends State<_ProfileScreen> {
     );
   }
 
+  
+
   DeleteUpdateUserDirectionListDto _buildUpdateUserDirectionDto(
       {required UserDirection direction,
       String? newName,
@@ -138,6 +140,36 @@ class _ProfileScreenState extends State<_ProfileScreen> {
     
     dtoList.removeWhere((element) => element.id == direction.id);
     dtoList.add(newDto);
+
+    return DeleteUpdateUserDirectionListDto(
+      directions: dtoList,
+    );
+  }
+
+  DeleteUpdateUserDirectionListDto _buildUpdateFavoriteUserDirectionDto(
+      {required UserDirection newFavoriteDirection, required List<UserDirection> directions}) {
+      
+     directions.forEach((element) {
+       if(element.isFavorite){
+         element.isFavorite = false;
+       }
+     });
+
+     directions.forEach((element) {
+       if(element.id == newFavoriteDirection.id){
+         element.isFavorite = true;
+       }
+     });
+    
+    final dtoList = directions
+        .map((e) => DeleteUpdateUserDirectionDto(
+              id: e.id,
+              name: e.addressName,
+              favorite: e.isFavorite,
+              lat: e.latitude.toDouble(),
+              lng: e.longitude.toDouble(),
+            ))
+        .toList();
 
     return DeleteUpdateUserDirectionListDto(
       directions: dtoList,
@@ -343,7 +375,16 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           id: direction.id,
                           address: direction.address,
                           onFavoriteChanged: (id, isFavorite) async {
-                            print('Favorite changed');
+                            if( direction.isFavorite ){
+                              return;
+                            }
+                            final updateUserDto =
+                                _buildUpdateFavoriteUserDirectionDto(
+                                    newFavoriteDirection: direction,
+                                    directions: widget.user.directions);
+                            this.context.read<UserBloc>().add(
+                                        UpdateUserDirectionEvent(
+                                            userDirection: updateUserDto));
                           },
                           onUpdate: () {
                             showModalBottomSheet(
