@@ -1,3 +1,4 @@
+import 'package:GoDeli/config/Fcm/Fcm.dart';
 import 'package:GoDeli/features/auth/application/repositories/auth_local_storage_repository.dart';
 import 'package:GoDeli/features/common/application/use_case.dart';
 import 'package:GoDeli/features/common/domain/result.dart';
@@ -22,6 +23,7 @@ class CheckAuthUseCase implements IUseCase<void, User> {
     _httpService.addHeader('Authorization', 'Bearer $token');
     
     final res = await _httpService.request('/auth/current', 'GET', (json) => User.fromJson(json));
+    configureFCM(_httpService);
 
     if (res.isSuccessful()) {
       return Result.success(res.getValue());

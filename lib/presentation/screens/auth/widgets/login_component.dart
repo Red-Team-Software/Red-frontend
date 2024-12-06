@@ -1,7 +1,5 @@
-import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
@@ -40,7 +38,6 @@ class _LoginComponentState extends State<LoginComponent> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -112,10 +109,7 @@ class _LoginComponentState extends State<LoginComponent> {
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(
-            onPressed: () {
-              
-
-            },
+            onPressed: () {},
             child: Text(
               "Forgot password?",
               style: TextStyle(color: colors.primary),

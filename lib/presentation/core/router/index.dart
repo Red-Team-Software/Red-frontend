@@ -1,6 +1,6 @@
 import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
+import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/screens/Search/search.dart';
-import 'package:GoDeli/presentation/screens/profile/profile_page.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_item.dart';
 import 'package:flutter/material.dart';

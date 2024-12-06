@@ -24,19 +24,16 @@ class RegisterEvent extends AuthEvent {
   final String password;
   final String fullName;
   final String phoneNumber;
-  final String addressName;
-  final num latitude;
-  final num longitude;
-
+  final AddUserDirectionListDto address;
+  final String? image;
 
   const RegisterEvent({
-    required this.email, 
-    required this.password, 
-    required this.fullName, 
-    required this.phoneNumber, 
-    required this.addressName, 
-    required this.latitude, 
-    required this.longitude
+    required this.email,
+    required this.password,
+    required this.fullName,
+    required this.phoneNumber,
+    required this.address,
+    this.image,
   });
 
   @override
