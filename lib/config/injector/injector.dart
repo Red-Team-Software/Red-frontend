@@ -88,7 +88,7 @@ Future<void> setUp() async {
 
 
     //? inicializando las dependencias de modulo categorias
-    final categoryDatasource = CategoriesDatasourceImpl();
+    final categoryDatasource = CategoriesDatasourceImpl(httpService);
     final categoriesRepository =
         CategoriesRespositoryImpl(categoryDatasource: categoryDatasource);
     getIt.registerFactory<ICategoriesRepository>(() => categoriesRepository);
