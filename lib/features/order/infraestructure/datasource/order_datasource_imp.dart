@@ -35,8 +35,6 @@ class OrderDatasourceImpl implements IOrderDatasource {
       },
     );
 
-    print(res.isSuccessful());
-
     if (!res.isSuccessful()) return Result.makeError(res.getError());
 
     return Result.success(res.getValue());

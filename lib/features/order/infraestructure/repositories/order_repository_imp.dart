@@ -2,8 +2,6 @@ import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/order/domain/datasource/order_datasource.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
-import 'package:GoDeli/features/order/infraestructure/mappers/order_mapper.dart';
-import 'package:GoDeli/features/order/infraestructure/models/order.entity.dart';
 
 class OrderRepositoryImpl implements IOrderRepository {
   final IOrderDatasource datasource;
