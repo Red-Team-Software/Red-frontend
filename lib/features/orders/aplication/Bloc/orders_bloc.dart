@@ -52,9 +52,20 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
 
   void _onOrderCancelled(
       OrderCancelled event, Emitter<OrdersState> emit) async {
+    emit(OrdersLoadInProgress());
     try {
-      await orderRepository.cancelOrder(orderId: event.orderId);
-      emit(OrderCancelSuccess());
+      print("cancelando");
+      print(event.orderId);
+      // await orderRepository.cancelOrder(orderId: event.orderId);
+      // emit(OrderCancelSuccess());
+
+      // Fetch updated orders
+      final orders = await orderRepository.fetchAllOrders(page: 1, perPage: 10);
+      emit(OrdersLoadSuccess(
+          orders: Orders(orders: orders.getValue()),
+          selectedTab: 'Active',
+          page: 1,
+          perPage: 10));
     } catch (e) {
       emit(OrderCancelFailure(error: e.toString()));
     }

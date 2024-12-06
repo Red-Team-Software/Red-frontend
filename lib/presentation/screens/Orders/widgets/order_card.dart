@@ -1,7 +1,10 @@
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
+import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderItem orderItem;
@@ -159,7 +162,9 @@ class OrderCard extends StatelessWidget {
   }
 
   void _cancelOrder(BuildContext context) {
-    // Implement cancel order logic here
+    print("Order cancel button pressed");
+    // Emit the OrderCancelled event
+    context.read<OrdersBloc>().add(OrderCancelled(orderId: orderItem.orderId));
   }
 
   void _trackOrder(BuildContext context) {
