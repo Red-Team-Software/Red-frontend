@@ -6,8 +6,8 @@ import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto
 import 'package:GoDeli/features/user/domain/dto/update_user_dto.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
-import 'package:GoDeli/presentation/screens/profile/widgets/add_direction_modal.dart';
-import 'package:GoDeli/presentation/screens/profile/widgets/profile_address_profile.dart';
+import 'package:GoDeli/presentation/screens/profile/widgets/addess_modal.dart';
+import 'package:GoDeli/presentation/screens/profile/widgets/profile_address_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -106,6 +106,73 @@ class _ProfileScreenState extends State<_ProfileScreen> {
           lng: direction.longitude.toDouble(),
         ),
       ],
+    );
+  }
+
+  
+
+  DeleteUpdateUserDirectionListDto _buildUpdateUserDirectionDto(
+      {required UserDirection direction,
+      String? newName,
+      LatLng? newLocation,
+      required List<UserDirection> directions}) {
+    newName ??= direction.addressName;
+    newLocation ??=
+        LatLng(direction.latitude.toDouble(), direction.longitude.toDouble());
+
+    final newDto = DeleteUpdateUserDirectionDto(
+      id: direction.id,
+      name: newName,
+      favorite: direction.isFavorite,
+      lat: newLocation.latitude.toDouble(),
+      lng: newLocation.longitude.toDouble(),
+    );
+
+    final dtoList = directions
+        .map((e) => DeleteUpdateUserDirectionDto(
+              id: e.id,
+              name: e.addressName,
+              favorite: e.isFavorite,
+              lat: e.latitude.toDouble(),
+              lng: e.longitude.toDouble(),
+            ))
+        .toList();
+    
+    dtoList.removeWhere((element) => element.id == direction.id);
+    dtoList.add(newDto);
+
+    return DeleteUpdateUserDirectionListDto(
+      directions: dtoList,
+    );
+  }
+
+  DeleteUpdateUserDirectionListDto _buildUpdateFavoriteUserDirectionDto(
+      {required UserDirection newFavoriteDirection, required List<UserDirection> directions}) {
+      
+     directions.forEach((element) {
+       if(element.isFavorite){
+         element.isFavorite = false;
+       }
+     });
+
+     directions.forEach((element) {
+       if(element.id == newFavoriteDirection.id){
+         element.isFavorite = true;
+       }
+     });
+    
+    final dtoList = directions
+        .map((e) => DeleteUpdateUserDirectionDto(
+              id: e.id,
+              name: e.addressName,
+              favorite: e.isFavorite,
+              lat: e.latitude.toDouble(),
+              lng: e.longitude.toDouble(),
+            ))
+        .toList();
+
+    return DeleteUpdateUserDirectionListDto(
+      directions: dtoList,
     );
   }
 
@@ -256,17 +323,12 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                             return AddressModal(
                               onFinished: (location, name, isUpdate) async {
                                 Navigator.pop(context);
-                                if (isUpdate) {
-                                  // Update the address
-                                  // final updateDtio = _buildDeleteUserDirectionDto(direction)
-                                } else {
-                                  // Add the address
-                                  final addDirectionDto =
-                                      _buildAddUserDirectionDto(location, name);
-                                  this.context.read<UserBloc>().add(
-                                      AddUserDirectionEvent(
-                                          userDirection: addDirectionDto));
-                                }
+                                // Add the address
+                                final addDirectionDto =
+                                    _buildAddUserDirectionDto(location, name);
+                                this.context.read<UserBloc>().add(
+                                    AddUserDirectionEvent(
+                                        userDirection: addDirectionDto));
                               },
                             );
                           },
@@ -289,10 +351,10 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                             children: [
                               SlidableAction(
                                 onPressed: (context) {
-                                  final dto = _buildDeleteUserDirectionDto(direction);
-                                  context
-                                      .read<UserBloc>()
-                                      .add(DeleteUserDirectionEvent(
+                                  final dto =
+                                      _buildDeleteUserDirectionDto(direction);
+                                  context.read<UserBloc>().add(
+                                      DeleteUserDirectionEvent(
                                           userDirection: dto));
                                 },
                                 backgroundColor: Colors.red,
@@ -311,10 +373,46 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           longitude: direction.longitude.toDouble(),
                           isFavorite: direction.isFavorite,
                           id: direction.id,
+                          address: direction.address,
                           onFavoriteChanged: (id, isFavorite) async {
-                            print('Favorite changed');
+                            if( direction.isFavorite ){
+                              return;
+                            }
+                            final updateUserDto =
+                                _buildUpdateFavoriteUserDirectionDto(
+                                    newFavoriteDirection: direction,
+                                    directions: widget.user.directions);
+                            this.context.read<UserBloc>().add(
+                                        UpdateUserDirectionEvent(
+                                            userDirection: updateUserDto));
                           },
-                          onSelect: () {},
+                          onUpdate: () {
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return AddressModal(
+                                  initialAddressName: direction.addressName,
+                                  initialLocation: LatLng(
+                                      direction.latitude.toDouble(),
+                                      direction.longitude.toDouble()),
+                                      initialLocationName: direction.address,
+                                  onFinished: (location, name, isUpdate) async {
+                                    Navigator.pop(context);
+                                    // update the address
+                                    final updateUserDto =
+                                        _buildUpdateUserDirectionDto(direction: direction,
+                                            newName: name,
+                                            newLocation: location,
+                                            directions: widget.user.directions);
+                                    this.context.read<UserBloc>().add(
+                                        UpdateUserDirectionEvent(
+                                            userDirection: updateUserDto));
+                                  },
+                                );
+                              },
+                            );
+                          },
                         ));
                   },
                 ),

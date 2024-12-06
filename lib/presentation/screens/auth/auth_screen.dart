@@ -1,16 +1,18 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
-import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/direction_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/login_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/profile_component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:latlong2/latlong.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -22,7 +24,6 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   int _currentIndex = 0; // Inicialmente mostrar el LoginComponent
-  bool _isMovingRight = true;
 
   // Email and password
   String email = '';
@@ -72,7 +73,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
     void onChangeIndex(int newIndex) {
       setState(() {
-        _isMovingRight = newIndex > _currentIndex;
         _currentIndex = newIndex;
       });
     }
@@ -83,6 +83,8 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Future<void> handleRegister() async {
       final realPhone = '$phoneCode$phone';
+      final image =
+          selectedImage != null ? await recortImage(selectedImage!.path) : null;
       final addressDto = AddUserDirectionListDto(
         directions: [
           AddUserDirectionDto(
@@ -140,7 +142,7 @@ class _AuthScreenState extends State<AuthScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Center(child: screens[_currentIndex]),
-      ),
+      ).animate().fadeIn(duration: 500.ms),
     );
   }
 }

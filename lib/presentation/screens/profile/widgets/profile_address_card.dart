@@ -6,23 +6,26 @@ import 'dart:convert';
 class ProfileAddressCard extends StatefulWidget {
   final String id;
   final String addressName;
+  final String address;
   final double latitude;
   final double longitude;
   final bool isFavorite;
-  final VoidCallback onSelect;
+  // final VoidCallback onSelect;
+  final VoidCallback onUpdate;
   final Future<void> Function(String id, bool isFavorite) onFavoriteChanged;
 
   const ProfileAddressCard({
     super.key,
     required this.id,
     required this.addressName,
+    required this.address,
     required this.latitude,
     required this.longitude,
     required this.isFavorite,
-    required this.onSelect,
     required this.onFavoriteChanged,
+    required this.onUpdate,
   });
-  
+
   @override
   _ProfileAddressCardState createState() => _ProfileAddressCardState();
 }
@@ -36,7 +39,8 @@ class _ProfileAddressCardState extends State<ProfileAddressCard> {
   void initState() {
     super.initState();
     _isFavorite = widget.isFavorite;
-    _getAddressName(); // Obtener el nombre de la dirección cuando se inicializa
+    _addressName = widget.address;
+    if (_addressName.isEmpty) _getAddressName(); // Obtener el nombre de la dirección cuando se inicializa
   }
 
   Future<void> _getAddressName() async {
@@ -99,11 +103,8 @@ class _ProfileAddressCardState extends State<ProfileAddressCard> {
             Text(_addressName), // Mostrar el nombre de la dirección obtenida
         trailing: IconButton(
           icon: const Icon(Icons.edit),
-          onPressed: () {
-            // TODO: Lógica para editar dirección
-          },
+          onPressed: widget.onUpdate,
         ),
-        onTap: widget.onSelect, // No hace nada cuando se toca la tarjeta
       ),
     );
   }
