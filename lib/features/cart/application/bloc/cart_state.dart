@@ -4,15 +4,11 @@ class CartState extends Equatable {
   final List<ProductCart> products;
   final List<BundleCart> bundles;
   final double discount = 0.0;
-  final double shipping;
-  final double tax;
   final String? errorMessage;
 
   const CartState({
     this.products = const [],
     this.bundles = const [],
-    this.shipping = 0.0,
-    this.tax = 0.0,
     this.errorMessage,
   });
 
@@ -54,11 +50,9 @@ class CartState extends Equatable {
     return CartState(
       products: products ?? this.products,
       bundles: bundles ?? this.bundles,
-      shipping: shipping ?? this.shipping,
-      tax: tax ?? this.tax,
     );
   }
 
   @override
-  List<Object> get props => [products, bundles, shipping, tax];
+  List<Object> get props => [products, bundles];
 }

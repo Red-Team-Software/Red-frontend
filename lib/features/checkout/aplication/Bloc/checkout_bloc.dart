@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
 import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
@@ -21,6 +22,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final AddUserDirectionUseCase addUserDirectionUseCase;
   final DeleteUserDirectionUseCase deleteUserDirectionUseCase;
   final UpdateUserDirectionUseCase updateUserDirectionUseCase;
+  final ITaxShippinRepository taxRepository;
 
   CheckoutBloc(
       {required this.cartBloc,
@@ -29,7 +31,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       required this.getUserDirectionsUseCase,
       required this.addUserDirectionUseCase,
       required this.deleteUserDirectionUseCase,
-      required this.updateUserDirectionUseCase})
+      required this.updateUserDirectionUseCase,
+      required this.taxRepository})
       : super(const CheckoutState()) {
     on<LoadCheckoutData>(_onLoadCheckoutData);
     on<SelectAddress>(_onSelectAddress);
@@ -44,6 +47,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
   Future<void> _onLoadCheckoutData(
       LoadCheckoutData event, Emitter<CheckoutState> emit) async {
+    print("Loading checkout data...");
     final cartState = cartBloc.state;
     emit(state.copyWith(isProcessing: true));
     final resDirections = await getUserDirectionsUseCase.execute(null);
@@ -66,14 +70,17 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         bundles: cartState.bundles,
         addresses: addresses,
         selectedAddress: addresses.isNotEmpty ? addresses.first : null,
+        isProcessing: false,
       ));
+      print("Checkout data loaded successfully.");
     } else {
       // Maneja el error si la respuesta no es exitosa
       emit(state.copyWith(
         errorMessage: 'Failed to fetch addresses.',
+        isProcessing: false,
       ));
+      print("Failed to fetch addresses.");
     }
-    emit(state.copyWith(isProcessing: false));
   }
 
   void _onSelectAddress(SelectAddress event, Emitter<CheckoutState> emit) {
@@ -95,24 +102,24 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
 
     if (res.isSuccessful()) {
-      final resDirections = await getUserDirectionsUseCase.execute(null);
+      // final resDirections = await getUserDirectionsUseCase.execute(null);
 
-      if (resDirections.isSuccessful()) {
-        final directions = resDirections.getValue();
-        final addresses = directions.map<Address>((direction) {
-          return Address(direction.id, direction.addressName, direction.address,
-              direction.latitude, direction.longitude);
-        }).toList();
+      // if (resDirections.isSuccessful()) {
+      //   final directions = resDirections.getValue();
+      //   final addresses = directions.map<Address>((direction) {
+      //     return Address(direction.id, direction.addressName, direction.address,
+      //         direction.latitude, direction.longitude);
+      //   }).toList();
 
-        emit(state.copyWith(
-          addresses: addresses,
-          selectedAddress: addresses.isNotEmpty ? addresses.first : null,
-        ));
-      } else {
-        emit(state.copyWith(
-          errorMessage: 'Failed to fetch addresses.',
-        ));
-      }
+      //   emit(state.copyWith(
+      //     addresses: addresses,
+      //     selectedAddress: addresses.isNotEmpty ? addresses.first : null,
+      //   ));
+      // } else {
+      //   emit(state.copyWith(
+      //     errorMessage: 'Failed to fetch addresses.',
+      //   ));
+      // }
     }
 
     emit(state.copyWith(isProcessing: false));
@@ -153,10 +160,10 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
   void _onFetchAddresses(
       FetchAddressesEvent event, Emitter<CheckoutState> emit) async {
-    final resDirections = await getUserDirectionsUseCase.execute(null);
+    // final resDirections = await getUserDirectionsUseCase.execute(null);
 
-    print("res de get directions");
-    print(resDirections);
+    // print("res de get directions");
+    // print(resDirections);
   }
 
   void _onRemoveAddress(

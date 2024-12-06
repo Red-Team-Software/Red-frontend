@@ -35,6 +35,9 @@ import 'package:GoDeli/features/products/domain/repositories/products_repository
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
 import 'package:GoDeli/features/products/infraestructure/repositories/products_repository_impl.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
+import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
+import 'package:GoDeli/features/tax-shipping/infraestructure/datasource/tax_shipping_datasource_imp.dart';
+import 'package:GoDeli/features/tax-shipping/infraestructure/repositories/tax-shipping_repository_imp.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
@@ -159,5 +162,12 @@ class Injector {
         updateUserDirectionUseCase);
 
     getIt.registerFactory<IOrderRepository>(() => orderRepository);
+
+    //? inicializando las dependencias de modulo tax y shipping
+    final taxShippingDatasource =
+        TaxShippingDatasourceImpl(httpService: httpService);
+    final taxShippingRepository =
+        TaxShippingRepositoryImpl(datasource: taxShippingDatasource);
+    getIt.registerFactory<ITaxShippinRepository>(() => taxShippingRepository);
   }
 }

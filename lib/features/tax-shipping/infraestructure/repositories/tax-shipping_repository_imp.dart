@@ -3,7 +3,7 @@ import 'package:GoDeli/features/tax-shipping/domain/tax-shipping.dart';
 import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
 import 'package:GoDeli/features/tax-shipping/domain/datasource/tax-shipping_datasource.dart';
 
-class TaxShippingRepositoryImpl implements ITaxRepository {
+class TaxShippingRepositoryImpl implements ITaxShippinRepository {
   final ITaxShippingDatasource datasource;
 
   TaxShippingRepositoryImpl({required this.datasource});

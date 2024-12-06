@@ -11,7 +11,11 @@ class OrderSummarySection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartBloc = context.watch<CartBloc>();
+    final checkoutBloc = context.watch<CheckoutBloc>();
     final colors = Theme.of(context).colorScheme;
+
+    // Remove LoadCheckoutData event dispatch
+    // context.read<CheckoutBloc>().add(LoadCheckoutData());
 
     return Container(
       padding: const EdgeInsets.all(16.0),
@@ -76,7 +80,7 @@ class OrderSummarySection extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${cartBloc.state.tax.toStringAsFixed(2)}',
+                '\$${checkoutBloc.state.tax.toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontSize: 18, // even smaller font size
                   fontWeight: FontWeight.bold,
@@ -98,7 +102,7 @@ class OrderSummarySection extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${cartBloc.state.shipping.toStringAsFixed(2)}',
+                '\$${checkoutBloc.state.shipping.toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontSize: 18, // even smaller font size
                   fontWeight: FontWeight.bold,
@@ -122,7 +126,7 @@ class OrderSummarySection extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${(cartBloc.state.subtotal + cartBloc.state.tax + cartBloc.state.shipping).toStringAsFixed(2)}',
+                '\$${(cartBloc.state.subtotal + checkoutBloc.state.tax + checkoutBloc.state.shipping).toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
