@@ -23,14 +23,15 @@ if (flutterVersionName == null) {
     flutterVersionName = "1.0"
 }
 
+
 android {
     namespace = "red_team.frontend.movil"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     defaultConfig {
@@ -51,6 +52,8 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
+
+    
 }
 
 flutter {

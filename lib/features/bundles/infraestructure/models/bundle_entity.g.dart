@@ -69,7 +69,7 @@ const BundleEntitySchema = CollectionSchema(
   getId: _bundleEntityGetId,
   getLinks: _bundleEntityGetLinks,
   attach: _bundleEntityAttach,
-  version: '3.1.0+1',
+  version: '3.1.8',
 );
 
 int _bundleEntityEstimateSize(

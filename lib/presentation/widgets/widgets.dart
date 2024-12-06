@@ -1,3 +1,5 @@
+export 'package:GoDeli/presentation/widgets/bundles/carrusel_bundles.dart';
+
 export 'package:GoDeli/presentation/widgets/buttons/custom_cart_action_button.dart';
 
 export 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';

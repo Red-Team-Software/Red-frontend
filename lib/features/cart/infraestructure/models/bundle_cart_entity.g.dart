@@ -41,7 +41,7 @@ const BundleCartEntitySchema = CollectionSchema(
   getId: _bundleCartEntityGetId,
   getLinks: _bundleCartEntityGetLinks,
   attach: _bundleCartEntityAttach,
-  version: '3.1.0+1',
+  version: '3.1.8',
 );
 
 int _bundleCartEntityEstimateSize(
