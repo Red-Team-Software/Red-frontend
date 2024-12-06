@@ -12,7 +12,7 @@ class OrderRepositoryImpl implements IOrderRepository {
 
   @override
   Future<Result<Order>> processPayment({
-    required double amount,
+    required String paymentId,
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,
@@ -22,7 +22,7 @@ class OrderRepositoryImpl implements IOrderRepository {
   }) async {
     try {
       final order = await datasource.processPayment(
-        amount: amount,
+        paymentId: paymentId,
         currency: currency,
         paymentMethod: paymentMethod,
         stripePaymentMethod: stripePaymentMethod,

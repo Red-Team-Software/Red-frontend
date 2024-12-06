@@ -41,7 +41,7 @@ class SelectPaymentMethod extends CheckoutEvent {
 class ProceedToCheckout extends CheckoutEvent {}
 
 class ProcessPayment extends CheckoutEvent {
-  final double amount;
+  final String paymentId;
   final String currency;
   final String paymentMethod;
   final String stripePaymentMethod;
@@ -51,7 +51,7 @@ class ProcessPayment extends CheckoutEvent {
   final BuildContext context;
 
   const ProcessPayment({
-    required this.amount,
+    required this.paymentId,
     required this.currency,
     required this.paymentMethod,
     required this.stripePaymentMethod,
@@ -63,7 +63,7 @@ class ProcessPayment extends CheckoutEvent {
 
   @override
   List<Object?> get props => [
-        amount,
+        paymentId,
         currency,
         paymentMethod,
         stripePaymentMethod,

@@ -3,7 +3,7 @@ import 'package:GoDeli/features/order/domain/order.dart';
 
 abstract class IOrderDatasource {
   Future<Result<Order>> processPayment({
-    required double amount,
+    required String paymentId,
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,

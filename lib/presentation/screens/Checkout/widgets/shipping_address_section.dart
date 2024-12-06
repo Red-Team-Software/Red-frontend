@@ -44,33 +44,36 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
             ),
             const SizedBox(height: 8),
             ...state.addresses.map((address) {
-              return Slidable(
-                endActionPane: ActionPane(
-                  motion: const ScrollMotion(),
-                  extentRatio: 0.25,
-                  children: [
-                    SlidableAction(
-                      onPressed: (context) {
-                        checkoutBloc.add(RemoveAddressEvent(address));
-                      },
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: Slidable(
+                  endActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    extentRatio: 0.25,
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) {
+                          checkoutBloc.add(RemoveAddressEvent(address));
+                        },
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          bottomRight: Radius.circular(8),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                child: AddressCard(
-                  title: address.title,
-                  address: address.location,
-                  isSelected: address == state.selectedAddress,
-                  onSelect: () {
-                    checkoutBloc.add(SelectAddress(address));
-                  },
+                    ],
+                  ),
+                  child: AddressCard(
+                    title: address.title,
+                    address: address.location,
+                    isSelected: address == state.selectedAddress,
+                    onSelect: () {
+                      checkoutBloc.add(SelectAddress(address));
+                    },
+                  ),
                 ),
               );
             }),
@@ -160,8 +163,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                                 child: Text(
                                   location,
                                   style: const TextStyle(fontSize: 16),
-                                  overflow:
-                                      TextOverflow.ellipsis, // Limita el texto
+                                  overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                 ),
                               ),
@@ -195,8 +197,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                             borderRadius: BorderRadius.circular(30),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
-                          minimumSize:
-                              const Size.fromHeight(48), // Ocupa todo el ancho
+                          minimumSize: const Size.fromHeight(48),
                         ),
                         child: const Text(
                           'Save Address',

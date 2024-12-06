@@ -70,7 +70,8 @@ class OrderSummarySection extends StatelessWidget {
                 onPressed: () {
                   context.read<CheckoutBloc>().add(
                         ProcessPayment(
-                          amount: cartBloc.state.total,
+                          paymentId: "To be decided",
+                          //amount: cartBloc.state.total,
                           currency: 'usd',
                           paymentMethod: "card",
                           stripePaymentMethod: 'pm_card_threeDSecureOptional',

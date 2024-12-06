@@ -148,7 +148,7 @@ class Injector {
 
     //? Iiniciando las dependencias de modulo de orden
 
-    final orderDatasource = OrderDatasourceImpl();
+    final orderDatasource = OrderDatasourceImpl(httpService: httpService);
     final orderRepository = OrderRepositoryImpl(datasource: orderDatasource);
 
     getIt.registerSingleton<GetUserDirectionsUseCase>(getUserDirectionsUseCase);
