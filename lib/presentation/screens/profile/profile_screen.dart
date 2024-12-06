@@ -9,6 +9,7 @@ import 'package:GoDeli/features/user/domain/user_direction.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/addess_modal.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/profile_address_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
@@ -412,7 +413,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                               },
                             );
                           },
-                        ));
+                        )).animate();
                   },
                 ),
               ],
@@ -420,7 +421,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
           ),
         ),
       ),
-    );
+    ).animate().fadeIn(duration: 500.ms );
   }
 }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class EmailPassComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
@@ -200,6 +201,6 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
           ),
         ),
       ],
-    );
+    ).animate().moveX(begin: 100, end: 0).fadeIn(duration: 500.ms);
   }
 }
