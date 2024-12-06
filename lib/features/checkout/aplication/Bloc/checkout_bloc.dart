@@ -1,8 +1,11 @@
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
+import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
+import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
+import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'checkout_event.dart';
 import 'checkout_state.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
@@ -12,11 +15,19 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final CartBloc cartBloc;
   final IOrderRepository orderRepository;
   final void Function(Order order) onOrderCreated;
+  final GetUserDirectionsUseCase getUserDirectionsUseCase;
+  final AddUserDirectionUseCase addUserDirectionUseCase;
+  final DeleteUserDirectionUseCase deleteUserDirectionUseCase;
+  final UpdateUserDirectionUseCase updateUserDirectionUseCase;
 
   CheckoutBloc(
       {required this.cartBloc,
       required this.orderRepository,
-      required this.onOrderCreated})
+      required this.onOrderCreated,
+      required this.getUserDirectionsUseCase,
+      required this.addUserDirectionUseCase,
+      required this.deleteUserDirectionUseCase,
+      required this.updateUserDirectionUseCase})
       : super(const CheckoutState()) {
     on<LoadCheckoutData>(_onLoadCheckoutData);
     on<SelectAddress>(_onSelectAddress);
@@ -29,19 +40,37 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     on<UpdateAddressEvent>(_onUpdateAddress);
   }
 
-  void _onLoadCheckoutData(
-      LoadCheckoutData event, Emitter<CheckoutState> emit) {
+  Future<void> _onLoadCheckoutData(
+      LoadCheckoutData event, Emitter<CheckoutState> emit) async {
     final cartState = cartBloc.state;
-    emit(state.copyWith(
-      products: cartState.products,
-      bundles: cartState.bundles,
-      addresses: [
-        Address('Home', 'Av Principal de bello campo, edif tupamaro'),
-        Address('Office', 'Casita de bryan, al frente del guaire')
-      ],
-      selectedAddress:
-          Address('Home', 'Av Principal de bello campo, edif tupamaro'),
-    ));
+
+    final resDirections = await getUserDirectionsUseCase.execute(null);
+
+    print("resDirections");
+    print(resDirections);
+
+    if (resDirections.isSuccessful()) {
+      final directions = resDirections.getValue();
+
+      // Si la lista de direcciones está vacía, asigna un array vacío
+      final addresses = directions.isEmpty
+          ? <Address>[] // Lista vacía de direcciones
+          : directions.map<Address>((direction) {
+              // Si necesitas mapear las direcciones a Address, lo harías aquí
+              return Address(direction.addressName, direction.address);
+            }).toList();
+
+      // Actualiza el estado con las direcciones obtenidas
+      emit(state.copyWith(
+        addresses: addresses,
+        selectedAddress: addresses.isNotEmpty ? addresses.first : null,
+      ));
+    } else {
+      // Maneja el error si la respuesta no es exitosa
+      emit(state.copyWith(
+        errorMessage: 'Failed to fetch addresses.',
+      ));
+    }
   }
 
   void _onSelectAddress(SelectAddress event, Emitter<CheckoutState> emit) {
@@ -93,8 +122,10 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
   void _onFetchAddresses(
       FetchAddressesEvent event, Emitter<CheckoutState> emit) async {
-    // Fetch addresses from the database
-    // emit(CheckoutState with fetched addresses);
+    final resDirections = await getUserDirectionsUseCase.execute(null);
+
+    print("res de get directions");
+    print(resDirections);
   }
 
   void _onRemoveAddress(

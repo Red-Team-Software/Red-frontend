@@ -1,6 +1,7 @@
 class UserDirection {
   String id;
   String addressName;
+  String address;
   num latitude;
   num longitude;
   bool isFavorite;
@@ -8,6 +9,7 @@ class UserDirection {
   UserDirection({
     required this.id,
     required this.addressName,
+    required this.address,
     required this.latitude,
     required this.longitude,
     this.isFavorite = false,
@@ -17,6 +19,7 @@ class UserDirection {
     return UserDirection(
       id: json['id'],
       addressName: json['name'],
+      address: json['address'],
       latitude: json['lat'],
       longitude: json['lng'],
       isFavorite: json['favorite'],

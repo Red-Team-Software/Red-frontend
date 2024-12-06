@@ -151,6 +151,13 @@ class Injector {
     final orderDatasource = OrderDatasourceImpl();
     final orderRepository = OrderRepositoryImpl(datasource: orderDatasource);
 
+    getIt.registerSingleton<GetUserDirectionsUseCase>(getUserDirectionsUseCase);
+    getIt.registerSingleton<AddUserDirectionUseCase>(addUserDirectionUseCase);
+    getIt.registerSingleton<DeleteUserDirectionUseCase>(
+        deleteUserDirectionUseCase);
+    getIt.registerSingleton<UpdateUserDirectionUseCase>(
+        updateUserDirectionUseCase);
+
     getIt.registerFactory<IOrderRepository>(() => orderRepository);
   }
 }
