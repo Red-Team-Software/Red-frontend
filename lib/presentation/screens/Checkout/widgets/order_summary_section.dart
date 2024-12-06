@@ -38,10 +38,78 @@ class OrderSummarySection extends StatelessWidget {
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[700],
+              color: cartBloc.state.totalItems == 5 ? Colors.red : Colors.grey,
             ),
           ),
           const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Subtotal',
+                style: TextStyle(
+                  fontSize: 18, // even smaller font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+              Text(
+                '\$${cartBloc.state.subtotal.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 18, // even smaller font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Tax',
+                style: TextStyle(
+                  fontSize: 18, // even smaller font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+              Text(
+                '\$${cartBloc.state.tax.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 18, // even smaller font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Shipping',
+                style: TextStyle(
+                  fontSize: 18, // even smaller font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+              Text(
+                '\$${cartBloc.state.shipping.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 18, // even smaller font size
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16.0),
+          const Divider(color: Colors.grey), // separator line
+          const SizedBox(height: 16.0),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -54,7 +122,7 @@ class OrderSummarySection extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${cartBloc.state.total.toStringAsFixed(2)}',
+                '\$${(cartBloc.state.subtotal + cartBloc.state.tax + cartBloc.state.shipping).toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
