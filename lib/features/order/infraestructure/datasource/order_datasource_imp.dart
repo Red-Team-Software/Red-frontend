@@ -45,7 +45,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
   Future<List<OrderItem>> fetchAllOrders(
       {int page = 1, int perPage = 10}) async {
     final res = await httpService.request(
-      '/order/all',
+      '/order/user/all',
       'GET',
       (json) => (json['orders'] as List)
           .map((order) => OrderItem.fromJson(order))

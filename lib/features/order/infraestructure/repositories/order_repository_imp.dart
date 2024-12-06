@@ -46,7 +46,9 @@ class OrderRepositoryImpl implements IOrderRepository {
           await datasource.fetchAllOrders(page: page, perPage: perPage);
       return Result.success(orders);
     } catch (e) {
-      return Result.makeError(e as Exception);
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
     }
   }
 }
