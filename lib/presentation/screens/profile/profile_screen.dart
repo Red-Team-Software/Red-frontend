@@ -17,7 +17,7 @@ import 'package:latlong2/latlong.dart';
 class ProfileScreen extends StatelessWidget {
   static const String name = 'profile_page';
 
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class ProfileScreen extends StatelessWidget {
 class _ProfileScreen extends StatefulWidget {
   final User user;
 
-  _ProfileScreen({required this.user, Key? key}) : super(key: key);
+  const _ProfileScreen({required this.user, super.key});
 
   @override
   State<_ProfileScreen> createState() => _ProfileScreenState();
@@ -109,8 +109,6 @@ class _ProfileScreenState extends State<_ProfileScreen> {
     );
   }
 
-  
-
   DeleteUpdateUserDirectionListDto _buildUpdateUserDirectionDto(
       {required UserDirection direction,
       String? newName,
@@ -137,7 +135,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
               lng: e.longitude.toDouble(),
             ))
         .toList();
-    
+
     dtoList.removeWhere((element) => element.id == direction.id);
     dtoList.add(newDto);
 
@@ -147,20 +145,20 @@ class _ProfileScreenState extends State<_ProfileScreen> {
   }
 
   DeleteUpdateUserDirectionListDto _buildUpdateFavoriteUserDirectionDto(
-      {required UserDirection newFavoriteDirection, required List<UserDirection> directions}) {
-      
-     directions.forEach((element) {
-       if(element.isFavorite){
-         element.isFavorite = false;
-       }
-     });
+      {required UserDirection newFavoriteDirection,
+      required List<UserDirection> directions}) {
+    for (var element in directions) {
+      if (element.isFavorite) {
+        element.isFavorite = false;
+      }
+    }
 
-     directions.forEach((element) {
-       if(element.id == newFavoriteDirection.id){
-         element.isFavorite = true;
-       }
-     });
-    
+    for (var element in directions) {
+      if (element.id == newFavoriteDirection.id) {
+        element.isFavorite = true;
+      }
+    }
+
     final dtoList = directions
         .map((e) => DeleteUpdateUserDirectionDto(
               id: e.id,
@@ -240,10 +238,10 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                       style: TextStyle(color: Colors.red)),
                 ),
                 const SizedBox(height: 20),
-                Align(
+                const Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left
-                  child: const Text('User:',
+                  child: Text('User:',
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                 ),
@@ -266,10 +264,10 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                     readOnly: _readOnly,
                   ),
                 const SizedBox(height: 20),
-                Align(
+                const Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left
-                  child: const Text('Profile:',
+                  child: Text('Profile:',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 ),
@@ -306,10 +304,10 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Align(
+                    const Align(
                       alignment:
                           Alignment.centerLeft, // Align the titles to the left
-                      child: const Text('Addresses:',
+                      child: Text('Addresses:',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                     ),
@@ -375,7 +373,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           id: direction.id,
                           address: direction.address,
                           onFavoriteChanged: (id, isFavorite) async {
-                            if( direction.isFavorite ){
+                            if (direction.isFavorite) {
                               return;
                             }
                             final updateUserDto =
@@ -383,8 +381,8 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                     newFavoriteDirection: direction,
                                     directions: widget.user.directions);
                             this.context.read<UserBloc>().add(
-                                        UpdateUserDirectionEvent(
-                                            userDirection: updateUserDto));
+                                UpdateUserDirectionEvent(
+                                    userDirection: updateUserDto));
                           },
                           onUpdate: () {
                             showModalBottomSheet(
@@ -396,12 +394,13 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                   initialLocation: LatLng(
                                       direction.latitude.toDouble(),
                                       direction.longitude.toDouble()),
-                                      initialLocationName: direction.address,
+                                  initialLocationName: direction.address,
                                   onFinished: (location, name, isUpdate) async {
                                     Navigator.pop(context);
                                     // update the address
                                     final updateUserDto =
-                                        _buildUpdateUserDirectionDto(direction: direction,
+                                        _buildUpdateUserDirectionDto(
+                                            direction: direction,
                                             newName: name,
                                             newLocation: location,
                                             directions: widget.user.directions);
@@ -440,8 +439,8 @@ class CustomTextField extends StatelessWidget {
     required this.readOnly,
     this.errorText,
     this.onChanged,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
