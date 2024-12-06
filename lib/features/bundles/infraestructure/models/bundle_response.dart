@@ -54,7 +54,7 @@ class BundleResponse {
         categories: json['categories'] != null ? List<Category>.from(json["categories"].map((x) => CategoryResponse.categoryToDomain(CategoryResponse.fromJson(json)))): [],
         promotion: json['promotion'] != null ? List<Promotion>.from(json["promotion"].map((x) => Promotion.fromJson(x))) : [],
         products: json['products'] != null
-            ? List<BundleProduct>.from(json['products'].map((x) => BundleProduct.fromJson(json)))
+            ? List<BundleProduct>.from(json['products'].map((x) => BundleProduct.fromJson(x)))
             : [],
         );
   }

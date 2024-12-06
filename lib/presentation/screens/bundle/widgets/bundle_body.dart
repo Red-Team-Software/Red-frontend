@@ -3,33 +3,17 @@ import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
-import 'package:go_router/go_router.dart';
-import 'package:GoDeli/config/injector/injector.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class BundleScreen extends StatelessWidget {
-  static const String name = 'details_bundle_screen';
-
-  final String idBundle;
-  const BundleScreen({super.key, required this.idBundle});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<BundleDetailsBloc>()..getBundleById(idBundle),
-      child: const _BundleView(),
-    );
-  }
-}
-
-class _BundleView extends StatelessWidget {
-  const _BundleView();
+class BundleBody extends StatelessWidget {
+  final ThemeData theme;
+  const BundleBody({super.key, required this.theme});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return SafeArea(
       child: Scaffold(
         body: BlocBuilder<BundleDetailsBloc, BundleDetailsState>(
@@ -95,34 +79,12 @@ class _BundleView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    _buttonArrow(context),
+                    CustomButtonArrowImage(context: context),
                     _scrollableDetails(context, state.bundle, theme)
                   ],
                 );
             }
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buttonArrow(BuildContext context) {
-    return Positioned(
-      top: 16,
-      left: 16,
-      child: Center(
-        child: InkWell(
-          onTap: () => context.pop(),
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
-            ),
-          ),
         ),
       ),
     );
@@ -158,32 +120,126 @@ class _BundleView extends StatelessWidget {
                         bundle.name,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.italic,
                           fontSize: 40,
                         ),
                       ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '${bundle.price} ${bundle.currency} / piece',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
+                      if (bundle.promotions.isNotEmpty) ...[
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: Wrap(
+                            spacing: 8,
+                            children: bundle.promotions
+                                .map((promotion) => Chip(
+                                      label: Text(
+                                        '${promotion.discount * 100}% off',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          theme.colorScheme.primary,
+                                    ))
+                                .toList(),
+                          ),
+                        ),
+                      ] else ...[
+                        const SizedBox(height: 8),
+                        const Text(
+                          'No promotions available',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.black38,
+                          ),
+                        ),
+                      ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              if (bundle.promotions.isNotEmpty) ...[
+                                TextSpan(
+                                    text: _calculateDiscount(bundle)
+                                        .toStringAsFixed(2),
+                                    style: TextStyle(
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.bold,
+                                      color: theme.colorScheme.primary,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                        text:
+                                            ' ${bundle.currency == 'usd' ? '\$' : bundle.currency} / piece\n',
+                                        style: TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                            fontStyle: FontStyle.italic,
+                                            color:
+                                                Theme.of(context).brightness ==
+                                                        Brightness.light
+                                                    ? Colors.black87
+                                                    : Colors.white70),
+                                      ),
+                                    ]),
+                                TextSpan(
+                                  text:
+                                      '${bundle.price} ${bundle.currency == 'usd' ? '\$' : bundle.currency}',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black38,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: Colors.red,
+                                    decorationThickness: 2,
+                                  ),
+                                ),
+                              ] else ...[
+                                TextSpan(
+                                  text: bundle.price.toStringAsFixed(2),
+                                  style: TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.primary,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      ' ${bundle.currency == 'usd' ? '\$' : bundle.currency} / piece',
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'Categories',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
-                      const Wrap(
-                        spacing: 8,
-                        // children: product.categories
-                        // .map((category) => Chip(label: Text(category)))
-                        // .toList(),
-                      ),
-                      const SizedBox(height: 16),
+                      bundle.categories.isNotEmpty
+                          ? Flex(
+                              direction: Axis.vertical,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Categories',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                Wrap(
+                                  spacing: 8,
+                                  children: bundle.categories
+                                      .map((category) =>
+                                          Chip(label: Text(category.name)))
+                                      .toList(),
+                                ),
+                              ],
+                            )
+                          : const SizedBox(height: 8),
                       const Text(
                         'Description',
                         style: TextStyle(
@@ -195,6 +251,48 @@ class _BundleView extends StatelessWidget {
                         bundle.description,
                         style: const TextStyle(fontSize: 16),
                       ),
+                      const SizedBox(
+                        height: 12.00,
+                      ),
+                      bundle.products.isNotEmpty
+                          ? Flex(
+                              direction: Axis.vertical,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                  const Text(
+                                    'Products included',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 8.00,
+                                  ),
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount: bundle.products.length,
+                                    itemBuilder: (context, index) {
+                                      final item = bundle.products[index];
+                                      return ListTile(
+                                        title: Text(
+                                          item.name,
+                                          style: const TextStyle(
+                                              fontStyle: FontStyle.italic,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        ),
+                                        trailing: IconButton(
+                                          icon: const Icon(
+                                              Icons.arrow_forward_ios),
+                                          onPressed: () => GoRouter.of(context)
+                                              .push('/product/${item.id}'),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ])
+                          : Container()
                     ],
                   ),
                 ),
@@ -251,6 +349,17 @@ class _BundleView extends StatelessWidget {
         );
       },
     );
+  }
+
+  double _calculateDiscount(Bundle bundle) {
+    if (bundle.promotions.isNotEmpty) {
+      late double acum = bundle.price;
+      for (final percent in bundle.promotions) {
+        acum -= acum * percent.discount;
+      }
+      return acum;
+    }
+    return 0;
   }
 
   Future<dynamic> _showModal(
@@ -352,5 +461,15 @@ class _BundleView extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+
+class PromotionsPriceDraggable extends StatelessWidget {
+  const PromotionsPriceDraggable({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
   }
 }

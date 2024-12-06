@@ -3,6 +3,7 @@ import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
+import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,34 +90,12 @@ class _ProductView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    _buttonArrow(context),
+                    CustomButtonArrowImage(context: context),
                     _scrollableDetails(context, state.product, theme)
                   ],
                 );
             }
           },
-        ),
-      ),
-    );
-  }
-
-  Widget _buttonArrow(BuildContext context) {
-    return Positioned(
-      top: 16,
-      left: 16,
-      child: InkWell(
-        onTap: () => context.pop(),
-        child: Center(
-          child: Container(
-            padding:
-                const EdgeInsets.only(left: 16, right: 8, top: 6, bottom: 6),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.1),
-              shape: BoxShape.circle,
-            ),
-            child:
-                const Icon(Icons.arrow_back_ios, size: 20, color: Colors.white),
-          ),
         ),
       ),
     );
