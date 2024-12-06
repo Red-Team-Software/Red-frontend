@@ -32,3 +32,12 @@ class FetchAllOrders extends OrdersEvent {
 
   const FetchAllOrders({this.page = 1, this.perPage = 10});
 }
+
+class OrderCancelled extends OrdersEvent {
+  final String orderId;
+
+  const OrderCancelled({required this.orderId});
+
+  @override
+  List<Object> get props => [orderId];
+}

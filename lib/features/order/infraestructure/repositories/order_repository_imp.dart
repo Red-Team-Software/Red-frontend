@@ -51,4 +51,13 @@ class OrderRepositoryImpl implements IOrderRepository {
       return Result.makeError(Exception(e));
     }
   }
+
+  @override
+  Future<void> cancelOrder({required String orderId}) async {
+    try {
+      await datasource.cancelOrder(orderId: orderId);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
 }

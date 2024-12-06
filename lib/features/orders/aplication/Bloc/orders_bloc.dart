@@ -12,6 +12,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   OrdersBloc({required this.orderRepository}) : super(OrdersInitial()) {
     on<OrdersLoaded>(_onOrdersLoaded);
     on<OrdersTabChanged>(_onOrdersTabChanged);
+    on<OrderCancelled>(_onOrderCancelled);
     // Remove the FetchAllOrders event handler
   }
 
@@ -46,6 +47,16 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
         page: currentState.page,
         perPage: currentState.perPage,
       ));
+    }
+  }
+
+  void _onOrderCancelled(
+      OrderCancelled event, Emitter<OrdersState> emit) async {
+    try {
+      await orderRepository.cancelOrder(orderId: event.orderId);
+      emit(OrderCancelSuccess());
+    } catch (e) {
+      emit(OrderCancelFailure(error: e.toString()));
     }
   }
 }

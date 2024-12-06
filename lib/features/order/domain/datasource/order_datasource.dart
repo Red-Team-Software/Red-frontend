@@ -15,4 +15,6 @@ abstract class IOrderDatasource {
   });
 
   Future<List<OrderItem>> fetchAllOrders({int page = 1, int perPage = 10});
+
+  Future<void> cancelOrder({required String orderId});
 }
