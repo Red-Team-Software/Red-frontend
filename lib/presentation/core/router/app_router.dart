@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
+import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:GoDeli/presentation/core/router/index.dart';
 import 'package:GoDeli/presentation/screens/Catalogo/view/catalog_screen.dart';
 import 'package:GoDeli/presentation/screens/Checkout/checkout_screen.dart';
@@ -8,6 +9,7 @@ import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
 import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/screens/Search/search.dart';
 import 'package:GoDeli/presentation/screens/Bundle/bundle.dart';
+import 'package:GoDeli/presentation/screens/Track/track_order_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../screens/screen.dart';
@@ -19,7 +21,10 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/',
       name: IndexPage.name,
-      builder: (context, state) => const IndexPage(),
+      builder: (context, state) {
+        final pageIndex = state.extra as int? ?? 0;
+        return IndexPage(pageIndex: pageIndex);
+      },
     ),
     GoRoute(
       path: '/search',
@@ -84,6 +89,14 @@ final appRouter = GoRouter(
             idOrder: state.pathParameters['idOrder'] ?? '',
           ),
         );
+      },
+    ),
+    GoRoute(
+      path: '/track_order/:orderId',
+      name: TrackOrderScreen.name,
+      builder: (context, state) {
+        final orderItem = state.extra as OrderItem;
+        return TrackOrderScreen(orderItem: orderItem);
       },
     ),
   ],

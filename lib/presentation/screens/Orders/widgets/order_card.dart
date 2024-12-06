@@ -5,6 +5,7 @@ import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderCard extends StatelessWidget {
   final OrderItem orderItem;
@@ -168,7 +169,7 @@ class OrderCard extends StatelessWidget {
   }
 
   void _trackOrder(BuildContext context) {
-    // Implement track order logic here
+    context.go('/track_order/${orderItem.orderId}', extra: orderItem);
   }
 
   void _reOrderItem(BuildContext context) {
