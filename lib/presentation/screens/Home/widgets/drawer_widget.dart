@@ -62,7 +62,7 @@ class DrawerWidget extends StatelessWidget {
                 ],
               ),
             ),
-            buildDrawerItems()
+            buildDrawerItems(context),
           ],
         ),
       ),
@@ -80,7 +80,7 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget buildDrawerItems() => Column(
+  Widget buildDrawerItems(BuildContext context) => Column(
         children: DrawerItems.all
             .map((item) => ListTile(
                   enableFeedback: true,
@@ -96,7 +96,7 @@ class DrawerWidget extends StatelessWidget {
                       fontSize: 14,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () => item.route != null? context.push(item.route!): null,
                 ))
             .toList(),
       );

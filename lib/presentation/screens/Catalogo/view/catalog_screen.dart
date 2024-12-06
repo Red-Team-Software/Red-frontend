@@ -1,7 +1,9 @@
 import 'package:GoDeli/config/injector/injector.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/catalog_body.dart';
 
@@ -20,6 +22,9 @@ class CatalogScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final itemsCountCart = context.select((CartBloc bloc) => bloc.state.totalItems);
+    
     return Scaffold(
         appBar: AppBar(
           title: const Text('Top Deals'),
@@ -37,6 +42,22 @@ class CatalogScreenView extends StatelessWidget {
         ),
         
         body: const CatalogBody(),
+
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: ()=> context.push('/cart'),
+          isExtended: true,
+          label: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.00),
+            child: Row(
+              children: [
+                const Icon(Icons.shopping_cart),
+                const SizedBox(width: 8.0),
+                Text('$itemsCountCart items in cart'),
+              ],
+            ),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         );
   }
 }
