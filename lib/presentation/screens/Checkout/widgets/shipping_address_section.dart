@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'address_card.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tuple/tuple.dart';
 import 'package:geolocator/geolocator.dart';
 
 class ShippingAddressSection extends StatefulWidget {
@@ -90,6 +91,8 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
       BuildContext context, CheckoutBloc bloc) async {
     String title = '';
     String location = 'Select on map';
+    num lat = 0;
+    num lng = 0;
     bool isLoading = false;
 
     await showModalBottomSheet(
@@ -135,7 +138,9 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                                     await _selectLocationOnMap(context);
                                 if (selectedLocation != null) {
                                   setState(() {
-                                    location = selectedLocation;
+                                    location = selectedLocation.item1!;
+                                    lat = selectedLocation.item2!;
+                                    lng = selectedLocation.item3!;
                                   });
                                 }
                                 setState(() {
@@ -176,13 +181,14 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                         ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed:
-                            title.isNotEmpty && location != 'Select on map'
-                                ? () {
-                                    bloc.add(AddNewAddress(title, location));
-                                    Navigator.pop(context);
-                                  }
-                                : null,
+                        onPressed: title.isNotEmpty &&
+                                location != 'Select on map'
+                            ? () {
+                                bloc.add(
+                                    AddNewAddress(title, location, lat, lng));
+                                Navigator.pop(context);
+                              }
+                            : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
@@ -262,7 +268,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                                     await _selectLocationOnMap(context);
                                 if (selectedLocation != null) {
                                   setState(() {
-                                    location = selectedLocation;
+                                    location = selectedLocation.item1!;
                                   });
                                 }
                                 setState(() {
@@ -338,7 +344,8 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
     );
   }
 
-  Future<String?> _selectLocationOnMap(BuildContext context) async {
+  Future<Tuple3<String?, num?, num?>?> _selectLocationOnMap(
+      BuildContext context) async {
     LatLng? selectedLocation;
 
     // Check location permissions
@@ -438,7 +445,8 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
 
     if (selectedLocation != null) {
       final locationName = await _getLocationName(selectedLocation!);
-      return locationName;
+      return Tuple3(locationName, selectedLocation?.latitude,
+          selectedLocation?.longitude);
     }
 
     return null;

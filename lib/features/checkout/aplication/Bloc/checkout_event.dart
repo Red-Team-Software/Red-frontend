@@ -22,7 +22,9 @@ class SelectAddress extends CheckoutEvent {
 class AddNewAddress extends CheckoutEvent {
   final String title;
   final String location;
-  const AddNewAddress(this.title, this.location);
+  final num lat;
+  final num lng;
+  const AddNewAddress(this.title, this.location, this.lat, this.lng);
 
   @override
   List<Object?> get props => [title, location];

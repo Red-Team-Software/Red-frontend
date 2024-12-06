@@ -46,9 +46,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
     final resDirections = await getUserDirectionsUseCase.execute(null);
 
-    print("resDirections");
-    print(resDirections);
-
     if (resDirections.isSuccessful()) {
       final directions = resDirections.getValue();
 
@@ -57,11 +54,14 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           ? <Address>[] // Lista vacía de direcciones
           : directions.map<Address>((direction) {
               // Si necesitas mapear las direcciones a Address, lo harías aquí
-              return Address(direction.addressName, direction.address);
+              return Address(direction.addressName, direction.address,
+                  direction.latitude, direction.longitude);
             }).toList();
 
       // Actualiza el estado con las direcciones obtenidas
       emit(state.copyWith(
+        products: cartState.products,
+        bundles: cartState.bundles,
         addresses: addresses,
         selectedAddress: addresses.isNotEmpty ? addresses.first : null,
       ));
@@ -78,7 +78,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   }
 
   void _onAddNewAddress(AddNewAddress event, Emitter<CheckoutState> emit) {
-    final newAddress = Address(event.title, event.location);
+    final newAddress =
+        Address(event.title, event.location, event.lat, event.lng);
     final updatedAddresses = List<Address>.from(state.addresses)
       ..add(newAddress);
     emit(state.copyWith(

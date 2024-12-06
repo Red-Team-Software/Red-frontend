@@ -1,13 +1,17 @@
 class Address {
   final String title;
   final String location;
+  final num lat;
+  final num lng;
 
-  Address(this.title, this.location);
+  Address(this.title, this.location, this.lat, this.lng);
 
   Address copyWith({String? title, String? location}) {
     return Address(
       title ?? this.title,
       location ?? this.location,
+      lat,
+      lng,
     );
   }
 }
