@@ -72,7 +72,23 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         selectedAddress: addresses.isNotEmpty ? addresses.first : null,
         isProcessing: false,
       ));
-      print("Checkout data loaded successfully.");
+
+      final res = await taxRepository.calculateTaxShipping(
+          amount: cartState.total,
+          currency: "USD",
+          address: state.selectedAddress!.location);
+
+      if (res.isSuccessful()) {
+        final taxShipping = res.getValue();
+        emit(state.copyWith(
+          tax: taxShipping.taxes,
+          shipping: taxShipping.shipping,
+        ));
+      } else {
+        emit(state.copyWith(
+          errorMessage: 'Failed to calculate tax and shipping.',
+        ));
+      }
     } else {
       // Maneja el error si la respuesta no es exitosa
       emit(state.copyWith(
@@ -83,8 +99,29 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     }
   }
 
-  void _onSelectAddress(SelectAddress event, Emitter<CheckoutState> emit) {
-    emit(state.copyWith(selectedAddress: event.address));
+  Future<void> _onSelectAddress(
+      SelectAddress event, Emitter<CheckoutState> emit) async {
+    emit(state.copyWith(isProcessing: true));
+    final cartState = cartBloc.state;
+
+    final res = await taxRepository.calculateTaxShipping(
+        amount: cartState.total,
+        currency: "USD",
+        address: event.address.location);
+
+    if (res.isSuccessful()) {
+      final taxShipping = res.getValue();
+      emit(state.copyWith(
+        selectedAddress: event.address,
+        tax: taxShipping.taxes,
+        shipping: taxShipping.shipping,
+      ));
+    } else {
+      emit(state.copyWith(
+        errorMessage: 'Failed to calculate tax and shipping.',
+      ));
+    }
+    emit(state.copyWith(isProcessing: false));
   }
 
   Future _onAddNewAddress(
