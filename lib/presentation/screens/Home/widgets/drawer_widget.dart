@@ -1,5 +1,10 @@
+import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/presentation/core/drawer/drawer_items.dart';
+import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class DrawerWidget extends StatelessWidget {
   final VoidCallback closeDrawer;
@@ -8,6 +13,10 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final authBloc = context.watch<AuthBloc>();
+    final cartBloc = context.watch<CartBloc>();
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -53,12 +62,16 @@ class DrawerWidget extends StatelessWidget {
                 ],
               ),
             ),
-            buildDrawerItems()
+            buildDrawerItems(context),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          authBloc.add(LogoutEvent());
+          cartBloc.add(ClearCart());
+          context.push('/auth');
+        },
         backgroundColor: Colors.transparent,
         label: const Text('Logout'),
         icon: const Icon(Icons.logout),
@@ -67,7 +80,7 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget buildDrawerItems() => Column(
+  Widget buildDrawerItems(BuildContext context) => Column(
         children: DrawerItems.all
             .map((item) => ListTile(
                   enableFeedback: true,
@@ -83,7 +96,7 @@ class DrawerWidget extends StatelessWidget {
                       fontSize: 14,
                     ),
                   ),
-                  onTap: () {},
+                  onTap: () => item.route != null? context.push(item.route!): null,
                 ))
             .toList(),
       );

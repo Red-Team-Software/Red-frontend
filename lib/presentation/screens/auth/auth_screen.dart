@@ -1,0 +1,192 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
+import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
+import 'package:GoDeli/presentation/screens/auth/widgets/direction_component.dart';
+import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.dart';
+import 'package:GoDeli/presentation/screens/auth/widgets/login_component.dart';
+import 'package:GoDeli/presentation/screens/auth/widgets/profile_component.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:go_router/go_router.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:latlong2/latlong.dart';
+
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+  static const String name = 'auth_page';
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  int _currentIndex = 0; // Inicialmente mostrar el LoginComponent
+
+  // Email and password
+  String email = '';
+  String password = '';
+
+  // Profile
+  File? selectedImage;
+  String fullname = '';
+  String phoneCode = '';
+  String phone = '';
+
+  // Direction
+  LatLng? selectedLocation;
+  String addressName = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is Authenticated) {
+            context.pushReplacement('/');
+          } else if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is UnAuthenticated || state is AuthError) {
+            return _buildAuthScreen(context);
+          }
+            return const Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+
+  Widget _buildAuthScreen(BuildContext context) {
+
+     final ImageCropper recort = ImageCropper();
+
+    Future<Uint8List?> compressFile(String file) async {
+      return await FlutterImageCompress.compressWithFile(
+        file,
+        minWidth: 300,
+        minHeight: 300,
+        quality: 80,
+      );
+    }
+    
+    Future<String> converToBase64(Uint8List bytes) async {
+      return base64Encode(bytes);
+    }
+
+    Future<String?> recortImage(String pathImage) async {
+      final CroppedFile? croppedFile = await recort.cropImage(
+        aspectRatio: CropAspectRatio(ratioX: 3, ratioY: 2),
+        sourcePath: pathImage,
+        compressQuality: 100,
+        uiSettings: [
+          IOSUiSettings(),
+          AndroidUiSettings(
+            cropGridColor: Colors.transparent,
+            cropFrameColor: Colors.transparent,
+            hideBottomControls: true,
+            cropStyle: CropStyle.circle,
+          ),
+        ]);
+
+      if (croppedFile == null) return null;
+      final bytes = await compressFile(croppedFile.path);
+      if (bytes == null) return null;
+      return converToBase64(bytes);
+    }
+
+
+    
+    
+    void onChangeIndex(int newIndex) {
+      setState(() {
+        _currentIndex = newIndex;
+      });
+    }
+
+    Future<void> handleLogin() async {
+      context.read<AuthBloc>().add(LoginEvent(email, password));
+    }
+
+    Future<void> handleRegister() async {
+      final realPhone = '$phoneCode$phone';
+      final image = selectedImage != null ? await recortImage(selectedImage!.path) : null;
+      final addressDto = AddUserDirectionListDto(
+                            directions: [
+                              AddUserDirectionDto(
+                                name: addressName,
+                                favorite: true,
+                                lat: selectedLocation!.latitude,
+                                lng: selectedLocation!.longitude,
+                              ),
+                            ],
+                          );
+      context.read<AuthBloc>().add(
+            RegisterEvent(
+              email: email,
+              password: password,
+              fullName: fullname,
+              phoneNumber: realPhone,
+              address: addressDto,
+              image: image
+            ),
+          );
+    }
+
+    final screens = [
+      LoginComponent(
+        onChangeIndex: onChangeIndex,
+        onHandleLogin: handleLogin,
+        onChangeEmail: (value) {
+          email = value;
+        },
+        onChangePassword: (password) => this.password = password,
+      ),
+      EmailPassComponent(
+        onChangeIndex: onChangeIndex,
+        onChangeEmail: (email) => this.email = email,
+        onChangePassword: (password) => this.password = password,
+      ),
+      ProfileComponent(
+        onChangeIndex: onChangeIndex,
+        onChangeImage: (image) => selectedImage = image,
+        onChangeFullname: (fullname) => this.fullname = fullname,
+        onChangePhoneCode: (phoneCode) => this.phoneCode = phoneCode,
+        onChangePhone: (phone) => this.phone = phone,
+      ),
+      DirectionComponent(
+        onChangeIndex: onChangeIndex,
+        onFinished: handleRegister,
+        onChangeLocation: (location) => selectedLocation = location,
+        onChangeAddressName: (addressName) => this.addressName = addressName,
+      ),
+    ];
+
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Center(child: screens[_currentIndex]),
+      ).animate().fadeIn(duration: 500.ms),
+    );
+  }
+}
+
+//? Animaciones
+// Center(
+// child: AnimatedSwitcher(
+//             duration: const Duration(milliseconds: 500),
+//             transitionBuilder: (child, animation) {
+//               return _isMovingRight
+//                   ? SlideInRight(child: child) // Animación al deslizarse hacia la derecha
+//                   : SlideInLeft(child: child); // Animación al deslizarse hacia la izquierda
+//             },
+//             child:
+//                 screens[_currentIndex], // Renderiza el widget actual/ Mostrar el componente según el índice
+//         ),
+//       ),

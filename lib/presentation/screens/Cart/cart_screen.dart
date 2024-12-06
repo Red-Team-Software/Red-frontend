@@ -1,4 +1,4 @@
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/presentation/screens/Cart/widgets/custom_cart_bundle.dart';
 import 'package:GoDeli/presentation/screens/Cart/widgets/custom_cart_product.dart';
 import 'package:flutter/material.dart';

@@ -11,7 +11,7 @@ import 'widgets/shipping_address_section.dart';
 import 'widgets/delivery_time_section.dart';
 import 'widgets/payment_method_section.dart';
 import 'widgets/order_summary_section.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 
 class CheckoutScreen extends StatelessWidget {
   static const String name = 'checkout_screen';
