@@ -102,24 +102,24 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     ));
 
     if (res.isSuccessful()) {
-      // final resDirections = await getUserDirectionsUseCase.execute(null);
+      final resDirections = await getUserDirectionsUseCase.execute(null);
 
-      // if (resDirections.isSuccessful()) {
-      //   final directions = resDirections.getValue();
-      //   final addresses = directions.map<Address>((direction) {
-      //     return Address(direction.id, direction.addressName, direction.address,
-      //         direction.latitude, direction.longitude);
-      //   }).toList();
+      if (resDirections.isSuccessful()) {
+        final directions = resDirections.getValue();
+        final addresses = directions.map<Address>((direction) {
+          return Address(direction.id, direction.addressName, direction.address,
+              direction.latitude, direction.longitude);
+        }).toList();
 
-      //   emit(state.copyWith(
-      //     addresses: addresses,
-      //     selectedAddress: addresses.isNotEmpty ? addresses.first : null,
-      //   ));
-      // } else {
-      //   emit(state.copyWith(
-      //     errorMessage: 'Failed to fetch addresses.',
-      //   ));
-      // }
+        emit(state.copyWith(
+          addresses: addresses,
+          selectedAddress: addresses.isNotEmpty ? addresses.first : null,
+        ));
+      } else {
+        emit(state.copyWith(
+          errorMessage: 'Failed to fetch addresses.',
+        ));
+      }
     }
 
     emit(state.copyWith(isProcessing: false));
