@@ -13,7 +13,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:latlong2/latlong.dart';
 
 class AuthScreen extends StatefulWidget {

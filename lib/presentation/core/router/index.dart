@@ -7,14 +7,16 @@ import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_
 import 'package:flutter/material.dart';
 
 class IndexPage extends StatefulWidget {
-  const IndexPage({super.key});
+  final int? pageIndex;
+
+  const IndexPage({super.key, this.pageIndex});
   static const String name = 'index_screen';
   @override
   State<IndexPage> createState() => _IndexPageState();
 }
 
 class _IndexPageState extends State<IndexPage> {
-  int _pageIndex = 0;
+  late int _pageIndex = widget.pageIndex ?? 0;
 
   final pages = [
     const HomeScreen(),

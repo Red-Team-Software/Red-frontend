@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'widgets/order_header.dart';
 import 'widgets/order_item_list.dart';
 import 'widgets/order_summary_details.dart';
@@ -18,7 +19,7 @@ class OrderSummaryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.push("/", extra: 3),
           icon: const Icon(Icons.arrow_back_ios),
         ),
         title: const Text(
