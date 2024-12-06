@@ -23,7 +23,7 @@ class ProductCart {
     return ProductCart(
       product: Product(
         id: json['id'] as String,
-        name: json['nombre'] as String,
+        name: (json['nombre'] ?? json['name']) as String,
         description: json['descripcion'] as String,
         price: (json['price'] as num).toDouble(),
         imageUrl: List<String>.from(json['images'] ?? []),

@@ -30,12 +30,16 @@ import 'package:GoDeli/features/common/infrastructure/dio_http_service_impl.dart
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/order/infraestructure/datasource/order_datasource_imp.dart';
 import 'package:GoDeli/features/order/infraestructure/repositories/order_repository_imp.dart';
+import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:GoDeli/features/products/infraestructure/datasources/products_datasource_impl.dart';
 import 'package:GoDeli/features/products/infraestructure/repositories/products_repository_impl.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
+import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
+import 'package:GoDeli/features/tax-shipping/infraestructure/datasource/tax_shipping_datasource_imp.dart';
+import 'package:GoDeli/features/tax-shipping/infraestructure/repositories/tax-shipping_repository_imp.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
@@ -52,7 +56,7 @@ import 'package:get_it/get_it.dart';
 final getIt = GetIt.instance;
 
 class Injector {
-Future<void> setUp() async {
+  Future<void> setUp() async {
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
     getIt.registerSingleton<IHttpService>(httpService);
@@ -76,8 +80,10 @@ Future<void> setUp() async {
         GetUserDirectionsUseCase(userRepository);
     final AddUserDirectionUseCase addUserDirectionUseCase =
         AddUserDirectionUseCase(userRepository);
-    final DeleteUserDirectionUseCase deleteUserDirectionUseCase = DeleteUserDirectionUseCase(userRepository);
-    final UpdateUserDirectionUseCase updateUserDirectionUseCase = UpdateUserDirectionUseCase(userRepository);
+    final DeleteUserDirectionUseCase deleteUserDirectionUseCase =
+        DeleteUserDirectionUseCase(userRepository);
+    final UpdateUserDirectionUseCase updateUserDirectionUseCase =
+        UpdateUserDirectionUseCase(userRepository);
 
     //? inicializando las dependencias de modulo autenticacion
     final IAuthDataSource authDataSource = AuthDatasource(httpService);
@@ -142,13 +148,32 @@ Future<void> setUp() async {
         () => BundleDetailsBloc(bundleRepository: bundleRepository));
 
     //? inicializando las dependencias de modulo search
-    getIt.registerFactory<SearchBloc>(()=>SearchBloc(productsRepository, bundleRepository));
+    getIt.registerFactory<SearchBloc>(
+        () => SearchBloc(productsRepository, bundleRepository));
 
     //? Iiniciando las dependencias de modulo de orden
 
-    final orderDatasource = OrderDatasourceImpl();
+    final orderDatasource = OrderDatasourceImpl(httpService: httpService);
     final orderRepository = OrderRepositoryImpl(datasource: orderDatasource);
 
+    getIt.registerSingleton<GetUserDirectionsUseCase>(getUserDirectionsUseCase);
+    getIt.registerSingleton<AddUserDirectionUseCase>(addUserDirectionUseCase);
+    getIt.registerSingleton<DeleteUserDirectionUseCase>(
+        deleteUserDirectionUseCase);
+    getIt.registerSingleton<UpdateUserDirectionUseCase>(
+        updateUserDirectionUseCase);
+
     getIt.registerFactory<IOrderRepository>(() => orderRepository);
+
+    //? inicializando las dependencias de modulo tax y shipping
+    final taxShippingDatasource =
+        TaxShippingDatasourceImpl(httpService: httpService);
+    final taxShippingRepository =
+        TaxShippingRepositoryImpl(datasource: taxShippingDatasource);
+    getIt.registerFactory<ITaxShippinRepository>(() => taxShippingRepository);
+
+    //? inicializando las dependencias de modulo ordenes
+    getIt.registerFactory<OrdersBloc>(
+        () => OrdersBloc(orderRepository: orderRepository));
   }
 }

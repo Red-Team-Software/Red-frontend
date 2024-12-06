@@ -1,4 +1,3 @@
-
 class AddUserDirectionDto {
   final String name;
   final bool favorite;
@@ -22,7 +21,6 @@ class AddUserDirectionDto {
 }
 
 class AddUserDirectionListDto {
-
   final List<AddUserDirectionDto> directions;
 
   AddUserDirectionListDto({
@@ -34,5 +32,4 @@ class AddUserDirectionListDto {
       'directions': directions.map((e) => e.toJson()).toList(),
     };
   }
-
 }

@@ -23,7 +23,7 @@ class BundleCart {
     return BundleCart(
       bundle: Bundle(
         id: json['id'] as String,
-        name: json['nombre'] as String,
+        name: (json['nombre'] ?? json['name']) as String,
         description: json['descripcion'] as String,
         price: (json['price'] as num).toDouble(),
         currency: json['currency'] as String,

@@ -3,6 +3,11 @@ import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
+import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
+import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
+import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
+import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -30,7 +35,12 @@ class CheckoutScreen extends StatelessWidget {
             extra: order, // Pasar la orden completa
           );
         },
-      )..add(LoadCheckoutData()),
+        getUserDirectionsUseCase: getIt<GetUserDirectionsUseCase>(),
+        addUserDirectionUseCase: getIt<AddUserDirectionUseCase>(),
+        deleteUserDirectionUseCase: getIt<DeleteUserDirectionUseCase>(),
+        updateUserDirectionUseCase: getIt<UpdateUserDirectionUseCase>(),
+        taxRepository: getIt<ITaxShippinRepository>(),
+      )..add(LoadCheckoutData()), // Ensure LoadCheckoutData is dispatched once
       child: Scaffold(
         appBar: AppBar(
           title: const Text(

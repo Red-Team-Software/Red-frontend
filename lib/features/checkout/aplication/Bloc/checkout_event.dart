@@ -22,7 +22,9 @@ class SelectAddress extends CheckoutEvent {
 class AddNewAddress extends CheckoutEvent {
   final String title;
   final String location;
-  const AddNewAddress(this.title, this.location);
+  final num lat;
+  final num lng;
+  const AddNewAddress(this.title, this.location, this.lat, this.lng);
 
   @override
   List<Object?> get props => [title, location];
@@ -39,7 +41,7 @@ class SelectPaymentMethod extends CheckoutEvent {
 class ProceedToCheckout extends CheckoutEvent {}
 
 class ProcessPayment extends CheckoutEvent {
-  final double amount;
+  final String paymentId;
   final String currency;
   final String paymentMethod;
   final String stripePaymentMethod;
@@ -49,7 +51,7 @@ class ProcessPayment extends CheckoutEvent {
   final BuildContext context;
 
   const ProcessPayment({
-    required this.amount,
+    required this.paymentId,
     required this.currency,
     required this.paymentMethod,
     required this.stripePaymentMethod,
@@ -61,7 +63,7 @@ class ProcessPayment extends CheckoutEvent {
 
   @override
   List<Object?> get props => [
-        amount,
+        paymentId,
         currency,
         paymentMethod,
         stripePaymentMethod,
@@ -69,4 +71,18 @@ class ProcessPayment extends CheckoutEvent {
         bundles,
         products
       ];
+}
+
+class FetchAddressesEvent extends CheckoutEvent {}
+
+class RemoveAddressEvent extends CheckoutEvent {
+  final Address address;
+
+  const RemoveAddressEvent(this.address);
+}
+
+class UpdateAddressEvent extends CheckoutEvent {
+  final Address address;
+
+  const UpdateAddressEvent(this.address);
 }

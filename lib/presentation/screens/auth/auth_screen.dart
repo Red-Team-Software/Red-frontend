@@ -64,7 +64,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _buildAuthScreen(BuildContext context) {
-
     Future<Uint8List?> compressFile(String file) async {
       return await FlutterImageCompress.compressWithFile(
         file,
@@ -77,7 +76,6 @@ class _AuthScreenState extends State<AuthScreen> {
     Future<String> converToBase64(Uint8List bytes) async {
       return base64Encode(bytes);
     }
-
 
     void onChangeIndex(int newIndex) {
       setState(() {
@@ -92,11 +90,12 @@ class _AuthScreenState extends State<AuthScreen> {
     Future<void> handleRegister() async {
       final realPhone = '$phoneCode$phone';
       String? image;
-      if (selectedImage != null){
+      if (selectedImage != null) {
         final compressedImage = await compressFile(selectedImage!.path);
-        image = compressedImage != null ? await converToBase64(compressedImage) : null;
-      }
-      else{
+        image = compressedImage != null
+            ? await converToBase64(compressedImage)
+            : null;
+      } else {
         image = null;
       }
       final addressDto = AddUserDirectionListDto(
@@ -116,7 +115,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 fullName: fullname,
                 phoneNumber: realPhone,
                 address: addressDto,
-                image:image),
+                image: image),
           );
     }
 

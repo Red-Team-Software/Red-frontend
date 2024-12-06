@@ -1,4 +1,5 @@
 import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
+import 'package:GoDeli/presentation/screens/Orders/oder_list.dart';
 import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/screens/Search/search.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
@@ -19,7 +20,7 @@ class _IndexPageState extends State<IndexPage> {
     const HomeScreen(),
     const SearchScreen(),
     const ProfileScreen(),
-    const ProfileScreen(),
+    const OrderListScreen(), // Remove const
   ];
 
   late final List<CustomBottomNavigationItem> _items = [
@@ -42,10 +43,10 @@ class _IndexPageState extends State<IndexPage> {
       name: "Perfil",
     ),
     CustomBottomNavigationItem(
-      icon: const Icon(Icons.menu_rounded),
-      activeIcon: const Icon(Icons.menu_outlined),
+      icon: const Icon(Icons.list_alt_rounded), // Change icon
+      activeIcon: const Icon(Icons.list_alt_outlined), // Change icon
       isActive: _pageIndex == 3,
-      name: "Menu",
+      name: "Orders", // Change text
     ),
   ];
 
