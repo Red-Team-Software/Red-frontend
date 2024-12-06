@@ -159,7 +159,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   20.0, // Ajuste para el teclado
             ),
             child: screens[_currentIndex]),
-      ).animate().fadeIn(duration: 500.ms),
+      ).animate().moveY(begin: 100, end: 0).fadeIn(duration: 500.ms),
     ));
   }
 }
