@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class LoginComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
