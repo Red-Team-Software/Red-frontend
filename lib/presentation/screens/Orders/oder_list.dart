@@ -21,7 +21,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<OrdersBloc>().add(OrdersLoaded());
+    context.read<OrdersBloc>().add(const OrdersLoaded());
   }
 
   @override
@@ -125,13 +125,20 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
             // ListView of filtered orders
             Expanded(
-              child: ListView.builder(
-                itemCount: filteredOrders.length,
-                itemBuilder: (context, index) {
-                  final order = filteredOrders[index];
-                  return OrderCard(orderItem: order);
-                },
-              ),
+              child: filteredOrders.isEmpty
+                  ? const Center(
+                      child: Text(
+                        'Aún no dispone de alguna orden',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    )
+                  : ListView.builder(
+                      itemCount: filteredOrders.length,
+                      itemBuilder: (context, index) {
+                        final order = filteredOrders[index];
+                        return OrderCard(orderItem: order);
+                      },
+                    ),
             ),
           ],
         ),

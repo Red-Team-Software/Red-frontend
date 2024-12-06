@@ -20,7 +20,7 @@ class _IndexPageState extends State<IndexPage> {
     const HomeScreen(),
     const SearchScreen(),
     const ProfileScreen(),
-    OrderListScreen(), // Remove const
+    const OrderListScreen(), // Remove const
   ];
 
   late final List<CustomBottomNavigationItem> _items = [
