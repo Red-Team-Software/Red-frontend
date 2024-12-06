@@ -152,6 +152,24 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           addresses: addresses,
           selectedAddress: addresses.isNotEmpty ? addresses.first : null,
         ));
+
+        final cartState = cartBloc.state;
+        final res = await taxRepository.calculateTaxShipping(
+            amount: cartState.total,
+            currency: "USD",
+            address: state.selectedAddress!.location);
+
+        if (res.isSuccessful()) {
+          final taxShipping = res.getValue();
+          emit(state.copyWith(
+            tax: taxShipping.taxes,
+            shipping: taxShipping.shipping,
+          ));
+        } else {
+          emit(state.copyWith(
+            errorMessage: 'Failed to calculate tax and shipping.',
+          ));
+        }
       } else {
         emit(state.copyWith(
           errorMessage: 'Failed to fetch addresses.',
@@ -205,7 +223,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
 
   void _onRemoveAddress(
       RemoveAddressEvent event, Emitter<CheckoutState> emit) async {
-    // Remove address from the database
     emit(state.copyWith(isProcessing: true));
     final res = await deleteUserDirectionUseCase
         .execute(DeleteUpdateUserDirectionListDto(directions: [
@@ -231,6 +248,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
         emit(state.copyWith(
           addresses: addresses,
           selectedAddress: addresses.isNotEmpty ? addresses.first : null,
+          tax: addresses.isEmpty ? 0 : state.tax,
+          shipping: addresses.isEmpty ? 0 : state.shipping,
         ));
       } else {
         emit(state.copyWith(
