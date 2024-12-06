@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/presentation/core/router/index.dart';
+import 'package:GoDeli/presentation/screens/Catalogo/view/catalog_screen.dart';
 import 'package:GoDeli/presentation/screens/Checkout/checkout_screen.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
@@ -44,6 +45,11 @@ final appRouter = GoRouter(
       path: '/categories',
       name: CategoriesScreen.name,
       builder: (context, state) => const CategoriesScreen(),
+    ),
+    GoRoute(
+      path: '/catalog',
+      name: CatalogScreen.name,
+      builder: (context, state) => const CatalogScreen(),
     ),
     GoRoute(
       path: '/product/:idProduct',
