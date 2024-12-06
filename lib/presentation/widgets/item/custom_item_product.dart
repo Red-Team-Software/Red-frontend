@@ -81,22 +81,28 @@ class CustomItemProduct extends StatelessWidget {
                   Text('\$${current.price}',
                       style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 4.00),
-                  if(!cartBloc.isProductInCart(ProductCart(product: current, quantity: 1)))
-                  IconButton.filled(
-                    onPressed: () {
-                      ProductCart productCart = ProductCart(
-                        product: current,
-                        quantity: 1,
-                      );
-    
-                      cartBloc.add(AddProduct(productCart));
-                      ScaffoldMessenger.of(context).showSnackBar(
+                  if (!cartBloc.isProductInCart(
+                      ProductCart(product: current, quantity: 1)))
+                    IconButton.filled(
+                      onPressed: () {
+                        ProductCart productCart = ProductCart(
+                          product: current,
+                          quantity: 1,
+                        );
+
+                        cartBloc.add(AddProduct(productCart));
+                        ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Row(
                               children: [
-                                const Icon(Icons.check_box, color: Colors.green,),
+                                const Icon(
+                                  Icons.check_box,
+                                  color: Colors.green,
+                                ),
                                 const SizedBox(width: 8),
-                                Text('${current.name} added to cart!',),
+                                Text(
+                                  '${current.name} added to cart!',
+                                ),
                               ],
                             ),
                             duration: const Duration(seconds: 2),
@@ -104,31 +110,36 @@ class CustomItemProduct extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             behavior: SnackBarBehavior.floating,
-                            margin: EdgeInsets.fromLTRB(16, 0, 16, 36),
+                            margin: const EdgeInsets.fromLTRB(16, 0, 16, 36),
                             elevation: 100,
                           ),
                         );
-                    },
-                    icon: const Icon(Icons.add, size: 24, color: Colors.white),
-                    style: IconButton.styleFrom(
-                      backgroundColor: theme.colorScheme.primary,
-                      padding: const EdgeInsets.all(2),
-                      minimumSize: const Size(24, 24),
-                    ),
-                  ) else 
-                  GestureDetector(
-                    onTap: (){},
-                    child: IconButton.filled(
-                      onPressed: null,
-                      icon: const Icon(Icons.check, size: 24, color: Colors.black),
+                      },
+                      icon:
+                          const Icon(Icons.add, size: 24, color: Colors.white),
                       style: IconButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: theme.colorScheme.primary,
                         padding: const EdgeInsets.all(2),
                         minimumSize: const Size(24, 24),
-                        shape: const CircleBorder(side: BorderSide(color: Colors.black, width: 0.3)),
                       ),
-                    ),
-                  )
+                    )
+                  else
+                    GestureDetector(
+                      onTap: () {},
+                      child: IconButton.filled(
+                        onPressed: null,
+                        icon: const Icon(Icons.check,
+                            size: 24, color: Colors.black),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          padding: const EdgeInsets.all(2),
+                          minimumSize: const Size(24, 24),
+                          shape: const CircleBorder(
+                              side:
+                                  BorderSide(color: Colors.black, width: 0.3)),
+                        ),
+                      ),
+                    )
                 ],
               ),
             ],
