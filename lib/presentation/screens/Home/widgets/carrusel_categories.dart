@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
-import 'package:GoDeli/features/categories/application/categories_bloc.dart';
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 
 class CaregoriesCarrusel extends StatelessWidget {
   const CaregoriesCarrusel({super.key});

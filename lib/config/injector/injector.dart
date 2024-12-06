@@ -21,7 +21,7 @@ import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repo
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/infraestructure/datasources/cart_isar_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/infraestructure/repositories/cart_local_storage_repository_impl.dart';
-import 'package:GoDeli/features/categories/application/categories_bloc.dart';
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
 import 'package:GoDeli/features/categories/infraestructure/repositories/categories_repository_impl.dart';
@@ -113,7 +113,7 @@ Future<void> setUp() async {
         updateUserDirectionUseCase: updateUserDirectionUseCase));
 
     //? inicializando las dependencias de modulo categorias
-    final categoryDatasource = CategoriesDatasourceImpl();
+    final categoryDatasource = CategoriesDatasourceImpl(httpService);
     final categoriesRepository =
         CategoriesRespositoryImpl(categoryDatasource: categoryDatasource);
     getIt.registerFactory<ICategoriesRepository>(() => categoriesRepository);
