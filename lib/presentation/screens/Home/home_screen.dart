@@ -3,6 +3,7 @@ import 'package:GoDeli/features/products/application/products/all_products_bloc.
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 import 'widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -205,7 +206,7 @@ class _CarruselItems extends StatelessWidget {
                 fontSize: 32),
           ),
           GestureDetector(
-              onTap: () {},
+              onTap: ()=>context.push('/catalog'),
               child: Text(
                 'view all',
                 textAlign: TextAlign.end,

@@ -3,6 +3,7 @@ import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
+import 'package:go_router/go_router.dart';
 
 class CardBundleCarrusel extends StatelessWidget {
   const CardBundleCarrusel({super.key});
@@ -30,7 +31,7 @@ class CardBundleCarrusel extends StatelessWidget {
                     fontSize: 32),
               ),
               GestureDetector(
-                  onTap: () {},
+                  onTap: ()=>context.push('/catalog'),
                   child: Text(
                     'view all',
                     textAlign: TextAlign.end,
