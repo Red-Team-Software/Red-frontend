@@ -1,1 +1,1 @@
-export 'package:GoDeli/presentation/screens/bundle/view/bundle_screen.dart';
+export 'package:GoDeli/presentation/screens/Bundle/view/bundle_screen.dart';
