@@ -319,7 +319,8 @@ class _ScrollableDetails extends StatelessWidget {
                                   const SizedBox(
                                     height: 8.00,
                                   ),
-                                  ListView.builder(
+                                  ListView.separated(
+                                    separatorBuilder: (context, index) => const Divider(),
                                     shrinkWrap: true,
                                     itemCount: bundleProducts.length,
                                     itemBuilder: (context, index) {
