@@ -173,6 +173,7 @@ class Injector {
     getIt.registerFactory<ITaxShippinRepository>(() => taxShippingRepository);
 
     //? inicializando las dependencias de modulo ordenes
-    getIt.registerFactory<OrdersBloc>(() => OrdersBloc());
+    getIt.registerFactory<OrdersBloc>(
+        () => OrdersBloc(orderRepository: orderRepository));
   }
 }

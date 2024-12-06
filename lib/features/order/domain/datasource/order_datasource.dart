@@ -1,6 +1,8 @@
 import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 
+import '../../../orders/domain/orders.dart';
+
 abstract class IOrderDatasource {
   Future<Result<Order>> processPayment({
     required String paymentId,
@@ -11,4 +13,6 @@ abstract class IOrderDatasource {
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   });
+
+  Future<List<OrderItem>> fetchAllOrders({int page = 1, int perPage = 10});
 }

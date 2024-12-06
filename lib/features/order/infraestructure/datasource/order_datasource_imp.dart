@@ -4,6 +4,7 @@ import 'package:GoDeli/features/order/domain/datasource/order_datasource.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/infraestructure/mappers/order_mapper.dart';
 import 'package:GoDeli/features/order/infraestructure/models/order.entity.dart';
+import 'package:GoDeli/features/orders/domain/orders.dart';
 
 class OrderDatasourceImpl implements IOrderDatasource {
   final IHttpService httpService;
@@ -38,5 +39,27 @@ class OrderDatasourceImpl implements IOrderDatasource {
     if (!res.isSuccessful()) return Result.makeError(res.getError());
 
     return Result.success(res.getValue());
+  }
+
+  @override
+  Future<List<OrderItem>> fetchAllOrders(
+      {int page = 1, int perPage = 10}) async {
+    final res = await httpService.request(
+      '/order/all',
+      'GET',
+      (json) => (json['orders'] as List)
+          .map((order) => OrderItem.fromJson(order))
+          .toList(),
+      queryParameters: {
+        'perPage': perPage,
+      },
+    );
+
+    print("res de fetch all orders");
+    print(res.getValue());
+
+    if (!res.isSuccessful()) throw Exception(res.getError());
+
+    return res.getValue();
   }
 }

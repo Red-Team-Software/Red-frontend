@@ -2,6 +2,7 @@ import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/order/domain/datasource/order_datasource.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/orders/domain/orders.dart';
 
 class OrderRepositoryImpl implements IOrderRepository {
   final IOrderDatasource datasource;
@@ -33,6 +34,18 @@ class OrderRepositoryImpl implements IOrderRepository {
     } catch (e) {
       print("error en el rerpo");
       print(e);
+      return Result.makeError(e as Exception);
+    }
+  }
+
+  @override
+  Future<Result<List<OrderItem>>> fetchAllOrders(
+      {int page = 1, int perPage = 10}) async {
+    try {
+      final orders =
+          await datasource.fetchAllOrders(page: page, perPage: perPage);
+      return Result.success(orders);
+    } catch (e) {
       return Result.makeError(e as Exception);
     }
   }

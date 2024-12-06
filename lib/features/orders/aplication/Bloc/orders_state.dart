@@ -15,18 +15,31 @@ class OrdersLoadInProgress extends OrdersState {}
 class OrdersLoadSuccess extends OrdersState {
   final Orders orders;
   final String selectedTab;
+  final int page;
+  final int perPage;
 
-  const OrdersLoadSuccess({required this.orders, required this.selectedTab});
+  const OrdersLoadSuccess({
+    required this.orders,
+    required this.selectedTab,
+    required this.page,
+    required this.perPage,
+  });
 
   @override
-  List<Object> get props => [orders, selectedTab];
+  List<Object> get props => [orders, selectedTab, page, perPage];
 }
 
 class OrdersLoadFailure extends OrdersState {
   final String error;
+  final int page;
+  final int perPage;
 
-  const OrdersLoadFailure({required this.error});
+  const OrdersLoadFailure({
+    required this.error,
+    required this.page,
+    required this.perPage,
+  });
 
   @override
-  List<Object> get props => [error];
+  List<Object> get props => [error, page, perPage];
 }
