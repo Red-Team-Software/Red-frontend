@@ -1,9 +1,11 @@
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
+import 'package:GoDeli/features/checkout/domain/address.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -21,6 +23,12 @@ class ShippingAddressSection extends StatefulWidget {
 
 class _ShippingAddressSectionState extends State<ShippingAddressSection> {
   @override
+  void initState() {
+    super.initState();
+    context.read<CheckoutBloc>().add(FetchAddressesEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final checkoutBloc = context.read<CheckoutBloc>();
 
@@ -35,13 +43,34 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
             ),
             const SizedBox(height: 8),
             ...state.addresses.map((address) {
-              return AddressCard(
-                title: address.title,
-                address: address.location,
-                isSelected: address == state.selectedAddress,
-                onSelect: () {
-                  checkoutBloc.add(SelectAddress(address));
-                },
+              return Slidable(
+                endActionPane: ActionPane(
+                  motion: const ScrollMotion(),
+                  extentRatio: 0.25,
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) {
+                        checkoutBloc.add(RemoveAddressEvent(address));
+                      },
+                      backgroundColor: Colors.red,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(8),
+                        bottomRight: Radius.circular(8),
+                      ),
+                    ),
+                  ],
+                ),
+                child: AddressCard(
+                  title: address.title,
+                  address: address.location,
+                  isSelected: address == state.selectedAddress,
+                  onSelect: () {
+                    checkoutBloc.add(SelectAddress(address));
+                  },
+                ),
               );
             }),
             TextButton(
@@ -183,6 +212,132 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
     );
   }
 
+  Future<void> _showEditAddressModal(
+      BuildContext context, CheckoutBloc bloc, Address address) async {
+    String title = address.title;
+    String location = address.location;
+    bool isLoading = false;
+
+    await showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Address Title',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            title = value;
+                          });
+                        },
+                        controller: TextEditingController(text: title),
+                      ),
+                      const SizedBox(height: 16),
+                      GestureDetector(
+                        onTap: isLoading
+                            ? null
+                            : () async {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                final selectedLocation =
+                                    await _selectLocationOnMap(context);
+                                if (selectedLocation != null) {
+                                  setState(() {
+                                    location = selectedLocation;
+                                  });
+                                }
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              },
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  location,
+                                  style: const TextStyle(fontSize: 16),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                ),
+                              ),
+                              Icon(Icons.map,
+                                  color: isLoading ? Colors.grey : Colors.red),
+                            ],
+                          ),
+                        ),
+                      ),
+                      if (isLoading)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 16),
+                          child: Text(
+                            'Obtaining current location...',
+                            style: TextStyle(color: Colors.red, fontSize: 16),
+                          ),
+                        ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: title.isNotEmpty &&
+                                location != 'Select on map'
+                            ? () {
+                                bloc.add(UpdateAddressEvent(address.copyWith(
+                                    title: title, location: location)));
+                                Navigator.pop(context);
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          minimumSize: const Size.fromHeight(48),
+                        ),
+                        child: const Text(
+                          'Update Address',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   Future<String?> _selectLocationOnMap(BuildContext context) async {
     LatLng? selectedLocation;
 
@@ -259,7 +414,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
           options: MapOptions(
             initialCenter:
                 selectedLocation ?? const LatLng(10.4833333, -66.83333333),
-            initialZoom: 13.0,
+            initialZoom: 16.0,
             onTap: (tapPosition, latLng) {
               selectedLocation = latLng;
               // Restore system UI elements

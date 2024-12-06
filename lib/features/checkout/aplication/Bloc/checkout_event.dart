@@ -70,3 +70,17 @@ class ProcessPayment extends CheckoutEvent {
         products
       ];
 }
+
+class FetchAddressesEvent extends CheckoutEvent {}
+
+class RemoveAddressEvent extends CheckoutEvent {
+  final Address address;
+
+  const RemoveAddressEvent(this.address);
+}
+
+class UpdateAddressEvent extends CheckoutEvent {
+  final Address address;
+
+  const UpdateAddressEvent(this.address);
+}

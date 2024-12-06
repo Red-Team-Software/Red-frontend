@@ -23,8 +23,10 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     on<AddNewAddress>(_onAddNewAddress);
     on<SelectPaymentMethod>(_onSelectPaymentMethod);
     on<ProceedToCheckout>(_onProceedToCheckout);
-    on<ProcessPayment>(
-        _onProcessPayment); // Agregar el evento de procesamiento de pago
+    on<ProcessPayment>(_onProcessPayment);
+    on<FetchAddressesEvent>(_onFetchAddresses);
+    on<RemoveAddressEvent>(_onRemoveAddress);
+    on<UpdateAddressEvent>(_onUpdateAddress);
   }
 
   void _onLoadCheckoutData(
@@ -87,5 +89,23 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       emit(
           state.copyWith(isProcessing: false, errorMessage: 'Payment failed.'));
     }
+  }
+
+  void _onFetchAddresses(
+      FetchAddressesEvent event, Emitter<CheckoutState> emit) async {
+    // Fetch addresses from the database
+    // emit(CheckoutState with fetched addresses);
+  }
+
+  void _onRemoveAddress(
+      RemoveAddressEvent event, Emitter<CheckoutState> emit) async {
+    // Remove address from the database
+    // emit(CheckoutState with updated addresses);
+  }
+
+  void _onUpdateAddress(
+      UpdateAddressEvent event, Emitter<CheckoutState> emit) async {
+    // Update address in the database
+    // emit(CheckoutState with updated addresses);
   }
 }
