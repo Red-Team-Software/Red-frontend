@@ -7,7 +7,6 @@ import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.da
 import 'package:GoDeli/presentation/screens/auth/widgets/login_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/profile_component.dart';
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
@@ -106,7 +105,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       ProfileComponent(
         onChangeIndex: onChangeIndex,
-        onChangeImage: (image) => this.selectedImage = image,
+        onChangeImage: (image) => selectedImage = image,
         onChangeFullname: (fullname) => this.fullname = fullname,
         onChangePhoneCode: (phoneCode) => this.phoneCode = phoneCode,
         onChangePhone: (phone) => this.phone = phone,
@@ -114,7 +113,7 @@ class _AuthScreenState extends State<AuthScreen> {
       DirectionComponent(
         onChangeIndex: onChangeIndex,
         onFinished: handleRegister,
-        onChangeLocation: (location) => selectedLocation = location as LatLng,
+        onChangeLocation: (location) => selectedLocation = location,
         onChangeAddressName: (addressName) => addressName = addressName,
       ),
     ];
