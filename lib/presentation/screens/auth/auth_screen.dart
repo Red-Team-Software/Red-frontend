@@ -9,6 +9,7 @@ import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.da
 import 'package:GoDeli/presentation/screens/auth/widgets/login_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/profile_component.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:go_router/go_router.dart';
@@ -63,12 +64,40 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _buildAuthScreen(BuildContext context) {
-    Future<String> convertFileToBase64(File imageFile) async {
-      // Leer los bytes del archivo
-      final bytes = await imageFile.readAsBytes();
+    final ImageCropper recort = ImageCropper();
 
-      // Convertir los bytes a una cadena base64
+    Future<Uint8List?> compressFile(String file) async {
+      return await FlutterImageCompress.compressWithFile(
+        file,
+        minWidth: 300,
+        minHeight: 300,
+        quality: 80,
+      );
+    }
+
+    Future<String> converToBase64(Uint8List bytes) async {
       return base64Encode(bytes);
+    }
+
+    Future<String?> recortImage(String pathImage) async {
+      final CroppedFile? croppedFile = await recort.cropImage(
+          aspectRatio: const CropAspectRatio(ratioX: 3, ratioY: 2),
+          sourcePath: pathImage,
+          compressQuality: 100,
+          uiSettings: [
+            IOSUiSettings(),
+            AndroidUiSettings(
+              cropGridColor: Colors.transparent,
+              cropFrameColor: Colors.transparent,
+              hideBottomControls: true,
+              cropStyle: CropStyle.circle,
+            ),
+          ]);
+
+      if (croppedFile == null) return null;
+      final bytes = await compressFile(croppedFile.path);
+      if (bytes == null) return null;
+      return converToBase64(bytes);
     }
 
     void onChangeIndex(int newIndex) {
@@ -97,15 +126,12 @@ class _AuthScreenState extends State<AuthScreen> {
       );
       context.read<AuthBloc>().add(
             RegisterEvent(
-              email: email,
-              password: password,
-              fullName: fullname,
-              phoneNumber: realPhone,
-              address: addressDto,
-              image: selectedImage != null
-                  ? await convertFileToBase64(selectedImage!)
-                  : null,
-            ),
+                email: email,
+                password: password,
+                fullName: fullname,
+                phoneNumber: realPhone,
+                address: addressDto,
+                image: image),
           );
     }
 
