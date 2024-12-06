@@ -5,7 +5,7 @@ class User {
   String fullName;
   String email;
   String phone;
-  // List<UserDirection> directions;
+  List<UserDirection> directions;
   // File? image;
   String? image;
 
@@ -14,7 +14,7 @@ class User {
     required this.fullName,
     required this.email,
     required this.phone,
-    // required this.directions,
+    required this.directions,
     this.image,
   });
 
@@ -24,11 +24,11 @@ class User {
       fullName: json['name'],
       email: json['email'],
       phone: json['phone'],
-      // directions: json['directions'] == null
-      //     ? []
-      //     : (json['directions'] as List)
-      //         .map((e) => UserDirection.fromJson(e))
-      //         .toList(),
+      directions: json['directions'] == null
+          ? []
+          : (json['directions'] as List)
+              .map((e) => UserDirection.fromJson(e))
+              .toList(),
       image: json['image'],
     );
   }

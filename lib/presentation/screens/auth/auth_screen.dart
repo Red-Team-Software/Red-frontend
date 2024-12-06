@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
+import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
 import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/direction_component.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/email_pass_component.dart';
@@ -39,31 +41,36 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthBloc, AuthState>(
-      listener: (context, state) {
-        if (state is Authenticated) {
-          // Navegar a la pantalla principal cuando esté autenticado
-          context.push('/');
-        } else if (state is AuthError) {
-          // Mostrar un mensaje de error si hay un problema de autenticación
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-      },
-      builder: (context, state) {
-        if (state is AuthLoading) {
-          // Mostrar un indicador de carga mientras se procesa la autenticación
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        // Construir la vista normal si no está en estado de carga
-        return _buildAuthScreen(context);
-      },
+    return Scaffold(
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is Authenticated) {
+            context.pushReplacement('/');
+          } else if (state is AuthError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is UnAuthenticated || state is AuthError) {
+            return _buildAuthScreen(context);
+          }
+            return const Center(child: CircularProgressIndicator());
+        },
+      ),
     );
   }
 
   Widget _buildAuthScreen(BuildContext context) {
+    Future<String> convertFileToBase64(File imageFile) async {
+      // Leer los bytes del archivo
+      final bytes = await imageFile.readAsBytes();
+      
+      // Convertir los bytes a una cadena base64
+      return base64Encode(bytes);
+    }
+    
     void onChangeIndex(int newIndex) {
       setState(() {
         _isMovingRight = newIndex > _currentIndex;
@@ -77,15 +84,24 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Future<void> handleRegister() async {
       final realPhone = '$phoneCode$phone';
+      final addressDto = AddUserDirectionListDto(
+                            directions: [
+                              AddUserDirectionDto(
+                                name: addressName,
+                                favorite: true,
+                                lat: selectedLocation!.latitude,
+                                lng: selectedLocation!.longitude,
+                              ),
+                            ],
+                          );
       context.read<AuthBloc>().add(
             RegisterEvent(
               email: email,
               password: password,
               fullName: fullname,
               phoneNumber: realPhone,
-              addressName: addressName,
-              latitude: selectedLocation!.latitude,
-              longitude: selectedLocation!.longitude,
+              address: addressDto,
+              image: selectedImage != null ? await convertFileToBase64(selectedImage!) : null,
             ),
           );
     }
@@ -106,7 +122,7 @@ class _AuthScreenState extends State<AuthScreen> {
       ),
       ProfileComponent(
         onChangeIndex: onChangeIndex,
-        onChangeImage: (image) => this.selectedImage = image,
+        onChangeImage: (image) => selectedImage = image,
         onChangeFullname: (fullname) => this.fullname = fullname,
         onChangePhoneCode: (phoneCode) => this.phoneCode = phoneCode,
         onChangePhone: (phone) => this.phone = phone,
@@ -114,8 +130,8 @@ class _AuthScreenState extends State<AuthScreen> {
       DirectionComponent(
         onChangeIndex: onChangeIndex,
         onFinished: handleRegister,
-        onChangeLocation: (location) => selectedLocation = location as LatLng,
-        onChangeAddressName: (addressName) => addressName = addressName,
+        onChangeLocation: (location) => selectedLocation = location,
+        onChangeAddressName: (addressName) => this.addressName = addressName,
       ),
     ];
 

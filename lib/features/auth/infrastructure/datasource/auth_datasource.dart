@@ -13,22 +13,18 @@ class AuthDatasource implements IAuthDataSource {
 
   @override
   Future<Result<LoginResponse>> login(LoginDto loginDto) async {
-    try {
       final response = await _httpService.request(
         '/auth/login',
         'POST',
         (json) => LoginResponse.fromJson(json),
         body: loginDto.toJson(),
       );
+      if (!response.isSuccessful()){
+        return Result.makeError(Exception('Failed to login: ${response.getError()}'));
+      }
       final token = response.getValue().token;
-
       _httpService.addHeader('Authorization', 'Bearer $token');
-
-      print(_httpService.toString());
       return Result.success(response.getValue());
-    } catch (e) {
-      return Result.makeError(Exception('Failed to login: ${e.toString()}'));
-    }
   }
 
   @override
