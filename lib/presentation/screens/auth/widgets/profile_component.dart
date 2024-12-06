@@ -199,6 +199,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                     });
                   });
                 },
+                maxLength: 7,
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelText: "Phone",

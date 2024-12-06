@@ -23,24 +23,37 @@ class AddressModal extends StatefulWidget {
 
 class _AddressModalState extends State<AddressModal> {
   LatLng? _selectedLocation; // To store latitude and longitude
-  String _selectedAddress = "Select Location"; // To store the address name
+  String _selectedLocationName = "Select Location"; // To store the address name
   String _currentAddressName = ''; // To store the address name input
   String? addressNameError; // To handle error if the address name is empty
 
   LatLng _currentLocation =
       const LatLng(10.4833333, -66.83333333); // Default location
 
+  final addressNameTextController = TextEditingController();
+
+
   @override
   void initState() {
     super.initState();
     if (widget.initialLocation != null) {
       _selectedLocation = widget.initialLocation;
-      _selectedAddress = widget.initialAddressName ?? "Unknown Location";
-      _currentAddressName = widget.initialAddressName ?? '';
+      _selectedLocationName = '';
       _currentLocation = widget.initialLocation!;
+      addressNameTextController.text = widget.initialAddressName ?? '';
+      _fetchInitialLocationName();
+      
     } else {
       _fetchCurrentLocation();
-    }
+    } 
+  }
+
+  Future<void> _fetchInitialLocationName() async {
+    final locationName = await _getLocationName(_selectedLocation!) ?? 'Unknown Location';
+    
+    setState(() {
+      _selectedLocationName = locationName;
+    });
   }
 
   // Function to get the current location
@@ -50,7 +63,7 @@ class _AddressModalState extends State<AddressModal> {
       if (permission == LocationPermission.denied ||
           permission == LocationPermission.deniedForever) {
         setState(() {
-          _selectedAddress = "Location permission denied";
+          _selectedLocationName = "Location permission denied";
         });
         return;
       }
@@ -67,7 +80,7 @@ class _AddressModalState extends State<AddressModal> {
       });
     } catch (e) {
       setState(() {
-        _selectedAddress = "Failed to fetch location";
+        _selectedLocationName = "Failed to fetch location";
       });
     }
   }
@@ -109,7 +122,7 @@ class _AddressModalState extends State<AddressModal> {
 
       setState(() {
         _selectedLocation = location;
-        _selectedAddress = locationName ?? "Unknown Location";
+        _selectedLocationName = locationName ?? "Unknown Location";
       });
     }
   }
@@ -177,7 +190,7 @@ class _AddressModalState extends State<AddressModal> {
           ),
           const SizedBox(height: 10),
           Text(
-            _selectedAddress,
+            _selectedLocationName,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 16, color: Colors.grey),
           ),
@@ -191,6 +204,7 @@ class _AddressModalState extends State<AddressModal> {
                     : "Please provide a name for this address";
               });
             },
+            controller: addressNameTextController,
             decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: "Address Name",

@@ -37,10 +37,10 @@ class DeleteUserDirectionEvent extends UserEvent {
   });
 }
 
-class UpadateUserDirectionEvent extends UserEvent {
+class UpdateUserDirectionEvent extends UserEvent {
   final DeleteUpdateUserDirectionListDto userDirection;
 
-  const UpadateUserDirectionEvent({
+  const UpdateUserDirectionEvent({
     required this.userDirection,
   });
 }

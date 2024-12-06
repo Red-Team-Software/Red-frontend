@@ -34,6 +34,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UpdateUserEvent>(_onUpdateUserEvent);
     on<AddUserDirectionEvent>(_onAddUserDirectionEvent);
     on<DeleteUserDirectionEvent>(_onDeleteUserDirectionEvent);
+    on<UpdateUserDirectionEvent>(_onUpdateUserDirectionEvent);
     
 
     add(GetUserEvent());
@@ -108,7 +109,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
 
   void _onUpdateUserDirectionEvent(
-      UpadateUserDirectionEvent event, Emitter<UserState> emit) async {
+      UpdateUserDirectionEvent event, Emitter<UserState> emit) async {
     emit(UserLoading());
     final res = await updateUserDirectionUseCase.execute(event.userDirection);
     if (!res.isSuccessful()) {

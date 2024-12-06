@@ -6,8 +6,8 @@ import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto
 import 'package:GoDeli/features/user/domain/dto/update_user_dto.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
-import 'package:GoDeli/presentation/screens/profile/widgets/add_direction_modal.dart';
-import 'package:GoDeli/presentation/screens/profile/widgets/profile_address_profile.dart';
+import 'package:GoDeli/presentation/screens/profile/widgets/addess_modal.dart';
+import 'package:GoDeli/presentation/screens/profile/widgets/profile_address_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -95,15 +95,19 @@ class _ProfileScreenState extends State<_ProfileScreen> {
   }
 
   DeleteUpdateUserDirectionListDto _buildDeleteUserDirectionDto(
-      UserDirection direction) {
+      UserDirection direction,{ String? newName, LatLng? newLocation}) {
+    
+    newName ??= direction.addressName;
+    newLocation ??= LatLng(direction.latitude.toDouble(), direction.longitude.toDouble());
+    
     return DeleteUpdateUserDirectionListDto(
       directions: [
         DeleteUpdateUserDirectionDto(
           id: direction.id,
-          name: direction.addressName,
+          name: newName,
           favorite: direction.isFavorite,
-          lat: direction.latitude.toDouble(),
-          lng: direction.longitude.toDouble(),
+          lat: newLocation.latitude.toDouble(),
+          lng: newLocation.longitude.toDouble(),
         ),
       ],
     );
@@ -256,17 +260,12 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                             return AddressModal(
                               onFinished: (location, name, isUpdate) async {
                                 Navigator.pop(context);
-                                if (isUpdate) {
-                                  // Update the address
-                                  // final updateDtio = _buildDeleteUserDirectionDto(direction)
-                                } else {
                                   // Add the address
                                   final addDirectionDto =
                                       _buildAddUserDirectionDto(location, name);
                                   this.context.read<UserBloc>().add(
                                       AddUserDirectionEvent(
                                           userDirection: addDirectionDto));
-                                }
                               },
                             );
                           },
@@ -314,7 +313,24 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           onFavoriteChanged: (id, isFavorite) async {
                             print('Favorite changed');
                           },
-                          onSelect: () {},
+                          onUpdate: (){
+                            showModalBottomSheet(
+                              context: context,
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return AddressModal(
+                                  initialAddressName: direction.addressName,
+                                  initialLocation: LatLng(direction.latitude.toDouble(), direction.longitude.toDouble()),
+                                  onFinished: (location, name, isUpdate) async {
+                                    Navigator.pop(context);
+                                      // Add the address
+                                      final updateUserDto = _buildDeleteUserDirectionDto(direction, newName: name, newLocation: location);
+                                      this.context.read<UserBloc>().add(UpdateUserDirectionEvent(userDirection: updateUserDto));
+                                  },
+                                );
+                              },
+                            );
+                          },
                         ));
                   },
                 ),

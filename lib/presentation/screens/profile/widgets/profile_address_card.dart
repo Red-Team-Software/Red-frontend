@@ -9,7 +9,8 @@ class ProfileAddressCard extends StatefulWidget {
   final double latitude;
   final double longitude;
   final bool isFavorite;
-  final VoidCallback onSelect;
+  // final VoidCallback onSelect;
+  final VoidCallback onUpdate;
   final Future<void> Function(String id, bool isFavorite) onFavoriteChanged;
 
   const ProfileAddressCard({
@@ -19,10 +20,10 @@ class ProfileAddressCard extends StatefulWidget {
     required this.latitude,
     required this.longitude,
     required this.isFavorite,
-    required this.onSelect,
     required this.onFavoriteChanged,
+    required this.onUpdate,
   });
-  
+
   @override
   _ProfileAddressCardState createState() => _ProfileAddressCardState();
 }
@@ -99,11 +100,8 @@ class _ProfileAddressCardState extends State<ProfileAddressCard> {
             Text(_addressName), // Mostrar el nombre de la dirección obtenida
         trailing: IconButton(
           icon: const Icon(Icons.edit),
-          onPressed: () {
-            // TODO: Lógica para editar dirección
-          },
+          onPressed: widget.onUpdate,
         ),
-        onTap: widget.onSelect, // No hace nada cuando se toca la tarjeta
       ),
     );
   }

@@ -7,7 +7,7 @@ import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
 import 'package:GoDeli/presentation/screens/bundle/bundle_screen.dart';
-import 'package:GoDeli/presentation/screens/profile/profile_page.dart';
+import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/screens/search/view/search_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
