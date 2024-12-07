@@ -104,7 +104,7 @@ class CheckoutScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return const SingleChildScrollView(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.fromLTRB( 16, 16, 16, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
