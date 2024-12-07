@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_state.dart';
+import 'package:go_router/go_router.dart';
 import 'widgets/order_card.dart';
 
 class OrderListScreen extends StatefulWidget {
@@ -54,7 +55,13 @@ class _OrderListScreenState extends State<OrderListScreen> {
           .length;
 
       return Scaffold(
-        appBar: AppBar(title: const Text('Order List')),
+        appBar: AppBar(
+          title: const Text('Order List'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () => context.push("/", extra: 0),
+          ),
+        ),
         body: Column(
           children: [
             // Centered Tabs to switch between Active and Past Orders
