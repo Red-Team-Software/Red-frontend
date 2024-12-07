@@ -22,11 +22,6 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       final orders = await orderRepository.fetchAllOrders(
           page: event.page, perPage: event.perPage);
 
-      print("daleee brii");
-      print(orders.isSuccessful());
-
-      print(orders.getValue());
-
       emit(OrdersLoadSuccess(
           orders: Orders(orders: orders.getValue()),
           selectedTab: 'Active',
@@ -56,17 +51,23 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     try {
       print("cancelando");
       print(event.orderId);
-      // await orderRepository.cancelOrder(orderId: event.orderId);
-      // emit(OrderCancelSuccess());
+
+      await orderRepository.cancelOrder(orderId: event.orderId);
 
       // Fetch updated orders
       final orders = await orderRepository.fetchAllOrders(page: 1, perPage: 10);
+
+      print("daleee brii");
+      print(orders.isSuccessful());
+      print(orders.getValue());
       emit(OrdersLoadSuccess(
           orders: Orders(orders: orders.getValue()),
           selectedTab: 'Active',
           page: 1,
           perPage: 10));
     } catch (e) {
+      print("error en el cancel");
+      print(e);
       emit(OrderCancelFailure(error: e.toString()));
     }
   }
