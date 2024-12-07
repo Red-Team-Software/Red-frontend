@@ -13,7 +13,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:latlong2/latlong.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -64,7 +63,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _buildAuthScreen(BuildContext context) {
-
     Future<Uint8List?> compressFile(String file) async {
       return await FlutterImageCompress.compressWithFile(
         file,
@@ -77,7 +75,6 @@ class _AuthScreenState extends State<AuthScreen> {
     Future<String> converToBase64(Uint8List bytes) async {
       return base64Encode(bytes);
     }
-
 
     void onChangeIndex(int newIndex) {
       setState(() {
@@ -92,11 +89,12 @@ class _AuthScreenState extends State<AuthScreen> {
     Future<void> handleRegister() async {
       final realPhone = '$phoneCode$phone';
       String? image;
-      if (selectedImage != null){
+      if (selectedImage != null) {
         final compressedImage = await compressFile(selectedImage!.path);
-        image = compressedImage != null ? await converToBase64(compressedImage) : null;
-      }
-      else{
+        image = compressedImage != null
+            ? await converToBase64(compressedImage)
+            : null;
+      } else {
         image = null;
       }
       final addressDto = AddUserDirectionListDto(
@@ -116,7 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 fullName: fullname,
                 phoneNumber: realPhone,
                 address: addressDto,
-                image:image),
+                image: image),
           );
     }
 
@@ -160,7 +158,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   20.0, // Ajuste para el teclado
             ),
             child: screens[_currentIndex]),
-      ).animate().fadeIn(duration: 500.ms),
+      ).animate().moveY(begin: 100, end: 0).fadeIn(duration: 500.ms),
     ));
   }
 }

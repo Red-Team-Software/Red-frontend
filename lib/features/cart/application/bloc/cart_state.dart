@@ -11,7 +11,7 @@ class CartState extends Equatable {
     this.bundles = const [],
     this.errorMessage,
   });
-  
+
   double get subtotal {
     double subtotal = 0;
     for (var product in products) {
@@ -30,7 +30,7 @@ class CartState extends Equatable {
   }
 
   int get totalItems {
-    return products.length + bundles.length ;
+    return products.length + bundles.length;
   }
 
   int get totalProducts {
@@ -44,6 +44,8 @@ class CartState extends Equatable {
   CartState copyWith({
     List<ProductCart>? products,
     List<BundleCart>? bundles,
+    double? shipping,
+    double? tax,
   }) {
     return CartState(
       products: products ?? this.products,
@@ -52,6 +54,5 @@ class CartState extends Equatable {
   }
 
   @override
-  List<Object> get props => [ products, bundles ];
+  List<Object> get props => [products, bundles];
 }
-

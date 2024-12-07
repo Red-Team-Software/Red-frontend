@@ -11,6 +11,8 @@ class CheckoutState extends Equatable {
   final String selectedPaymentMethod;
   final bool isProcessing;
   final String errorMessage;
+  final double tax;
+  final double shipping;
 
   const CheckoutState({
     this.products = const [],
@@ -20,6 +22,8 @@ class CheckoutState extends Equatable {
     this.selectedPaymentMethod = '',
     this.isProcessing = false,
     this.errorMessage = '',
+    this.tax = 0.0,
+    this.shipping = 0.0,
   });
 
   // Nuevo getter para calcular el total de items en el carrito
@@ -33,6 +37,8 @@ class CheckoutState extends Equatable {
     String? selectedPaymentMethod,
     bool? isProcessing,
     String? errorMessage,
+    double? tax,
+    double? shipping,
   }) {
     return CheckoutState(
       products: products ?? this.products,
@@ -43,6 +49,8 @@ class CheckoutState extends Equatable {
           selectedPaymentMethod ?? this.selectedPaymentMethod,
       isProcessing: isProcessing ?? this.isProcessing,
       errorMessage: errorMessage ?? this.errorMessage,
+      tax: tax ?? this.tax,
+      shipping: shipping ?? this.shipping,
     );
   }
 
@@ -55,5 +63,7 @@ class CheckoutState extends Equatable {
         selectedPaymentMethod,
         isProcessing,
         errorMessage,
+        tax,
+        shipping,
       ];
 }

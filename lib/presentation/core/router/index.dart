@@ -1,4 +1,5 @@
 import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
+import 'package:GoDeli/presentation/screens/Orders/oder_list.dart';
 import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/screens/Search/search.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
@@ -6,20 +7,22 @@ import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_
 import 'package:flutter/material.dart';
 
 class IndexPage extends StatefulWidget {
-  const IndexPage({super.key});
+  final int? pageIndex;
+
+  const IndexPage({super.key, this.pageIndex});
   static const String name = 'index_screen';
   @override
   State<IndexPage> createState() => _IndexPageState();
 }
 
 class _IndexPageState extends State<IndexPage> {
-  int _pageIndex = 0;
+  late int _pageIndex = widget.pageIndex ?? 0;
 
   final pages = [
     const HomeScreen(),
     const SearchScreen(),
     const ProfileScreen(),
-    const ProfileScreen(),
+    const OrderListScreen(), // Remove const
   ];
 
   late final List<CustomBottomNavigationItem> _items = [
@@ -42,10 +45,10 @@ class _IndexPageState extends State<IndexPage> {
       name: "Perfil",
     ),
     CustomBottomNavigationItem(
-      icon: const Icon(Icons.menu_rounded),
-      activeIcon: const Icon(Icons.menu_outlined),
+      icon: const Icon(Icons.list_alt_rounded), // Change icon
+      activeIcon: const Icon(Icons.list_alt_outlined), // Change icon
       isActive: _pageIndex == 3,
-      name: "Menu",
+      name: "Orders", // Change text
     ),
   ];
 
@@ -55,15 +58,25 @@ class _IndexPageState extends State<IndexPage> {
     });
   }
 
+  Future<bool> _onWillPop() async {
+    setState(() {
+      _pageIndex = _pageIndex > 0 ? _pageIndex - 1 : 3;
+    });
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: pages[_pageIndex],
-      bottomNavigationBar: CustomBottomNavigationBar(
-        items1: _items.sublist(0, 2), // Primera mitad de los elementos
-        items2: _items.sublist(2), // Segunda mitad de los elementos
-        currentIndex: _pageIndex,
-        onItemTapped: _onItemTapped,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: pages[_pageIndex],
+        bottomNavigationBar: CustomBottomNavigationBar(
+          items1: _items.sublist(0, 2), // Primera mitad de los elementos
+          items2: _items.sublist(2), // Segunda mitad de los elementos
+          currentIndex: _pageIndex,
+          onItemTapped: _onItemTapped,
+        ),
       ),
     );
   }

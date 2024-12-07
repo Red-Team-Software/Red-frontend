@@ -17,4 +17,10 @@ class CategoriesRespositoryImpl implements ICategoriesRepository {
       return Result<List<Category>>.makeError(error as Exception);
     }
   }
+  
+  @override
+  Future<Result<List<ProductCategory>>> getProductsByCategory(String categoryId) {
+    // TODO: implement getProductsByCategory
+    throw UnimplementedError();
+  }
 }

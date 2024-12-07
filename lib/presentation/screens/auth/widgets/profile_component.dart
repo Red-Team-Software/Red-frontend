@@ -1,5 +1,6 @@
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -267,6 +268,6 @@ class _ProfileComponentState extends State<ProfileComponent> {
           ),
         ),
       ],
-    );
+    ).animate().moveX(begin: 100, end: 0).fadeIn(duration: 500.ms);
   }
 }

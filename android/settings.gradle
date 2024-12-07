@@ -10,9 +10,12 @@ pluginManagement {
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
-        gradlePluginPortal()
+    }
+    plugins {
+        id "org.jetbrains.kotlin.android" version "1.9.25" // Update to the latest version
     }
 }
 

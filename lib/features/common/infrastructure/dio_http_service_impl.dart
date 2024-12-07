@@ -33,14 +33,17 @@ class DioHttpServiceImpl<T> implements IHttpService {
       );
       return Result<T>.success(mapper(response.data));
     } on DioException catch (e) {
+      print("a");
       print(e);
+      print("b");
+      print(e.response);
+
       return Result.makeError(e);
     }
   }
 
   @override
   dynamic getHeaders() {
-    
     return _dio.options.headers;
   }
 
@@ -50,8 +53,7 @@ class DioHttpServiceImpl<T> implements IHttpService {
   }
 
   @override
-  Map<String,dynamic> getHeaderByKey(String key) {
-
+  Map<String, dynamic> getHeaderByKey(String key) {
     return _dio.options.headers[key];
   }
   //TODO: Implementar el manejo de errores
