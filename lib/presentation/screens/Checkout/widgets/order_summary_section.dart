@@ -160,6 +160,7 @@ class OrderSummarySection extends StatelessWidget {
                           context: context,
                         ),
                       );
+                  context.read<CartBloc>().add(ClearCart());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.primary,
