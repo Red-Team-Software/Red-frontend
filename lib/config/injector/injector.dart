@@ -31,6 +31,9 @@ import 'package:GoDeli/features/order/domain/repositories/order_repository.dart'
 import 'package:GoDeli/features/order/infraestructure/datasource/order_datasource_imp.dart';
 import 'package:GoDeli/features/order/infraestructure/repositories/order_repository_imp.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
+import 'package:GoDeli/features/payment-method/domain/repositories/payment-method_repository.dart';
+import 'package:GoDeli/features/payment-method/infraestructure/datasource/payment-method_datasource_imp.dart';
+import 'package:GoDeli/features/payment-method/infraestructure/repositories/payment-method_respository_imp.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
@@ -153,6 +156,9 @@ class Injector {
 
     //? Iiniciando las dependencias de modulo de orden
 
+    final paymentMethodDataSource = PaymentMethodDatasourceImpl(httpService);
+    final paymentMethodRepository = PaymentMethodRepositoryImpl(
+        paymentMethodDatasource: paymentMethodDataSource);
     final orderDatasource = OrderDatasourceImpl(httpService: httpService);
     final orderRepository = OrderRepositoryImpl(datasource: orderDatasource);
 
@@ -164,6 +170,8 @@ class Injector {
         updateUserDirectionUseCase);
 
     getIt.registerFactory<IOrderRepository>(() => orderRepository);
+    getIt.registerFactory<IPaymentMethodRepository>(
+        () => paymentMethodRepository);
 
     //? inicializando las dependencias de modulo tax y shipping
     final taxShippingDatasource =

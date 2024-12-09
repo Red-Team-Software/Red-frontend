@@ -1,4 +1,3 @@
-import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
@@ -13,6 +12,7 @@ import 'checkout_event.dart';
 import 'checkout_state.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/checkout/domain/address.dart';
+import 'package:GoDeli/features/payment-method/domain/repositories/payment-method_repository.dart';
 
 class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final CartBloc cartBloc;
@@ -23,6 +23,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final DeleteUserDirectionUseCase deleteUserDirectionUseCase;
   final UpdateUserDirectionUseCase updateUserDirectionUseCase;
   final ITaxShippinRepository taxRepository;
+  final IPaymentMethodRepository paymentMethodRepository;
 
   CheckoutBloc(
       {required this.cartBloc,
@@ -32,7 +33,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       required this.addUserDirectionUseCase,
       required this.deleteUserDirectionUseCase,
       required this.updateUserDirectionUseCase,
-      required this.taxRepository})
+      required this.taxRepository,
+      required this.paymentMethodRepository})
       : super(const CheckoutState()) {
     on<LoadCheckoutData>(_onLoadCheckoutData);
     on<SelectAddress>(_onSelectAddress);
@@ -63,6 +65,19 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
               return Address(direction.id, direction.addressName,
                   direction.address, direction.latitude, direction.longitude);
             }).toList();
+
+      final paymentMethodsResult =
+          await paymentMethodRepository.fetchAllPaymentMethods();
+      if (paymentMethodsResult.isSuccessful()) {
+        final paymentMethods = paymentMethodsResult.getValue();
+        emit(state.copyWith(
+          paymentMethods: paymentMethods,
+          selectedPaymentMethod:
+              paymentMethods.isNotEmpty ? paymentMethods.first : null,
+        ));
+      } else {
+        emit(state.copyWith(errorMessage: 'Failed to fetch payment methods.'));
+      }
 
       // Actualiza el estado con las direcciones obtenidas
       emit(state.copyWith(
