@@ -41,34 +41,6 @@ class OrderItem {
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     try {
-      print('orderId: ${json['orderId']}');
-      print('orderState: ${json['orderState']}');
-      print('orderCreatedDate: ${json['orderCreatedDate']}');
-      print('totalAmount: ${json['totalAmount']}');
-      print('orderReceivedDate: ${json['orderReceivedDate']}');
-      print('orderPayment: ${json['orderPayment']}');
-      print('orderDirection: ${json['orderDirection']}');
-      print('products: ${json['products']}');
-      print('bundles: ${json['bundles']}');
-
-      print('casteando id: ${json['orderId']} as String');
-      print('casteando estado: ${json['orderState']} as String');
-      print(
-          'casteando orderCreatedDate: ${json['orderCreatedDate']} as String');
-      print('casteando totalAmount : ${json['totalAmount']} as num');
-      print(
-          'casteando orderReceivedDate: ${json['orderReceivedDate']} as String');
-      print(
-          'casteando orderPayment payementMethod: ${json['orderPayment']['payementMethod']} as String');
-      print(
-          'casteando orderPayment paymentCurrency: ${json['orderPayment']['paymentCurrency']} as String');
-      print(
-          'casteando orderPayment paymetAmount: ${json['orderPayment']['paymetAmount']} as num');
-      print(
-          'casteando orderDirection lat: ${json['orderDirection']['lat']} as double');
-      print(
-          'casteando orderDirection long: ${json['orderDirection']['long']} as double');
-
       return OrderItem(
         orderId: json['orderId'] as String,
         orderState: json['orderState'] as String,

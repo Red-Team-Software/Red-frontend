@@ -10,12 +10,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
   final IOrderRepository orderRepository;
 
   OrderBloc({required this.orderRepository}) : super(OrderInitial()) {
-    on<LoadOrder>(_onLoadOrder);
     on<FetchOrderById>(_onFetchOrderById);
-  }
-
-  void _onLoadOrder(LoadOrder event, Emitter<OrderState> emit) {
-    emit(OrderLoaded(order: event.order));
   }
 
   Future<void> _onFetchOrderById(
@@ -23,6 +18,10 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
     emit(OrderLoading());
 
     final result = await orderRepository.fetchOrderById(orderId: event.orderId);
-    print(result.isSuccessful());
+    if (result.isSuccessful()) {
+      emit(OrderLoaded(order: result.getValue()));
+    } else {
+      emit(const OrderError(message: 'Failed to load order'));
+    }
   }
 }

@@ -32,7 +32,7 @@ class OrderSummaryScreen extends StatelessWidget {
       ),
       body: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
-          if (state is OrderInitial) {
+          if (state is OrderLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );

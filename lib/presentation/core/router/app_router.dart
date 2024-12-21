@@ -79,13 +79,10 @@ final appRouter = GoRouter(
       path: "/order/:idOrder",
       name: OrderSummaryScreen.name,
       builder: (context, state) {
-        final order = state.extra
-            as Order; // Asegúrate de pasar la orden desde el `CheckoutBloc`
         return BlocProvider(
           create: (_) {
             final orderBloc =
                 OrderBloc(orderRepository: getIt<IOrderRepository>());
-            orderBloc.add(LoadOrder(order: order)); // Disparar el evento aquí
             return orderBloc;
           },
           child: OrderSummaryScreen(
