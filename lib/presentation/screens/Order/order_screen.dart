@@ -16,6 +16,9 @@ class OrderSummaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
+    // Dispatch the FetchOrderById event with the idOrder parameter
+    context.read<OrderBloc>().add(FetchOrderById(orderId: idOrder));
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(

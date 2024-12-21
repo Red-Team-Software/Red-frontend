@@ -77,4 +77,17 @@ class OrderDatasourceImpl implements IOrderDatasource {
 
     if (!res.isSuccessful()) throw Exception(res.getError());
   }
+
+  @override
+  Future<Order> fetchOrderById({required String orderId}) async {
+    final res = await httpService.request(
+      '/order/one/$orderId',
+      'GET',
+      (json) => OrderMapper.mapEntityToDomain(OrderEntity.fromJson(json)),
+    );
+
+    if (!res.isSuccessful()) throw Exception(res.getError());
+
+    return res.getValue();
+  }
 }

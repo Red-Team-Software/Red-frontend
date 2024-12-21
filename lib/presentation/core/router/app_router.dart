@@ -1,5 +1,7 @@
+import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
+import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:GoDeli/presentation/core/router/index.dart';
 import 'package:GoDeli/presentation/screens/Catalogo/view/catalog_screen.dart';
@@ -81,7 +83,8 @@ final appRouter = GoRouter(
             as Order; // Asegúrate de pasar la orden desde el `CheckoutBloc`
         return BlocProvider(
           create: (_) {
-            final orderBloc = OrderBloc();
+            final orderBloc =
+                OrderBloc(orderRepository: getIt<IOrderRepository>());
             orderBloc.add(LoadOrder(order: order)); // Disparar el evento aquí
             return orderBloc;
           },

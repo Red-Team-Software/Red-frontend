@@ -53,6 +53,18 @@ class OrderRepositoryImpl implements IOrderRepository {
   }
 
   @override
+  Future<Result<Order>> fetchOrderById({required String orderId}) async {
+    try {
+      final order = await datasource.fetchOrderById(orderId: orderId);
+      return Result.success(order);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
+    }
+  }
+
+  @override
   Future<void> cancelOrder({required String orderId}) async {
     try {
       await datasource.cancelOrder(orderId: orderId);

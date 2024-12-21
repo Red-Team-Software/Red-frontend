@@ -15,3 +15,12 @@ class LoadOrder extends OrderEvent {
   @override
   List<Object?> get props => [order];
 }
+
+class FetchOrderById extends OrderEvent {
+  final String orderId;
+
+  const FetchOrderById({required this.orderId});
+
+  @override
+  List<Object?> get props => [orderId];
+}

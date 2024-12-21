@@ -28,4 +28,27 @@ class OrderMapper {
       ),
     );
   }
+
+  static Order mapOneEntityToDomain(OrderEntity entity) {
+    return Order(
+      id: entity.id,
+      orderState: entity.orderState,
+      orderCreatedDate: entity.orderCreatedDate,
+      orderTimeCreated: entity.orderTimeCreated,
+      totalAmount: entity.totalAmount,
+      currency: entity.currency,
+      orderDirection: OrderDirection(
+        latitude: entity.orderDirection.latitude,
+        longitude: entity.orderDirection.longitude,
+      ),
+      products: entity.products,
+      bundles: entity.bundles,
+      orderReceivedDate: entity.orderReceivedDate,
+      orderPayment: OrderPayment(
+        paymentMethod: entity.orderPayment.paymentMethod,
+        currency: entity.orderPayment.currency,
+        amount: entity.orderPayment.amount,
+      ),
+    );
+  }
 }
