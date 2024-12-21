@@ -1,7 +1,5 @@
-import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
-import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:equatable/equatable.dart';
 
 class Order extends Equatable {
@@ -15,6 +13,9 @@ class Order extends Equatable {
   final List<BundleCart> bundles;
   final String? orderReceivedDate;
   final OrderPayment orderPayment;
+  final String orderTimeCreated;
+  final String? orderReport;
+  final Courier? orderCourier;
 
   const Order({
     required this.id,
@@ -27,6 +28,9 @@ class Order extends Equatable {
     required this.bundles,
     this.orderReceivedDate,
     required this.orderPayment,
+    required this.orderTimeCreated,
+    this.orderReport,
+    this.orderCourier,
   });
 
   @override
@@ -41,6 +45,9 @@ class Order extends Equatable {
         bundles,
         orderReceivedDate,
         orderPayment,
+        orderTimeCreated,
+        orderReport,
+        orderCourier,
       ];
 }
 
@@ -60,5 +67,27 @@ class OrderPayment {
     required this.paymentMethod,
     required this.currency,
     required this.amount,
+  });
+}
+
+class Courier {
+  final String courierName;
+  final String courierImage;
+  final Location location;
+
+  Courier({
+    required this.courierName,
+    required this.courierImage,
+    required this.location,
+  });
+}
+
+class Location {
+  final double latitude;
+  final double longitude;
+
+  Location({
+    required this.latitude,
+    required this.longitude,
   });
 }

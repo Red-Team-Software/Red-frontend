@@ -7,6 +7,8 @@ class OrderEntity {
   final String id;
   final String orderState;
   final String orderCreatedDate;
+  final String orderTimeCreated;
+
   final double totalAmount;
   final String currency;
   final OrderDirectionEntity orderDirection;
@@ -19,6 +21,7 @@ class OrderEntity {
     required this.id,
     required this.orderState,
     required this.orderCreatedDate,
+    required this.orderTimeCreated,
     required this.totalAmount,
     required this.currency,
     required this.orderDirection,
@@ -44,6 +47,7 @@ class OrderEntity {
           id: json['id'] as String,
           orderState: json['orderState'] as String,
           orderCreatedDate: json['orderCreatedDate'] as String,
+          orderTimeCreated: json['orderTimeCreated'] as String,
           totalAmount: (json['totalAmount'] as num).toDouble(),
           currency: json['currency'] as String,
           orderDirection: OrderDirectionEntity.fromJson(json['orderDirection']),

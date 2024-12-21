@@ -11,6 +11,7 @@ class OrderMapper {
       id: entity.id,
       orderState: entity.orderState,
       orderCreatedDate: entity.orderCreatedDate,
+      orderTimeCreated: entity.orderTimeCreated,
       totalAmount: entity.totalAmount,
       currency: entity.currency,
       orderDirection: OrderDirection(
