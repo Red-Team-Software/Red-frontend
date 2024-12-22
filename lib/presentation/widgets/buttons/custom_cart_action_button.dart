@@ -11,24 +11,24 @@ class CustomCartActionButton extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: theme.colorScheme.primary,
-        borderRadius: BorderRadius.all(Radius.circular(24)),
+        borderRadius: const BorderRadius.all(Radius.circular(24)),
       ),
       padding: const EdgeInsets.all(2.0),
       child: Row(
         children: [
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.remove,
               color: Colors.white,
             ),
             onPressed: () {},
           ),
-          Text(
+          const Text(
             '1',
             style: TextStyle(fontSize: 14, color: Colors.white),
           ),
           IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
+            icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {},
           ),
         ],

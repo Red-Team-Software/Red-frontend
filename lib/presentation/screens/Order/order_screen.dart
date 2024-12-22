@@ -68,6 +68,12 @@ class OrderSummaryScreen extends StatelessWidget {
             );
           }
 
+          if (state is OrderError) {
+            return Center(
+              child: Text(state.message),
+            );
+          }
+
           return const Center(
             child: Text('Error loading order.'),
           );

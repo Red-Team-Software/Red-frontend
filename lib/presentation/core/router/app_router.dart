@@ -80,11 +80,7 @@ final appRouter = GoRouter(
       name: OrderSummaryScreen.name,
       builder: (context, state) {
         return BlocProvider(
-          create: (_) {
-            final orderBloc =
-                OrderBloc(orderRepository: getIt<IOrderRepository>());
-            return orderBloc;
-          },
+          create: (_) => OrderBloc(orderRepository: getIt<IOrderRepository>()),
           child: OrderSummaryScreen(
             idOrder: state.pathParameters['idOrder'] ?? '',
           ),
