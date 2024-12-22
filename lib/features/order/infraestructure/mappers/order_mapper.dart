@@ -13,7 +13,6 @@ class OrderMapper {
       orderCreatedDate: entity.orderCreatedDate,
       orderTimeCreated: entity.orderTimeCreated,
       totalAmount: entity.totalAmount,
-      currency: entity.currency,
       orderDirection: OrderDirection(
         latitude: entity.orderDirection.latitude,
         longitude: entity.orderDirection.longitude,
@@ -36,7 +35,6 @@ class OrderMapper {
       orderCreatedDate: entity.orderCreatedDate,
       orderTimeCreated: entity.orderTimeCreated,
       totalAmount: entity.totalAmount,
-      currency: entity.currency,
       orderDirection: OrderDirection(
         latitude: entity.orderDirection.latitude,
         longitude: entity.orderDirection.longitude,

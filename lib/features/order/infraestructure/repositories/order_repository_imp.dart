@@ -32,6 +32,7 @@ class OrderRepositoryImpl implements IOrderRepository {
 
       return order;
     } catch (e) {
+      print("error en el rerpo pago");
       print("error en el rerpo");
       print(e);
       return Result.makeError(e as Exception);
@@ -40,7 +41,7 @@ class OrderRepositoryImpl implements IOrderRepository {
 
   @override
   Future<Result<List<OrderItem>>> fetchAllOrders(
-      {int page = 1, int perPage = 10}) async {
+      {int page = 1, int perPage = 100}) async {
     try {
       final orders =
           await datasource.fetchAllOrders(page: page, perPage: perPage);

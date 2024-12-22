@@ -7,7 +7,6 @@ class Order extends Equatable {
   final String orderState;
   final String orderCreatedDate;
   final double totalAmount;
-  final String currency;
   final OrderDirection orderDirection;
   final List<ProductCart> products;
   final List<BundleCart> bundles;
@@ -22,7 +21,6 @@ class Order extends Equatable {
     required this.orderState,
     required this.orderCreatedDate,
     required this.totalAmount,
-    required this.currency,
     required this.orderDirection,
     required this.products,
     required this.bundles,
@@ -39,7 +37,6 @@ class Order extends Equatable {
         orderState,
         orderCreatedDate,
         totalAmount,
-        currency,
         orderDirection,
         products,
         bundles,

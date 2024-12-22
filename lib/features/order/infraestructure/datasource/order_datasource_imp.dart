@@ -24,7 +24,8 @@ class OrderDatasourceImpl implements IOrderDatasource {
     final res = await httpService.request(
       '/order/pay/stripe',
       'POST',
-      (json) => OrderMapper.mapEntityToDomain(OrderEntity.fromJson(json)),
+      (json) =>
+          OrderMapper.mapEntityToDomain(OrderEntity.fromPaymentJson(json)),
       body: {
         "paymentId": paymentId,
         "currency": currency,
@@ -43,7 +44,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
 
   @override
   Future<List<OrderItem>> fetchAllOrders(
-      {int page = 1, int perPage = 10}) async {
+      {int page = 1, int perPage = 100}) async {
     final res = await httpService.request(
       '/order/user/all',
       'GET',
