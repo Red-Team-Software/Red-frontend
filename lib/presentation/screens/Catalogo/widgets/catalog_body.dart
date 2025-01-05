@@ -7,6 +7,8 @@ import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CatalogBody extends StatelessWidget {
@@ -168,7 +170,11 @@ class _CustomItemGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return GestureDetector(
+        onTap: () {
+          context.push('/bundle/${current.id}');
+        },
+    child: Material(
       elevation: 8.0,
       borderRadius: BorderRadius.circular(16),
       child: Stack(
@@ -208,6 +214,6 @@ class _CustomItemGrid extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ));
   }
 }

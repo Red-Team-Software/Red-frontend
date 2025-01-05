@@ -3,6 +3,7 @@ import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/categories/domain/datasources/categories_datasource.dart';
 import 'package:GoDeli/features/categories/infraestructure/mappers/category_mapper.dart';
 import 'package:GoDeli/features/categories/infraestructure/models/category_response.dart';
+import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/common/infrastructure/http_service.dart';
 
 // List<Category> categories = [
@@ -42,7 +43,7 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
   Future<List<Category>> getCategories() async{
 
     final res = await _httpService.request(
-        '/category/all', 'GET', (json) => CategoryResponse.fromJsonList(json),
+        '/category/many', 'GET', (json) => CategoryResponse.fromJsonList(json),
         queryParameters: {
           'page': 1,
           'perPage': 10,
@@ -57,5 +58,11 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
     }
 
     return categories;
+  }
+
+  @override
+  Future<Result<List<ProductCategory>>> getProductsByCategory(String categoryId) {
+    // TODO: implement getProductsByCategory
+    throw UnimplementedError();
   }
 }

@@ -9,8 +9,8 @@ class TaxShippingEntity {
 
   factory TaxShippingEntity.fromJson(Map<String, dynamic> json) {
     return TaxShippingEntity(
-      taxes: json['taxes'],
-      shipping: json['shipping'],
+      taxes: json['taxes'].toDouble(),
+      shipping: json['shipping'].toDouble(),
     );
   }
 

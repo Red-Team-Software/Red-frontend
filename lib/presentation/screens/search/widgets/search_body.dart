@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
@@ -50,15 +52,14 @@ class SearchBody extends StatelessWidget {
                 state.status != SearchStatus.initial) {
               return const SliverFillRemaining(
                 child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.search_off_outlined, size: 64),        
-                      SizedBox(height: 16),
-                      Text('Nothing found'),
-                    ],
-                  )
-                ),
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.search_off_outlined, size: 64),
+                    SizedBox(height: 16),
+                    Text('Nothing found'),
+                  ],
+                )),
               );
             }
 
@@ -80,25 +81,23 @@ class SearchBody extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 260,
-                        child: Expanded(
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: state.bundles.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Bundle current = state.bundles[index];
-                              return GestureDetector(
-                                onTap: () {},
-                                child: CardItem(current: current),
-                              );
-                            },
-                            separatorBuilder: (BuildContext context, int index) {
-                              return const SizedBox(width: 24); // Espacio entre los elementos
-                            },
-                          )
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.bundles.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            Bundle current = state.bundles[index];
+                            return GestureDetector(
+                              onTap: () {},
+                              child: CardItem(current: current),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(
+                                width: 24); // Espacio entre los elementos
+                          },
                         ),
                       )
                     ],
-                    
                     if (state.products.isNotEmpty) ...[
                       Text(
                         'Products',
@@ -148,7 +147,7 @@ class SearchBody extends StatelessWidget {
               SizedBox(height: 16),
               Text('Here some popular searches...'),
               SizedBox(height: 8),
-              CardBundleCarrusel(),
+              // CardBundleCarrusel(),
               SizedBox(height: 16),
             ],
           ),
@@ -158,33 +157,80 @@ class SearchBody extends StatelessWidget {
   }
 }
 
-class _InputSearch extends StatelessWidget {
+class _InputSearch extends StatefulWidget {
+  @override
+  _InputSearchState createState() => _InputSearchState();
+}
+
+class _InputSearchState extends State<_InputSearch> {
   final TextEditingController controller = TextEditingController();
+  Timer? _debounce;
 
-  _InputSearch();
+  @override
+  void dispose() {
+    _debounce?.cancel(); // Cancelar el temporizador al destruir el widget
+    controller.dispose();
+    super.dispose();
+  }
 
+  void _onTextChanged(String text) {
+    // Reiniciar el temporizador en cada cambio
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 700), () {
+      // Llamar a la búsqueda automática después del tiempo de espera
+      if (text.isNotEmpty) {
+        context.read<SearchBloc>().onSearch(text);
+      } else {
+        context.read<SearchBloc>().add(const ResetSearchEvent());
+      }
+    });
+  }
+
+  @override
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return SearchBar(
-          onChanged: (text) => controller.text = text,
+          controller: controller,
+          onChanged: (text) {
+            _onTextChanged(text);
+          },
           hintText: 'Search for products or bundles',
           backgroundColor: WidgetStateProperty.all(Colors.grey[300]),
           trailing: [
-            state.status != SearchStatus.initial
-                ? IconButton(
-                    icon: Icon(Icons.clear, color: Theme.of(context).primaryColor),
-                    onPressed: () {
-                      context.read<SearchBloc>().add(const ResetSearchEvent());
-                    },
-                  )
-                : IconButton(
-                    icon: const Icon(Icons.search),
-                    onPressed: () {
-                      context.read<SearchBloc>().onSearch(controller.text);
-                    },
-                  )
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: state.status == SearchStatus.loading
+                  ? const SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : controller.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(
+                            Icons.clear,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          onPressed: () {
+                            controller.clear();
+                            _onTextChanged('');
+                            context
+                                .read<SearchBloc>()
+                                .add(const ResetSearchEvent());
+                          },
+                        )
+                      : IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                            context
+                                .read<SearchBloc>()
+                                .onSearch(controller.text);
+                          },
+                        ),
+            ),
           ],
         );
       },

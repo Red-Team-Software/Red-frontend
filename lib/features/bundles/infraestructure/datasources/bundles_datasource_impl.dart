@@ -16,8 +16,7 @@ class BundlesDatasourceImpl implements IBundleDatasource{
   Future<Bundle> getBundleById(String id) async {
 
     final res = await _httpService.request(
-        '/bundle/', 'GET', (json) => BundleResponse.fromJson(json),
-        queryParameters: {'id': id});
+        '/bundle/$id', 'GET', (json) => BundleResponse.fromJson(json));
 
     return BundleMapper.bundleToDomian(res.getValue());
   }
@@ -26,7 +25,7 @@ class BundlesDatasourceImpl implements IBundleDatasource{
   Future<List<Bundle>> getBundlesPaginated({int page = 1, int perPage = 10}) async {
     
     final res = await _httpService.request(
-        '/bundle/all', 'GET', (json) => BundleResponse.fromJsonList(json),
+        '/bundle/many', 'GET', (json) => BundleResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
           'perPage': perPage,

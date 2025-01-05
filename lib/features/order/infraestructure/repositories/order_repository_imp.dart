@@ -57,7 +57,8 @@ class OrderRepositoryImpl implements IOrderRepository {
     try {
       await datasource.cancelOrder(orderId: orderId);
     } catch (e) {
-      throw Exception(e);
+      print("error en el rerpo");
+      print(e);
     }
   }
 }
