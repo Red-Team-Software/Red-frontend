@@ -47,6 +47,13 @@ class CardBundleCarrusel extends StatelessWidget {
                 state.bundles.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
+            if (state.bundles.isEmpty &&
+                (state.status == BundlesStatus.allLoaded ||
+                    state.status == BundlesStatus.loaded)) {
+              return const Center(
+                  child: Text('Algo raro paso, No hay Bundles!',
+                      style: TextStyle(color: Colors.red)));
+            }
             if (state.status == BundlesStatus.error) {
               return const Center(
                 child: Text('Algo inesperado paso',

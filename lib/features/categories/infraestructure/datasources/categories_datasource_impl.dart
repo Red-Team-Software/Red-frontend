@@ -43,7 +43,7 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
   Future<List<Category>> getCategories() async{
 
     final res = await _httpService.request(
-        '/category/all', 'GET', (json) => CategoryResponse.fromJsonList(json),
+        '/category/many', 'GET', (json) => CategoryResponse.fromJsonList(json),
         queryParameters: {
           'page': 1,
           'perPage': 10,

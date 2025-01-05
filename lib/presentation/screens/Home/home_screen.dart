@@ -222,6 +222,16 @@ class _CarruselItems extends StatelessWidget {
               state.products.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
+          if (state.products.isEmpty &&
+              (state.status == ProductsStatus.allLoaded ||
+                  state.status == ProductsStatus.loaded)) {
+            return const Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Center(
+                  child: Text('Algo raro paso, No hay productos!',
+                      style: TextStyle(color: Colors.red))),
+            );
+          }
           if (state.status == ProductsStatus.error) {
             return const Center(
               child: Text('Algo inesperado paso',
