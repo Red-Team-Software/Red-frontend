@@ -7,14 +7,20 @@ class CategoryResponse {
   final String id;
   final String name;
   final String icon;
-  CategoryResponse({required this.id, required this.name, required this.icon});
+  CategoryResponse({required this.id, required this.name, this.icon = ''});
 
   factory CategoryResponse.fromJson(Map<String, dynamic> json) => CategoryResponse(
         id: json["categoryId"],
         name: json["categoryName"],
-        icon: json["categoryImage"],
+        icon: json["categoryImage"] ?? '',
     );
   
+  factory CategoryResponse.fromProductJson(Map<String, dynamic> json) => CategoryResponse(
+        id: json["id"],
+        name: json["name"],
+    );
+
+
   static Category categoryToDomain(CategoryResponse json){
     return Category(id: json.id, name: json.name, icon: json.icon);
   }

@@ -5,7 +5,6 @@ import 'package:GoDeli/features/products/infraestructure/mappers/product_mapper.
 import 'package:GoDeli/features/products/infraestructure/models/product_response.dart';
 import 'package:GoDeli/features/products/infraestructure/models/search_response.dart';
 
-
 class ProductsDatasourceImpl implements IProductsDatasource {
   final IHttpService _httpService;
 
@@ -14,16 +13,16 @@ class ProductsDatasourceImpl implements IProductsDatasource {
   @override
   Future<Product> getProductById(String id) async {
     final res = await _httpService.request(
-        '/product/', 'GET', (json) => ProductResponse.fromJson(json),
-        queryParameters: {'id': id});
+        '/product/$id', 'GET', (json) => ProductResponse.fromJson(json, id: id));
+
+    print(res.getValue());
     return ProductMapper.productToDomain(res.getValue());
   }
 
   @override
   Future<List<Product>> getProducts({int page = 1, int perPage = 10}) async {
-
     final res = await _httpService.request(
-        '/product/all', 'GET', (json) => ProductResponse.fromJsonList(json),
+        '/product/many', 'GET', (json) => ProductResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
           'perPage': perPage,
@@ -31,7 +30,7 @@ class ProductsDatasourceImpl implements IProductsDatasource {
 
     final List<Product> products = [];
 
-    if( res.isSuccessful() ) {
+    if (res.isSuccessful()) {
       for (var product in res.getValue()) {
         products.add(ProductMapper.productToDomain(product));
       }
@@ -39,22 +38,18 @@ class ProductsDatasourceImpl implements IProductsDatasource {
 
     return products;
   }
-  
-  @override
-  Future<List<Product>> searchProducts({int page = 1, int perPage = 10, required String term}) async {
 
-    final resProduct = await _httpService.request(
-        '/product/all-product-bundle', 'GET', (json) => SearchResponse.fromJson(json),
-        queryParameters: {
-          'page': page,
-          'perPage': perPage,
-          'term': term
-        });
+  @override
+  Future<List<Product>> searchProducts(
+      {int page = 1, int perPage = 10, required String term}) async {
+    final resProduct = await _httpService.request('/product/all-product-bundle',
+        'GET', (json) => SearchResponse.fromJson(json),
+        queryParameters: {'page': page, 'perPage': perPage, 'term': term});
 
     // print(res);
     final List<Product> products = [];
-    
-    if(resProduct.isSuccessful()) {
+
+    if (resProduct.isSuccessful()) {
       for (var product in resProduct.getValue().products) {
         products.add(ProductMapper.productToDomain(product));
       }

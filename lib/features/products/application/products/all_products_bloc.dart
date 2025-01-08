@@ -65,6 +65,7 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
       add(ProductsFetched(products));
       return;
     } else {
+      print(res.getError());
       add(const ProductsError());
     }
   }

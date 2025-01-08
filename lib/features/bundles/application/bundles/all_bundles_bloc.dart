@@ -7,34 +7,30 @@ part 'all_bundles_event.dart';
 part 'all_bundles_state.dart';
 
 class AllBundlesBloc extends Bloc<AllBundlesEvent, AllBundlesState> {
-
   final IBundleRepository bundleRepository;
 
-  AllBundlesBloc({required this.bundleRepository}) : super(const AllBundlesState()) {
+  AllBundlesBloc({required this.bundleRepository})
+      : super(const AllBundlesState()) {
     on<BundlesFetched>(_onBundlesFetched);
     on<BundlesLoading>(_onBundlesLoading);
     on<BundlesIsEmpty>(_onBundlesIsEmpty);
     on<BundlesError>(_onBundlesError);
   }
 
-
-  void _onBundlesFetched(
-      BundlesFetched event, Emitter<AllBundlesState> emit) {
+  void _onBundlesFetched(BundlesFetched event, Emitter<AllBundlesState> emit) {
     emit(state.copyWith(
       bundles: event.bundles,
       status: BundlesStatus.loaded,
     ));
   }
 
-  void _onBundlesIsEmpty(
-      BundlesIsEmpty event, Emitter<AllBundlesState> emit) {
+  void _onBundlesIsEmpty(BundlesIsEmpty event, Emitter<AllBundlesState> emit) {
     emit(state.copyWith(
       status: BundlesStatus.allLoaded,
     ));
   }
 
-  void _onBundlesLoading(
-      BundlesLoading event, Emitter<AllBundlesState> emit) {
+  void _onBundlesLoading(BundlesLoading event, Emitter<AllBundlesState> emit) {
     emit(state.copyWith(
       status: BundlesStatus.loading,
     ));
@@ -52,6 +48,7 @@ class AllBundlesBloc extends Bloc<AllBundlesEvent, AllBundlesState> {
         state.status == BundlesStatus.error) return;
     add(const BundlesLoading());
 
+    print('peticion de Bundles');
     final res = await bundleRepository.getBundlesPaginated(
       page: state.page,
       perPage: state.perPage,

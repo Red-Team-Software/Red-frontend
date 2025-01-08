@@ -3,31 +3,34 @@ import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.da
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-
 part 'bundle_details_event.dart';
 part 'bundle_details_state.dart';
 
-final initialBundle = Bundle(id: '', name: '', description: '', price: 0, imageUrl: [''], currency: '');
+final initialBundle = Bundle(
+    id: '', name: '', description: '', price: 0, imageUrl: [''], currency: '');
 
 class BundleDetailsBloc extends Bloc<BundleDetailsEvent, BundleDetailsState> {
-
   final IBundleRepository bundleRepository;
 
-  BundleDetailsBloc({ required this.bundleRepository }) : super(BundleDetailsState(bundle: initialBundle)) {
+  BundleDetailsBloc({required this.bundleRepository})
+      : super(BundleDetailsState(bundle: initialBundle)) {
     on<BundleLoaded>(_onBundleLoaded);
     on<LoadingStarted>(_onLoadingStarted);
     on<ErrorOnBundleLoading>(_onErrorOnBundleLoading);
   }
 
   void _onBundleLoaded(BundleLoaded event, Emitter<BundleDetailsState> emit) {
-    emit(state.copyWith(status: BundleDetailsStatus.loaded, bundle: event.bundle));
+    emit(state.copyWith(
+        status: BundleDetailsStatus.loaded, bundle: event.bundle));
   }
 
-  void _onLoadingStarted(LoadingStarted event, Emitter<BundleDetailsState> emit) {
+  void _onLoadingStarted(
+      LoadingStarted event, Emitter<BundleDetailsState> emit) {
     emit(state.copyWith(status: BundleDetailsStatus.loading));
   }
 
-  void _onErrorOnBundleLoading(ErrorOnBundleLoading event, Emitter<BundleDetailsState> emit) {
+  void _onErrorOnBundleLoading(
+      ErrorOnBundleLoading event, Emitter<BundleDetailsState> emit) {
     emit(state.copyWith(status: BundleDetailsStatus.error));
   }
 
@@ -41,6 +44,7 @@ class BundleDetailsBloc extends Bloc<BundleDetailsEvent, BundleDetailsState> {
       add(BundleLoaded(bundle: bundle));
       return;
     }
+    print(res.getError());
     add(ErrorOnBundleLoading());
   }
 }

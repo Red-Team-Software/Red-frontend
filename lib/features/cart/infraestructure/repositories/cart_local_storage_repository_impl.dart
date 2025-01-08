@@ -3,7 +3,7 @@ import 'package:GoDeli/features/cart/domain/datasource/cart_local_storage_dataso
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/cart/domain/repositories/cart_local_storage_repository.dart';
 
-class CartLocalStorageRepositoryImpl extends CartLocalStorageRepository {
+class CartLocalStorageRepositoryImpl extends ICartLocalStorageRepository {
   //! Aqui iria el manejador de local storage
   final CartLocalStorageDataSource dataSource;
 

@@ -99,7 +99,7 @@ class Injector {
     final LogoutUseCase logoutUseCase =
         LogoutUseCase(httpService, authLocalStorageRepository, cartRepository);
     final CheckAuthUseCase checkAuthUseCase =
-        CheckAuthUseCase(httpService, authLocalStorageRepository);
+        CheckAuthUseCase(httpService, authLocalStorageRepository, cartRepository);
 
     // getIt.registerSingleton<IAuthRepository>(authRepository);
     getIt.registerFactory<AuthBloc>(() => AuthBloc(

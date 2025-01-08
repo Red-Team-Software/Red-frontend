@@ -33,10 +33,10 @@ class ProductResponse {
 
   });
 
-  factory ProductResponse.fromJson(Map<String, dynamic> json) {
+  factory ProductResponse.fromJson(Map<String, dynamic> json, {String id = ''}) {
     return ProductResponse(
-      id: json['id'],
-      description: json['description'],
+      id: json['id'] ?? id,
+      description: json['description'] ?? '',
       caducityDate: json['caducityDate'],
       name: json['name'],
       stock: json['stock'],
@@ -47,14 +47,14 @@ class ProductResponse {
           ? json['price']
           : double.tryParse(json['price'].toString()) ?? 0.0, // Maneja casos de String o null,  
       currency: json['currency'],
-      weigth: json['weigth'] is int
-          ? json['weigth'].toDouble()
-          : json['weigth'] is double
-          ? json['weigth']
-          : double.tryParse(json['weigth'].toString()) ?? 0.0,
+      weigth: json['weight'] is int
+          ? json['weight'].toDouble()
+          : json['weight'] is double
+          ? json['weight']
+          : double.tryParse(json['weight'].toString()) ?? 0.0,
       measurement: json['measurement'],
-      categories: json['categories'] != null ? List<Category>.from(json["categories"].map((x) => CategoryResponse.categoryToDomain(CategoryResponse.fromJson(json)))): [],
-      promotion: json['promotion'] != null ? List<Promotion>.from(json["promotion"].map((x) => Promotion.fromJson(x))) : []
+      categories: json['category'] != null ? List<Category>.from(json["category"].map((x) => CategoryResponse.categoryToDomain(CategoryResponse.fromProductJson(x)))): [],
+      promotion: json['discount'] != null ? List<Promotion>.from(json["discount"].map((x) => Promotion.fromJson(x))) : []
     );
   }
 

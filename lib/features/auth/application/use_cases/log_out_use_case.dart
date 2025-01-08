@@ -6,7 +6,7 @@ import 'package:GoDeli/features/common/infrastructure/http_service.dart';
 
 class LogoutUseCase implements IUseCase<void, bool> {
   final IAuthLocalStorageRepository _authLocalStorageRepository;
-  final CartLocalStorageRepository _cartLocalStorageRepository;
+  final ICartLocalStorageRepository _cartLocalStorageRepository;
   final IHttpService _httpService;
 
   LogoutUseCase(this._httpService, this._authLocalStorageRepository,
