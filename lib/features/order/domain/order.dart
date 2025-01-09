@@ -77,6 +77,17 @@ class Courier {
     required this.courierImage,
     required this.location,
   });
+
+  factory Courier.fromJson(Map<String, dynamic> json) {
+    return Courier(
+      courierName: json['courierName'] as String,
+      courierImage: json['courierImage'] as String,
+      location: Location(
+        latitude: (json['location']['lat'] as num).toDouble(),
+        longitude: (json['location']['long'] as num).toDouble(),
+      ),
+    );
+  }
 }
 
 class Location {

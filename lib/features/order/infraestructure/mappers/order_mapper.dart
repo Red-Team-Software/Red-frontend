@@ -25,6 +25,7 @@ class OrderMapper {
         currency: entity.orderPayment.currency,
         amount: entity.orderPayment.amount,
       ),
+      orderCourier: entity.orderCourier,
     );
   }
 

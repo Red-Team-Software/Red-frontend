@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'widgets/order_header.dart';
 import 'widgets/order_item_list.dart';
 import 'widgets/order_summary_details.dart';
+import 'widgets/order_courier.dart';
 
 class OrderSummaryScreen extends StatelessWidget {
   static const String name = 'order_summary_screen';
@@ -40,12 +41,13 @@ class OrderSummaryScreen extends StatelessWidget {
 
           if (state is OrderLoaded) {
             final order = state.order;
-
             return Column(
               children: [
                 OrderHeader(
                     orderSummary: order), // Encabezado con la info de la orden
                 const SizedBox(height: 16),
+                if (order.orderCourier != null)
+                  OrderCourierCard(courier: order.orderCourier!),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Align(

@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:GoDeli/features/order/domain/order.dart';
 
 class OrderEntity {
   final String id;
@@ -13,6 +14,7 @@ class OrderEntity {
   final List<BundleCart> bundles;
   final String? orderReceivedDate;
   final OrderPaymentEntity orderPayment;
+  final Courier? orderCourier;
 
   OrderEntity({
     required this.id,
@@ -25,6 +27,7 @@ class OrderEntity {
     required this.bundles,
     this.orderReceivedDate,
     required this.orderPayment,
+    this.orderCourier,
   });
 
   factory OrderEntity.fromPaymentJson(dynamic json) {
@@ -104,6 +107,9 @@ class OrderEntity {
               .toList(),
           orderReceivedDate: orderJson['orderReceivedDate'] as String? ?? '',
           orderPayment: OrderPaymentEntity.fromJson(orderJson['orderPayment']),
+          orderCourier: orderJson['orderCourier'] != null
+              ? Courier.fromJson(orderJson['orderCourier'])
+              : null,
         );
       } else {
         print('Invalid JSON type or missing "orders" key: ${json.runtimeType}');
