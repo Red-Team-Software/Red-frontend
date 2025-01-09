@@ -30,7 +30,7 @@ class FetchAllOrders extends OrdersEvent {
   final int page;
   final int perPage;
 
-  const FetchAllOrders({this.page = 1, this.perPage = 10});
+  const FetchAllOrders({this.page = 1, this.perPage = 100});
 }
 
 class OrderCancelled extends OrdersEvent {

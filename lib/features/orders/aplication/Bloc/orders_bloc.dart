@@ -55,7 +55,8 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       await orderRepository.cancelOrder(orderId: event.orderId);
 
       // Fetch updated orders
-      final orders = await orderRepository.fetchAllOrders(page: 1, perPage: 10);
+      final orders =
+          await orderRepository.fetchAllOrders(page: 1, perPage: 100);
 
       print("daleee brii");
       print(orders.isSuccessful());

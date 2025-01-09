@@ -7,11 +7,11 @@ abstract class OrderEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadOrder extends OrderEvent {
-  final Order order;
+class FetchOrderById extends OrderEvent {
+  final String orderId;
 
-  const LoadOrder({required this.order});
+  const FetchOrderById({required this.orderId});
 
   @override
-  List<Object?> get props => [order];
+  List<Object?> get props => [orderId];
 }

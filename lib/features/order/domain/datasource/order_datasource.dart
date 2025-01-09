@@ -14,7 +14,9 @@ abstract class IOrderDatasource {
     required List<Map<String, dynamic>> products,
   });
 
-  Future<List<OrderItem>> fetchAllOrders({int page = 1, int perPage = 10});
+  Future<List<OrderItem>> fetchAllOrders({int page = 1, int perPage = 100});
 
   Future<void> cancelOrder({required String orderId});
+
+  Future<Order> fetchOrderById({required String orderId});
 }
