@@ -8,7 +8,7 @@ class User {
   List<UserDirection> directions;
   // File? image;
   String? image;
-  Wallet wallet;
+  Wallet? wallet;
 
   User({
     required this.id,
@@ -32,7 +32,7 @@ class User {
               .map((e) => UserDirection.fromJson(e))
               .toList(),
       image: json['image'],
-      wallet: Wallet.fromJson(json['wallet']),
+      wallet: json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null,
     );
   }
 }

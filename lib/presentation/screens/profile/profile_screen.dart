@@ -266,7 +266,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                   thickness: 1,
                 ),
                 const SizedBox(height: 10),
-                WalletCard(wallet: widget.user.wallet,),
+                WalletCard(wallet: widget.user.wallet!,),
                 Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left

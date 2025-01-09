@@ -79,7 +79,7 @@ class Promotion extends Equatable{
   factory Promotion.fromJson(Map<String, dynamic> json) => Promotion(
         id: json["id"],
         // name: json["name"],
-        percentage: json["discount"]?.toDouble(),
+        percentage: json["percentage"]?.toDouble(),
     );
   
   @override

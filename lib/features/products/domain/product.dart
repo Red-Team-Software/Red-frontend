@@ -54,18 +54,18 @@ class Product extends Equatable{
 class Promotion extends Equatable{
 
   final String id;
-  final String name;
+  final String? name;
   final double discount;
 
   const Promotion({required this.id, required this.name, required this.discount});
 
   factory Promotion.fromJson(Map<String, dynamic> json) => Promotion(
         id: json["id"],
-        name: json["name"],
-        discount: json["discount"]?.toDouble(),
+        name: json["name"] ?? '',
+        discount: json["percentage"]?.toDouble(),
     );
   
   @override
-  List<Object> get props => [id, name, discount];
+  List<Object> get props => [id, discount];
 
 }
