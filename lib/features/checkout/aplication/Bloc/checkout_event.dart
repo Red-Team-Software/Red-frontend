@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:GoDeli/features/checkout/domain/address.dart';
+import 'package:flutter/material.dart';
+import 'package:GoDeli/features/payment-method/domain/payment-method.dart';
 
 abstract class CheckoutEvent extends Equatable {
   const CheckoutEvent();
@@ -21,14 +23,16 @@ class SelectAddress extends CheckoutEvent {
 class AddNewAddress extends CheckoutEvent {
   final String title;
   final String location;
-  const AddNewAddress(this.title, this.location);
+  final num lat;
+  final num lng;
+  const AddNewAddress(this.title, this.location, this.lat, this.lng);
 
   @override
   List<Object?> get props => [title, location];
 }
 
 class SelectPaymentMethod extends CheckoutEvent {
-  final String paymentMethod;
+  final PaymentMethod paymentMethod;
   const SelectPaymentMethod(this.paymentMethod);
 
   @override
@@ -36,3 +40,50 @@ class SelectPaymentMethod extends CheckoutEvent {
 }
 
 class ProceedToCheckout extends CheckoutEvent {}
+
+class ProcessPayment extends CheckoutEvent {
+  final String paymentId;
+  final String currency;
+  final String paymentMethod;
+  final String stripePaymentMethod;
+  final String address;
+  final List<Map<String, dynamic>> bundles;
+  final List<Map<String, dynamic>> products;
+  final BuildContext context;
+
+  const ProcessPayment({
+    required this.paymentId,
+    required this.currency,
+    required this.paymentMethod,
+    required this.stripePaymentMethod,
+    required this.address,
+    required this.bundles,
+    required this.products,
+    required this.context,
+  });
+
+  @override
+  List<Object?> get props => [
+        paymentId,
+        currency,
+        paymentMethod,
+        stripePaymentMethod,
+        address,
+        bundles,
+        products
+      ];
+}
+
+class FetchAddressesEvent extends CheckoutEvent {}
+
+class RemoveAddressEvent extends CheckoutEvent {
+  final Address address;
+
+  const RemoveAddressEvent(this.address);
+}
+
+class UpdateAddressEvent extends CheckoutEvent {
+  final Address address;
+
+  const UpdateAddressEvent(this.address);
+}

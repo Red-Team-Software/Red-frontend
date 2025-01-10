@@ -1,24 +1,22 @@
-import 'package:dio/dio.dart';
-import 'package:GoDeli/config/constants/enviroments.dart';
+import 'package:GoDeli/features/common/domain/result.dart';
+import 'package:GoDeli/features/common/infrastructure/http_service.dart';
 
 class NotificationDatasource {
-  final Dio dio =
-      Dio(BaseOptions(baseUrl: '${Environment.backendApi}/notification'));
+  final IHttpService _httpService;
 
-  Future<void> saveToken(String token) async {
-    try {
-      final response = await dio.post('/savetoken', data: {'token': token});
-      print('Token guardado exitosamente: ${response.statusCode}');
-    } on DioException catch (e) {
-      // print('Error al guardar el token: ${e.message}');
-      // print('URL: ${e.requestOptions.uri}');
-      // print('Headers: ${e.requestOptions.headers}');
-      // print('Method: ${e.requestOptions.method}');
-      // print('Status code: ${e.response?.statusCode}');
-      // print('Response data: ${e.response?.data}');
-      // print('Stack trace: $e');
-    } catch (e) {
-      print('Error inesperado: $e');
+  NotificationDatasource(this._httpService);
+
+  Future<Result<String>> saveToken(String token) async {
+    final response = await _httpService.request(
+        '/notification/savetoken', 'POST', (json) => {},
+        body: {'token': token});
+
+    if (!response.isSuccessful()) {
+      print('Entra a error');
+      return Result.makeError(
+          Exception('Failed to save token: ${response.getError()}'));
     }
+    print('Firebase Token guardado exitosamente');
+    return Result.success('Token guardado exitosamente');
   }
 }

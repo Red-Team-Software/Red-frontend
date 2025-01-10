@@ -1,8 +1,15 @@
 part of 'bundle_details_bloc.dart';
 
-sealed class BundleDetailsEvent extends Equatable {
+sealed class BundleDetailsEvent {
   const BundleDetailsEvent();
 
-  @override
-  List<Object> get props => [];
 }
+
+class BundleLoaded extends BundleDetailsEvent{
+  final Bundle bundle;
+  const BundleLoaded({required this.bundle});
+}
+
+class LoadingStarted extends BundleDetailsEvent{}
+
+class ErrorOnBundleLoading extends BundleDetailsEvent{}

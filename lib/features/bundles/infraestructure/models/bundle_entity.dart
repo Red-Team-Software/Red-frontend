@@ -24,4 +24,15 @@ class BundleEntity {
       required this.currency,
       this.weigth,
       this.measurement});
+
+  factory BundleEntity.fromJson(Map<String, dynamic> json) {
+    return BundleEntity(
+      id: json['id'] as String,
+      name: json['nombre'] as String,
+      description: json['descripcion'] as String,
+      price: (json['price'] as num).toDouble(),
+      currency: json['currency'] as String,
+      imageUrl: (json['images'] as List).map((e) => e as String).toList(),
+    );
+  }
 }
