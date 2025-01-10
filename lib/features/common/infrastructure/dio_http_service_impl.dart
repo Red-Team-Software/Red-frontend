@@ -35,11 +35,9 @@ class DioHttpServiceImpl<T> implements IHttpService {
       return Result<T>.success(mapper(response.data));
     } on DioException catch (e) {
       print("--------------");
-      print(e);
-      print("--------------");
       print(e.response);
       print("--------------");
-      return Result.makeError(e);
+      return Result.makeError(Exception(e.response));
     } catch (e) {
       return Result.makeError(Exception('Error en request: ${e.toString()}'));
     }

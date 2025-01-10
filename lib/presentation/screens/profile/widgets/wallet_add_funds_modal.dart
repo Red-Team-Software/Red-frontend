@@ -1,6 +1,10 @@
 import 'package:GoDeli/config/injector/injector.dart';
+import 'package:GoDeli/features/common/infrastructure/dio_http_service_impl.dart';
 import 'package:GoDeli/features/payment-method/application/bloc/payment_method_bloc.dart';
 import 'package:GoDeli/features/payment-method/domain/payment-method.dart';
+import 'package:GoDeli/features/wallet/application/dto/add_funds_pago_movil_dto.dart';
+import 'package:GoDeli/features/wallet/infrastructure/datasource/wallet_datasource_impl.dart';
+import 'package:GoDeli/features/wallet/infrastructure/repository/wallet_repository_impl.dart';
 import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -44,40 +48,53 @@ class _WalletAddFundsModalState extends State<WalletAddFundsModal> {
                   );
                 }
                 if (state is PaymentMethodLoaded) {
-                  return Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          'Add Funds',
-                          style: textStyles.displayMedium,
-                        ),
-                        const SizedBox(height: 20),
-                        // Listado de métodos de pago
-                        Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
+                  return Stack(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text(
+                            'Add Funds',
+                            style: textStyles.displayMedium,
                           ),
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              if (state.paymentMethods.isEmpty) {
-                                return const Center(
-                                  child: Text('No payment methods'),
-                                );
-                              }
-                              return PaymentMethodCard(
-                                  paymentMethod: state.paymentMethods[index]);
-                            },
-                            itemCount: state.paymentMethods.length,
-                            padding: const EdgeInsets.all(8),
+                          const SizedBox(height: 20),
+                          // Listado de métodos de pago
+                          Container(
+                            height: 400,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: ListView.builder(
+                              itemBuilder: (context, index) {
+                                if (state.paymentMethods.isEmpty) {
+                                  return const Center(
+                                    child: Text('No payment methods'),
+                                  );
+                                }
+                                return PaymentMethodCard(
+                                    paymentMethod: state.paymentMethods[index]);
+                              },
+                              itemCount: state.paymentMethods.length,
+                              padding: const EdgeInsets.all(8),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                      ],
+                          const SizedBox(height: 20),
+                        ],
+                      ),
                     ),
-                  );
+                    Positioned(
+                      top: 5,
+                      right: 5,
+                      child: IconButton(
+                        icon: const Icon(Icons.close),
+                        color: colors.error,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    )
+                  ]);
                 }
                 return const Center(child: CircularProgressIndicator());
               }),
@@ -110,20 +127,20 @@ class PaymentMethodCard extends StatelessWidget {
                       return ZellePaymentForm();
                     }
                     if (paymentMethod.name.toUpperCase() == 'PAGO MOVIL') {
-                      return PagoMovilPaymentForm();
+                      return PagoMovilPaymentForm(paymentId: paymentMethod.id);
                     }
                     return const SizedBox();
                   });
             }
           : null,
       child: SizedBox(
-        height: 100,
+        height: 120,
         width: 80,
         child: Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            elevation: 4,
+            elevation: 8,
             child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Stack(
@@ -268,21 +285,21 @@ class ZellePaymentForm extends StatelessWidget {
                       },
                       child: const Text('Submit'),
                     ),
-                                      ],
+                  ],
                 ),
               ),
             ),
             Positioned(
-                      top: 5,
-                      right: 5,
-                      child: IconButton(
-                        icon: const Icon(Icons.close),
-                        color: colors.error,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                      ),
-                    )
+              top: 5,
+              right: 5,
+              child: IconButton(
+                icon: const Icon(Icons.close),
+                color: colors.error,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            )
           ],
         ),
       ),
@@ -291,7 +308,8 @@ class ZellePaymentForm extends StatelessWidget {
 }
 
 class PagoMovilPaymentForm extends StatelessWidget {
-  PagoMovilPaymentForm({super.key});
+  final String paymentId;
+  PagoMovilPaymentForm({super.key, required this.paymentId});
 
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
@@ -414,9 +432,28 @@ class PagoMovilPaymentForm extends StatelessWidget {
                       },
                     ),
                     ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           // Handle form submission
+                          final WalletRepositoryImpl walletRepository =
+                              WalletRepositoryImpl(
+                                  WalletDatasourceImpl(DioHttpServiceImpl()));
+                          final res = await walletRepository.addFundsPagoMovil(
+                              AddFundsPagoMovilDto(
+                                  amount: double.parse(_amountController.text),
+                                  phone: _phoneController.text,
+                                  reference: _referenceController.text,
+                                  bank: _bankController.text,
+                                  identification:
+                                      _identificationController.text,
+                                  paymentId: paymentId));
+                          if (!res.isSuccessful()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(res.getError().toString())),
+                            );
+                          }
+                          print('all G');
                           Navigator.pop(context);
                         }
                       },
