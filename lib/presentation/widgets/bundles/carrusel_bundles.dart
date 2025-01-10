@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
@@ -11,6 +12,9 @@ class CardBundleCarrusel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final categ = context.read<CategoriesBloc>().state.categories;
+
+
     return SizedBox(
       height: 304,
       child: Column(
@@ -31,7 +35,7 @@ class CardBundleCarrusel extends StatelessWidget {
                     fontSize: 32),
               ),
               GestureDetector(
-                  onTap: ()=>context.push('/catalog'),
+                  onTap: ()=>context.push('/catalog/${categ.first.id}'),
                   child: Text(
                     'view all',
                     textAlign: TextAlign.end,

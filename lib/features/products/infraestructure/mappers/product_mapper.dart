@@ -10,7 +10,7 @@ class ProductMapper {
       description: json.description,
       price: json.price,
       currency: json.currency,
-      imageUrl: json.images,
+      imageUrl: json.image,
       expirationDate: json.caducityDate,
       weigth: json.weigth,
       measurement: json.measurement,

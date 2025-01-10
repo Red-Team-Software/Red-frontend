@@ -8,7 +8,7 @@ class ProductResponse {
   final String? caducityDate;
   final String name;
   final int? stock;
-  final List<String> images;
+  final List<String> image;
   final double price;
   final String currency;
   final double? weigth;
@@ -23,7 +23,7 @@ class ProductResponse {
     required this.description,
     required this.price,
     required this.currency,
-    required this.images,
+    required this.image,
     this.caducityDate, 
     this.stock, 
     this.weigth, 
@@ -40,7 +40,7 @@ class ProductResponse {
       caducityDate: json['caducityDate'],
       name: json['name'],
       stock: json['stock'],
-      images: json['images'] != null
+      image: json['image'] != null
             ? List<String>.from(json['images'].map((img) => img))
             : [],
       price: json['price'] is double

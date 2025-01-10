@@ -1,3 +1,4 @@
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
@@ -191,6 +192,10 @@ class _CarruselItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    final categ = context.read<CategoriesBloc>().state.categories;
+
+
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -206,7 +211,7 @@ class _CarruselItems extends StatelessWidget {
                 fontSize: 32),
           ),
           GestureDetector(
-              onTap: ()=>context.push('/catalog'),
+              onTap: ()=>context.push('/catalog/${categ.first.id}'),
               child: Text(
                 'view all',
                 textAlign: TextAlign.end,
