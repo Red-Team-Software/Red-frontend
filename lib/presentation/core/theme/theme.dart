@@ -71,7 +71,7 @@ class AppTheme {
         iconTheme: IconThemeData(
             color: isDarkMode ? Colors.white : darkIcons, size: 24),
       ),
-      brightness: isDarkMode ? Brightness.dark : Brightness.light,      
+      brightness: isDarkMode ? Brightness.dark : Brightness.light, 
     );
   }
 }

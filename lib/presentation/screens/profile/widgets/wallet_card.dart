@@ -1,4 +1,5 @@
 import 'package:GoDeli/features/user/domain/user.dart';
+import 'package:GoDeli/presentation/screens/profile/widgets/wallet_add_funds_modal.dart';
 import 'package:flutter/material.dart';
 
 class WalletCard extends StatefulWidget {
@@ -10,11 +11,9 @@ class WalletCard extends StatefulWidget {
 }
 
 class _WalletCardState extends State<WalletCard> {
-
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textScale = theme.textTheme;
+    final textScale = Theme.of(context).textTheme;
 
     return Card(
       shape: RoundedRectangleBorder(
@@ -26,33 +25,34 @@ class _WalletCardState extends State<WalletCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Tu saldo',
-              style: TextStyle(
-                fontSize: textScale.displaySmall?.fontSize,
-                fontWeight: FontWeight.bold,
-              ),
+              'Your Balance',
+              style: textScale.displaySmall,
             ),
             const SizedBox(height: 8),
             Row(
               children: [
                 Text(
                   '${widget.wallet.currency.toUpperCase()}. ',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: textScale.displayMedium,
                 ),
                 Text(
-                  '${widget.wallet.amount.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  '${widget.wallet.amount}',
+                  style: textScale.displayMedium,
                 ),
                 const Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Recargar'),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const WalletAddFundsModal();
+                      },
+                    );
+                  },
+                  child: const Text(
+                    'Add Funds',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ],
             ),
@@ -60,6 +60,5 @@ class _WalletCardState extends State<WalletCard> {
         ),
       ),
     );
-    ;
   }
 }
