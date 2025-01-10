@@ -21,7 +21,8 @@ class AddFundsPagoMovilDto {
       'reference': reference,
       'bank': bank,
       'cedula': identification,
-      'paymentId': paymentId
+      'paymentId': paymentId,
+      'date': DateTime.now().toIso8601String(),
     };
   }
 }

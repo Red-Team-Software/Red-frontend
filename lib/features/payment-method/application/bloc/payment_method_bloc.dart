@@ -26,9 +26,4 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
       emit(PaymentMethodError('Error loading payment methods'));
     }
   }
-
-  _addFundsPagoMovil(AddFundsPagoMovil event, emit) async {
-    emit(Paying());
-    
-  }
 }
