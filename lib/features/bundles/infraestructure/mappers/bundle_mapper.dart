@@ -11,7 +11,7 @@ class BundleMapper {
       price: json.price,
       currency: json.currency,
       imageUrl: json.images,
-      weigth: json.weigth,
+      weight: json.weight,
       measurement: json.measurement,
       inStock: json.stock,
       expirationDate: json.caducityDate,

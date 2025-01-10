@@ -14,20 +14,22 @@ class AuthDatasource implements IAuthDataSource {
 
   @override
   Future<Result<LoginResponse>> login(LoginDto loginDto) async {
-      final response = await _httpService.request(
-        '/auth/login',
-        'POST',
-        (json) => LoginResponse.fromJson(json),
-        body: loginDto.toJson(),
-      );
-      if (!response.isSuccessful()){
-        return Result.makeError(Exception('Failed to login: ${response.getError()}'));
-      }
-      final token = response.getValue().token;
-      _httpService.addHeader('Authorization', 'Bearer $token');
-      configureFCM(_httpService);
+    final response = await _httpService.request(
+      '/auth/login',
+      'POST',
+      (json) => LoginResponse.fromJson(json),
+      body: loginDto.toJson(),
+    );
+    print('Entre en este peo');
+    if (!response.isSuccessful()) {
+      return Result.makeError(
+          Exception('Failed to login: ${response.getError()}'));
+    }
+    final token = response.getValue().token;
+    _httpService.addHeader('Authorization', 'Bearer $token');
+    configureFCM(_httpService);
 
-      return Result.success(response.getValue());
+    return Result.success(response.getValue());
   }
 
   @override
@@ -44,5 +46,4 @@ class AuthDatasource implements IAuthDataSource {
       return Result.makeError(Exception('Failed to register: ${e.toString()}'));
     }
   }
-  
 }

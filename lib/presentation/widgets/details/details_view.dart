@@ -182,7 +182,7 @@ class _ScrollableDetails extends StatelessWidget {
                             children: promotions
                                 .map((promotion) => Chip(
                                       label: Text(
-                                        '${promotion.discount * 100}% off',
+                                        '${promotion.percentage * 100}% off',
                                         style: const TextStyle(
                                           color: Colors.white,
                                         ),
@@ -362,7 +362,7 @@ class _ScrollableDetails extends StatelessWidget {
     if (promotions.isNotEmpty) {
       late double acum = price;
       for (final percent in promotions) {
-        acum -= acum * percent.discount;
+        acum -= acum * percent.percentage;
       }
       return acum;
     }

@@ -3,6 +3,7 @@ import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/payment-method/domain/repositories/payment-method_repository.dart';
 import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
 import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
@@ -40,6 +41,7 @@ class CheckoutScreen extends StatelessWidget {
         deleteUserDirectionUseCase: getIt<DeleteUserDirectionUseCase>(),
         updateUserDirectionUseCase: getIt<UpdateUserDirectionUseCase>(),
         taxRepository: getIt<ITaxShippinRepository>(),
+        paymentMethodRepository: getIt<IPaymentMethodRepository>(),
       )..add(LoadCheckoutData()), // Ensure LoadCheckoutData is dispatched once
       child: Scaffold(
         appBar: AppBar(
@@ -104,7 +106,7 @@ class CheckoutScreen extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             }
             return const SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB( 16, 16, 16, 0),
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

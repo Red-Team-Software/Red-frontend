@@ -31,14 +31,17 @@ class DioHttpServiceImpl<T> implements IHttpService {
         queryParameters: queryParameters,
         options: Options(method: method),
       );
+      print(response.data);
       return Result<T>.success(mapper(response.data));
     } on DioException catch (e) {
-      print("a");
+      print("--------------");
       print(e);
-      print("b");
+      print("--------------");
       print(e.response);
-
+      print("--------------");
       return Result.makeError(e);
+    } catch (e) {
+      return Result.makeError(Exception('Error en request: ${e.toString()}'));
     }
   }
 

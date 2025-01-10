@@ -7,7 +7,7 @@ class Bundle extends Equatable {
   final String description;
   final double price;
   final String currency;
-  final double? weigth;
+  final double? weight;
   final String? measurement;
   final String? expirationDate;
   final int? inStock;
@@ -20,11 +20,11 @@ class Bundle extends Equatable {
   const Bundle(
       {required this.id,
       required this.name,
-      required this.description,
+      this.description = "",
       required this.imageUrl,
       required this.price,
       required this.currency,
-      this.weigth,
+      this.weight,
       this.measurement,
       this.inStock,
       this.expirationDate,
@@ -41,7 +41,7 @@ class Bundle extends Equatable {
         imageUrl,
         price,
         currency,
-        weigth,
+        weight,
         measurement,
         inStock,
         expirationDate,
@@ -70,19 +70,19 @@ class BundleProduct extends Equatable{
 class Promotion extends Equatable{
 
   final String id;
-  final String name;
-  final double discount;
+  // final String name;
+  final double percentage;
 
-  const Promotion({required this.id, required this.name, required this.discount});
+  const Promotion({required this.id,  required this.percentage});
 
   
   factory Promotion.fromJson(Map<String, dynamic> json) => Promotion(
         id: json["id"],
-        name: json["name"],
-        discount: json["discount"]?.toDouble(),
+        // name: json["name"],
+        percentage: json["percentage"]?.toDouble(),
     );
   
   @override
-  List<Object> get props => [id, name, discount];
+  List<Object> get props => [id, percentage];
 
 }

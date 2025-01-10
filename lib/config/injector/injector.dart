@@ -1,4 +1,3 @@
-import 'package:GoDeli/config/Fcm/Fcm.dart';
 import 'package:GoDeli/config/locar_storage/isar_local_storage.dart';
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/auth/application/datasources/auth_datasource.dart';
@@ -31,6 +30,11 @@ import 'package:GoDeli/features/order/domain/repositories/order_repository.dart'
 import 'package:GoDeli/features/order/infraestructure/datasource/order_datasource_imp.dart';
 import 'package:GoDeli/features/order/infraestructure/repositories/order_repository_imp.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
+import 'package:GoDeli/features/payment-method/application/bloc/payment_method_bloc.dart';
+import 'package:GoDeli/features/payment-method/application/use_cases/get_payment_methods_use_case.dart';
+import 'package:GoDeli/features/payment-method/domain/repositories/payment-method_repository.dart';
+import 'package:GoDeli/features/payment-method/infraestructure/datasource/payment-method_datasource_imp.dart';
+import 'package:GoDeli/features/payment-method/infraestructure/repositories/payment-method_respository_imp.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
@@ -99,7 +103,7 @@ class Injector {
     final LogoutUseCase logoutUseCase =
         LogoutUseCase(httpService, authLocalStorageRepository, cartRepository);
     final CheckAuthUseCase checkAuthUseCase =
-        CheckAuthUseCase(httpService, authLocalStorageRepository);
+        CheckAuthUseCase(httpService, authLocalStorageRepository, cartRepository);
 
     // getIt.registerSingleton<IAuthRepository>(authRepository);
     getIt.registerFactory<AuthBloc>(() => AuthBloc(
@@ -153,8 +157,12 @@ class Injector {
 
     //? Iiniciando las dependencias de modulo de orden
 
+    final paymentMethodDataSource = PaymentMethodDatasourceImpl(httpService);
+    final paymentMethodRepository = PaymentMethodRepositoryImpl(
+        paymentMethodDatasource: paymentMethodDataSource);
     final orderDatasource = OrderDatasourceImpl(httpService: httpService);
     final orderRepository = OrderRepositoryImpl(datasource: orderDatasource);
+    final getPaymentMethodsUseCase = GetPaymentMethodsUseCase(paymentMethodRepository);
 
     getIt.registerSingleton<GetUserDirectionsUseCase>(getUserDirectionsUseCase);
     getIt.registerSingleton<AddUserDirectionUseCase>(addUserDirectionUseCase);
@@ -164,6 +172,10 @@ class Injector {
         updateUserDirectionUseCase);
 
     getIt.registerFactory<IOrderRepository>(() => orderRepository);
+    getIt.registerFactory<IPaymentMethodRepository>(
+        () => paymentMethodRepository);
+    getIt.registerFactory<PaymentMethodBloc>(
+        () => PaymentMethodBloc(getPaymentMethodsUseCase: getPaymentMethodsUseCase));
 
     //? inicializando las dependencias de modulo tax y shipping
     final taxShippingDatasource =
@@ -175,5 +187,8 @@ class Injector {
     //? inicializando las dependencias de modulo ordenes
     getIt.registerFactory<OrdersBloc>(
         () => OrdersBloc(orderRepository: orderRepository));
+
+    //? inicializando las dependencias de modulo paymentMethod
+    
   }
 }

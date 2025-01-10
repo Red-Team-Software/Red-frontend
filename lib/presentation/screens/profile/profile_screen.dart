@@ -8,6 +8,7 @@ import 'package:GoDeli/features/user/domain/user.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/addess_modal.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/profile_address_card.dart';
+import 'package:GoDeli/presentation/screens/profile/widgets/wallet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -193,6 +194,10 @@ class _ProfileScreenState extends State<_ProfileScreen> {
   Widget build(BuildContext context) {
     initializeControllers();
 
+    final theme = Theme.of(context);
+
+    final scales = theme.textTheme;
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
@@ -204,47 +209,70 @@ class _ProfileScreenState extends State<_ProfileScreen> {
               crossAxisAlignment:
                   CrossAxisAlignment.center, // Keep everything centered
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.grey[300],
-                  child: widget.user.image != null
-                      ? Image.network(widget.user.image!)
-                      : Icon(Icons.person, size: 50, color: Colors.grey[700]),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.grey[300],
+                          child: widget.user.image != null
+                              ? Image.network(widget.user.image!)
+                              : Icon(Icons.person,
+                                  size: 50, color: Colors.grey[700]),
+                        )
+                      ],
+                    ),
+                    const SizedBox(width: 20),
+                    Column(
+                      children: [
+                        Text(
+                          'Hello, ${widget.user.fullName}!',
+                          style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          children: [
+                            TextButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  _readOnly = !_readOnly;
+                                  initializeControllers();
+                                });
+                              },
+                              icon: Icon(_readOnly ? Icons.edit : Icons.cancel,
+                                  color: Colors.grey),
+                              label: Text(_readOnly ? 'Edit' : 'Cancel',
+                                  style: const TextStyle(color: Colors.grey)),
+                            ),
+                            const SizedBox(width: 20),
+                            TextButton(
+                              onPressed: () {
+                                context.read<AuthBloc>().add(LogoutEvent());
+                                context.push('/auth');
+                              },
+                              child: Text('Log out',
+                                  style: TextStyle(color: theme.primaryColor, fontSize: scales.bodyMedium?.fontSize, fontWeight: FontWeight.bold)),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      _readOnly = !_readOnly;
-                      initializeControllers();
-                    });
-                  },
-                  icon: Icon(_readOnly ? Icons.edit : Icons.cancel,
-                      color: Colors.grey),
-                  label: Text(_readOnly ? 'Edit' : 'Cancel',
-                      style: const TextStyle(color: Colors.grey)),
+                const Divider(
+                  color: Colors.grey,
+                  thickness: 1,
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  'Hello, ${widget.user.fullName}!',
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(LogoutEvent());
-                    context.push('/auth');
-                  },
-                  child: const Text('Log out',
-                      style: TextStyle(color: Colors.red)),
-                ),
-                const SizedBox(height: 20),
-                const Align(
+                WalletCard(wallet: widget.user.wallet!,),
+                Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left
                   child: Text('User:',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          TextStyle(fontSize: scales.bodyLarge?.fontSize, fontWeight: FontWeight.bold)),
                 ),
                 CustomTextField(
                   label: 'Email',
@@ -313,7 +341,8 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                               fontSize: 20, fontWeight: FontWeight.bold)),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.add, color: Colors.red, size: 30),
+                      icon:
+                          Icon(Icons.add, color: theme.primaryColor, size: 30),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
@@ -356,7 +385,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                       DeleteUserDirectionEvent(
                                           userDirection: dto));
                                 },
-                                backgroundColor: Colors.red,
+                                backgroundColor: theme.primaryColor,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
                                 label: 'Delete',
@@ -421,7 +450,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
           ),
         ),
       ),
-    ).animate().fadeIn(duration: 500.ms );
+    ).animate().fadeIn(duration: 500.ms);
   }
 }
 

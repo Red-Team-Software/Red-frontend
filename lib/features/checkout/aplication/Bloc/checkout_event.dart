@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:GoDeli/features/checkout/domain/address.dart';
 import 'package:flutter/material.dart';
+import 'package:GoDeli/features/payment-method/domain/payment-method.dart';
 
 abstract class CheckoutEvent extends Equatable {
   const CheckoutEvent();
@@ -31,7 +32,7 @@ class AddNewAddress extends CheckoutEvent {
 }
 
 class SelectPaymentMethod extends CheckoutEvent {
-  final String paymentMethod;
+  final PaymentMethod paymentMethod;
   const SelectPaymentMethod(this.paymentMethod);
 
   @override

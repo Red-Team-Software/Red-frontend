@@ -11,7 +11,7 @@ part 'cart_state.dart';
 
 class CartBloc extends Bloc<CartEvent, CartState> {
   
-  final CartLocalStorageRepository repository;
+  final ICartLocalStorageRepository repository;
   
   CartBloc({ required this.repository }) : super(const CartState()) {
 

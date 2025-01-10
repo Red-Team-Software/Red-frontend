@@ -17,7 +17,7 @@ class ProductsRepositoryImpl implements IProductsRepository {
     } on DioException catch (dioError) {
       return Result<Product>.makeError(Exception('Dio error: ${dioError.message}'));
     } catch (error, _) {
-      return Result<Product>.makeError(error as Exception);
+      return Result<Product>.makeError(Exception('Error en ProductById: ${error.toString()}'));
     }
   }
 

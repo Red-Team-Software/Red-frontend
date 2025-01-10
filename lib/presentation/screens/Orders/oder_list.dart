@@ -143,7 +143,12 @@ class _OrderListScreenState extends State<OrderListScreen> {
                       itemCount: filteredOrders.length,
                       itemBuilder: (context, index) {
                         final order = filteredOrders[index];
-                        return OrderCard(orderItem: order);
+                        return GestureDetector(
+                          onTap: () {
+                            context.push("/order/${order.orderId}");
+                          },
+                          child: OrderCard(orderItem: order),
+                        );
                       },
                     ),
             ),

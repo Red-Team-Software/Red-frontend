@@ -17,3 +17,14 @@ class OrderLoaded extends OrderState {
   @override
   List<Object?> get props => [order];
 }
+
+class OrderLoading extends OrderState {}
+
+class OrderError extends OrderState {
+  final String message;
+
+  const OrderError({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

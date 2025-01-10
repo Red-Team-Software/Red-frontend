@@ -139,7 +139,7 @@ class OrderSummarySection extends StatelessWidget {
                 onPressed: () {
                   context.read<CheckoutBloc>().add(
                         ProcessPayment(
-                          paymentId: "feb39169-bc63-4814-9ac2-f8f98fe0a328",
+                          paymentId: state.selectedPaymentMethod?.id ?? '',
                           //amount: cartBloc.state.total,
                           currency: 'usd',
                           paymentMethod: "card",

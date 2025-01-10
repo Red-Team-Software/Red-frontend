@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'widgets/order_header.dart';
 import 'widgets/order_item_list.dart';
 import 'widgets/order_summary_details.dart';
+import 'widgets/order_courier.dart';
 
 class OrderSummaryScreen extends StatelessWidget {
   static const String name = 'order_summary_screen';
@@ -15,6 +16,9 @@ class OrderSummaryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+
+    // Dispatch the FetchOrderById event with the idOrder parameter
+    context.read<OrderBloc>().add(FetchOrderById(orderId: idOrder));
 
     return Scaffold(
       appBar: AppBar(
@@ -29,7 +33,7 @@ class OrderSummaryScreen extends StatelessWidget {
       ),
       body: BlocBuilder<OrderBloc, OrderState>(
         builder: (context, state) {
-          if (state is OrderInitial) {
+          if (state is OrderLoading) {
             return const Center(
               child: CircularProgressIndicator(),
             );
@@ -37,12 +41,13 @@ class OrderSummaryScreen extends StatelessWidget {
 
           if (state is OrderLoaded) {
             final order = state.order;
-
             return Column(
               children: [
                 OrderHeader(
                     orderSummary: order), // Encabezado con la info de la orden
                 const SizedBox(height: 16),
+                if (order.orderCourier != null)
+                  OrderCourierCard(courier: order.orderCourier!),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Align(
@@ -62,6 +67,12 @@ class OrderSummaryScreen extends StatelessWidget {
                   orderSummary: order,
                 ), // Subtotales y total
               ],
+            );
+          }
+
+          if (state is OrderError) {
+            return Center(
+              child: Text(state.message),
             );
           }
 

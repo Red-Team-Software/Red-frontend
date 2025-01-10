@@ -14,7 +14,9 @@ abstract class IOrderRepository {
   });
 
   Future<Result<List<OrderItem>>> fetchAllOrders(
-      {int page = 1, int perPage = 10});
+      {int page = 1, int perPage = 100});
+
+  Future<Result<Order>> fetchOrderById({required String orderId});
 
   Future<void> cancelOrder({required String orderId});
 }

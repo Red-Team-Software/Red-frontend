@@ -1,7 +1,7 @@
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 
-abstract class CartLocalStorageRepository {
+abstract class ICartLocalStorageRepository {
   
   Future<List<ProductCart>> getCartProducts();
   Future<List<BundleCart>> getCartBundles();

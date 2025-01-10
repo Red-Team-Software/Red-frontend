@@ -1,5 +1,7 @@
+import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
+import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:GoDeli/presentation/core/router/index.dart';
 import 'package:GoDeli/presentation/screens/Catalogo/view/catalog_screen.dart';
@@ -77,14 +79,8 @@ final appRouter = GoRouter(
       path: "/order/:idOrder",
       name: OrderSummaryScreen.name,
       builder: (context, state) {
-        final order = state.extra
-            as Order; // Asegúrate de pasar la orden desde el `CheckoutBloc`
         return BlocProvider(
-          create: (_) {
-            final orderBloc = OrderBloc();
-            orderBloc.add(LoadOrder(order: order)); // Disparar el evento aquí
-            return orderBloc;
-          },
+          create: (_) => OrderBloc(orderRepository: getIt<IOrderRepository>()),
           child: OrderSummaryScreen(
             idOrder: state.pathParameters['idOrder'] ?? '',
           ),

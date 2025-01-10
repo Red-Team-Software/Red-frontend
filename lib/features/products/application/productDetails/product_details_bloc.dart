@@ -46,6 +46,7 @@ class ProductDetailsBloc
       add(ProductLoaded(product: product));
       return;
     }
+    print('Error es ${res.getError()}');
     add(ErrorOnProductLoading());
     return;
   }
