@@ -23,6 +23,9 @@ class CaregoriesCarrusel extends StatelessWidget {
                 if (state.status == CategoriesStatus.loading && state.categories.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
+                if (state.categories.isEmpty && (state.status == CategoriesStatus.allLoaded || state.status == CategoriesStatus.loaded)) {
+                  return const Center(child: Text('Algo raro paso, No hay categorias!', style: TextStyle(color: Colors.red)));
+                }
                 if (state.status == CategoriesStatus.error) {
                   return const Center(
                     child: Text('Algo inesperado paso', style: TextStyle(color: Colors.red)),

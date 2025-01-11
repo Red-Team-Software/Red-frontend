@@ -13,8 +13,7 @@ class ProductsDatasourceImpl implements IProductsDatasource {
   @override
   Future<Product> getProductById(String id) async {
     final res = await _httpService.request(
-        '/product/$id', 'GET', (json) => ProductResponse.fromJson(json, id: id));
-
+        '/product/$id', 'GET', (json) => ProductResponse.fromJson(json));
     return ProductMapper.productToDomain(res.getValue());
   }
 

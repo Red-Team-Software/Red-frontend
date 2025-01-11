@@ -16,7 +16,7 @@ class BundlesDatasourceImpl implements IBundleDatasource{
   Future<Bundle> getBundleById(String id) async {
 
     final res = await _httpService.request(
-        '/bundle/$id', 'GET', (json) => BundleResponse.fromJson(json, id: id));
+        '/bundle/$id', 'GET', (json) => BundleResponse.fromJson(json));
 
     return BundleMapper.bundleToDomian(res.getValue());
   }
