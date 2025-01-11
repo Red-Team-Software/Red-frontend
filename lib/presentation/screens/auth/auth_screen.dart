@@ -116,6 +116,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 address: addressDto,
                 image: image),
           );
+      onChangeIndex(1);
     }
 
     final screens = [
