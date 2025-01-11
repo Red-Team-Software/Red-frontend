@@ -20,11 +20,9 @@ class BundleRepositoryImpl implements IBundleRepository {
   }
 
   @override
-  Future<Result<List<Bundle>>> getBundlesPaginated(
-      {int page = 1, int perPage = 10}) async {
+  Future<Result<List<Bundle>>> getBundlesPaginated({ int page = 1, int perPage = 10, List<String>? category, String? popular, double? discount }) async {
     try {
-      final bundles = await bundleDatasource.getBundlesPaginated(
-          page: page, perPage: perPage);
+      final bundles = await bundleDatasource.getBundlesPaginated(category: category, discount: discount, page: page, perPage: perPage, popular: popular);
       return Result<List<Bundle>>.success(bundles);
     } catch (error) {
       return Result<List<Bundle>>.makeError(Exception(error.toString()));

@@ -92,14 +92,6 @@ class CatalogBody extends StatelessWidget {
         ),
         BlocBuilder<CatalogBloc, CatalogState>(
           builder: (context, state) {
-            if (state.bundles.isEmpty) {
-              return const SliverToBoxAdapter(
-                child: Center(
-                  child: Text('No bundles available'),
-                ),
-              );
-            }
-
             if (state.status == CatalogStatus.loading) {
               return const SliverToBoxAdapter(
                 child: Center(
@@ -115,6 +107,15 @@ class CatalogBody extends StatelessWidget {
                 ),
               );
             }
+
+            if (state.bundles.isEmpty) {
+              return const SliverToBoxAdapter(
+                child: Center(
+                  child: Text('No bundles available'),
+                ),
+              );
+            }
+
 
             return SliverPadding(
               padding: const EdgeInsets.all(8.0),
@@ -162,14 +163,6 @@ class CatalogBody extends StatelessWidget {
         BlocBuilder<CatalogBloc, CatalogState>(
           builder: (context, state) {
 
-            if (state.products.isEmpty) {
-              return const SliverToBoxAdapter(
-                child: Center(
-                  child: Text('No products available'),
-                ),
-              );
-            }
-
             if (state.status == CatalogStatus.loading) {
               return const SliverToBoxAdapter(
                 child: Center(
@@ -182,6 +175,14 @@ class CatalogBody extends StatelessWidget {
               return const SliverToBoxAdapter(
                 child: Center(
                   child: Text('Error loading products'),
+                ),
+              );
+            }
+
+            if (state.products.isEmpty) {
+              return const SliverToBoxAdapter(
+                child: Center(
+                  child: Text('No products available'),
                 ),
               );
             }

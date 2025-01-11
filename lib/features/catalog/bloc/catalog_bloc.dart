@@ -86,10 +86,20 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
         page: state.page,
         perPage: state.perPage,
       );
-      if (resPro.isSuccessful()) {
-        final products = resPro.getValue();
 
-        add(ItemsFetched(products, []));
+      final resBun = await bundleRepository.getBundlesPaginated(
+        category: state.categorySelected,
+        discount: state.discount==0.0 ? null : state.discount,
+        popular: state.popular ? 'popular' : null,
+        page: state.page,
+        perPage: state.perPage,
+      );
+
+      if (resPro.isSuccessful() && resBun.isSuccessful()) {
+        final products = resPro.getValue();
+        final bundles = resBun.getValue();
+
+        add(ItemsFetched(products, bundles));
       } else {
         add(CatalogError(resPro.getError().toString()));
       }
@@ -97,7 +107,4 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       add(CatalogError(e.toString()));
     }
   }
-}
-
-class IBundlesRepository {
 }
