@@ -1,14 +1,14 @@
 class Category {
   final String id;
   final String name;
-  final String icon;
+  final String? icon;
   final List<ItemCategory> products;
   final List<ItemCategory> bundles;
 
   Category(
       {required this.id,
       required this.name,
-      required this.icon,
+      this.icon,
       this.products = const [],
       this.bundles = const []
       });

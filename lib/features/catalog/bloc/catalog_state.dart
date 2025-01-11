@@ -6,25 +6,25 @@ class CatalogState extends Equatable {
 
   final List<ItemCategory> products;
   final List<ItemCategory> bundles;
+  final List<String> categorySelected;
   final CatalogStatus status;
-  final String? categorySelected;
   final int page;
   final int perPage;
 
   const CatalogState({
     this.products = const [],  
     this.bundles = const [], 
+    this.categorySelected = const [],
     this.status = CatalogStatus.initial, 
     this.page = 1,
     this.perPage = 10,
-    this.categorySelected
     });
 
   CatalogState copyWith({
     List<ItemCategory>? products,
     List<ItemCategory>? bundles,
     CatalogStatus? status,
-    String? categorySelected,
+    List<String>? categorySelected,
     int? page,
     int? perPage
   }) {

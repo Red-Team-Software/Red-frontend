@@ -28,6 +28,9 @@ class CaregoriesCarrusel extends StatelessWidget {
                     child: Text('Algo inesperado paso', style: TextStyle(color: Colors.red)),
                   );
                 }
+                if (state.status != CategoriesStatus.loading && state.categories.isEmpty) {
+                  return const Center(child: Text('No hay categorias'));
+                }
                 return ListView.separated(
                   scrollDirection: Axis.horizontal,
                   separatorBuilder: (context, index) => const SizedBox(width: 16),
@@ -53,7 +56,7 @@ class CaregoriesCarrusel extends StatelessWidget {
                                 child: SizedBox(
                                   height: 24,
                                   width: 24,
-                                  child: Image.network(currentCategory.icon),
+                                  child: Image.network(currentCategory.icon!),
                                 ),
                               ),
                               const SizedBox(height: 8),

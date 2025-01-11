@@ -4,18 +4,17 @@ import 'package:GoDeli/features/products/domain/product.dart';
 
 class ProductResponse {
   final String id;
-  final String description;
-  final String? caducityDate;
   final String name;
-  final int? stock;
+  final String description;
   final List<String> image;
   final double price;
   final String currency;
   final double? weigth;
   final String? measurement;
+  final int? stock;
+  final String? caducityDate;
   final List<Category> categories;
   final List<Promotion> promotion;
-
 
   ProductResponse({
     required this.id,
@@ -30,22 +29,19 @@ class ProductResponse {
     this.measurement, 
     this.categories = const [], 
     this.promotion = const [],
-
   });
 
   factory ProductResponse.fromJson(Map<String, dynamic> json, {String id = ''}) {
     return ProductResponse(
       id: json['id'] ?? id,
-      description: json['description'] ?? '',
-      caducityDate: json['caducityDate'],
       name: json['name'],
-      stock: json['stock'],
-      image: json['image'] != null
+      description: json['description'] ?? '',
+      image: json['images'] != null
             ? List<String>.from(json['images'].map((img) => img))
             : [],
       price: json['price'] is double
           ? json['price']
-          : double.tryParse(json['price'].toString()) ?? 0.0, // Maneja casos de String o null,  
+          : double.tryParse(json['price'].toString()) ?? 0.0,
       currency: json['currency'],
       weigth: json['weight'] is int
           ? json['weight'].toDouble()
@@ -53,7 +49,9 @@ class ProductResponse {
           ? json['weight']
           : double.tryParse(json['weight'].toString()) ?? 0.0,
       measurement: json['measurement'],
-      categories: json['category'] != null ? List<Category>.from(json["category"].map((x) => CategoryResponse.categoryToDomain(CategoryResponse.fromProductJson(x)))): [],
+      stock: json['stock'],
+      caducityDate: json['caducityDate'],
+      categories: json['category'] != null ? List<Category>.from(json["category"].map((x) => CategoryResponse.fromProductJson(x))): [],
       promotion: json['discount'] != null ? List<Promotion>.from(json["discount"].map((x) => Promotion.fromJson(x))) : []
     );
   }

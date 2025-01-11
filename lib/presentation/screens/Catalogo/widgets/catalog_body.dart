@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
-import 'package:GoDeli/features/categories/application/catalog/catalog_bloc.dart';
+import 'package:GoDeli/features/catalog/bloc/catalog_bloc.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

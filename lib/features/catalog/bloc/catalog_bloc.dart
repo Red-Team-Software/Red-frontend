@@ -1,5 +1,5 @@
 import 'package:GoDeli/features/categories/domain/category.dart';
-import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
+import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -7,9 +7,10 @@ part 'catalog_event.dart';
 part 'catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
-  final ICategoriesRepository itemsRepository;
+  final IProductsRepository productsRepository;
+  final IBundlesRepository bundleRepository;
 
-  CatalogBloc({required this.itemsRepository}) : super(const CatalogState()) {
+  CatalogBloc({ required this.bundleRepository, required this.productsRepository }) : super(const CatalogState()) {
     on<ItemsFetched>(_onItemsFetched);
     on<CategorySet>(_onCategorySet);
     on<CatalogLoading>(_onCatalogLoading);
@@ -26,10 +27,12 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void _onCategorySet(CategorySet event, Emitter<CatalogState> emit) {
+    var cate = state.categorySelected;
+    cate.add(event.category);
     emit(state.copyWith(
-      categorySelected: event.category,
+      categorySelected: cate,
     ));
-    fetchItems(event.category);
+    fetchItems();
   }
 
   void _onCatalogLoading(CatalogLoading event, Emitter<CatalogState> emit) {
@@ -52,11 +55,11 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     ));
   }
 
-  void fetchItems(String categoryId) async {
+  void fetchItems() async {
     print('fetchItems');
     add(const CatalogLoading());
     try {
-      final res = await itemsRepository.getCategoryItems(categoryId);
+      final resPro = await productsRepository.getProducts(category);
       if (res.isSuccessful()) {
         final categoryDetails = res.getValue();
 
@@ -76,4 +79,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       add(CatalogError(e.toString()));
     }
   }
+}
+
+class IBundlesRepository {
 }

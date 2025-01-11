@@ -211,7 +211,7 @@ class _CarruselItems extends StatelessWidget {
                 fontSize: 32),
           ),
           GestureDetector(
-              onTap: ()=>context.push('/catalog/${categ.first.id}'),
+              onTap: ()=>context.push('/catalog/${categ[0].id}'),
               child: Text(
                 'view all',
                 textAlign: TextAlign.end,
@@ -226,6 +226,10 @@ class _CarruselItems extends StatelessWidget {
           if (state.status == ProductsStatus.loading &&
               state.products.isEmpty) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if (state.status != ProductsStatus.loading &&
+              state.products.isEmpty) {
+            return const Center(child: Text('No hay productos'));
           }
           if (state.status == ProductsStatus.error) {
             return const Center(

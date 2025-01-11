@@ -73,7 +73,7 @@ class _CategoriesView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Image.network(
-                              category.icon,
+                              category.icon!,
                               fit: BoxFit.contain,
                               width: 70.00,
                             ),

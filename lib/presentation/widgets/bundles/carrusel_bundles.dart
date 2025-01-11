@@ -35,7 +35,7 @@ class CardBundleCarrusel extends StatelessWidget {
                     fontSize: 32),
               ),
               GestureDetector(
-                  onTap: ()=>context.push('/catalog/${categ.first.id}'),
+                  onTap: ()=>context.push('/catalog/${categ[0].id}'),
                   child: Text(
                     'view all',
                     textAlign: TextAlign.end,
@@ -56,6 +56,10 @@ class CardBundleCarrusel extends StatelessWidget {
                 child: Text('Algo inesperado paso',
                     style: TextStyle(color: Colors.red)),
               );
+            }
+            if (state.status != BundlesStatus.loading &&
+                state.bundles.isEmpty) {
+              return const Center(child: Text('No hay items para mostrar'));
             }
             return ListView.separated(
               scrollDirection: Axis.horizontal,
