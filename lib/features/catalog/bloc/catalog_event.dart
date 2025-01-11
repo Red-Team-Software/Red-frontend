@@ -6,8 +6,8 @@ sealed class CatalogEvent {
 
 
 class ItemsFetched extends CatalogEvent {
-  final List<ItemCategory> product;
-  final List<ItemCategory> bundle;
+  final List<Product> product;
+  final List<Bundle> bundle;
   const ItemsFetched(this.product, this.bundle);
 }
 

@@ -157,7 +157,9 @@ class Injector {
         () => SearchBloc(productsRepository, bundleRepository));
 
     //? inicializando las dependencias del modulo catalogo
-    getIt.registerFactory<CatalogBloc>(() => CatalogBloc(itemsRepository: categoriesRepository));
+    getIt.registerFactory<CatalogBloc>(() => CatalogBloc(
+        productsRepository: productsRepository,
+        bundleRepository: bundleRepository));
 
     //? Iiniciando las dependencias de modulo de orden
 

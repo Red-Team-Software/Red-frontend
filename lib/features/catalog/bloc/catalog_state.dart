@@ -4,8 +4,8 @@ enum CatalogStatus { initial, loading, loaded, error }
 
 class CatalogState extends Equatable {
 
-  final List<ItemCategory> products;
-  final List<ItemCategory> bundles;
+  final List<Product> products;
+  final List<Bundle> bundles;
   final List<String> categorySelected;
   final CatalogStatus status;
   final int page;
@@ -21,8 +21,8 @@ class CatalogState extends Equatable {
     });
 
   CatalogState copyWith({
-    List<ItemCategory>? products,
-    List<ItemCategory>? bundles,
+    List<Product>? products,
+    List<Bundle>? bundles,
     CatalogStatus? status,
     List<String>? categorySelected,
     int? page,

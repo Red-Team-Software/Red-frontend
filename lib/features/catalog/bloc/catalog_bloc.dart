@@ -1,4 +1,6 @@
-import 'package:GoDeli/features/categories/domain/category.dart';
+import 'package:GoDeli/features/bundles/domain/bundle.dart';
+import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -8,7 +10,7 @@ part 'catalog_state.dart';
 
 class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   final IProductsRepository productsRepository;
-  final IBundlesRepository bundleRepository;
+  final IBundleRepository bundleRepository;
 
   CatalogBloc({ required this.bundleRepository, required this.productsRepository }) : super(const CatalogState()) {
     on<ItemsFetched>(_onItemsFetched);
@@ -28,7 +30,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
 
   void _onCategorySet(CategorySet event, Emitter<CatalogState> emit) {
     var cate = state.categorySelected;
-    cate.add(event.category);
+    cate.any((element) => element == event.category) ? cate.remove(event.category) : cate.add(event.category);
     emit(state.copyWith(
       categorySelected: cate,
     ));
@@ -59,21 +61,19 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     print('fetchItems');
     add(const CatalogLoading());
     try {
-      final resPro = await productsRepository.getProducts(category);
-      if (res.isSuccessful()) {
-        final categoryDetails = res.getValue();
+      final resPro = await productsRepository.getProducts(
+        category: state.categorySelected,
+        page: state.page,
+        perPage: state.perPage,
+      );
+      print(resPro);
+      if (resPro.isSuccessful()) {
+        final products = resPro.getValue();
 
-        if (categoryDetails.products.isEmpty &&
-            categoryDetails.bundles.isEmpty) {
-          add(const CatalogIsEmpty());
-          return;
-        }
 
-        final products = categoryDetails.products;
-        final bundles = categoryDetails.bundles;
-        add(ItemsFetched(products, bundles));
+        add(ItemsFetched(products, []));
       } else {
-        add(CatalogError(res.getError().toString()));
+        add(CatalogError(resPro.getError().toString()));
       }
     } catch (e) {
       add(CatalogError(e.toString()));

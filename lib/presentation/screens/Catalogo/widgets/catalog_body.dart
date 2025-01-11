@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/features/catalog/bloc/catalog_bloc.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
@@ -187,7 +188,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class _CustomItemGrid extends StatelessWidget {
-  final ItemCategory current;
+  final Bundle current;
   const _CustomItemGrid({required this.current});
 
   @override
