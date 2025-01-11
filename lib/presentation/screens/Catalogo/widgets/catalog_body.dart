@@ -1,9 +1,10 @@
 import 'dart:ui';
 
-import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/features/catalog/bloc/catalog_bloc.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,10 +24,8 @@ class CatalogBody extends StatelessWidget {
           ScaffoldMessenger.of(context)
               .showSnackBar(const SnackBar(content: Text('Error')));
         }
-
       },
       builder: (context, state) {
-
         if (state.status == CatalogStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -57,7 +56,8 @@ class CatalogBody extends StatelessWidget {
                               showCheckmark: false,
                               selectedColor: Theme.of(context).primaryColor,
                               disabledColor: Colors.grey[200],
-                              selected: category.id == state.categorySelected,
+                              selected: state.categorySelected
+                                  .any((element) => element == category.id),
                               onSelected: (selected) {
                                 context
                                     .read<CatalogBloc>()
@@ -66,7 +66,10 @@ class CatalogBody extends StatelessWidget {
                               label: Text(category.name),
                               elevation: 5.0,
                               labelStyle: TextStyle(
-                                color: category.id == state.categorySelected ? Colors.white : Colors.black,
+                                color: state.categorySelected.any(
+                                        (element) => element == category.id)
+                                    ? Colors.white
+                                    : Colors.black,
                               ),
                             );
                           },
@@ -75,6 +78,50 @@ class CatalogBody extends StatelessWidget {
                     ),
                   ),
                 ),
+              ),
+            ),
+            SliverToBoxAdapter(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12.00),
+                height: 80,
+                child: Row(children: [
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: context
+                          .watch<CatalogBloc>()
+                          .state
+                          .popular
+                          ? Colors.white
+                          : Theme.of(context).primaryColor,
+                      backgroundColor: context
+                              .watch<CatalogBloc>()
+                              .state
+                              .popular
+                          ? Theme.of(context).primaryColor
+                          : Colors.white,
+                    ),
+                    iconAlignment: IconAlignment.end,
+                    onPressed: () =>
+                        context.read<CatalogBloc>()..add(const PopularSet()),
+                    label: const Text('Popular'),
+                    icon: const Icon(Icons.star),
+                  ),
+                  const SizedBox(width: 12),
+                  Text('Discount: ${context.watch<CatalogBloc>().state.discount}%'),
+                  Expanded(
+                    child: Slider(
+                      value: context.read<CatalogBloc>().state.discount,
+                      onChanged: (value) {
+                        // Update the slider value in the state
+                        context.read<CatalogBloc>().add(DiscountSet(value));
+                      },
+                      onChangeEnd: (value) {
+                        // Make the request and change the state when the slider is released
+                        context.read<CatalogBloc>().add(DiscountSet(value));
+                      },
+                    ),
+                  ),
+                ]),
               ),
             ),
             SliverPadding(
@@ -92,29 +139,38 @@ class CatalogBody extends StatelessWidget {
                 ),
               ),
             ),
-            state.bundles.isNotEmpty? SliverPadding(
-              padding: const EdgeInsets.all(8.0),
-              sliver: SliverGrid(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1.5,
-                ),
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final item = state.bundles[index];
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _CustomItemGrid(current: item),
-                    );
-                  },
-                  childCount: state.bundles.length,
-                ),
-              ),
-            ): const SliverToBoxAdapter(
-              child: Center(
-                child: Text('No bundles available'),
-              ),
-            ),
+            state.bundles.isNotEmpty
+                ? SliverPadding(
+                    padding: const EdgeInsets.all(8.0),
+                    sliver: SliverGrid(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        childAspectRatio: 1.5,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final item = state.bundles[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: _CustomItemGrid(
+                              id: item.id,
+                              name: item.name,
+                              imageUrl: item.imageUrl,
+                              price: item.price,
+                              redirect: '/bundle',
+                            ),
+                          );
+                        },
+                        childCount: state.bundles.length,
+                      ),
+                    ),
+                  )
+                : const SliverToBoxAdapter(
+                    child: Center(
+                      child: Text('No bundles available'),
+                    ),
+                  ),
             SliverPadding(
               padding:
                   const EdgeInsets.symmetric(vertical: 8.00, horizontal: 12.00),
@@ -131,25 +187,44 @@ class CatalogBody extends StatelessWidget {
                 ),
               ),
             ),
-            state.products.isNotEmpty? SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final item = state.products[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 4.00, horizontal: 8.00),
-                    child: ListTile(
-                      title: Text(item.name),
-                      subtitle: Text(item.price.toString()),
-                    )
-              );},
-                childCount: state.products.length,
-              ),
-            ): const SliverToBoxAdapter(
-              child: Center(
-                child: Text('No products available'),
-              ),
-            ),
+            state.products.isNotEmpty
+                ? SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2),
+                      child: SizedBox(
+                        height: 200, // Ajusta la altura según tus necesidades
+                        child: GridView.builder(
+                          scrollDirection: Axis.horizontal,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 16,
+                            crossAxisSpacing: 8,
+                            childAspectRatio:
+                                0.28, // Ajusta el aspecto para que ocupe todo el ancho
+                          ),
+                          itemCount: state.products.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            Product currentProduct = state.products[index];
+                            return SizedBox(
+                              width: MediaQuery.of(context)
+                                  .size
+                                  .width, // Ocupa todo el ancho de la pantalla
+                              child: CustomItemProduct(
+                                theme: Theme.of(context),
+                                current: currentProduct,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  )
+                : const SliverToBoxAdapter(
+                    child: Center(
+                      child: Text('No products available'),
+                    ),
+                  ),
           ],
         );
       },
@@ -188,37 +263,46 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class _CustomItemGrid extends StatelessWidget {
-  final Bundle current;
-  const _CustomItemGrid({required this.current});
+  final String id;
+  final String name;
+  final List<String> imageUrl;
+  final double price;
+  final String redirect;
+
+  const _CustomItemGrid(
+      {required this.id,
+      required this.name,
+      required this.imageUrl,
+      required this.price,
+      required this.redirect});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          context.push('/bundle/${current.id}');
+          context.push('$redirect/$id');
         },
         child: Material(
           elevation: 8.0,
           borderRadius: BorderRadius.circular(16),
           child: Stack(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.network(
-                  current.imageUrl.isNotEmpty ? current.imageUrl[0] : '',
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(
-                      child: Icon(
+              SizedBox(
+                height: 200, // Ajusta la altura según tus necesidades
+                width: double.infinity,
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
+                        imageUrl[0],
+                        fit: BoxFit.cover,
+                      )
+                    : Icon(
                         Icons.image_not_supported,
-                        color: Colors.grey,
-                        size: 40,
+                        size: 64,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.6),
                       ),
-                    );
-                  },
-                ),
               ),
               Positioned(
                 bottom: 8,
@@ -227,10 +311,10 @@ class _CustomItemGrid extends StatelessWidget {
                   color: Colors.black.withOpacity(0.5),
                   padding: const EdgeInsets.all(4.0),
                   child: Text(
-                    current.name,
+                    name,
                     style: const TextStyle(
                       color: Colors.white,
-                      fontSize: 10,
+                      fontSize: 16,
                     ),
                   ),
                 ),

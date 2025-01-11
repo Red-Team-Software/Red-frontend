@@ -35,7 +35,7 @@ class CardBundleCarrusel extends StatelessWidget {
                     fontSize: 32),
               ),
               GestureDetector(
-                  onTap: ()=>context.push('/catalog/${categ[0].id}'),
+                  onTap: ()=>context.push('/catalog'),
                   child: Text(
                     'view all',
                     textAlign: TextAlign.end,

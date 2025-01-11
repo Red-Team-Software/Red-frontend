@@ -15,6 +15,8 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   CatalogBloc({ required this.bundleRepository, required this.productsRepository }) : super(const CatalogState()) {
     on<ItemsFetched>(_onItemsFetched);
     on<CategorySet>(_onCategorySet);
+    on<PopularSet>(_onPopularSet);
+    on<DiscountSet>(_onDiscountSet);
     on<CatalogLoading>(_onCatalogLoading);
     on<CatalogIsEmpty>(_onCatalogIsEmpty);
     on<CatalogError>(_onCatalogError);
@@ -29,10 +31,26 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void _onCategorySet(CategorySet event, Emitter<CatalogState> emit) {
-    var cate = state.categorySelected;
+    var cate = List<String>.from(state.categorySelected);
+    
     cate.any((element) => element == event.category) ? cate.remove(event.category) : cate.add(event.category);
     emit(state.copyWith(
       categorySelected: cate,
+    ));
+    fetchItems();
+  }
+
+  void _onPopularSet(PopularSet event, Emitter<CatalogState> emit) {
+    final popular = event.popular ?? !state.popular;
+    emit(state.copyWith(
+      popular: popular,
+    ));
+    fetchItems();
+  }
+
+  void _onDiscountSet(DiscountSet event, Emitter<CatalogState> emit) {
+    emit(state.copyWith(
+      discount: event.discount,
     ));
     fetchItems();
   }
@@ -58,18 +76,17 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void fetchItems() async {
-    print('fetchItems');
     add(const CatalogLoading());
     try {
       final resPro = await productsRepository.getProducts(
         category: state.categorySelected,
+        discount: state.discount==0.0 ? null : state.discount,
+        popular: state.popular ? 'popular' : null,
         page: state.page,
         perPage: state.perPage,
       );
-      print(resPro);
       if (resPro.isSuccessful()) {
         final products = resPro.getValue();
-
 
         add(ItemsFetched(products, []));
       } else {

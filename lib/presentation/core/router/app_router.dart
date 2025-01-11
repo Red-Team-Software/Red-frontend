@@ -54,8 +54,13 @@ final appRouter = GoRouter(
     ),
     GoRoute(
       path: '/catalog/:category',
+      name: '${CatalogScreen.name}_category',
+      builder: (context, state) => CatalogScreen( category: state.pathParameters['category']?? ''),
+    ),
+    GoRoute(
+      path: '/catalog',
       name: CatalogScreen.name,
-      builder: (context, state) => CatalogScreen( category: state.pathParameters['category'] ?? ''),
+      builder: (context, state) => const CatalogScreen(),
     ),
     GoRoute(
       path: '/product/:idProduct',

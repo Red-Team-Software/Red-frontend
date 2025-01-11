@@ -13,7 +13,7 @@ class ProductResponse {
   final String? measurement;
   final int? stock;
   final String? caducityDate;
-  final List<Category> categories;
+  final List<CategoryProduct> categories;
   final List<Promotion> promotion;
 
   ProductResponse({
@@ -51,7 +51,7 @@ class ProductResponse {
       measurement: json['measurement'],
       stock: json['stock'],
       caducityDate: json['caducityDate'],
-      categories: json['category'] != null ? List<Category>.from(json["category"].map((x) => CategoryResponse.fromProductJson(x))): [],
+      categories: json['category'] != null ? List<CategoryProduct>.from(json["category"].map((c) => CategoryProduct.fromJson(c))) : [],
       promotion: json['discount'] != null ? List<Promotion>.from(json["discount"].map((x) => Promotion.fromJson(x))) : []
     );
   }

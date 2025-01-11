@@ -10,6 +10,8 @@ class CatalogState extends Equatable {
   final CatalogStatus status;
   final int page;
   final int perPage;
+  final bool popular;
+  final double discount;
 
   const CatalogState({
     this.products = const [],  
@@ -18,6 +20,8 @@ class CatalogState extends Equatable {
     this.status = CatalogStatus.initial, 
     this.page = 1,
     this.perPage = 10,
+    this.popular = false,
+    this.discount = 0.0
     });
 
   CatalogState copyWith({
@@ -26,7 +30,9 @@ class CatalogState extends Equatable {
     CatalogStatus? status,
     List<String>? categorySelected,
     int? page,
-    int? perPage
+    int? perPage,
+    bool? popular,
+    double? discount
   }) {
     return CatalogState(
       products: products ?? this.products,
@@ -34,10 +40,12 @@ class CatalogState extends Equatable {
       status: status ?? this.status,
       categorySelected: categorySelected ?? this.categorySelected,
       page: page ?? this.page,
-      perPage: perPage ?? this.perPage
+      perPage: perPage ?? this.perPage,
+      popular: popular ?? this.popular,
+      discount: discount ?? this.discount
     );
   }
   
   @override
-  List<Object?> get props => [products, bundles, status, categorySelected, page, perPage];
+  List<Object?> get props => [products, bundles, status, categorySelected, page, perPage, popular, discount];
 }

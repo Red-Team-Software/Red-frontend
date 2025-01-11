@@ -7,7 +7,6 @@ import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
-import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/presentation/core/router/app_router.dart';

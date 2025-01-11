@@ -16,6 +16,16 @@ class CategorySet extends CatalogEvent {
   const CategorySet(this.category);
 }
 
+class PopularSet extends CatalogEvent {
+  final bool? popular;
+  const PopularSet({this.popular});
+}
+
+class DiscountSet extends CatalogEvent {
+  final double discount;
+  DiscountSet(double discount) : discount = double.parse(discount.toStringAsFixed(2));
+}
+
 class CatalogLoading extends CatalogEvent {
   const CatalogLoading();
 }

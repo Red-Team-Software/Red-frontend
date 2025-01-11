@@ -8,23 +8,32 @@ import 'package:go_router/go_router.dart';
 
 import '../widgets/catalog_body.dart';
 
-
 class CatalogScreen extends StatelessWidget {
-  final String category;
+  final String? category;
 
-  const CatalogScreen({super.key, required this.category });
+  const CatalogScreen({super.key, this.category});
   static const String name = "catalog_page";
 
   @override
   Widget build(BuildContext context) {
-    return CatalogScreenView(category: category);
+    return BlocProvider(
+      create: (context) {
+        final catalogBloc = getIt<CatalogBloc>();
+        if (category != null && category!.isNotEmpty && category != '') {
+          catalogBloc.add(CategorySet(category!));
+        } else {
+          catalogBloc.add( const PopularSet( popular: true ) );
+        }
+        return catalogBloc;
+      },
+      child: const CatalogScreenView(),
+    );
   }
 }
 
 class CatalogScreenView extends StatelessWidget {
-  final String category;
-  
-  const CatalogScreenView({super.key, required this.category});
+
+  const CatalogScreenView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +55,8 @@ class CatalogScreenView extends StatelessWidget {
           )
         ],
       ),
-      body: BlocProvider<CatalogBloc>(
-        create: (context) => getIt<CatalogBloc>()..add(CategorySet(category)),
-        child: const CatalogBody(),
-      ),
+      body: const CatalogBody(),
+
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/cart'),
         isExtended: true,

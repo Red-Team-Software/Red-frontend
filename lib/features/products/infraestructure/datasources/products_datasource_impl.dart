@@ -24,10 +24,12 @@ class ProductsDatasourceImpl implements IProductsDatasource {
         queryParameters: {
           'page': page,
           'perPage': perPage,
-          'category': category,
-          'discount': discount,
-          'popular': popular
+          if (discount != null) 'discount': discount,
+          if (category != null) 'category': category,
+          if (popular != null) 'popular': popular,
         });
+
+    print(res.getValue());
 
     final List<Product> products = [];
 
