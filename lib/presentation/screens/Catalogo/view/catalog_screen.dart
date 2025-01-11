@@ -19,6 +19,7 @@ class CatalogScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) {
         final catalogBloc = getIt<CatalogBloc>();
+
         if (category != null && category!.isNotEmpty && category != '') {
           catalogBloc.add(CategorySet(category!));
         } else {

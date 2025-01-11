@@ -76,6 +76,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void fetchItems() async {
+    print('Categoria tal: ${state.categorySelected}');
     add(const CatalogLoading());
     try {
       final resPro = await productsRepository.getProducts(
