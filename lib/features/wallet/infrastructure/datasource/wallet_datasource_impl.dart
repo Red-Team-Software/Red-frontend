@@ -12,31 +12,33 @@ class WalletDatasourceImpl implements IWalletDatasource {
 
 
   @override
-  Future<Result<void>> addFundsPagoMovil(AddFundsPagoMovilDto addFundsPagoMovilDto) async {
+  Future<Result<bool>> addFundsPagoMovil(AddFundsPagoMovilDto addFundsPagoMovilDto) async {
     final res = await _httpService.request(
-      '/pay/pago-movil',
+      '/payment/method/recharge/pago-movil',
        'POST', 
-       (json) => null,
+       (json) => true,
        body: addFundsPagoMovilDto.toJson()
     );
-    if (!res.isSuccessful()) return Result.makeError(res.getError());
-    print('En pago movil: ${res.getValue()}');
-
-    return Result.success(null);
+    if (!res.isSuccessful()) {
+      return Result.makeError(res.getError());
+    }
+    return Result.success(true);
   }
 
   @override
-  Future<Result<void>> addFundsZelle(AddFundsZelleDto addFundsZelleDto) async  {
+  Future<Result<bool>> addFundsZelle(AddFundsZelleDto addFundsZelleDto) async  {
+    print('El json es : ' + addFundsZelleDto.toJson().toString());
+
     final res = await _httpService.request(
-      '/pay/zelle',
+      '/payment/method/recharge/zelle',
        'POST', 
-       (json) => null,
+       (json) => true,
        body: addFundsZelleDto.toJson()
     );
     if (!res.isSuccessful()) return Result.makeError(res.getError());
     print('En zelle: ${res.getValue()}');
 
-    return Result.success(null);
+    return Result.success(false);
 
   }
 }

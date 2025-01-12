@@ -11,12 +11,12 @@ class WalletRepositoryImpl implements IWalletRepository {
   WalletRepositoryImpl(this.walletDatasource);
 
   @override
-  Future<Result<void>> addFundsPagoMovil( AddFundsPagoMovilDto addFundsPagoMovilDto) {
+  Future<Result<bool>> addFundsPagoMovil( AddFundsPagoMovilDto addFundsPagoMovilDto) {
     return walletDatasource.addFundsPagoMovil(addFundsPagoMovilDto);
   }
 
   @override
-  Future<Result<void>> addFundsZelle(AddFundsZelleDto addFundsZelleDto) {
+  Future<Result<bool>> addFundsZelle(AddFundsZelleDto addFundsZelleDto) {
     return walletDatasource.addFundsZelle(addFundsZelleDto);
   }
 }

@@ -59,6 +59,7 @@ import 'package:GoDeli/features/wallet/application/bloc/wallet_bloc.dart';
 import 'package:GoDeli/features/wallet/application/datasource/wallet_datasource.dart';
 import 'package:GoDeli/features/wallet/application/repository/wallet_repository.dart';
 import 'package:GoDeli/features/wallet/application/use_cases/pay_pago_movil_use_case.dart';
+import 'package:GoDeli/features/wallet/application/use_cases/pay_zelle_use_case.dart';
 import 'package:GoDeli/features/wallet/infrastructure/datasource/wallet_datasource_impl.dart';
 import 'package:GoDeli/features/wallet/infrastructure/repository/wallet_repository_impl.dart';
 import 'package:get_it/get_it.dart';
@@ -202,9 +203,11 @@ class Injector {
         WalletRepositoryImpl(walletDatasource);
     final PayPagoMovilUseCase payPagoMovilUseCase =
         PayPagoMovilUseCase(walletRepository);
+    final PayZelleUseCase payZelleUseCase = PayZelleUseCase(walletRepository);
 
     getIt.registerFactory<WalletBloc>(() => WalletBloc(
           payPagoMovilUseCase: payPagoMovilUseCase,
+          payZelleUseCase: payZelleUseCase,
         ));
   }
 }
