@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:GoDeli/common/Exception/exception_mapper.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
@@ -29,7 +28,9 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
           perPage: event.perPage));
     } catch (e) {
       emit(OrdersLoadFailure(
-          error: e.toString(), page: event.page, perPage: event.perPage));
+          error: extractErrorMessage(e.toString()),
+          page: event.page,
+          perPage: event.perPage));
     }
   }
 

@@ -156,9 +156,64 @@ class _OrderListScreenState extends State<OrderListScreen> {
         ),
       );
     } else if (state is OrdersLoadFailure) {
-      return Center(child: Text('Failed to load orders: ${state.error}'));
+      return ErrorView(
+        errorMessage: 'Failed to load orders: ${state.error}',
+        onRetry: () {
+          context.read<OrdersBloc>().add(const OrdersLoaded());
+        },
+      );
     } else {
       return Container();
     }
+  }
+}
+
+// New ErrorView widget
+class ErrorView extends StatelessWidget {
+  final String errorMessage;
+  final VoidCallback onRetry;
+
+  const ErrorView({
+    super.key,
+    required this.errorMessage,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.error_outline,
+              size: 100,
+              color: Colors.red,
+            ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'Oops!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
+              ),
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              errorMessage,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 16.0),
+          ],
+        ),
+      ),
+    );
   }
 }
