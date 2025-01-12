@@ -34,8 +34,22 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
   }
 
   @override
-  Future<Result<List<ProductCategory>>> getProductsByCategory(String categoryId) {
-    // TODO: implement getProductsByCategory
-    throw UnimplementedError();
+  Future<Category> getCategoryItems(String categoryId) async{
+    final res = await _httpService.request(
+        '/category/$categoryId', 'GET', (json) => CategoryResponse.fromCatalogJson(json),
+        queryParameters: {
+          'page': 1,
+          'perPage': 10,
+        });
+
+
+
+    if( res.isSuccessful() ) {
+
+      return CategoryMapper.categoryItemsToDomian(res.getValue());
+    }
+    else {
+      throw Exception('Error loko');
+    }
   }
 }

@@ -1,5 +1,5 @@
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/config/injector/injector.dart';
-import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
 import 'package:flutter/material.dart';
@@ -138,11 +138,11 @@ class HomeScreenView extends StatelessWidget {
                   direction: Axis.vertical,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Deliver to',
+                    const Text('Deliver to',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
-                    Text('${favoriteDirection.address}',
-                        style: TextStyle(
+                    Text(favoriteDirection.address,
+                        style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w400)),
                   ],
                 );
@@ -216,6 +216,10 @@ class _CarruselItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
+
+    final categ = context.read<CategoriesBloc>().state.categories;
+
+
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -227,7 +231,7 @@ class _CarruselItems extends StatelessWidget {
 ,
           ),
           GestureDetector(
-              onTap: () => context.push('/catalog'),
+              onTap: ()=>context.push('/catalog'),
               child: Text(
                 'view all',
                 textAlign: TextAlign.end,
@@ -243,6 +247,10 @@ class _CarruselItems extends StatelessWidget {
           if (state.status == ProductsStatus.loading &&
               state.products.isEmpty) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if (state.status != ProductsStatus.loading &&
+              state.products.isEmpty) {
+            return const Center(child: Text('No hay productos'));
           }
           if (state.status == ProductsStatus.error) {
             return Center(

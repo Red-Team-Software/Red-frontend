@@ -10,4 +10,15 @@ class CategoryMapper {
       icon: json.icon,
     );
   }
+
+  static Future<Category> categoryItemsToDomian(CategoryResponse json) {
+    return Future.value(Category(
+      id: json.id,
+      name: json.name,
+      icon: json.icon,
+      products: json.products.isEmpty ? [] : json.products,
+      bundles: json.bundles.isEmpty ? [] : json.bundles,
+    ));
+
+  }
 }

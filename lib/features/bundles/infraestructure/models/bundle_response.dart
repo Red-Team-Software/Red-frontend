@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/categories/infraestructure/models/category_response.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
 
 class BundleResponse {
   final String id;
@@ -13,7 +14,7 @@ class BundleResponse {
   final String? measurement;
   final int? stock;
   final String? caducityDate;
-  final List<Category> categories;
+  final List<CategoryProduct> categories;
   final List<Promotion> promotion;
   final List<BundleProduct> products;
 
@@ -54,9 +55,8 @@ class BundleResponse {
       measurement: json['measurement'],
       stock: json['stock'],
       categories: json['category'] != null
-          ? List<Category>.from(json["category"].map((x) =>
-              CategoryResponse.categoryToDomain(
-                  CategoryResponse.fromJson(json))))
+          ? List<CategoryProduct>.from(json["category"].map((x) =>
+              CategoryProduct.fromJson(x))) // Mapea la lista de categorias
           : [],
       promotion: json['discount'] != null
           ? List<Promotion>.from(
