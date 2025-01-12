@@ -99,20 +99,20 @@ class CheckoutScreen extends StatelessWidget {
                 );
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.info),
-              onPressed: () {
-                CustomSnackBar.show(
-                  context,
-                  type: SnackBarType.error,
-                  title: 'Test SnackBar',
-                  message: 'This is a test',
-                );
-              },
-            ),
           ],
         ),
-        body: BlocBuilder<CheckoutBloc, CheckoutState>(
+        body: BlocConsumer<CheckoutBloc, CheckoutState>(
+          listener: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              CustomSnackBar.show(
+                context,
+                type: SnackBarType.error,
+                title: 'Error',
+                message: state.errorMessage,
+              );
+              context.read<CheckoutBloc>().add(ClearErrorEvent());
+            }
+          },
           builder: (context, state) {
             if (state.isProcessing) {
               return const Center(child: CircularProgressIndicator());
