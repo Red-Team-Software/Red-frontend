@@ -13,20 +13,23 @@ class ProductsDatasourceImpl implements IProductsDatasource {
   @override
   Future<Product> getProductById(String id) async {
     final res = await _httpService.request(
-        '/product/$id', 'GET', (json) => ProductResponse.fromJson(json, id: id));
-
-    print(res.getValue());
+        '/product/$id', 'GET', (json) => ProductResponse.fromJson(json));
     return ProductMapper.productToDomain(res.getValue());
   }
 
   @override
-  Future<List<Product>> getProducts({int page = 1, int perPage = 10}) async {
+  Future<List<Product>> getProducts({ List<String>? category, double? discount, int page = 1, int perPage = 10, String? popular }) async {
     final res = await _httpService.request(
         '/product/many', 'GET', (json) => ProductResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
           'perPage': perPage,
+          if (discount != null) 'discount': discount,
+          if (category != null) 'category': category,
+          if (popular != null) 'popular': popular,
         });
+
+    print(res.getValue());
 
     final List<Product> products = [];
 

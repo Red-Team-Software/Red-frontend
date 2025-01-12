@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   final bool isDarkMode;
-  final Color primaryColor = const Color(0xFFFF0000);
+  final Color primaryColor = const Color(0xFFad0101);
   final Color accentColor = const Color(0xFFFFADAD);
-  final Color darkIcons = const Color(0xFF1E1E1E);
+  final Color darkIcons = const Color(0xFF2B0A0A);
   final Color lightBackgroundColor = const Color(0xFFF2F4F7);
   final Color darkBackgroundColor = const Color(0xFF1E1E1E);
+  final Color textColor = const Color(0xFF2b0a0a);
 
   AppTheme({this.isDarkMode = false});
 
@@ -35,31 +36,37 @@ class AppTheme {
       fontFamily: 'Catamaran',
       textTheme: TextTheme(
         displayLarge: TextStyle(
+          
           fontSize: 34,
           fontWeight: FontWeight.bold,
           color: isDarkMode ? Colors.white : darkIcons,
         ),
         displayMedium: TextStyle(
+          
           fontSize: 24,
           fontWeight: FontWeight.bold,
           color: isDarkMode ? Colors.white : darkIcons,
         ),
         displaySmall: TextStyle(
+          
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: isDarkMode ? Colors.white : darkIcons,
         ),
         bodyLarge: TextStyle(
+          
           fontSize: 16,
           fontWeight: FontWeight.normal,
           color: isDarkMode ? Colors.white : darkIcons,
         ),
         bodyMedium: TextStyle(
+          
           fontSize: 14,
           fontWeight: FontWeight.normal,
           color: isDarkMode ? Colors.white : darkIcons,
         ),
         bodySmall: TextStyle(
+          
           fontSize: 12,
           fontWeight: FontWeight.normal,
           color: isDarkMode ? Colors.white : darkIcons,

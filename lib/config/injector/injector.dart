@@ -20,6 +20,7 @@ import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repo
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/infraestructure/datasources/cart_isar_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/infraestructure/repositories/cart_local_storage_repository_impl.dart';
+import 'package:GoDeli/features/catalog/bloc/catalog_bloc.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
@@ -55,6 +56,12 @@ import 'package:GoDeli/features/user/domain/datasources/user_datasource.dart';
 import 'package:GoDeli/features/user/domain/repositories/user_repository.dart';
 import 'package:GoDeli/features/user/infrastructure/datasources/user_datasource_impl.dart';
 import 'package:GoDeli/features/user/infrastructure/repositories/user_repository_impl.dart';
+import 'package:GoDeli/features/wallet/application/bloc/wallet_bloc.dart';
+import 'package:GoDeli/features/wallet/application/datasource/wallet_datasource.dart';
+import 'package:GoDeli/features/wallet/application/repository/wallet_repository.dart';
+import 'package:GoDeli/features/wallet/application/use_cases/pay_pago_movil_use_case.dart';
+import 'package:GoDeli/features/wallet/infrastructure/datasource/wallet_datasource_impl.dart';
+import 'package:GoDeli/features/wallet/infrastructure/repository/wallet_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -102,8 +109,8 @@ class Injector {
         RegisterUseCase(authRepository, authLocalStorageRepository);
     final LogoutUseCase logoutUseCase =
         LogoutUseCase(httpService, authLocalStorageRepository, cartRepository);
-    final CheckAuthUseCase checkAuthUseCase =
-        CheckAuthUseCase(httpService, authLocalStorageRepository, cartRepository);
+    final CheckAuthUseCase checkAuthUseCase = CheckAuthUseCase(
+        httpService, authLocalStorageRepository, cartRepository);
 
     // getIt.registerSingleton<IAuthRepository>(authRepository);
     getIt.registerFactory<AuthBloc>(() => AuthBloc(
@@ -155,6 +162,11 @@ class Injector {
     getIt.registerFactory<SearchBloc>(
         () => SearchBloc(productsRepository, bundleRepository));
 
+    //? inicializando las dependencias del modulo catalogo
+    getIt.registerFactory<CatalogBloc>(() => CatalogBloc(
+        productsRepository: productsRepository,
+        bundleRepository: bundleRepository));
+
     //? Iiniciando las dependencias de modulo de orden
 
     final paymentMethodDataSource = PaymentMethodDatasourceImpl(httpService);
@@ -162,7 +174,8 @@ class Injector {
         paymentMethodDatasource: paymentMethodDataSource);
     final orderDatasource = OrderDatasourceImpl(httpService: httpService);
     final orderRepository = OrderRepositoryImpl(datasource: orderDatasource);
-    final getPaymentMethodsUseCase = GetPaymentMethodsUseCase(paymentMethodRepository);
+    final getPaymentMethodsUseCase =
+        GetPaymentMethodsUseCase(paymentMethodRepository);
 
     getIt.registerSingleton<GetUserDirectionsUseCase>(getUserDirectionsUseCase);
     getIt.registerSingleton<AddUserDirectionUseCase>(addUserDirectionUseCase);
@@ -174,8 +187,8 @@ class Injector {
     getIt.registerFactory<IOrderRepository>(() => orderRepository);
     getIt.registerFactory<IPaymentMethodRepository>(
         () => paymentMethodRepository);
-    getIt.registerFactory<PaymentMethodBloc>(
-        () => PaymentMethodBloc(getPaymentMethodsUseCase: getPaymentMethodsUseCase));
+    getIt.registerFactory<PaymentMethodBloc>(() =>
+        PaymentMethodBloc(getPaymentMethodsUseCase: getPaymentMethodsUseCase));
 
     //? inicializando las dependencias de modulo tax y shipping
     final taxShippingDatasource =
@@ -188,7 +201,16 @@ class Injector {
     getIt.registerFactory<OrdersBloc>(
         () => OrdersBloc(orderRepository: orderRepository));
 
-    //? inicializando las dependencias de modulo paymentMethod
-    
+    //? inicializando las dependencias de modulo wallet
+    final IWalletDatasource walletDatasource =
+        WalletDatasourceImpl(httpService);
+    final IWalletRepository walletRepository =
+        WalletRepositoryImpl(walletDatasource);
+    final PayPagoMovilUseCase payPagoMovilUseCase =
+        PayPagoMovilUseCase(walletRepository);
+
+    getIt.registerFactory<WalletBloc>(() => WalletBloc(
+          payPagoMovilUseCase: payPagoMovilUseCase,
+        ));
   }
 }

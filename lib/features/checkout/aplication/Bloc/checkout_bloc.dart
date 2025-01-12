@@ -222,6 +222,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       final order = result.getValue();
       emit(state.copyWith(isProcessing: false));
       onOrderCreated(order);
+      event.context.read<CartBloc>().add(ClearCart()); //! Revisar si al ejecutar correctamente el checkout no explota el programa
     } else {
       emit(
           state.copyWith(isProcessing: false, errorMessage: 'Payment failed.'));

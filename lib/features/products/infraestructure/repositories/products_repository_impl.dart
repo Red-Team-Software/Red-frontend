@@ -23,10 +23,10 @@ class ProductsRepositoryImpl implements IProductsRepository {
 
   @override
   Future<Result<List<Product>>> getProducts(
-      {int page = 1, int perPage = 10}) async {
+      { List<String>? category, double? discount, int page = 1, int perPage = 10, String? popular }) async {
     try {
       final products =
-          await productsDatasource.getProducts(page: page, perPage: perPage);
+          await productsDatasource.getProducts(category: category, discount: discount, page: page, perPage: perPage, popular: popular);
       return Result<List<Product>>.success(products);
     } on DioException catch (dioError) {
       return Result<List<Product>>.makeError(Exception('Dio error: ${dioError.message}'));

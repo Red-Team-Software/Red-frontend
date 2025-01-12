@@ -44,9 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await loginUseCase.execute(LoginDto(event.email, event.password));
     if (!res.isSuccessful()) {
       emit(AuthError('Invalid credentials'));
-    } 
-      emit(Authenticated(res.getValue()));
-      print('User: ${res.getValue().fullName}');
+    }
+    emit(Authenticated(res.getValue()));
+    print('User: ${res.getValue().fullName}');
   }
 
   void _onRegisterEvent(RegisterEvent event, Emitter<AuthState> emit) async {
@@ -58,6 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         phone: event.phoneNumber));
     if (!resRegister.isSuccessful()) {
       emit(AuthError('Registering failed'));
+      return;
     }
 
     if (event.image != null) {
@@ -68,7 +69,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AuthError('Updating user failed'));
       }
     }
-   
+
     final resDirections = await addUserDirectionUseCase.execute(event.address);
     if (!resDirections.isSuccessful()) {
       print('El error es: ${resDirections.getError()}');

@@ -16,4 +16,3 @@ final class PaymentMethodError extends PaymentMethodState {
 
   PaymentMethodError(this.message);
 }
-

@@ -19,8 +19,13 @@ class CategoriesRespositoryImpl implements ICategoriesRepository {
   }
   
   @override
-  Future<Result<List<ProductCategory>>> getProductsByCategory(String categoryId) {
-    // TODO: implement getProductsByCategory
-    throw UnimplementedError();
+  Future<Result<Category>> getCategoryItems(String categoryId) async {
+  try {
+      final category = await categoryDatasource.getCategoryItems(categoryId);
+
+      return Result<Category>.success(category);
+    } catch (error, _) {
+      return Result<Category>.makeError(error as Exception);
+    }
   }
 }

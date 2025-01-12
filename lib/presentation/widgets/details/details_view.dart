@@ -1,9 +1,8 @@
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
-import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/categories/domain/category.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../widgets.dart';
@@ -20,7 +19,7 @@ class DetailsView extends StatelessWidget {
   final int? inStock;
   final List<Promotion> promotions;
   final List<BundleProduct> bundleProducts;
-  final List<Category> categories;
+  final List<CategoryProduct> categories;
   final Widget buttonWidget;
 
   const DetailsView({super.key, 
@@ -123,7 +122,7 @@ class _ScrollableDetails extends StatelessWidget {
   final int? inStock;
   final List<Promotion> promotions;
   final List<BundleProduct> bundleProducts;
-  final List<Category> categories;
+  final List<CategoryProduct> categories;
   final Widget buttonWidget;
 
 
@@ -182,7 +181,7 @@ class _ScrollableDetails extends StatelessWidget {
                             children: promotions
                                 .map((promotion) => Chip(
                                       label: Text(
-                                        '${promotion.percentage * 100}% off',
+                                        '${promotion.discount * 100}% off',
                                         style: const TextStyle(
                                           color: Colors.white,
                                         ),
@@ -362,7 +361,7 @@ class _ScrollableDetails extends StatelessWidget {
     if (promotions.isNotEmpty) {
       late double acum = price;
       for (final percent in promotions) {
-        acum -= acum * percent.percentage;
+        acum -= acum * percent.discount;
       }
       return acum;
     }
