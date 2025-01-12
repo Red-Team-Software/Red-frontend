@@ -210,9 +210,12 @@ class HomeScreenView extends StatelessWidget {
 class _CarruselItems extends StatelessWidget {
   const _CarruselItems();
 
+
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textStyles = theme.textTheme;
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,34 +223,33 @@ class _CarruselItems extends StatelessWidget {
         children: [
           Text(
             'Popular',
-            style: TextStyle(
-                color: theme.brightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 32),
+                        style: textStyles.displayLarge
+,
           ),
           GestureDetector(
               onTap: () => context.push('/catalog'),
               child: Text(
                 'view all',
                 textAlign: TextAlign.end,
-                style: TextStyle(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w700),
+                style: textStyles.displaySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold),
               )),
         ],
       ),
       BlocBuilder<AllProductsBloc, AllProductsState>(
         builder: (context, state) {
+            final textStyles = theme.textTheme;
           if (state.status == ProductsStatus.loading &&
               state.products.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
           if (state.status == ProductsStatus.error) {
-            return const Center(
+            return Center(
               child: Text('Algo inesperado paso',
-                  style: TextStyle(color: Colors.red)),
+                  style: textStyles.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                        fontWeight: FontWeight.bold)),
             );
           }
           return Padding(

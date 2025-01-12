@@ -10,27 +10,41 @@ class CaregoriesCarrusel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final textStyles = theme.textTheme;
 
     return SizedBox(
       height: 88,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          GestureDetector(onTap: ()=>context.push('/categories') ,child: Text('view all', textAlign: TextAlign.end, style: TextStyle(color: theme.colorScheme.primary, fontWeight: FontWeight.w700),)),
+          GestureDetector(
+              onTap: () => context.push('/categories'),
+              child: Text(
+                'view all',
+                textAlign: TextAlign.end,
+                style: textStyles.displaySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold),
+              )),
           Expanded(
             child: BlocBuilder<CategoriesBloc, CategoriesState>(
               builder: (context, state) {
-                if (state.status == CategoriesStatus.loading && state.categories.isEmpty) {
+                if (state.status == CategoriesStatus.loading &&
+                    state.categories.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (state.status == CategoriesStatus.error) {
-                  return const Center(
-                    child: Text('Algo inesperado paso', style: TextStyle(color: Colors.red)),
+                  return Center(
+                    child: Text('Algo inesperado paso',
+                        style: textStyles.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                        fontWeight: FontWeight.bold)),
                   );
                 }
                 return ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) => const SizedBox(width: 16),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 16),
                   itemCount: state.categories.length,
                   itemBuilder: (BuildContext context, int index) {
                     Category currentCategory = state.categories[index];
@@ -57,7 +71,8 @@ class CaregoriesCarrusel extends StatelessWidget {
                               const SizedBox(height: 8),
                               Text(
                                 currentCategory.name,
-                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800),
+                                style: const TextStyle(
+                                    fontSize: 10, fontWeight: FontWeight.w800),
                               ),
                             ],
                           ),

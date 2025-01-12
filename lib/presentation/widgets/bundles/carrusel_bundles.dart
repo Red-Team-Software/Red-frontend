@@ -11,6 +11,8 @@ class CardBundleCarrusel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    final textStyles = theme.textTheme;
     return SizedBox(
       height: 304,
       child: Column(
@@ -21,36 +23,31 @@ class CardBundleCarrusel extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                'Bundle Offers',
-                style: TextStyle(
-                    color: theme.brightness == Brightness.dark
-                        ? Colors.white
-                        : Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 32),
-              ),
+              Text('Bundle Offers', style: textStyles.displayLarge),
               GestureDetector(
-                  onTap: ()=>context.push('/catalog'),
+                  onTap: () => context.push('/catalog'),
                   child: Text(
                     'view all',
                     textAlign: TextAlign.end,
-                    style: TextStyle(
+                    style: textStyles.displaySmall?.copyWith(
                         color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w700),
+                        fontWeight: FontWeight.bold),
                   )),
             ],
           ),
           Expanded(child: BlocBuilder<AllBundlesBloc, AllBundlesState>(
               builder: (context, state) {
+            final textStyles = theme.textTheme;
             if (state.status == BundlesStatus.loading &&
                 state.bundles.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
             if (state.status == BundlesStatus.error) {
-              return const Center(
+              return Center(
                 child: Text('Algo inesperado paso',
-                    style: TextStyle(color: Colors.red)),
+                    style: textStyles.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                        fontWeight: FontWeight.bold)),
               );
             }
             return ListView.separated(
