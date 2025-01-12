@@ -24,7 +24,7 @@ class ProductCart {
       product: Product(
         id: json['id'] as String,
         name: (json['nombre'] ?? json['name']) as String,
-        description: json['descripcion'] as String,
+        description: json['description'] as String,
         price: (json['price'] as num).toDouble(),
         imageUrl: List<String>.from(json['images'] ?? []),
         currency: json['currency'] as String?,

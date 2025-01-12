@@ -9,6 +9,7 @@ import 'package:GoDeli/features/user/application/use_cases/add_user_direction_us
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
+import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -95,6 +96,17 @@ class CheckoutScreen extends StatelessWidget {
                         ),
                       ),
                   ],
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.info),
+              onPressed: () {
+                CustomSnackBar.show(
+                  context,
+                  type: SnackBarType.error,
+                  title: 'Test SnackBar',
+                  message: 'This is a test',
                 );
               },
             ),

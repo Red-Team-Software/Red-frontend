@@ -1,7 +1,6 @@
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
-import 'package:GoDeli/features/payment-method/domain/payment-method.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'payment_method_card.dart';

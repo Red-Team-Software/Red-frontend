@@ -35,6 +35,7 @@ class OrderEntity {
       // Verifica que el JSON sea del tipo esperado
       if (json is Map<String, dynamic>) {
         print('Parsing OrderEntity from JSON...');
+        print("Fallo el 1");
 
         // Depuración de valores clave
         print('ID: ${json['id']}');
