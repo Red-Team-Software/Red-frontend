@@ -35,7 +35,9 @@ class WalletDatasourceImpl implements IWalletDatasource {
        (json) => true,
        body: addFundsZelleDto.toJson()
     );
-    if (!res.isSuccessful()) return Result.makeError(res.getError());
+    if (!res.isSuccessful()){
+      return Result.makeError(res.getError());
+    } 
     print('En zelle: ${res.getValue()}');
 
     return Result.success(false);

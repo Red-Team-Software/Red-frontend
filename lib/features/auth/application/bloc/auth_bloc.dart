@@ -46,7 +46,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthError('Invalid credentials'));
     }
     emit(Authenticated(res.getValue()));
-    print('User: ${res.getValue().fullName}');
   }
 
   void _onRegisterEvent(RegisterEvent event, Emitter<AuthState> emit) async {
