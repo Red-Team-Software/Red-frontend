@@ -79,7 +79,7 @@ const ProductEntitySchema = CollectionSchema(
   getId: _productEntityGetId,
   getLinks: _productEntityGetLinks,
   attach: _productEntityAttach,
-  version: '3.1.0+1',
+  version: '3.1.8',
 );
 
 int _productEntityEstimateSize(

@@ -3,6 +3,7 @@ import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
 import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'payment_method_card.dart';
 
 class PaymentMethodSection extends StatelessWidget {
   const PaymentMethodSection({super.key});
@@ -12,12 +13,6 @@ class PaymentMethodSection extends StatelessWidget {
     final checkoutBloc = context.read<CheckoutBloc>();
     return BlocBuilder<CheckoutBloc, CheckoutState>(
       builder: (context, state) {
-        final paymentMethods = [
-          'cash on delivery',
-          'Pago movil',
-          'PayPal',
-          'Zelle'
-        ];
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -27,13 +22,14 @@ class PaymentMethodSection extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Column(
-              children: paymentMethods.map((method) {
-                return RadioListTile<String>(
-                  title: Text(method),
-                  value: method,
-                  groupValue: state.selectedPaymentMethod,
-                  onChanged: (value) {
-                    checkoutBloc.add(SelectPaymentMethod(value!));
+              children: state.paymentMethods
+                  .where((method) => method.state == 'active')
+                  .map((method) {
+                return PaymentMethodCard(
+                  method: method,
+                  selectedMethod: state.selectedPaymentMethod,
+                  onSelected: (selectedMethod) {
+                    checkoutBloc.add(SelectPaymentMethod(selectedMethod));
                   },
                 );
               }).toList(),

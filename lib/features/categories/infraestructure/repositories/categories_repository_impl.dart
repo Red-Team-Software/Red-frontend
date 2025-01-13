@@ -17,4 +17,15 @@ class CategoriesRespositoryImpl implements ICategoriesRepository {
       return Result<List<Category>>.makeError(error as Exception);
     }
   }
+  
+  @override
+  Future<Result<Category>> getCategoryItems(String categoryId) async {
+  try {
+      final category = await categoryDatasource.getCategoryItems(categoryId);
+
+      return Result<Category>.success(category);
+    } catch (error, _) {
+      return Result<Category>.makeError(error as Exception);
+    }
+  }
 }

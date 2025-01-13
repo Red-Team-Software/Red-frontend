@@ -1,13 +1,16 @@
+import 'package:GoDeli/features/order/domain/order.dart';
+import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/cart/application/cart/cart_bloc.dart';
+import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderSummaryDetails extends StatelessWidget {
-  const OrderSummaryDetails({super.key});
+  final Order orderSummary;
+
+  const OrderSummaryDetails({super.key, required this.orderSummary});
 
   @override
   Widget build(BuildContext context) {
-    final cartBloc = context.watch<CartBloc>();
     final colors = Theme.of(context).colorScheme;
 
     return Container(
@@ -42,7 +45,7 @@ class OrderSummaryDetails extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${cartBloc.state.subtotal.toStringAsFixed(2)}',
+                '\$${orderSummary.orderPayment.amount.toStringAsFixed(2)}', //! Revisar lo del subtotal
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
@@ -63,7 +66,7 @@ class OrderSummaryDetails extends StatelessWidget {
                 ),
               ),
               const Text(
-                '\$${29}',
+                '\$${0.0}', //TODO: Agregar el costo de envío desde el BloC
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.black,
@@ -82,9 +85,9 @@ class OrderSummaryDetails extends StatelessWidget {
                   color: Colors.grey[700],
                 ),
               ),
-              Text(
-                '\$${cartBloc.state.discount.toStringAsFixed(2)}',
-                style: const TextStyle(
+              const Text(
+                '\$${0.0}', //TODO: Agregar el descuento desde el BloC
+                style: TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                 ),
@@ -104,7 +107,7 @@ class OrderSummaryDetails extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${cartBloc.state.total.toStringAsFixed(2)}',
+                '\$${orderSummary.totalAmount.toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,

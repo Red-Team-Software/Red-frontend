@@ -1,8 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
-import 'package:GoDeli/features/categories/application/categories_bloc.dart';
-import 'package:GoDeli/features/categories/domain/category.dart';
-import 'package:GoDeli/presentation/screens/auth/auth.dart';
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -60,30 +59,33 @@ class _CategoriesView extends StatelessWidget {
               itemCount: state.categories.length,
               itemBuilder: (context, index) {
                 final category = state.categories[index];
-                return Card(
-                  elevation: 6.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Image.network(
-                            category.icon,
-                            fit: BoxFit.contain,
-                            width: 70.00,
+                return InkWell(
+                  onTap: () => context.push('/catalog/${category.id}'),
+                  child: Card(
+                    elevation: 6.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Image.network(
+                              category.icon!,
+                              fit: BoxFit.contain,
+                              width: 70.00,
+                            ),
                           ),
-                        ),
-                        Text(
-                          category.name,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(height: 8.00,)
-                      ],
+                          Text(
+                            category.name,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w700),
+                          ),
+                          const SizedBox(height: 8.00,)
+                        ],
+                      ),
                     ),
                   ),
                 );

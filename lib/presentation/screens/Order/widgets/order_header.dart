@@ -1,7 +1,11 @@
+import 'package:GoDeli/features/order/domain/order.dart';
+import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:flutter/material.dart';
 
 class OrderHeader extends StatelessWidget {
-  const OrderHeader({super.key});
+  final Order orderSummary;
+
+  const OrderHeader({super.key, required this.orderSummary});
 
   @override
   Widget build(BuildContext context) {
@@ -25,30 +29,43 @@ class OrderHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Order #2184374',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+              Flexible(
+                child: Text(
+                  'Order #${orderSummary.id}',
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow
+                      .ellipsis, // Para truncar el texto si es demasiado largo
+                  softWrap: true,
                 ),
               ),
-              Text(
-                'Delivered',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF0E650E), // Color personalizado
+              const SizedBox(width: 8), // Espacio entre los textos
+              Flexible(
+                child: Text(
+                  orderSummary.orderState,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF0E650E),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow
+                      .ellipsis, // Para truncar el texto si es necesario
+                  softWrap: true,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 8),
           Text(
-            'Delivery today at 12:45 pm',
+            'Delivery ${orderSummary.orderCreatedDate}',
             style: TextStyle(
               fontSize: 14,
               color: Colors.grey[600],
@@ -63,9 +80,9 @@ class OrderHeader extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          const Text(
-            'Cash on delivery',
-            style: TextStyle(
+          Text(
+            orderSummary.orderPayment.paymentMethod,
+            style: const TextStyle(
               fontSize: 14,
               color: Colors.black,
             ),
@@ -80,7 +97,7 @@ class OrderHeader extends StatelessWidget {
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'Sherman, Calle Wallaby 42, Sidney',
+                  'Lat: ${orderSummary.orderDirection.latitude.toString()} | Lon: ${orderSummary.orderDirection.longitude.toString()}',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey[700],
@@ -97,7 +114,7 @@ class OrderHeader extends StatelessWidget {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                'Sherman, Calle Wallaby 42, Sidney',
+                orderSummary.orderCreatedDate,
                 style: TextStyle(
                   fontSize: 14,
                   color: Colors.grey[700],

@@ -11,6 +11,13 @@ class BundleMapper {
       price: json.price,
       currency: json.currency,
       imageUrl: json.images,
+      weight: json.weight,
+      measurement: json.measurement,
+      inStock: json.stock,
+      expirationDate: json.caducityDate,
+      categories: json.categories,
+      promotions: json.promotion,
+      products: json.products
     );
   }
 }

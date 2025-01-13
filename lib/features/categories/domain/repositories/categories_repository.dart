@@ -3,4 +3,5 @@ import 'package:GoDeli/features/common/domain/result.dart';
 
 abstract class ICategoriesRepository {
   Future<Result<List<Category>>> getCategories();
+  Future<Result<Category>> getCategoryItems(String categoryId);
 }
