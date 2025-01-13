@@ -63,8 +63,9 @@ class OrderItem {
             .map((bundle) => BundleCart.fromJson(bundle))
             .toList(),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Error parsing OrderItem: $e');
+      print('StackTrace: $stackTrace');
       rethrow;
     }
   }

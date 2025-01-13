@@ -1,3 +1,4 @@
+import 'package:GoDeli/common/Exception/exception_mapper.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
@@ -45,6 +46,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
     on<FetchAddressesEvent>(_onFetchAddresses);
     on<RemoveAddressEvent>(_onRemoveAddress);
     on<UpdateAddressEvent>(_onUpdateAddress);
+    on<ClearErrorEvent>(_onClearError);
   }
 
   Future<void> _onLoadCheckoutData(
@@ -222,10 +224,11 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       final order = result.getValue();
       emit(state.copyWith(isProcessing: false));
       onOrderCreated(order);
-      event.context.read<CartBloc>().add(ClearCart()); //! Revisar si al ejecutar correctamente el checkout no explota el programa
+      event.context.read<CartBloc>().add(ClearCart());
     } else {
-      emit(
-          state.copyWith(isProcessing: false, errorMessage: 'Payment failed.'));
+      emit(state.copyWith(
+          isProcessing: false,
+          errorMessage: extractErrorMessage(result.getError().toString())));
     }
   }
 
@@ -280,5 +283,9 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       UpdateAddressEvent event, Emitter<CheckoutState> emit) async {
     // Update address in the database
     // emit(CheckoutState with updated addresses);
+  }
+
+  void _onClearError(ClearErrorEvent event, Emitter<CheckoutState> emit) {
+    emit(state.copyWith(errorMessage: ''));
   }
 }

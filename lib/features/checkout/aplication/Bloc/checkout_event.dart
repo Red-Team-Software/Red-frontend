@@ -87,3 +87,5 @@ class UpdateAddressEvent extends CheckoutEvent {
 
   const UpdateAddressEvent(this.address);
 }
+
+class ClearErrorEvent extends CheckoutEvent {}
