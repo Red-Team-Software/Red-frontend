@@ -68,13 +68,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
   @override
   Future<void> cancelOrder({required String orderId}) async {
     final res = await httpService.request(
-      '/order/cancel/order',
-      'POST',
-      (json) => null,
-      body: {
-        "orderId": orderId,
-      },
-    );
+        '/order/cancel/$orderId', 'GET', (json) => null);
 
     if (!res.isSuccessful()) throw Exception(res.getError());
   }
@@ -82,7 +76,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
   @override
   Future<Order> fetchOrderById({required String orderId}) async {
     final res = await httpService.request(
-      '/order/one/$orderId',
+      '/order/$orderId',
       'GET',
       (json) => OrderMapper.mapEntityToDomain(OrderEntity.fromJson(json)),
     );
