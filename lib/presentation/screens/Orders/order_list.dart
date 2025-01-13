@@ -28,7 +28,6 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final textStyles = theme.textTheme;
@@ -61,9 +60,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: Text(
-            'Order List',
-            style: textStyles.displayLarge),
+          title: Text('Order List', style: textStyles.displayLarge),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.push("/", extra: 0),
@@ -136,20 +133,25 @@ class _OrderListScreenState extends State<OrderListScreen> {
             Expanded(
               child: filteredOrders.isEmpty
                   ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
-                    crossAxisAlignment: CrossAxisAlignment.center, // Centrar horizontalmente
-                    children:[ 
-                      SvgPicture.asset('images/empty_bag.svg', height: 100, color: colors.primary,),
-                      const SizedBox(height: 16),
-                      Center(
-                        child: Text(
-                          'Aún no dispone de alguna orden',
-                          style: textStyles.displaySmall?.copyWith(
+                      mainAxisAlignment:
+                          MainAxisAlignment.center, // Centrar verticalmente
+                      crossAxisAlignment:
+                          CrossAxisAlignment.center, // Centrar horizontalmente
+                      children: [
+                          SvgPicture.asset(
+                            'images/empty_bag.svg',
+                            height: 100,
                             color: colors.primary,
-                        ),
-                        )
-                      ),]
-                  )
+                          ),
+                          const SizedBox(height: 16),
+                          Center(
+                              child: Text(
+                            'Aún no dispone de alguna orden',
+                            style: textStyles.displaySmall?.copyWith(
+                              color: colors.primary,
+                            ),
+                          )),
+                        ])
                   : ListView.builder(
                       itemCount: filteredOrders.length,
                       itemBuilder: (context, index) {

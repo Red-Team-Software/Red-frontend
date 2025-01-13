@@ -24,7 +24,7 @@ class CustomItemProduct extends StatelessWidget {
         context.push('/product/${current.id}');
       },
       child: Card(
-        elevation: 4,
+        elevation: 6  ,
         color: theme.brightness == Brightness.dark
             ? Colors.grey[800]
             : Colors.white,

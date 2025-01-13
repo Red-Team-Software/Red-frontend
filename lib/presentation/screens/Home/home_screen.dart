@@ -194,15 +194,15 @@ class HomeScreenView extends StatelessWidget {
                       const SizedBox(
                         height: 24,
                       ),
+                      const PopularProductsHome(),
+                      const SizedBox(
+                        height: 24,
+                      ),
                       const CaregoriesCarrusel(),
                       const SizedBox(
                         height: 24,
                       ),
                       const CardBundleCarrusel(),
-                      const SizedBox(
-                        height: 24,
-                      ),
-                      const PopularProductsHome(),
                     ],
                   ),
                 ]),
