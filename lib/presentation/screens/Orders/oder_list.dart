@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_state.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'widgets/order_card.dart';
 
@@ -27,6 +28,10 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+    final textStyles = theme.textTheme;
     final state = context.watch<OrdersBloc>().state;
 
     if (state is OrdersLoadInProgress) {
@@ -56,7 +61,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Order List'),
+          title: Text(
+            'Order List',
+            style: textStyles.displayLarge),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => context.push("/", extra: 0),
@@ -81,18 +88,16 @@ class _OrderListScreenState extends State<OrderListScreen> {
                           horizontal: 16.0, vertical: 8.0),
                       decoration: BoxDecoration(
                         color: selectedTab == 'Active'
-                            ? Colors.red
+                            ? colors.primary
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Text(
                         'Active Orders ($activeCount)',
-                        style: TextStyle(
+                        style: textStyles.displaySmall?.copyWith(
                           color: selectedTab == 'Active'
                               ? Colors.white
                               : Colors.grey,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -109,18 +114,16 @@ class _OrderListScreenState extends State<OrderListScreen> {
                           horizontal: 16.0, vertical: 8.0),
                       decoration: BoxDecoration(
                         color: selectedTab == 'Past'
-                            ? Colors.red
+                            ? colors.primary
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Text(
                         'Past Orders ($pastCount)',
-                        style: TextStyle(
+                        style: textStyles.displaySmall?.copyWith(
                           color: selectedTab == 'Past'
                               ? Colors.white
                               : Colors.grey,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -129,16 +132,24 @@ class _OrderListScreenState extends State<OrderListScreen> {
               ),
             ),
             const SizedBox(height: 8.0),
-
             // ListView of filtered orders
             Expanded(
               child: filteredOrders.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'Aún no dispone de alguna orden',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                    )
+                  ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center, // Centrar verticalmente
+                    crossAxisAlignment: CrossAxisAlignment.center, // Centrar horizontalmente
+                    children:[ 
+                      SvgPicture.asset('images/empty_bag.svg', height: 100, color: colors.primary,),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: Text(
+                          'Aún no dispone de alguna orden',
+                          style: textStyles.displaySmall?.copyWith(
+                            color: colors.primary,
+                        ),
+                        )
+                      ),]
+                  )
                   : ListView.builder(
                       itemCount: filteredOrders.length,
                       itemBuilder: (context, index) {

@@ -44,6 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         await loginUseCase.execute(LoginDto(event.email, event.password));
     if (!res.isSuccessful()) {
       emit(AuthError('Invalid credentials'));
+      return;
     }
     emit(Authenticated(res.getValue()));
   }
