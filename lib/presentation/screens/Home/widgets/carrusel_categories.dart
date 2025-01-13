@@ -23,10 +23,16 @@ class CaregoriesCarrusel extends StatelessWidget {
                 if (state.status == CategoriesStatus.loading && state.categories.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
+                if (state.categories.isEmpty && (state.status == CategoriesStatus.allLoaded || state.status == CategoriesStatus.loaded)) {
+                  return const Center(child: Text('Algo raro paso, No hay categorias!', style: TextStyle(color: Colors.red)));
+                }
                 if (state.status == CategoriesStatus.error) {
                   return const Center(
                     child: Text('Algo inesperado paso', style: TextStyle(color: Colors.red)),
                   );
+                }
+                if (state.status != CategoriesStatus.loading && state.categories.isEmpty) {
+                  return const Center(child: Text('No hay categorias'));
                 }
                 return ListView.separated(
                   scrollDirection: Axis.horizontal,
@@ -35,7 +41,9 @@ class CaregoriesCarrusel extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     Category currentCategory = state.categories[index];
                     return GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        context.push('/catalog/${currentCategory.id}');
+                      },
                       child: SizedBox(
                         width: 80,
                         child: Card(
@@ -51,7 +59,7 @@ class CaregoriesCarrusel extends StatelessWidget {
                                 child: SizedBox(
                                   height: 24,
                                   width: 24,
-                                  child: Image.network(currentCategory.icon),
+                                  child: Image.network(currentCategory.icon!),
                                 ),
                               ),
                               const SizedBox(height: 8),

@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
+import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
@@ -11,6 +12,9 @@ class CardBundleCarrusel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final categ = context.read<CategoriesBloc>().state.categories;
+
+
     return SizedBox(
       height: 304,
       child: Column(
@@ -47,11 +51,22 @@ class CardBundleCarrusel extends StatelessWidget {
                 state.bundles.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
+            if (state.bundles.isEmpty &&
+                (state.status == BundlesStatus.allLoaded ||
+                    state.status == BundlesStatus.loaded)) {
+              return const Center(
+                  child: Text('Algo raro paso, No hay Bundles!',
+                      style: TextStyle(color: Colors.red)));
+            }
             if (state.status == BundlesStatus.error) {
               return const Center(
                 child: Text('Algo inesperado paso',
                     style: TextStyle(color: Colors.red)),
               );
+            }
+            if (state.status != BundlesStatus.loading &&
+                state.bundles.isEmpty) {
+              return const Center(child: Text('No hay items para mostrar'));
             }
             return ListView.separated(
               scrollDirection: Axis.horizontal,

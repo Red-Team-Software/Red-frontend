@@ -20,6 +20,7 @@ import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repo
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/infraestructure/datasources/cart_isar_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/infraestructure/repositories/cart_local_storage_repository_impl.dart';
+import 'package:GoDeli/features/catalog/bloc/catalog_bloc.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
@@ -160,6 +161,11 @@ class Injector {
     //? inicializando las dependencias de modulo search
     getIt.registerFactory<SearchBloc>(
         () => SearchBloc(productsRepository, bundleRepository));
+
+    //? inicializando las dependencias del modulo catalogo
+    getIt.registerFactory<CatalogBloc>(() => CatalogBloc(
+        productsRepository: productsRepository,
+        bundleRepository: bundleRepository));
 
     //? Iiniciando las dependencias de modulo de orden
 
