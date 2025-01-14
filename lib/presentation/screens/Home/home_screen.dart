@@ -198,7 +198,7 @@ class HomeScreenView extends StatelessWidget {
                       const SizedBox(
                         height: 24,
                       ),
-                      const CaregoriesCarrusel(),
+                      const CategoriesCarrusel(),
                       const SizedBox(
                         height: 24,
                       ),
@@ -225,33 +225,45 @@ class PopularProductsHome extends StatelessWidget {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
 
-    final categ = context.read<CategoriesBloc>().state.categories;
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 8, right: 8),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Popular',
-              style: textStyles.displayLarge,
-            ),
-            GestureDetector(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Título y botón de "view all"
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Popular',
+                style: TextStyle(
+                  color: theme.brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 32,
+                ),
+              ),
+              GestureDetector(
                 onTap: () => context.push('/catalog'),
                 child: Text(
                   'view all',
                   textAlign: TextAlign.end,
-                  style: textStyles.displaySmall?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold),
-                )),
-          ],
+                  style: TextStyle(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+        const SizedBox(height: 16),
+
+        // BlocBuilder para productos populares
         BlocBuilder<AllProductsBloc, AllProductsState>(
           builder: (context, state) {
-            final textStyles = theme.textTheme;
             if (state.status == ProductsStatus.loading &&
                 state.products.isEmpty) {
               return const Center(child: CircularProgressIndicator());
@@ -262,34 +274,35 @@ class PopularProductsHome extends StatelessWidget {
             }
             if (state.status == ProductsStatus.error) {
               return Center(
-                child: Text('Algo inesperado paso',
-                    style: textStyles.bodyLarge?.copyWith(
-                        color: theme.colorScheme.error,
-                        fontWeight: FontWeight.bold)),
+                child: Text(
+                  'Algo inesperado pasó',
+                  style: textStyles.bodyLarge?.copyWith(
+                    color: theme.colorScheme.error,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               );
             }
+
+            // Lista de productos populares
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: SizedBox(
                 height: 200, // Ajusta la altura según tus necesidades
                 child: GridView.builder(
                   scrollDirection: Axis.horizontal,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 16,
-                      crossAxisSpacing: 8,
-                      childAspectRatio:
-                          0.28 // Ajusta el aspecto para que ocupe todo el ancho
-                      ),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 16,
+                    crossAxisSpacing: 8,
+                    childAspectRatio: 0.8, // Ajusta el aspecto de las tarjetas
+                  ),
                   itemCount: state.products.length,
                   itemBuilder: (BuildContext context, int index) {
-                    Product currentProduct = state.products[index];
-                    return SizedBox(
-                      width: MediaQuery.of(context)
-                          .size
-                          .width, // Ocupa todo el ancho de la pantalla
-                      child: CustomItemProduct(
-                          current: currentProduct, theme: theme),
+                    final currentProduct = state.products[index];
+                    return CustomItemProduct(
+                      current: currentProduct,
+                      theme: theme,
                     );
                   },
                 ),
@@ -297,7 +310,8 @@ class PopularProductsHome extends StatelessWidget {
             );
           },
         ),
-      ]),
+      ],
     );
   }
 }
+
