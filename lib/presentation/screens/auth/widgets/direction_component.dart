@@ -9,6 +9,7 @@ class DirectionComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
   final void Function(LatLng) onChangeLocation;
   final void Function(String) onChangeAddressName;
+  final void Function(String) onChangeDirection;
   final Future<void> Function() onFinished;
 
 
@@ -17,6 +18,7 @@ class DirectionComponent extends StatefulWidget {
     required this.onChangeIndex,
     required this.onChangeLocation,
     required this.onChangeAddressName,
+    required this.onChangeDirection,
     required this.onFinished,
   });
 
@@ -219,6 +221,7 @@ class _DirectionComponentState extends State<DirectionComponent> {
             if (_selectedLocation != null) {
               widget.onChangeLocation(_selectedLocation!);
               widget.onChangeAddressName(_currentAddressName);
+              widget.onChangeDirection(_selectedAddress);
               widget.onFinished(); // Llama al registro en AuthScreen
             }
           }

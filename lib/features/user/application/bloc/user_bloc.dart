@@ -5,7 +5,8 @@ import 'package:GoDeli/features/user/application/use_cases/get_user_use_case.dar
 import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/update_user_use_case.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
-import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/delete_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/update_user_direction_dto.dart';
 import 'package:GoDeli/features/user/domain/dto/update_user_dto.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
 import 'package:bloc/bloc.dart';

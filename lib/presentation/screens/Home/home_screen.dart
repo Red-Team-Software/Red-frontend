@@ -142,7 +142,7 @@ class HomeScreenView extends StatelessWidget {
                     const Text('Deliver to',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
-                    Text(favoriteDirection.address,
+                    Text(favoriteDirection.direction,
                         style: const TextStyle(
                             fontSize: 14, fontWeight: FontWeight.w400)),
                   ],

@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 
 class AddressModal extends StatefulWidget {
-  final Future<void> Function(LatLng, String, bool) onFinished;
+  final Future<void> Function(LatLng, String, bool, String) onFinished;
   final LatLng? initialLocation; // Optional initial location for update
   final String? initialLocationName;
   final String? initialAddressName;
@@ -242,12 +242,16 @@ class _AddressModalState extends State<AddressModal> {
                           widget.onFinished(
                               _selectedLocation!,
                               _currentAddressName,
-                              true); // Finish the address update
+                              true,
+                              _selectedLocationName
+                              ); // Finish the address update
                         } else {
                           widget.onFinished(
                               _selectedLocation!,
                               _currentAddressName,
-                              false); // Finish the address addition
+                              false,
+                              _selectedLocationName
+                              ); // Finish the address addition
                         }
                       }
                     }

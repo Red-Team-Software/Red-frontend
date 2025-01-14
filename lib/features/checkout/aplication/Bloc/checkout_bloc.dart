@@ -7,7 +7,8 @@ import 'package:GoDeli/features/user/application/use_cases/delete_user_direction
 import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
-import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/delete_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/update_user_direction_dto.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'checkout_event.dart';
 import 'checkout_state.dart';
@@ -65,7 +66,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
           : directions.map<Address>((direction) {
               // Si necesitas mapear las direcciones a Address, lo harías aquí
               return Address(direction.id, direction.addressName,
-                  direction.address, direction.latitude, direction.longitude);
+                  direction.direction, direction.latitude, direction.longitude);
             }).toList();
 
       final paymentMethodsResult =
@@ -144,15 +145,12 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   Future _onAddNewAddress(
       AddNewAddress event, Emitter<CheckoutState> emit) async {
     emit(state.copyWith(isProcessing: true));
-    final res = await addUserDirectionUseCase.execute(AddUserDirectionListDto(
-      directions: [
-        AddUserDirectionDto(
-          name: event.title,
-          favorite: false, // Assuming default value
-          lat: event.lat,
-          lng: event.lng,
-        )
-      ],
+    final res = await addUserDirectionUseCase.execute(AddUserDirectionDto(
+      direction: event.location,
+      name: event.title,
+      favorite: false, // Assuming default value
+      lat: event.lat,
+      lng: event.lng,
     ));
 
     if (res.isSuccessful()) {
@@ -161,8 +159,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       if (resDirections.isSuccessful()) {
         final directions = resDirections.getValue();
         final addresses = directions.map<Address>((direction) {
-          return Address(direction.id, direction.addressName, direction.address,
-              direction.latitude, direction.longitude);
+          return Address(direction.id, direction.addressName,
+              direction.direction, direction.latitude, direction.longitude);
         }).toList();
 
         emit(state.copyWith(
@@ -244,15 +242,11 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       RemoveAddressEvent event, Emitter<CheckoutState> emit) async {
     emit(state.copyWith(isProcessing: true));
     final res = await deleteUserDirectionUseCase
-        .execute(DeleteUpdateUserDirectionListDto(directions: [
-      DeleteUpdateUserDirectionDto(
+        .execute(
+      DeleteUserDirectionDto(
         id: event.address.id,
-        name: event.address.title,
-        favorite: false,
-        lat: event.address.lat,
-        lng: event.address.lng,
       )
-    ]));
+  );
 
     if (res.isSuccessful()) {
       final resDirections = await getUserDirectionsUseCase.execute(null);
@@ -260,8 +254,8 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       if (resDirections.isSuccessful()) {
         final directions = resDirections.getValue();
         final addresses = directions.map<Address>((direction) {
-          return Address(direction.id, direction.addressName, direction.address,
-              direction.latitude, direction.longitude);
+          return Address(direction.id, direction.addressName,
+              direction.direction, direction.latitude, direction.longitude);
         }).toList();
 
         emit(state.copyWith(

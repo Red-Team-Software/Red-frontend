@@ -2,7 +2,8 @@ import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/common/infrastructure/http_service.dart';
 import 'package:GoDeli/features/user/domain/datasources/user_datasource.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
-import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/delete_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/update_user_direction_dto.dart';
 import 'package:GoDeli/features/user/domain/dto/update_user_dto.dart';
 import 'package:GoDeli/features/user/domain/responses/add_user_direction_response.dart';
 import 'package:GoDeli/features/user/domain/responses/delete_update_user_direction_response.dart';
@@ -40,7 +41,7 @@ class UserDatasourceImpl implements IUserDatasource {
 
   @override
   Future<Result<GetUserDirectionsResponse>> getUserDirections() async {
-    final res = await _httpService.request('/user/directions', 'GET',
+    final res = await _httpService.request('/user/address/many', 'GET',
         (json) => GetUserDirectionsResponse.fromJson(json));
 
     if (!res.isSuccessful()) return Result.makeError(res.getError());
@@ -51,12 +52,12 @@ class UserDatasourceImpl implements IUserDatasource {
 
   @override
   Future<Result<AddUserDirectionResponse>> addUserDirection(
-      AddUserDirectionListDto addUserDirectionListDto) async {
-    print('json: ${addUserDirectionListDto.toJson()}');
+      AddUserDirectionDto addUserDirectionDto) async {
+    print('json: ${addUserDirectionDto.toJson()}');
 
-    final res = await _httpService.request('/user/add-directions', 'POST',
+    final res = await _httpService.request('/user/add/address', 'POST',
         (json) => AddUserDirectionResponse.fromJson(json),
-        body: addUserDirectionListDto.toJson());
+        body: addUserDirectionDto.toJson());
 
     if (!res.isSuccessful()) return Result.makeError(res.getError());
 
@@ -65,8 +66,8 @@ class UserDatasourceImpl implements IUserDatasource {
 
   @override
   Future<Result<DeleteUpdateUserDirectionResponse>> deleteUserDirection(
-      DeleteUpdateUserDirectionListDto deleteUserDirectionListDto) async {
-    final res = await _httpService.request('/user/delete-directions', 'DELETE',
+      DeleteUserDirectionDto deleteUserDirectionListDto) async {
+    final res = await _httpService.request('/user/delete/address', 'DELETE',
         (json) => DeleteUpdateUserDirectionResponse.fromJson(json),
         body: deleteUserDirectionListDto.toJson());
 
@@ -77,10 +78,10 @@ class UserDatasourceImpl implements IUserDatasource {
 
   @override
   Future<Result<DeleteUpdateUserDirectionResponse>> updateUserDirection(
-      DeleteUpdateUserDirectionListDto updateUserDirectionListDto) async {
-    final res = await _httpService.request('/user/update-directions', 'PUT',
+      UpdateUserDirectionDto updateUserDirectionDto) async {
+    final res = await _httpService.request('/user/update/address', 'PATCH',
         (json) => DeleteUpdateUserDirectionResponse.fromJson(json),
-        body: updateUserDirectionListDto.toJson());
+        body: updateUserDirectionDto.toJson());
 
     if (!res.isSuccessful()) return Result.makeError(res.getError());
 

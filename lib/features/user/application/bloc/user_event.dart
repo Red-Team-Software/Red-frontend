@@ -22,7 +22,7 @@ class UpdateUserEvent extends UserEvent {
 }
 
 class AddUserDirectionEvent extends UserEvent {
-  final AddUserDirectionListDto userDirection;
+  final AddUserDirectionDto userDirection;
 
   const AddUserDirectionEvent({
     required this.userDirection,
@@ -30,7 +30,7 @@ class AddUserDirectionEvent extends UserEvent {
 }
 
 class DeleteUserDirectionEvent extends UserEvent {
-  final DeleteUpdateUserDirectionListDto userDirection;
+  final DeleteUserDirectionDto userDirection;
 
   const DeleteUserDirectionEvent({
     required this.userDirection,
@@ -38,7 +38,7 @@ class DeleteUserDirectionEvent extends UserEvent {
 }
 
 class UpdateUserDirectionEvent extends UserEvent {
-  final DeleteUpdateUserDirectionListDto userDirection;
+  final UpdateUserDirectionDto userDirection;
 
   const UpdateUserDirectionEvent({
     required this.userDirection,

@@ -3,7 +3,8 @@
 import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/user/domain/datasources/user_datasource.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
-import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/delete_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/update_user_direction_dto.dart';
 import 'package:GoDeli/features/user/domain/dto/update_user_dto.dart';
 import 'package:GoDeli/features/user/domain/repositories/user_repository.dart';
 import 'package:GoDeli/features/user/domain/responses/add_user_direction_response.dart';
@@ -34,17 +35,17 @@ class UserRepositoryImpl implements IUserRepository{
   }
 
   @override
-  Future<Result<AddUserDirectionResponse>> addUserDirection(AddUserDirectionListDto updateUserDto) {
+  Future<Result<AddUserDirectionResponse>> addUserDirection(AddUserDirectionDto updateUserDto) {
     return _userDatasource.addUserDirection(updateUserDto);
   }
 
   @override
-  Future<Result<DeleteUpdateUserDirectionResponse>> deleteUserDirection(DeleteUpdateUserDirectionListDto deleteUserDirectionDto) {
+  Future<Result<DeleteUpdateUserDirectionResponse>> deleteUserDirection(DeleteUserDirectionDto deleteUserDirectionDto) {
     return _userDatasource.deleteUserDirection(deleteUserDirectionDto);
   }
 
   @override
-  Future<Result<DeleteUpdateUserDirectionResponse>> updateUserDirection(DeleteUpdateUserDirectionListDto updateUserDirectionDto) {
+  Future<Result<DeleteUpdateUserDirectionResponse>> updateUserDirection(UpdateUserDirectionDto updateUserDirectionDto) {
     return _userDatasource.updateUserDirection(updateUserDirectionDto);
   }
 

@@ -187,7 +187,7 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                                 location != 'Select on map'
                             ? () {
                                 bloc.add(
-                                    AddNewAddress(title, location, lat, lng));
+                                    AddNewAddress(title: title, location: location, lat: lat, lng: lng));
                                 Navigator.pop(context);
                               }
                             : null,

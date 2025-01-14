@@ -25,7 +25,7 @@ class AddNewAddress extends CheckoutEvent {
   final String location;
   final num lat;
   final num lng;
-  const AddNewAddress(this.title, this.location, this.lat, this.lng);
+  const AddNewAddress({required this.title, required this.location, required this.lat, required this.lng });
 
   @override
   List<Object?> get props => [title, location];

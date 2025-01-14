@@ -38,6 +38,7 @@ class _AuthScreenState extends State<AuthScreen> {
   // Direction
   LatLng? selectedLocation;
   String addressName = '';
+  String direction = '';
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +98,13 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         image = null;
       }
-      final addressDto = AddUserDirectionListDto(
-        directions: [
+      final addressDto = 
           AddUserDirectionDto(
             name: addressName,
+            direction: direction,
             favorite: true,
             lat: selectedLocation!.latitude,
             lng: selectedLocation!.longitude,
-          ),
-        ],
       );
       context.read<AuthBloc>().add(
             RegisterEvent(
@@ -145,6 +144,7 @@ class _AuthScreenState extends State<AuthScreen> {
         onFinished: handleRegister,
         onChangeLocation: (location) => selectedLocation = location,
         onChangeAddressName: (addressName) => this.addressName = addressName,
+        onChangeDirection: (direction) => this.direction = direction,
       ),
     ];
 

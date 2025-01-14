@@ -1,7 +1,7 @@
 class UserDirection {
   String id;
   String addressName;
-  String address;
+  String direction;
   num latitude;
   num longitude;
   bool isFavorite;
@@ -9,7 +9,7 @@ class UserDirection {
   UserDirection({
     required this.id,
     required this.addressName,
-    required this.address,
+    required this.direction,
     required this.latitude,
     required this.longitude,
     this.isFavorite = false,
@@ -18,10 +18,10 @@ class UserDirection {
   factory UserDirection.fromJson(Map<String, dynamic> json) {
     return UserDirection(
       id: json['id'],
-      addressName: json['name'],
-      address: json['address'],
+      direction: json['address'], //! Change this to direction
+      longitude: json['long'],
       latitude: json['lat'],
-      longitude: json['lng'],
+      addressName: json['name'],
       isFavorite: json['favorite'],
     );
   }

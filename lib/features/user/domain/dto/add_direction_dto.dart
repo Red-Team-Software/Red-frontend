@@ -1,10 +1,12 @@
 class AddUserDirectionDto {
   final String name;
+  final String direction;
   final bool favorite;
   final num lat;
   final num lng;
   AddUserDirectionDto({
     required this.name,
+    required this.direction,
     required this.favorite,
     required this.lat,
     required this.lng,
@@ -13,9 +15,10 @@ class AddUserDirectionDto {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'direction': direction,
       'favorite': favorite,
       'lat': lat,
-      'lng': lng,
+      'long': lng,
     };
   }
 }
