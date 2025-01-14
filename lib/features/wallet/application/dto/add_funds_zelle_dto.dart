@@ -17,7 +17,7 @@ class AddFundsZelleDto {
       'email': email,
       'amount': amount,
       'reference': reference,
-      'paymentId': paymentId
+      // 'paymentId': paymentId
     };
   }
 }

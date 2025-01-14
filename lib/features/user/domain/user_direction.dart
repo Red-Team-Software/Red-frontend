@@ -18,7 +18,7 @@ class UserDirection {
   factory UserDirection.fromJson(Map<String, dynamic> json) {
     return UserDirection(
       id: json['id'],
-      direction: json['address'], //! Change this to direction
+      direction: json['direction'],
       longitude: json['long'],
       latitude: json['lat'],
       addressName: json['name'],

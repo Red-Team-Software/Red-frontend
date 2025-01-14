@@ -3,7 +3,6 @@ import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/categories/domain/datasources/categories_datasource.dart';
 import 'package:GoDeli/features/categories/infraestructure/mappers/category_mapper.dart';
 import 'package:GoDeli/features/categories/infraestructure/models/category_response.dart';
-import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/common/infrastructure/http_service.dart';
 
 class CategoriesDatasourceImpl implements ICategoriesDatasource {
@@ -34,12 +33,12 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
   }
 
   @override
-  Future<Category> getCategoryItems(String categoryId) async{
+  Future<Category> getCategoryItems(String categoryId, {page = 1, perpage = 10}) async{
     final res = await _httpService.request(
         '/category/$categoryId', 'GET', (json) => CategoryResponse.fromCatalogJson(json),
         queryParameters: {
-          'page': 1,
-          'perPage': 10,
+          'page': page,
+          'perPage': perpage,
         });
 
 

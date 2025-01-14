@@ -1,14 +1,14 @@
 
 
-class DeleteUpdateUserDirectionResponse {
+class UpdateUserDirectionResponse {
   final String id;
-  final String name;
+  final String direction;
   final bool favorite;
   final num lat;
   final num lng;
-  final String direction;
+  final String name;
 
-  DeleteUpdateUserDirectionResponse({
+  UpdateUserDirectionResponse({
     required this.id,
     required this.name,
     required this.favorite,
@@ -17,14 +17,15 @@ class DeleteUpdateUserDirectionResponse {
     required this.direction,
   });
 
-  factory DeleteUpdateUserDirectionResponse.fromJson(Map<String, dynamic> json) {
-    return DeleteUpdateUserDirectionResponse(
+  //TODO: Implement ToNum en lat y long
+  factory UpdateUserDirectionResponse.fromJson(Map<String, dynamic> json) {
+    return UpdateUserDirectionResponse(
       id: json['id'],
-      name: json['name'],
       direction: json['direction'],
       favorite: json['favorite'],
       lat: json['lat'],
       lng: json['long'],
+      name: json['name'],
     );
   }
 

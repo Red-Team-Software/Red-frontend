@@ -15,6 +15,7 @@ class UpdateUserDirectionDto {
     required this.direction,
   });
 
+  //TODO: Implement ToString en lat y long
   Map<String, dynamic> toJson() {
     return {
       'directionId': id,
