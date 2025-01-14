@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 
 class CategoriesCarrusel extends StatelessWidget {
@@ -13,9 +12,9 @@ class CategoriesCarrusel extends StatelessWidget {
     final textStyles = theme.textTheme;
 
     return SizedBox(
-      height: 88,
+      height: 300,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           // Botón "view all"
           GestureDetector(
@@ -23,16 +22,15 @@ class CategoriesCarrusel extends StatelessWidget {
             child: Text(
               'view all',
               textAlign: TextAlign.end,
-              style: TextStyle(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.w700,
-              ),
+              style: textStyles.displaySmall?.copyWith(
+                        color: theme.colorScheme.primary,
+                        fontWeight: FontWeight.bold),
             ),
           ),
           const SizedBox(height: 8),
-
           // BlocBuilder para categorías
-          Expanded(
+          SizedBox(
+            height: 100,
             child: BlocBuilder<CategoriesBloc, CategoriesState>(
               builder: (context, state) {
                 if (state.status == CategoriesStatus.loading &&
@@ -43,26 +41,32 @@ class CategoriesCarrusel extends StatelessWidget {
                 if (state.categories.isEmpty &&
                     (state.status == CategoriesStatus.allLoaded ||
                         state.status == CategoriesStatus.loaded)) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       'Algo raro pasó, no hay categorías!',
-                      style: TextStyle(color: Colors.red),
+                      style: textStyles.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                        fontWeight: FontWeight.bold),
                     ),
                   );
                 }
 
                 if (state.status == CategoriesStatus.error) {
-                  return const Center(
+                  return Center(
                     child: Text(
                       'Algo inesperado pasó',
-                      style: TextStyle(color: Colors.red),
+                      style: textStyles.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                        fontWeight: FontWeight.bold),
                     ),
                   );
                 }
 
                 if (state.status != CategoriesStatus.loading &&
                     state.categories.isEmpty) {
-                  return const Center(child: Text('No hay categorías'));
+                  return Center(child: Text('No hay categorías', style: textStyles.bodyLarge?.copyWith(
+                        color: theme.colorScheme.error,
+                        fontWeight: FontWeight.bold)));
                 }
 
                 // Carrusel de categorías
@@ -103,9 +107,8 @@ class CategoriesCarrusel extends StatelessWidget {
                                 // Nombre de la categoría
                                 Text(
                                   currentCategory.name,
-                                  style: const TextStyle(
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w800,
+                                  style: textStyles.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),

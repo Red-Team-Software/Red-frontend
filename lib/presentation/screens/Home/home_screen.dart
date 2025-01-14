@@ -237,23 +237,16 @@ class PopularProductsHome extends StatelessWidget {
             children: [
               Text(
                 'Popular',
-                style: TextStyle(
-                  color: theme.brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32,
-                ),
+                style: textStyles.displayLarge
               ),
               GestureDetector(
                 onTap: () => context.push('/catalog'),
                 child: Text(
                   'view all',
                   textAlign: TextAlign.end,
-                  style: TextStyle(
-                    color: theme.colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: textStyles.displaySmall?.copyWith(
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ],
@@ -295,7 +288,7 @@ class PopularProductsHome extends StatelessWidget {
                     crossAxisCount: 2,
                     mainAxisSpacing: 16,
                     crossAxisSpacing: 8,
-                    childAspectRatio: 0.8, // Ajusta el aspecto de las tarjetas
+                    childAspectRatio: 0.28, // Ajusta el aspecto de las tarjetas
                   ),
                   itemCount: state.products.length,
                   itemBuilder: (BuildContext context, int index) {

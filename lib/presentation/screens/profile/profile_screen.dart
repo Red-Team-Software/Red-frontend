@@ -144,7 +144,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
     return UpdateUserDirectionDto(
       id: newFavoriteDirection.id,
       name: newFavoriteDirection.addressName,
-      favorite: !newFavoriteDirection.isFavorite,
+      favorite: newFavoriteDirection.isFavorite,
       lat: newFavoriteDirection.latitude.toDouble(),
       lng: newFavoriteDirection.longitude.toDouble(),
       direction: newFavoriteDirection.direction,

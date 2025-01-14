@@ -34,7 +34,6 @@ class _AddressModalState extends State<AddressModal> {
 
   final addressNameTextController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
@@ -43,18 +42,19 @@ class _AddressModalState extends State<AddressModal> {
       _selectedLocationName = widget.initialLocationName ?? "";
       _currentLocation = widget.initialLocation!;
       addressNameTextController.text = widget.initialAddressName ?? '';
-      if(widget.initialLocationName == null) {
+      if (widget.initialLocationName == null) {
         print('Fetching initial location name');
         _fetchInitialLocationName();
       }
     } else {
       _fetchCurrentLocation();
-    } 
+    }
   }
 
   Future<void> _fetchInitialLocationName() async {
-    final locationName = await _getLocationName(_selectedLocation!) ?? 'Unknown Location';
-    
+    final locationName =
+        await _getLocationName(_selectedLocation!) ?? 'Unknown Location';
+
     setState(() {
       _selectedLocationName = locationName;
     });
@@ -149,8 +149,12 @@ class _AddressModalState extends State<AddressModal> {
 
   bool isFinishButtonEnabled() {
     return _selectedLocation != null &&
-        _currentAddressName.isNotEmpty &&
-        addressNameError == null;
+            _currentAddressName.isNotEmpty &&
+            addressNameError == null ||
+        (widget.initialAddressName != null &&
+            _selectedLocation != widget.initialLocation &&
+            _currentAddressName.isNotEmpty &&
+            addressNameError == null);
   }
 
   @override
@@ -243,15 +247,13 @@ class _AddressModalState extends State<AddressModal> {
                               _selectedLocation!,
                               _currentAddressName,
                               true,
-                              _selectedLocationName
-                              ); // Finish the address update
+                              _selectedLocationName); // Finish the address update
                         } else {
                           widget.onFinished(
                               _selectedLocation!,
                               _currentAddressName,
                               false,
-                              _selectedLocationName
-                              ); // Finish the address addition
+                              _selectedLocationName); // Finish the address addition
                         }
                       }
                     }
