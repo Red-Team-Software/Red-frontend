@@ -60,7 +60,7 @@ class _CategoriesView extends StatelessWidget {
               itemBuilder: (context, index) {
                 final category = state.categories[index];
                 return InkWell(
-                  onTap: () => context.push('/catalog/${category.id}'),
+                  onTap: () => context.push('/catalog/${category.name}'),
                   child: Card(
                     elevation: 6.0,
                     shape: RoundedRectangleBorder(

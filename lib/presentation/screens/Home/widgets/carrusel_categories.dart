@@ -42,7 +42,7 @@ class CaregoriesCarrusel extends StatelessWidget {
                     Category currentCategory = state.categories[index];
                     return GestureDetector(
                       onTap: () {
-                        context.push('/catalog/${currentCategory.id}');
+                        context.push('/catalog/${currentCategory.name}');
                       },
                       child: SizedBox(
                         width: 80,

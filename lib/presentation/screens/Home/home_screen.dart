@@ -214,9 +214,6 @@ class _CarruselItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    final categ = context.read<CategoriesBloc>().state.categories;
-
-
     return Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -283,7 +283,13 @@ class _ScrollableDetails extends StatelessWidget {
                                   spacing: 8,
                                   children: categories
                                       .map((category) =>
-                                          Chip(label: Text(category.name)))
+                                          Chip(
+                                            label: Text(category.name),
+                                            labelStyle: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                            backgroundColor: Theme.of(context).primaryColor,
+                                          ))
                                       .toList(),
                                 ),
                               ],
