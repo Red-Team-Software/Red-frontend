@@ -46,11 +46,11 @@ class CatalogBody extends StatelessWidget {
                           selectedColor: Theme.of(context).primaryColor,
                           disabledColor: Colors.grey[200],
                           selected: context.watch<CatalogBloc>()
-                              .state.categorySelected.any((element) => element == category.id),
+                              .state.categorySelected.any((element) => element == category.name),
                           onSelected: (selected) {
                             context
                                 .read<CatalogBloc>()
-                                .add(CategorySet(category.id));
+                                .add(CategorySet(category.name));
                           },
                           label: Text(category.name),
                           elevation: 5.0,
@@ -59,7 +59,7 @@ class CatalogBody extends StatelessWidget {
                                     .read<CatalogBloc>()
                                     .state
                                     .categorySelected
-                                    .any((element) => element == category.id)
+                                    .any((element) => element == category.name)
                                 ? Colors.white
                                 : Colors.black,
                           ),

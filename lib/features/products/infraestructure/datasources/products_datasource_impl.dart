@@ -29,8 +29,6 @@ class ProductsDatasourceImpl implements IProductsDatasource {
           if (popular != null) 'popular': popular,
         });
 
-    print(res.getValue());
-
     final List<Product> products = [];
 
     if (res.isSuccessful()) {
