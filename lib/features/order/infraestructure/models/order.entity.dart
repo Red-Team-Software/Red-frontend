@@ -83,6 +83,8 @@ class OrderEntity {
         // Depuración de valores clave
         print('ID: ${orderJson['orderId']}');
         print('State: ${orderJson['orderState']}');
+        print(orderJson['orderState'][0]);
+        print(orderJson['orderState'][0]["state"]);
         print('Created Date: ${orderJson['orderCreatedDate']}');
         print('Time Created: ${orderJson['orderTimeCreated']}');
         print('Total Amount: ${orderJson['totalAmount']}');
@@ -94,7 +96,7 @@ class OrderEntity {
 
         return OrderEntity(
           id: orderJson['orderId'] as String? ?? '',
-          orderState: orderJson['orderState'] as String? ?? '',
+          orderState: orderJson['orderState'][0]['state'] as String? ?? '',
           orderCreatedDate: orderJson['orderCreatedDate'] as String? ?? '',
           orderTimeCreated: orderJson['orderTimeCreated'] as String? ?? '',
           totalAmount: (orderJson['totalAmount'] as num).toDouble(),
@@ -163,7 +165,10 @@ class OrderPaymentEntity {
     return OrderPaymentEntity(
       paymentMethod: json['payementMethod'] as String,
       currency: json['paymentCurrency'] as String,
-      amount: (json['paymetAmount'] as num).toDouble(),
+      amount: (json['paymetAmount'] is String
+              ? num.parse(json['paymetAmount']).toDouble()
+              : json['paymetAmount'] as num)
+          .toDouble(),
     );
   }
 }

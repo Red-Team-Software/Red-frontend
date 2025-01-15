@@ -26,6 +26,15 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
   late MapboxMap mapboxMap;
 
   @override
+  void initState() {
+    super.initState();
+    // Configura el token de Mapbox
+    MapboxOptions.setAccessToken(
+      "pk.eyJ1IjoiZGltZWJyaWkiLCJhIjoiY201d3B5eWJ0MDBxYzJpcHRleTA2MjBlZyJ9.asGCuRxG-jUItZNv4k-3xw",
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 300,
