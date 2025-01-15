@@ -1,6 +1,8 @@
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
@@ -14,8 +16,7 @@ class CardBundleCarrusel extends StatelessWidget {
     final theme = Theme.of(context);
 
     final textStyles = theme.textTheme;
-    final categ = context.read<CategoriesBloc>().state.categories;
-
+    final idiom = context.read<LanguagesCubit>().state.selected.language;
 
     return Padding(
       padding: const EdgeInsets.only(left: 8, right: 8),
@@ -29,16 +30,25 @@ class CardBundleCarrusel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Text('Bundle Offers', style: textStyles.displayLarge),
+                TranslationWidget(
+                  message: 'Bundle Ofertas',
+                  toLanguage: idiom,
+                  builder: (translated) =>
+                      Text(translated, style: textStyles.displayLarge),
+                ),
                 GestureDetector(
                     onTap: () => context.push('/catalog'),
-                    child: Text(
-                      'view all',
-                      textAlign: TextAlign.end,
-                      style: textStyles.displaySmall?.copyWith(
+                    child: TranslationWidget(
+                      message: 'view all',
+                      toLanguage: idiom,
+                      builder: (translated) => Text(
+                        translated,
+                        textAlign: TextAlign.end,
+                        style: textStyles.displaySmall?.copyWith(
                           color: theme.colorScheme.primary,
                           fontWeight: FontWeight.bold),
-                    )),
+                      ),
+                    ),),
               ],
             ),
             Expanded(child: BlocBuilder<AllBundlesBloc, AllBundlesState>(
@@ -78,7 +88,8 @@ class CardBundleCarrusel extends StatelessWidget {
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(width: 24); // Espacio entre los elementos
+                  return const SizedBox(
+                      width: 24); // Espacio entre los elementos
                 },
               );
             }))

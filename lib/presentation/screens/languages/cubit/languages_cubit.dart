@@ -11,6 +11,7 @@ class LanguagesCubit extends Cubit<LanguagesState> {
     ));
 
   void selectLanguage(Translations selected) {
+  
     emit(state.copyWith(selected: selected));
   }
 }

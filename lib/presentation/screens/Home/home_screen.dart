@@ -1,4 +1,3 @@
-import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
@@ -7,7 +6,6 @@ import 'package:GoDeli/presentation/screens/Home/widgets/carrusel_categories.dar
 import 'package:GoDeli/presentation/screens/Home/widgets/drawer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
-import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';

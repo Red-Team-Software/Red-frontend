@@ -12,6 +12,8 @@ class Translations {
       Translations('Español', 'https://th.bing.com/th/id/OIP.YsBdn_5ODBeaAYawGmu_8wHaE8?rs=1&pid=ImgDetMain'),
       Translations('Russian', 'https://th.bing.com/th/id/OIP.uW9Hi1USsULyX2e4Y7iy-gHaE7?w=248&h=180&c=7&r=0&o=5&pid=1.7'),
       Translations('German', 'https://th.bing.com/th/id/OIP.-0JgOkcYn_kcem1JsgQnKwHaE8?rs=1&pid=ImgDetMain'),
+      Translations('Chino', 'https://th.bing.com/th/id/OIP.VN_BoEQP-W7YtNN-LhR4OgHaE8?w=552&h=368&rs=1&pid=ImgDetMain'),
+
     ];
   }
 
@@ -29,6 +31,8 @@ class Translations {
         return 'es';
       case 'German':
         return 'de';
+      case 'Chino':
+        return 'zh-cn';
       default:
         return 'en';
     }

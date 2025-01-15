@@ -1,7 +1,8 @@
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/presentation/core/drawer/drawer_items.dart';
-import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,7 +14,6 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final authBloc = context.watch<AuthBloc>();
     final cartBloc = context.watch<CartBloc>();
 
@@ -89,14 +89,20 @@ class DrawerWidget extends StatelessWidget {
                     item.icon,
                     color: Colors.white,
                   ),
-                  title: Text(
-                    item.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
+                  title: TranslationWidget(
+                    message: item.title,
+                    toLanguage:
+                        context.watch<LanguagesCubit>().state.selected.language,
+                    builder: (translated) => Text(
+                      translated,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                  onTap: () => item.route != null? context.push(item.route!): null,
+                  onTap: () =>
+                      item.route != null ? context.push(item.route!) : null,
                 ))
             .toList(),
       );

@@ -23,7 +23,7 @@ class LanguageItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.0),
         ),
         color:
-            lanCubbit.state.selected == lan ? Colors.blue[100] : Colors.white,
+            lanCubbit.state.selected.language == lan.language ? Colors.blue[100] : Colors.white,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10.0),
           child: Column(
