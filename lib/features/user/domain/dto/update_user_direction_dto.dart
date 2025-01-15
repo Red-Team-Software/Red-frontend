@@ -15,15 +15,14 @@ class UpdateUserDirectionDto {
     required this.direction,
   });
 
-  //TODO: Implement ToString en lat y long
   Map<String, dynamic> toJson() {
     return {
       'directionId': id,
       'name': name,
       'direction': direction,
       'favorite': favorite,
-      'lat': lat,
-      'long': lng,
+      'lat': lat.toString(),
+      'long': lng.toString(),
     };
   }
 }

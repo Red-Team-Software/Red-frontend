@@ -132,8 +132,8 @@ class OrderDirectionEntity {
 
   factory OrderDirectionEntity.fromJson(Map<String, dynamic> json) {
     return OrderDirectionEntity(
-      latitude: (json['lat'] as num).toDouble(),
-      longitude: (json['long'] as num).toDouble(),
+      latitude: num.parse(json['lat']).toDouble(),
+      longitude: num.parse(json['long']).toDouble(),
     );
   }
 }

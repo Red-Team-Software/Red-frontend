@@ -83,8 +83,8 @@ class Courier {
       courierName: json['courierName'] as String,
       courierImage: json['courierImage'] as String,
       location: Location(
-        latitude: (json['location']['lat'] as num).toDouble(),
-        longitude: (json['location']['long'] as num).toDouble(),
+        latitude: num.parse(json['location']['lat']).toDouble(),
+        longitude: num.parse(json['location']['long']).toDouble(),
       ),
     );
   }

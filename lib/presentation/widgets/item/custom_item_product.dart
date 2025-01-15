@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
@@ -75,15 +76,18 @@ class CustomItemProduct extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Nombre del producto
-                    Text(
-                      current.name,
+                    TranslationWidget(
+                      message: current.name,
+                      toLanguage: 'Spanish',
+                      builder:(translatedMessage) => Text(
+                      translatedMessage,
                       style: textStyle.displaySmall?.copyWith(
                         color: Colors.white,
                       ),
                       maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                      overflow: TextOverflow.clip,
+                    )),
+                    
                     const SizedBox(height: 4),
 
                     // Descripción del producto

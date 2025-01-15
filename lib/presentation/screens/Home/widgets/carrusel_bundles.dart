@@ -1,3 +1,5 @@
+import 'package:GoDeli/config/injector/injector.dart';
+import 'package:GoDeli/features/bundles/application/bundle_offers/bundle_offers_bloc.dart';
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +44,9 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
 
-    return SizedBox(
+    return BlocProvider(
+      create: (_) => getIt<BundleOffersBloc>(),
+      child: SizedBox(
         height: 600, // Ajusta la altura según tus necesidades
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,26 +73,12 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
               ),
             ),
             const SizedBox(height: 16),
-
             // BlocBuilder para los bundles
-            Expanded(
-              child: BlocBuilder<AllBundlesBloc, AllBundlesState>(
+            SizedBox(
+              height: 500,
+              child: BlocBuilder<BundleOffersBloc, BundleOffersState>(
                 builder: (context, state) {
-                  if (state.status == BundlesStatus.loading &&
-                      state.bundles.isEmpty) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (state.bundles.isEmpty &&
-                      (state.status == BundlesStatus.allLoaded ||
-                          state.status == BundlesStatus.loaded)) {
-                    return const Center(
-                      child: Text(
-                        'Algo raro pasó, ¡No hay Bundles!',
-                        style: TextStyle(color: Colors.red),
-                      ),
-                    );
-                  }
-                  if (state.status == BundlesStatus.error) {
+                  if (state is BundleOffersError) {
                     return Center(
                       child: Text(
                         'Algo inesperado pasó',
@@ -100,35 +90,53 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
                     );
                   }
 
-                  // PageView con los Bundles
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 370, // Ajusta la altura según los bundles
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: state.bundles.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final currentBundle = state.bundles[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: BundleHomeCard(current: currentBundle),
-                            );
-                          },
+                  if (state is BundleOffersLoaded) {
+                    if (state.bundles.isEmpty) {
+                      return Center(
+                          child: Text(
+                        'No hay bundles',
+                        style: textStyles.bodyLarge?.copyWith(
+                          color: theme.colorScheme.error,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                      const SizedBox(height: 16),
+                      ));
+                    }
+                    // PageView con los Bundles
+                    return Column(
+                      children: [
+                        SizedBox(
+                          height: 370, // Ajusta la altura según los bundles
+                          child: PageView.builder(
+                            controller: _pageController,
+                            itemCount: state.bundles.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final currentBundle = state.bundles[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: BundleHomeCard(current: currentBundle),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 16),
 
-                      // Puntos indicadores
-                     CustomDotsList(currentPage: _currentPage, theme: theme, list: state.bundles),
-                    ],
-                  );
+                        // Puntos indicadores
+                        CustomDotsList(
+                            currentPage: _currentPage,
+                            theme: theme,
+                            list: state.bundles),
+                      ],
+                    );
+                  }
+
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),
           ],
         ),
+      ),
     );
   }
 }
-

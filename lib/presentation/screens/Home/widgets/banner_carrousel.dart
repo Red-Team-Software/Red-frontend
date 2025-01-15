@@ -1,26 +1,27 @@
 import 'dart:async';
 
-import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
 import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
 
-class HomaBannerCarrousel extends StatefulWidget {
+class HomeBannerCarrousel extends StatefulWidget {
   final List<String> cards = [
-    'images/banner1.jpg',
-    'images/banner2.jpg',
-    'images/banner3.jpg',
+    'images/banner_red_alessandro.jpg',
+    'images/banner_red_alfredo.jpg',
+    // 'images/red_banner_bryant.jpg',
+    'images/banner_red_daniel.jpg',
+    // 'images/red_banner_eduardo.jpg',
+    'images/banner_red_gabriel.jpg',
   ];
 
-
-  HomaBannerCarrousel({
+  HomeBannerCarrousel({
     super.key,
   });
 
   @override
-  State<HomaBannerCarrousel> createState() => _HomaBannerCarrouselState();
+  State<HomeBannerCarrousel> createState() => _HomeBannerCarrouselState();
 }
 
-class _HomaBannerCarrouselState extends State<HomaBannerCarrousel> {
+class _HomeBannerCarrouselState extends State<HomeBannerCarrousel> {
   late PageController _pageController;
 
   int _currentPage = 0;
@@ -62,72 +63,133 @@ class _HomaBannerCarrouselState extends State<HomaBannerCarrousel> {
         Stack(children: [
           SizedBox(
             height: 300,
-            child: PageView(
+            child: PageView.builder(
               controller: _pageController,
+              itemCount: widget.cards.length,
               onPageChanged: (int page) {
                 setState(() {
                   _currentPage = page;
                 });
               },
-              children: const [
-                Image(
-                  image: AssetImage('images/banner1.jpg'),
-                  fit: BoxFit.cover,
-                ),
-                Image(
-                  image: AssetImage('images/banner2.jpg'),
-                  fit: BoxFit.cover,
-                ),
-                Image(
-                  image: AssetImage('images/banner3.jpg'),
-                  fit: BoxFit.cover,
-                ),
-              ],
+              itemBuilder: (BuildContext context, int index){
+                return BannerCard(assetImage: AssetImage(widget.cards[index]));
+              },
+              // children: const [
+              //   Image(
+              //     image: AssetImage('images/banner1.jpg'),
+              //     fit: BoxFit.cover,
+              //   ),
+              //   Image(
+              //     image: AssetImage('images/banner2.jpg'),
+              //     fit: BoxFit.cover,
+              //   ),
+              //   Image(
+              //     image: AssetImage('images/banner3.jpg'),
+              //     fit: BoxFit.cover,
+              //   ),
+              // ],
             ),
           ),
-          Positioned.fill(
-            child: IgnorePointer(
-              ignoring: true,
-              child: Row(
-                children: [
-                  // Gradiente izquierdo
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                          colors: [
-                            Color.fromARGB(100, 0, 0, 0), // Oscuro en el borde izquierdo
-                            Colors.transparent, // Transparente hacia el centro
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Gradiente derecho
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.centerRight,
-                          end: Alignment.centerLeft,
-                          colors: [
-                            Color.fromARGB(100, 0, 0, 0),  // Oscuro en el borde derecho
-                            Colors.transparent, // Transparente hacia el centro
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          )
+          
         ]),
         const SizedBox(height: 12),
-        CustomDotsList(currentPage: _currentPage, theme: theme, list: widget.cards),
+        CustomDotsList(
+            currentPage: _currentPage, theme: theme, list: widget.cards),
       ],
+    );
+  }
+}
+
+class BannerCard extends StatelessWidget {
+  final AssetImage assetImage;
+  const BannerCard({super.key, required this.assetImage});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              SizedBox(
+                height: 300,
+                width: double.infinity,
+                child: Stack(children: [
+                  Image(
+                          image:assetImage,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Icon(
+                                Icons.image_not_supported,
+                                color: Colors.grey,
+                                size: 40,
+                              ),
+                            );
+                          },
+                        ),
+                  Positioned.fill(
+              child: IgnorePointer(
+                ignoring: true,
+                child: Row(
+                  children: [
+                    // Gradiente izquierdo
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              Color.fromARGB(
+                                  100, 0, 0, 0), // Oscuro en el borde izquierdo
+                              Colors.transparent, // Transparente hacia el centro
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Gradiente derecho
+                    Expanded(
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerRight,
+                            end: Alignment.centerLeft,
+                            colors: [
+                              Color.fromARGB(
+                                  100, 0, 0, 0), // Oscuro en el borde derecho
+                              Colors.transparent, // Transparente hacia el centro
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+                ]),
+              ),
+            ],
+          ),
+        
+          // Título del producto
+        ),
+      ),
     );
   }
 }

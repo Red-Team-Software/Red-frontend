@@ -50,7 +50,7 @@ class ProductResponse {
           : double.tryParse(json['weight'].toString()) ?? 0.0,
       measurement: json['measurement'],
       stock: json['stock'],
-      caducityDate: json['caducityDate'], //TODO: Revisar que efectivamente devuelva bien el string por ser date
+      caducityDate: json['caducityDate'],
       categories: json['category'] != null ? List<CategoryProduct>.from(json["category"].map((c) => CategoryProduct.fromJson(c))) : [],
       promotion: json['discount'] != null ? List<Promotion>.from(json["discount"].map((x) => Promotion.fromJson(x))) : []
     );

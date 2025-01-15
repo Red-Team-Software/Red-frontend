@@ -102,8 +102,31 @@ class _LoginComponentState extends State<LoginComponent> {
             suffixIcon: Icon(Icons.lock,color: colors.primary,),
           ),
         ),
-        const SizedBox(height: 10),
-
+        const SizedBox(height: 30),
+        SizedBox(
+          width: double.infinity,
+          height: 50,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isLoginButtonEnabled()
+                  ? colors.primary
+                  : Colors.grey, // Change button color if disabled
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            onPressed: isLoginButtonEnabled()
+                ? () async {
+                    await widget.onHandleLogin();
+                  }
+                : null, // Disable button if conditions are not met
+            child:  Text(
+              "Login",
+              style: textStyles.displaySmall?.copyWith(color: Colors.white),
+            ),
+          ),
+        ),
+        const SizedBox(height: 20),
         // Forgot Password Button
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -129,32 +152,9 @@ class _LoginComponentState extends State<LoginComponent> {
         ),
         
         const SizedBox(height: 20),
+       
 
         // Login Button
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isLoginButtonEnabled()
-                  ? colors.primary
-                  : Colors.grey, // Change button color if disabled
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: isLoginButtonEnabled()
-                ? () async {
-                    await widget.onHandleLogin();
-                  }
-                : null, // Disable button if conditions are not met
-            child:  Text(
-              "Login",
-              style: textStyles.displaySmall?.copyWith(color: Colors.white),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
       ],
     ).animate().moveX(begin: 100, end: 0).fadeIn(duration: 500.ms);
   }

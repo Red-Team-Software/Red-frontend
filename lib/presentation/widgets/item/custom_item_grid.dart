@@ -1,5 +1,8 @@
 
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomItemGrid extends StatelessWidget {
@@ -50,11 +53,15 @@ class CustomItemGrid extends StatelessWidget {
                 child: Container(
                   color: Colors.black.withOpacity(0.5),
                   padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
+                  child: TranslationWidget(
+                    message: name,
+                    toLanguage: context.read<LanguagesCubit>().state.selected.language,
+                    builder: (trnaslated) => Text(
+                      trnaslated,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),

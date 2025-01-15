@@ -1,3 +1,5 @@
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,12 +21,16 @@ class CategoriesCarrusel extends StatelessWidget {
           // Botón "view all"
           GestureDetector(
             onTap: () => context.push('/categories'),
-            child: Text(
-              'view all',
-              textAlign: TextAlign.end,
-              style: textStyles.displaySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold),
+            child: TranslationWidget(
+              message: 'view all',
+              toLanguage: context.read<LanguagesCubit>().state.selected.language,
+              builder: (translated) => Text(
+                translated,
+                textAlign: TextAlign.end,
+                style: textStyles.displaySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -105,12 +111,20 @@ class CategoriesCarrusel extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 8),
                                 // Nombre de la categoría
-                                Text(
-                                  currentCategory.name,
-                                  style: textStyles.bodySmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
+                                TranslationWidget(
+                                  message: currentCategory.name,
+                                  toLanguage: context
+                                      .read<LanguagesCubit>()
+                                      .state
+                                      .selected
+                                      .language,
+                                  builder:(translatedMessage) =>  Text(
+                                    translatedMessage,
+                                    style: textStyles.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),

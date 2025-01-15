@@ -35,7 +35,7 @@ class FilterCatalog extends StatelessWidget {
           icon: const Icon(Icons.star),
         ),
         const SizedBox(width: 12),
-        Text('Discount: ${context.watch<CatalogBloc>().state.discount}%'),
+        Text('Discount: ${context.watch<CatalogBloc>().state.discount *100} %'),
         Expanded(
           child: Slider(
             value: context.read<CatalogBloc>().state.discount,

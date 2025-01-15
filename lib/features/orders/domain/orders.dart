@@ -56,8 +56,8 @@ class OrderItem {
           amount: 0.0, // Update as per your requirement
         ),
         orderDirection: OrderDirection(
-          latitude: 0.0, // Update as per your requirement
-          longitude: 0.0, // Update as per your requirement
+          latitude: num.parse(json['orderDirection']['lat']) as double,
+          longitude: num.parse(json['orderDirection']['long']) as double,
         ),
         products: [], // Update as per your requirement
         bundles: [], // Update as per your requirement

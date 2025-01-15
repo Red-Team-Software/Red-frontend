@@ -28,7 +28,6 @@ class BundlesDatasourceImpl implements IBundleDatasource{
         '/bundle/many', 'GET', (json) => BundleResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
           'perpage': perPage,
           
           if (discount != null) 'discount': discount,
@@ -52,8 +51,7 @@ class BundlesDatasourceImpl implements IBundleDatasource{
         '/bundle/all-name', 'GET', (json) => BundleResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
-          'perPage': perPage,
+          'perpage': perPage,
           'term': term
         });
 

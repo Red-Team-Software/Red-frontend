@@ -19,8 +19,8 @@ class UserDirection {
     return UserDirection(
       id: json['id'],
       direction: json['direction'],
-      longitude: json['long'],
-      latitude: json['lat'],
+      longitude: num.parse(json['long']),
+      latitude: num.parse(json['lat']),
       addressName: json['name'],
       isFavorite: json['favorite'],
     );
