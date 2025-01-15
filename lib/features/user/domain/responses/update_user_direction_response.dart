@@ -23,8 +23,8 @@ class UpdateUserDirectionResponse {
       id: json['id'],
       direction: json['direction'],
       favorite: json['favorite'],
-      lat: json['lat'],
-      lng: json['long'],
+      lat: num.parse(json['lat']),
+      lng: num.parse(json['long']),
       name: json['name'],
     );
   }

@@ -53,8 +53,8 @@ class OrderItem {
           amount: (json['orderPayment']['paymetAmount'] as num).toDouble(),
         ),
         orderDirection: OrderDirection(
-          latitude: json['orderDirection']['lat'] as double,
-          longitude: json['orderDirection']['long'] as double,
+          latitude: num.parse(json['orderDirection']['lat']) as double,
+          longitude: num.parse(json['orderDirection']['long']) as double,
         ),
         products: (json['products'] as List)
             .map((product) => ProductCart.fromJson(product))

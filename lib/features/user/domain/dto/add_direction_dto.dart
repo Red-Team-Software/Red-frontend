@@ -13,14 +13,13 @@ class AddUserDirectionDto {
   });
 
 
-  //TODO: Implement ToString en lat y long
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'direction': direction,
       'favorite': favorite,
-      'lat': lat,
-      'long': lng,
+      'lat': lat.toString(),
+      'long': lng.toString(),
     };
   }
 }
