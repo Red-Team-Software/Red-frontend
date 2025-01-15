@@ -36,8 +36,11 @@ class TrackOrderScreen extends StatelessWidget {
             OrderInfoWidget(orderId: orderItem.orderId),
             const SizedBox(height: 16),
             OrderMapWidget(
-                latitude: orderItem.orderDirection.latitude,
-                longitude: orderItem.orderDirection.longitude),
+              userLatitude: orderItem.orderDirection.latitude,
+              userLongitude: orderItem.orderDirection.longitude,
+              deliveryLatitude: 10.511052,
+              deliveryLongitude: -66.906131,
+            ),
             const SizedBox(height: 16),
             Expanded(
               child: ListView(

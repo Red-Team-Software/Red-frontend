@@ -12,14 +12,13 @@ class PaymentMethodDatasourceImpl implements IPaymentMethodDatasource {
   Future<Result<List<PaymentMethod>>> fetchAllPaymentMethods(
       {int page = 1, int perPage = 5}) async {
     final res = await _httpService.request(
-        '/payment/method/many',
+        '/payment-method/many',
         'GET',
         (json) =>
             (json as List).map((item) => PaymentMethod.fromJson(item)).toList(),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
-          'perPage': perPage,
+          'perpage': perPage,
         });
 
     if (res.isSuccessful()) {
