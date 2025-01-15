@@ -13,6 +13,9 @@ class BundleBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final textStyles = Theme.of(context).textTheme;
+
     return SafeArea(
       child: Scaffold(
         body: BlocBuilder<BundleDetailsBloc, BundleDetailsState>(
@@ -66,6 +69,8 @@ class BundleBody extends StatelessWidget {
 
   Widget buttonWidget(BuildContext context, Bundle bundle) {
     final cartBloc = context.watch<CartBloc>();
+    final textStyles = Theme.of(context).textTheme;
+
     return Flex(
       direction: Axis.vertical,
       children: [
@@ -75,16 +80,14 @@ class BundleBody extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.symmetric(vertical: 24),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
                 'Add to Cart',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+                style: textStyles.displaySmall?.copyWith(
                   color: Colors.white,
                 ),
               ),

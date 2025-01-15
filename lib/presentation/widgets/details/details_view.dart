@@ -143,6 +143,8 @@ class _ScrollableDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
       minChildSize: 0.68,
@@ -153,8 +155,8 @@ class _ScrollableDetails extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
             ),
           ),
           child: Column(
@@ -167,23 +169,22 @@ class _ScrollableDetails extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 40,
+                        style: textStyles.displayLarge?.copyWith(
+                          fontSize: 40
                         ),
                       ),
                       if (promotions.isNotEmpty) ...[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Wrap(
-                            spacing: 8,
+                            spacing: 12,
                             children: promotions
                                 .map((promotion) => Chip(
                                       label: Text(
                                         '${promotion.discount * 100}% off',
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        style:textStyles.displaySmall?.copyWith(
+                                          fontSize: 16,
+                                          color:colors.secondary,
                                         ),
                                       ),
                                       backgroundColor:
@@ -209,8 +210,18 @@ class _ScrollableDetails extends StatelessWidget {
                             children: [
                               if (promotions.isNotEmpty) ...[
                                 TextSpan(
-                                    text: _calculateDiscount(promotions, price)
-                                        .toStringAsFixed(2),
+                                  text:
+                                      '$price ${currency == 'usd' ? '\$' : currency}\n',
+                                  style: textStyles.displayMedium?.copyWith(
+                                    fontSize: 40,
+                                    color: Colors.black38,
+                                    decoration: TextDecoration.lineThrough,
+                                    decorationColor: colors.primary,
+                                    decorationThickness: 2
+                                  ),
+                                ),
+                                TextSpan(
+                                    text: '${_calculateDiscount(promotions, price).toStringAsFixed(2)}${currency == 'usd' ? '\$' : currency}',
                                     style: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold,
@@ -219,11 +230,10 @@ class _ScrollableDetails extends StatelessWidget {
                                     children: [
                                       TextSpan(
                                         text:
-                                            ' ${currency == 'usd' ? '\$' : currency} / piece\n',
+                                            '  / piece\n',
                                         style: TextStyle(
                                             fontSize: 24,
                                             fontWeight: FontWeight.bold,
-                                            fontStyle: FontStyle.italic,
                                             color:
                                                 Theme.of(context).brightness ==
                                                         Brightness.light
@@ -231,18 +241,7 @@ class _ScrollableDetails extends StatelessWidget {
                                                     : Colors.white70),
                                       ),
                                     ]),
-                                TextSpan(
-                                  text:
-                                      '$price ${currency == 'usd' ? '\$' : currency}',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black38,
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationColor: Colors.red,
-                                    decorationThickness: 2,
-                                  ),
-                                ),
+                                
                               ] else ...[
                                 TextSpan(
                                   text: price.toStringAsFixed(2),
@@ -295,19 +294,12 @@ class _ScrollableDetails extends StatelessWidget {
                               ],
                             )
                           : const SizedBox(height: 8),
-                      const Text(
-                        'Description',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
                       Text(
                         description,
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(
-                        height: 12.00,
+                        height: 8,
                       ),
                       bundleProducts.isNotEmpty
                           ? Flex(
