@@ -7,6 +7,7 @@ import 'package:GoDeli/presentation/screens/Catalogo/view/catalog_screen.dart';
 import 'package:GoDeli/presentation/screens/Checkout/checkout_screen.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
+import 'package:GoDeli/presentation/screens/languages/language_screen.dart';
 import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/screens/Search/search.dart';
 import 'package:GoDeli/presentation/screens/Bundle/bundle.dart';
@@ -56,6 +57,11 @@ final appRouter = GoRouter(
       path: '/catalog/:category',
       name: '${CatalogScreen.name}_category',
       builder: (context, state) => CatalogScreen( category: state.pathParameters['category']?? ''),
+    ),
+    GoRoute(
+      path: '/languages',
+      name: LanguageScreen.name,
+      builder: (context, state) => const LanguageScreen(),
     ),
     GoRoute(
       path: '/catalog',

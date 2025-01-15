@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,8 +57,11 @@ class CustomItemProduct extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      current.name,
+                    TranslationWidget(
+                      message: current.name,
+                      toLanguage: 'Spanish',
+                      builder:(translatedMessage) => Text(
+                      translatedMessage,
                       style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -66,7 +70,7 @@ class CustomItemProduct extends StatelessWidget {
                               : Colors.black54),
                       maxLines: 1,
                       overflow: TextOverflow.clip,
-                    ),
+                    )),
                     Text(
                       current.description,
                       maxLines: 1,

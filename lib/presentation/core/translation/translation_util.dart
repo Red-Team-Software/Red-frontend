@@ -1,0 +1,37 @@
+class Translations {
+  final String language;
+  final String flag;
+
+  Translations(this.language, this.flag);
+
+  static List<Translations> languagesList() {
+    return <Translations>[
+      Translations('English', 'https://th.bing.com/th/id/R.a21162786cc0c40a5520fbc1769630f0?rik=CxVFa2ztWdqCRw&riu=http%3a%2f%2fimage.shutterstock.com%2fz%2fstock-vector-vector-background-of-half-us-and-uk-flag-175729622.jpg&ehk=1kX4%2fxUc8ycMgmF5QjHrKHwc1ipQU4K6N%2bUAio0BdJo%3d&risl=&pid=ImgRaw&r=0'),
+      Translations('French', 'https://th.bing.com/th/id/OIP.mO2EfRE-TxiZgZ20kE6aOwHaE7?rs=1&pid=ImgDetMain'),
+      Translations('Italian', 'https://th.bing.com/th/id/OIP.TpVkVp5HY5O7gIlMeAP8dQHaE8?rs=1&pid=ImgDetMain'),
+      Translations('Español', 'https://th.bing.com/th/id/OIP.YsBdn_5ODBeaAYawGmu_8wHaE8?rs=1&pid=ImgDetMain'),
+      Translations('Russian', 'https://th.bing.com/th/id/OIP.uW9Hi1USsULyX2e4Y7iy-gHaE7?w=248&h=180&c=7&r=0&o=5&pid=1.7'),
+      Translations('German', 'https://th.bing.com/th/id/OIP.-0JgOkcYn_kcem1JsgQnKwHaE8?rs=1&pid=ImgDetMain'),
+    ];
+  }
+
+  static String getLanguageCode(String language) {
+    switch (language) {
+      case 'English':
+        return 'en';
+      case 'French':
+        return 'fr';
+      case 'Italian':
+        return 'it';
+      case 'Russian':
+        return 'ru';
+      case 'Español':
+        return 'es';
+      case 'German':
+        return 'de';
+      default:
+        return 'en';
+    }
+  }
+}
+

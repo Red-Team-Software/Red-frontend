@@ -1,3 +1,4 @@
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -105,12 +106,16 @@ class CategoriesCarrusel extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 8),
                                 // Nombre de la categoría
-                                Text(
-                                  currentCategory.name,
-                                  style: textStyles.bodySmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
+                                TranslationWidget(
+                                  message: currentCategory.name,
+                                  toLanguage: 'English',
+                                  builder:(translatedMessage) =>  Text(
+                                    currentCategory.name,
+                                    style: textStyles.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
