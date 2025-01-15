@@ -62,9 +62,9 @@ class BundleResponse {
           ? List<Promotion>.from(
               json["discount"].map((x) => Promotion.fromJson(x)))
           : [],
-      products: json['products'] != null
+      products: json['product'] != null
           ? List<BundleProduct>.from(
-              json['products'].map((x) => BundleProduct.fromJson(x)))
+              json['product'].map((x) => BundleProduct.fromJson(x)))
           : [],
     );
   }

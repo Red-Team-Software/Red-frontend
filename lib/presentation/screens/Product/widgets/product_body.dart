@@ -2,12 +2,15 @@ import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductBody extends StatelessWidget {
-  const ProductBody({super.key});
+  
+  final String idProduct;
+  const ProductBody({super.key, required this.idProduct});
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +20,24 @@ class ProductBody extends StatelessWidget {
         body: BlocConsumer<ProductDetailsBloc, ProductDetailsState>(
           listener: (context, state) {
             if (state.status == ProductDetailsStatus.error) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Ups! Something went wrong'),
-                  backgroundColor: Colors.red,
-                ),
+              CustomSnackBar.show(
+                context,
+                title: 'Error',
+                message: 'Ups! Something went wrong',
+                type: SnackBarType.error,
               );
             }
           },
           builder: (context, state) {
+            final Product newProduct = Product(
+              id: idProduct,
+              name: state.product.name,
+              description: state.product.description,
+              price: state.product.price,
+              imageUrl: state.product.imageUrl,
+              currency: state.product.currency,
+              categories: state.product.categories,
+            );
             switch (state.status) {
               case ProductDetailsStatus.loading:
               case ProductDetailsStatus.initial:
@@ -41,13 +53,13 @@ class ProductBody extends StatelessWidget {
 
               case ProductDetailsStatus.loaded:
                 return DetailsView(
-                    images: state.product.imageUrl,
-                    name: state.product.name,
-                    description: state.product.description,
-                    price: state.product.price,
-                    currency: state.product.currency ?? 'usd',
-                    categories: state.product.categories,
-                    buttonWidget: buttonWidget(context, state.product));
+                    images: newProduct.imageUrl,
+                    name: newProduct.name,
+                    description: newProduct.description,
+                    price: newProduct.price,
+                    currency: newProduct.currency ?? 'usd',
+                    categories: newProduct.categories,
+                    buttonWidget: buttonWidget(context, newProduct));
             }
           },
         ),

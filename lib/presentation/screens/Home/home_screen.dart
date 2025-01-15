@@ -4,6 +4,8 @@ import 'package:GoDeli/features/user/domain/user_direction.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/banner_carrousel.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/carrusel_categories.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/drawer_widget.dart';
+import 'package:GoDeli/presentation/screens/Home/widgets/popular_products_home.dart';
+import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -188,7 +190,7 @@ class HomeScreenView extends StatelessWidget {
                       const SizedBox(
                         height: 24,
                       ),
-                      HomaBannerCarrousel(),
+                      HomeBannerCarrousel(),
                       const SizedBox(
                         height: 24,
                       ),
@@ -215,94 +217,5 @@ class HomeScreenView extends StatelessWidget {
 
 
 
-class PopularProductsHome extends StatelessWidget {
-  const PopularProductsHome({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final textStyles = theme.textTheme;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Título y botón de "view all"
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Popular',
-                style: textStyles.displayLarge
-              ),
-              GestureDetector(
-                onTap: () => context.push('/catalog'),
-                child: Text(
-                  'view all',
-                  textAlign: TextAlign.end,
-                  style: textStyles.displaySmall?.copyWith(
-                      color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // BlocBuilder para productos populares
-        BlocBuilder<AllProductsBloc, AllProductsState>(
-          builder: (context, state) {
-            if (state.status == ProductsStatus.loading &&
-                state.products.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (state.status != ProductsStatus.loading &&
-                state.products.isEmpty) {
-              return const Center(child: Text('No hay productos'));
-            }
-            if (state.status == ProductsStatus.error) {
-              return Center(
-                child: Text(
-                  'Algo inesperado pasó',
-                  style: textStyles.bodyLarge?.copyWith(
-                    color: theme.colorScheme.error,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              );
-            }
-
-            // Lista de productos populares
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: SizedBox(
-                height: 200, // Ajusta la altura según tus necesidades
-                child: GridView.builder(
-                  scrollDirection: Axis.horizontal,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 16,
-                    crossAxisSpacing: 8,
-                    childAspectRatio: 0.28, // Ajusta el aspecto de las tarjetas
-                  ),
-                  itemCount: state.products.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final currentProduct = state.products[index];
-                    return CustomItemProduct(
-                      current: currentProduct,
-                      theme: theme,
-                    );
-                  },
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-}
 

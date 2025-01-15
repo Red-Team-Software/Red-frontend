@@ -16,18 +16,19 @@ class BundleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<BundleDetailsBloc>()..getBundleById(idBundle),
-      child: const _BundleView(),
+      child: _BundleView( idBundle: idBundle),
     );
   }
 }
 
 class _BundleView extends StatelessWidget {
-  const _BundleView();
+  final String idBundle;
+  const _BundleView({required this.idBundle});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return BundleBody(theme: theme);
+    return BundleBody(theme: theme, idBundle: idBundle);
   }
 }
