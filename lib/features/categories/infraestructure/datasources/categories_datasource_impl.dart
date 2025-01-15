@@ -12,13 +12,14 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
   CategoriesDatasourceImpl(this._httpService);
 
   @override
-  Future<List<Category>> getCategories() async{
+  Future<List<Category>> getCategories({int page = 1, int perPage = 10}) async{
 
     final res = await _httpService.request(
         '/category/many', 'GET', (json) => CategoryResponse.fromJsonList(json),
         queryParameters: {
-          'page': 1,
-          'perPage': 10,
+          'page': page,
+          // TODO: cambiar a perpage
+          'perPage': perPage,
         });
 
     final List<Category> categories = [];
@@ -38,6 +39,7 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
         '/category/$categoryId', 'GET', (json) => CategoryResponse.fromCatalogJson(json),
         queryParameters: {
           'page': page,
+          // TODO: cambiar a perpage
           'perPage': perpage,
         });
 

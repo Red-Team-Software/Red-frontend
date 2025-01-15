@@ -23,6 +23,7 @@ class ProductsDatasourceImpl implements IProductsDatasource {
         '/product/many', 'GET', (json) => ProductResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
+          // TODO: cambiar a perpage
           'perPage': perPage,
           if (discount != null) 'discount': discount,
           if (category != null) 'category': category,
@@ -45,7 +46,11 @@ class ProductsDatasourceImpl implements IProductsDatasource {
       {int page = 1, int perPage = 10, required String term}) async {
     final resProduct = await _httpService.request('/product/all-product-bundle',
         'GET', (json) => SearchResponse.fromJson(json),
-        queryParameters: {'page': page, 'perPage': perPage, 'term': term});
+        queryParameters: {
+          'page': page,
+          // TODO: cambiar a perpage
+          'perPage': perPage, 
+          'term': term});
 
     // print(res);
     final List<Product> products = [];

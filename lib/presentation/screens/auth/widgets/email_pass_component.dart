@@ -48,6 +48,7 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
 
     bool isNextButtonEnabled() {
       return email.isNotEmpty &&
@@ -62,12 +63,9 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ImageComponent(),
-        const Text(
+        Text(
           "Sign Up",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textStyles.displayMedium,
         ),
         const SizedBox(height: 20),
         TextField(
@@ -92,7 +90,7 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.email),
+            suffixIcon: Icon(Icons.email, color: colors.primary),
           ),
         ),
         const SizedBox(height: 20),
@@ -124,7 +122,7 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.lock),
+            suffixIcon: Icon(Icons.lock, color: colors.primary),
           ),
         ),
         const SizedBox(height: 20),
@@ -150,7 +148,7 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.lock),
+            suffixIcon: Icon(Icons.lock, color: colors.primary),
           ),
         ),
         const SizedBox(height: 20),
@@ -174,29 +172,9 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
                             2); // Cambiar a la siguiente pantalla
                       }
                     : null, // Deshabilitar si los campos están vacíos
-            child: const Text(
-              "Next",
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: colors.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () {
-              widget.onChangeIndex(0); // Cambiar a la pantalla de login
-            },
             child: Text(
-              "Login",
-              style: TextStyle(fontSize: 18, color: colors.primary),
+              "Next",
+              style: textStyles.displaySmall?.copyWith(color: Colors.white),
             ),
           ),
         ),
