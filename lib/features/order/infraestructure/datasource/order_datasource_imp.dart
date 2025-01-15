@@ -51,11 +51,6 @@ class OrderDatasourceImpl implements IOrderDatasource {
       (json) => (json['orders'] as List)
           .map((order) => OrderItem.fromJson(order))
           .toList(),
-      queryParameters: {
-        'page': page,
-        // TODO: cambiar a perpage
-        'perPage': perPage,
-      },
     );
 
     print("res de fetch all orders");

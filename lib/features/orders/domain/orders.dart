@@ -42,26 +42,22 @@ class OrderItem {
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     try {
       return OrderItem(
-        orderId: json['orderId'] as String,
-        orderState: json['orderState'] as String,
-        orderCreatedDate: json['orderCreatedDate'] as String,
+        orderId: json['id'] as String,
+        orderState: json['last_state']['state'] as String,
+        orderCreatedDate: json['last_state']['date'] as String,
         totalAmount: (json['totalAmount'] as num).toDouble(),
-        orderReceivedDate: "",
+        orderReceivedDate: null,
         orderPayment: OrderPayment(
-          paymentMethod: json['orderPayment']['payementMethod'] as String,
-          currency: json['orderPayment']['paymentCurrency'] as String,
-          amount: (json['orderPayment']['paymetAmount'] as num).toDouble(),
+          paymentMethod: "", // Update as per your requirement
+          currency: "", // Update as per your requirement
+          amount: 0.0, // Update as per your requirement
         ),
         orderDirection: OrderDirection(
-          latitude: json['orderDirection']['lat'] as double,
-          longitude: json['orderDirection']['long'] as double,
+          latitude: 0.0, // Update as per your requirement
+          longitude: 0.0, // Update as per your requirement
         ),
-        products: (json['products'] as List)
-            .map((product) => ProductCart.fromJson(product))
-            .toList(),
-        bundles: (json['bundles'] as List)
-            .map((bundle) => BundleCart.fromJson(bundle))
-            .toList(),
+        products: [], // Update as per your requirement
+        bundles: [], // Update as per your requirement
       );
     } catch (e, stackTrace) {
       print('Error parsing OrderItem: $e');
