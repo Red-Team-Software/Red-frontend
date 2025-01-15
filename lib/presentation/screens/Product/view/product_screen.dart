@@ -14,17 +14,18 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<ProductDetailsBloc>()..getProductById(idProduct),
-      child: const _ProductView(),
+      child: _ProductView(idProduct: idProduct),
     );
   }
 }
 
 class _ProductView extends StatelessWidget {
-  const _ProductView();
+  final String idProduct;
+  const _ProductView({required this.idProduct});
 
   @override
   Widget build(BuildContext context) {
 
-    return const ProductBody();
+    return ProductBody(idProduct: idProduct);
     }
 }
