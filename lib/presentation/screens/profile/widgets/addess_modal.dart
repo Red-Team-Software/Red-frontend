@@ -42,6 +42,7 @@ class _AddressModalState extends State<AddressModal> {
       _selectedLocationName = widget.initialLocationName ?? "";
       _currentLocation = widget.initialLocation!;
       addressNameTextController.text = widget.initialAddressName ?? '';
+      _currentAddressName = widget.initialAddressName ?? '';
       if (widget.initialLocationName == null) {
         print('Fetching initial location name');
         _fetchInitialLocationName();
