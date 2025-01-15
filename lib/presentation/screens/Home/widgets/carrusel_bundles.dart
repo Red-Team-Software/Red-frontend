@@ -74,7 +74,8 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
             ),
             const SizedBox(height: 16),
             // BlocBuilder para los bundles
-            Expanded(
+            SizedBox(
+              height: 500,
               child: BlocBuilder<BundleOffersBloc, BundleOffersState>(
                 builder: (context, state) {
                   if (state is BundleOffersError) {

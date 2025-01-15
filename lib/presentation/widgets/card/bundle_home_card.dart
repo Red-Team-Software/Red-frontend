@@ -149,15 +149,18 @@ class BundleHomeCard extends StatelessWidget {
                 style: textStyle.displaySmall,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                current.description,
-                style: textStyle.bodyLarge?.copyWith(
-                    // color: Colors.white,
-                    ),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
+
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  current.description,
+                  style: textStyle.bodyLarge?.copyWith(
+                      // color: Colors.white,
+                      ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             const SizedBox(height: 8),
