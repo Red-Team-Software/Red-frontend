@@ -8,7 +8,7 @@ abstract class IOrderRepository {
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,
-    required String address,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   });

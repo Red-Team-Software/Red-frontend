@@ -45,17 +45,13 @@ class OrderEntity {
 
         return OrderEntity(
           id: json['id'] as String,
-          orderState: json['orderState'] as String,
+          orderState: json['orderState'][0]["state"] as String,
           orderCreatedDate: json['orderCreatedDate'] as String,
           totalAmount: (json['totalAmount'] as num).toDouble(),
           orderTimeCreated: json['orderTimeCreated'] as String,
           orderDirection: OrderDirectionEntity.fromJson(json['orderDirection']),
-          products: (json['products'] as List? ?? [])
-              .map((product) => ProductCart.fromJson(product))
-              .toList(),
-          bundles: (json['bundles'] as List? ?? [])
-              .map((bundle) => BundleCart.fromJson(bundle))
-              .toList(),
+          products: [],
+          bundles: [],
           orderReceivedDate: json['orderReceivedDate'] as String? ?? '',
           orderPayment:
               OrderPaymentEntity.fromPaymentJson(json['orderPayment']),

@@ -17,10 +17,19 @@ class OrderDatasourceImpl implements IOrderDatasource {
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,
-    required String address,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   }) async {
+    print("req");
+    print(paymentId);
+    print(currency);
+    print(paymentMethod);
+    print(stripePaymentMethod);
+    print(idUserDirection);
+    print(bundles);
+    print(products);
+
     final res = await httpService.request(
       '/order/pay/stripe',
       'POST',
@@ -31,7 +40,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
         "currency": currency,
         "paymentMethod": paymentMethod,
         "stripePaymentMethod": stripePaymentMethod,
-        "address": address,
+        "idUserDirection": idUserDirection,
         "bundles": bundles,
         "products": products,
       },
