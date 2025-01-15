@@ -1,3 +1,4 @@
+import 'package:GoDeli/common/Date/date.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
@@ -24,18 +25,23 @@ class OrderCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Order: ${orderItem.orderId}',
+              style: const TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Date: ${orderItem.orderCreatedDate}',
+                  'Date: ${DateMapper.isoToDDMMYY(orderItem.orderCreatedDate)}',
                   style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.black),
                 ),
                 Text(
-                  'Total: \$${orderItem.totalAmount.toStringAsFixed(2)}',
+                  'Time: ${DateMapper.isoToHHMMAM(orderItem.orderCreatedDate)}',
                   style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -45,8 +51,11 @@ class OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Order: ${orderItem.orderId}',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              'Total: \$${orderItem.totalAmount.toStringAsFixed(2)}',
+              style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
             const SizedBox(height: 8),
             const Row(
@@ -66,8 +75,7 @@ class OrderCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            _buildItemList(orderItem.products,
-                orderItem.bundles), // Build the product and bundle list
+            _buildItemList(orderItem.summaryOrder),
             const SizedBox(height: 8),
             Text(
               'Status: ${orderItem.orderState}',
@@ -90,30 +98,17 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _buildItemList(List<ProductCart> products, List<BundleCart> bundles) {
-    final List<Map<String, dynamic>> allItems = [
-      ...products.map((product) =>
-          {'name': product.product.name, 'quantity': product.quantity}),
-      ...bundles.map(
-          (bundle) => {'name': bundle.bundle.name, 'quantity': bundle.quantity})
-    ];
-    const int maxItemsToShow = 3;
-
-    final List<Map<String, dynamic>> displayedItems =
-        allItems.length <= maxItemsToShow
-            ? allItems
-            : allItems.sublist(0, maxItemsToShow);
+  Widget _buildItemList(String itemDescription) {
+    print("Item Description: $itemDescription");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: displayedItems.map((item) {
-        final String name = item['name'];
-        final int quantity = item['quantity'];
-        return Text(
-          '$name ($quantity)',
+      children: [
+        Text(
+          itemDescription,
           style: const TextStyle(fontSize: 14, color: Colors.grey),
-        );
-      }).toList(),
+        ),
+      ],
     );
   }
 

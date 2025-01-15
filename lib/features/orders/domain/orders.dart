@@ -21,6 +21,7 @@ class OrderItem {
   final String orderState;
   final String orderCreatedDate;
   final double totalAmount;
+  final String summaryOrder;
   final String? orderReceivedDate;
   final OrderPayment orderPayment;
   final OrderDirection orderDirection;
@@ -32,6 +33,7 @@ class OrderItem {
     required this.orderState,
     required this.orderCreatedDate,
     required this.totalAmount,
+    required this.summaryOrder,
     this.orderReceivedDate,
     required this.orderPayment,
     required this.orderDirection,
@@ -46,6 +48,7 @@ class OrderItem {
         orderState: json['last_state']['state'] as String,
         orderCreatedDate: json['last_state']['date'] as String,
         totalAmount: (json['totalAmount'] as num).toDouble(),
+        summaryOrder: json['summary_order'] as String,
         orderReceivedDate: null,
         orderPayment: OrderPayment(
           paymentMethod: "", // Update as per your requirement
