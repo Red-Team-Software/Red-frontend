@@ -148,6 +148,9 @@ class _AddressModalState extends State<AddressModal> {
   }
 
   bool isFinishButtonEnabled() {
+    print(
+        "Selected Location: $_selectedLocation, Current Address Name: $_currentAddressName, Address Name Error: $addressNameError");
+
     return _selectedLocation != null &&
             _currentAddressName.isNotEmpty &&
             addressNameError == null ||
