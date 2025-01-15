@@ -18,7 +18,6 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
         '/category/many', 'GET', (json) => CategoryResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
           'perpage': perPage,
         });
 
@@ -39,8 +38,7 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
         '/category/$categoryId', 'GET', (json) => CategoryResponse.fromCatalogJson(json),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
-          'perPage': perpage,
+          'perpage': perpage,
         });
 
 

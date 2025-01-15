@@ -23,7 +23,6 @@ class ProductsDatasourceImpl implements IProductsDatasource {
         '/product/many', 'GET', (json) => ProductResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
           'perpage': perPage,
           if (discount != null) 'discount': discount,
           if (category != null) 'category': category,
@@ -48,8 +47,7 @@ class ProductsDatasourceImpl implements IProductsDatasource {
         'GET', (json) => SearchResponse.fromJson(json),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
-          'perPage': perPage, 
+          'perpage': perPage, 
           'term': term});
 
     // print(res);

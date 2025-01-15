@@ -18,7 +18,6 @@ class PaymentMethodDatasourceImpl implements IPaymentMethodDatasource {
             (json as List).map((item) => PaymentMethod.fromJson(item)).toList(),
         queryParameters: {
           'page': page,
-          // TODO: cambiar a perpage
           'perPage': perPage,
         });
 
