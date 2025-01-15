@@ -88,7 +88,7 @@ class SearchBody extends StatelessWidget {
                             Bundle current = state.bundles[index];
                             return GestureDetector(
                               onTap: () {},
-                              child: CardItem(current: current),
+                              child: BundleHomeCard(current: current),
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) {

@@ -29,7 +29,7 @@ class BundlesDatasourceImpl implements IBundleDatasource{
         queryParameters: {
           'page': page,
           // TODO: cambiar a perpage
-          'perPage': perPage,
+          'perpage': perPage,
           
           if (discount != null) 'discount': discount,
           if (category != null) 'category': category,

@@ -19,7 +19,7 @@ class CategoriesDatasourceImpl implements ICategoriesDatasource {
         queryParameters: {
           'page': page,
           // TODO: cambiar a perpage
-          'perPage': perPage,
+          'perpage': perPage,
         });
 
     final List<Category> categories = [];

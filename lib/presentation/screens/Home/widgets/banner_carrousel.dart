@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:GoDeli/presentation/screens/Home/home_screen.dart';
+import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
 
 class HomaBannerCarrousel extends StatefulWidget {
@@ -54,6 +56,7 @@ class _HomaBannerCarrouselState extends State<HomaBannerCarrousel> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Column(
       children: [
         Stack(children: [
@@ -123,24 +126,7 @@ class _HomaBannerCarrouselState extends State<HomaBannerCarrousel> {
           )
         ]),
         const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(widget.cards.length, (index) {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: _currentPage == index ? 24 : 8, // Tamaño dinámico
-              height: 8,
-              decoration: BoxDecoration(
-                color: _currentPage == index
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.grey,
-                borderRadius: BorderRadius.circular(4),
-                shape: BoxShape.rectangle,
-              ),
-            );
-          }),
-        ),
+        CustomDotsList(currentPage: _currentPage, theme: theme, list: widget.cards),
       ],
     );
   }
