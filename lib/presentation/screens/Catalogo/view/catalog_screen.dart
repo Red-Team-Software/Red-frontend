@@ -4,8 +4,6 @@ import 'package:GoDeli/features/catalog/bloc/catalog_bloc.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
 import '../widgets/catalog_body.dart';
 
 class CatalogScreen extends StatelessWidget {
