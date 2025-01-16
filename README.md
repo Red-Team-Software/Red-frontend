@@ -2,7 +2,7 @@
 
 A Flutter project. It's an ecomerce that sales products and bundles and allowed you to trak yours orders
 
-![GoDeli - logo](/images/logo.png)
+<img src="/images/logo.png" alt="Logo-app" width="300">
 
 ## Getting Started
 
