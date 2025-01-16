@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'dart:convert';
@@ -45,15 +47,35 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
         cameraOptions: CameraOptions(
           center: Point(
             coordinates: Position(
-              widget.userLongitude,
-              widget.userLatitude,
+              (widget.userLongitude + widget.deliveryLongitude) / 2,
+              (widget.userLatitude + widget.deliveryLatitude) / 2,
             ),
           ),
-          zoom: 12.0,
+          zoom: _calculateZoomLevel(),
         ),
         onMapCreated: _onMapCreated,
       ),
     );
+  }
+
+  double _calculateZoomLevel() {
+    // Calculate the zoom level based on the distance between the two points
+    final distance = _calculateDistance(
+      widget.userLatitude,
+      widget.userLongitude,
+      widget.deliveryLatitude,
+      widget.deliveryLongitude,
+    );
+    return 12.0 - (distance / 10.0); // Adjust the divisor as needed
+  }
+
+  double _calculateDistance(
+      double lat1, double lon1, double lat2, double lon2) {
+    const p = 0.017453292519943295; // Pi/180
+    final a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
   }
 
   void _onMapCreated(MapboxMap map) async {
