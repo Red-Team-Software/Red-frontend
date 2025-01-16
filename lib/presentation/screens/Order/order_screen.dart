@@ -41,6 +41,7 @@ class OrderSummaryScreen extends StatelessWidget {
 
           if (state is OrderLoaded) {
             final order = state.order;
+            final shppingFee = state.shippingFee;
             return Column(
               children: [
                 OrderHeader(
@@ -65,6 +66,7 @@ class OrderSummaryScreen extends StatelessWidget {
                 ),
                 OrderSummaryDetails(
                   orderSummary: order,
+                  shippingFee: shppingFee,
                 ), // Subtotales y total
               ],
             );

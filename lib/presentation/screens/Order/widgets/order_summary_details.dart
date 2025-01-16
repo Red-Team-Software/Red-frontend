@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 class OrderSummaryDetails extends StatelessWidget {
   final Order orderSummary;
+  final double shippingFee;
 
-  const OrderSummaryDetails({super.key, required this.orderSummary});
+  const OrderSummaryDetails(
+      {super.key, required this.orderSummary, required this.shippingFee});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,7 @@ class OrderSummaryDetails extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${orderSummary.orderPayment.amount.toStringAsFixed(2)}', //! Revisar lo del subtotal
+                '\$${(orderSummary.orderPayment.amount - shippingFee).toStringAsFixed(2)}', //! Revisar lo del subtotal
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
@@ -62,9 +64,9 @@ class OrderSummaryDetails extends StatelessWidget {
                   color: Colors.grey[700],
                 ),
               ),
-              const Text(
-                '\$${0.0}', //TODO: Agregar el costo de envío desde el BloC
-                style: TextStyle(
+              Text(
+                '\$${shippingFee.toStringAsFixed(2)}',
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                 ),

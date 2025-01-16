@@ -50,13 +50,6 @@ class TrackOrderScreen extends StatelessWidget {
                       totalAmount: order.totalAmount,
                     ),
                     const SizedBox(height: 16),
-                    OrderMapWidget(
-                      userLatitude: order.orderDirection.latitude,
-                      userLongitude: order.orderDirection.longitude,
-                      deliveryLatitude: 10.511052,
-                      deliveryLongitude: -66.906131,
-                    ),
-                    const SizedBox(height: 16),
                     Expanded(
                       child: ListView(
                         children: [
@@ -70,6 +63,11 @@ class TrackOrderScreen extends StatelessWidget {
                             ),
                         ],
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    OrderMapWidget(
+                      userLatitude: order.orderDirection.latitude,
+                      userLongitude: order.orderDirection.longitude,
                     ),
                   ],
                 ),
