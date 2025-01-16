@@ -17,16 +17,40 @@ class OrdersLoadSuccess extends OrdersState {
   final String selectedTab;
   final int page;
   final int perPage;
+  final String? orderReportError; // New variable
 
   const OrdersLoadSuccess({
     required this.orders,
     required this.selectedTab,
     required this.page,
     required this.perPage,
+    this.orderReportError, // Initialize new variable
   });
 
   @override
-  List<Object> get props => [orders, selectedTab, page, perPage];
+  List<Object> get props => [
+        orders,
+        selectedTab,
+        page,
+        perPage,
+        orderReportError ?? ''
+      ]; // Update props
+
+  OrdersLoadSuccess copyWith({
+    Orders? orders,
+    String? selectedTab,
+    int? page,
+    int? perPage,
+    String? orderReportError,
+  }) {
+    return OrdersLoadSuccess(
+      orders: orders ?? this.orders,
+      selectedTab: selectedTab ?? this.selectedTab,
+      page: page ?? this.page,
+      perPage: perPage ?? this.perPage,
+      orderReportError: orderReportError ?? this.orderReportError,
+    );
+  }
 }
 
 class OrdersLoadFailure extends OrdersState {
