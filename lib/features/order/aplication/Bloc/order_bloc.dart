@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
-
 part 'order_event.dart';
 part 'order_state.dart';
 
