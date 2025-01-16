@@ -24,7 +24,7 @@ class BundleCart {
       bundle: Bundle(
         id: json['id'] as String,
         name: (json['nombre'] ?? json['name']) as String,
-        description: json['descripcion'] as String,
+        description: json['description'] as String,
         price: json['price'] is String
             ? num.parse(json['price']).toDouble()
             : (json['price'] as num).toDouble(),
