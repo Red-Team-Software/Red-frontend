@@ -20,7 +20,7 @@ class PopularProductsBloc extends Bloc<PopularProductsEvent, PopularProductsStat
 
   void _onFetchPopularProducts(FetchPopularProducts event, Emitter<PopularProductsState> emit) async {
     emit(PopularProductsLoading());
-    final res = await productsRepository.getProducts(page: 1, perPage: 3, popular: 'true');
+    final res = await productsRepository.getProducts(page: 1, perPage: 5, popular: 'true');
     if (!res.isSuccessful()) {
       emit(PopularProductsError('Failed to get popular products'));
       return;

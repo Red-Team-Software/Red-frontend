@@ -1,4 +1,6 @@
+import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
+import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
@@ -8,14 +10,14 @@ import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class CustomItemProduct extends StatelessWidget {
-  const CustomItemProduct({
+class CustomItemBundle extends StatelessWidget {
+  const CustomItemBundle({
     super.key,
     required this.current,
     required this.theme,
   });
 
-  final Product current;
+  final Bundle current;
   final ThemeData theme;
 
   @override
@@ -26,7 +28,7 @@ class CustomItemProduct extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.push('/product/${current.id}');
+        context.push('/bundle/${current.id}');
       },
       child: Card(
         elevation: 6,
@@ -123,16 +125,16 @@ class CustomItemProduct extends StatelessWidget {
                         ),
 
                         // Botón agregar/quitar del carrito
-                        if (!cartBloc.isProductInCart(
-                            ProductCart(product: current, quantity: 1)))
+                        if (!cartBloc.isBundleInCart(
+                            BundleCart(bundle: current, quantity: 1)))
                           IconButton(
                             onPressed: () {
-                              ProductCart productCart = ProductCart(
-                                product: current,
+                              BundleCart bundleCart = BundleCart(
+                                bundle: current,
                                 quantity: 1,
                               );
 
-                              cartBloc.add(AddProduct(productCart));
+                              cartBloc.add(AddBundle(bundleCart));
                               CustomSnackBar.show(
                               context,
                               type: SnackBarType.success,

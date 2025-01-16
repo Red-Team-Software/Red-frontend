@@ -49,36 +49,26 @@ class CatalogScreenView extends StatelessWidget {
         title:  Text('Catalog',
         style: textStyle.displayLarge,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: CatalogSearchDelegate(),
-              );
-            },
-          )
-        ],
+        
       ),
       body: const CatalogBody(),
 
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/cart'),
-        isExtended: true,
-        label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.00, vertical: 8.0),
-          child: Row(
-            children: [
-              const Icon(Icons.shopping_cart),
-              const SizedBox(width: 8.0),
-              Text('$itemsCountCart items in cart', style: textStyle.displaySmall!.copyWith(color: Colors.white)
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () => context.push('/cart'),
+      //   isExtended: true,
+      //   label: Padding(
+      //     padding: const EdgeInsets.symmetric(horizontal: 16.00, vertical: 8.0),
+      //     child: Row(
+      //       children: [
+      //         const Icon(Icons.shopping_cart),
+      //         const SizedBox(width: 8.0),
+      //         Text('$itemsCountCart items in cart', style: textStyle.displaySmall!.copyWith(color: Colors.white)
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -6,7 +6,7 @@ import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/Catalogo/widgets/filter_modal.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
-import 'package:GoDeli/presentation/widgets/item/custom_item_grid.dart';
+import 'package:GoDeli/presentation/widgets/item/custom_item_bundle.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';
 import 'package:flutter/material.dart';
 
@@ -22,20 +22,61 @@ class CatalogBody extends StatefulWidget {
 
 class _CatalogBodyState extends State<CatalogBody> {
   bool showProducts = true;
+  final ScrollController _scrollController = ScrollController();
+  bool isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    // print(
+    //     '_scrollController.position.pixels: ${_scrollController.position.pixels}\n _scrollController.position.maxScrollExtent: ${_scrollController.position.maxScrollExtent}');
+    // if (_scrollController.position.pixels >=
+    //         _scrollController.position.maxScrollExtent &&
+    //     !isLoadingMore) {
+    //   setState(() {
+    //     isLoadingMore = true;
+    //   });
+
+    //   final catalogBloc = context.read<CatalogBloc>();
+
+    //   // Incrementar la página y cargar más elementos
+    //   final nextPage = catalogBloc.state.page + 1;
+    //   catalogBloc.add(PageSet(nextPage));
+    //   catalogBloc.add(const FetchItems(isPagination: true));
+
+    //   Future.delayed(const Duration(seconds: 1), () {
+    //     if (mounted) {
+    //       setState(() {
+    //         isLoadingMore = false;
+    //       });
+    //     }
+    //   });
+    // }
+  }
 
   // Método para construir el contenido de Bundles
   Widget _buildBundles(BuildContext context) {
-     final language = context.watch<LanguagesCubit>().state.selected.language;
+    final language = context.watch<LanguagesCubit>().state.selected.language;
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final textStyles = theme.textTheme;
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
-        if (state.status == CatalogStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        // if (state.status == CatalogStatus.loading) {
+        //   return const Center(child: CircularProgressIndicator());
+        // }
         if (state.status == CatalogStatus.error) {
-           return Center(
+          return Center(
               child: Text(
             'Error loading bundles',
             style: textStyles.displaySmall?.copyWith(
@@ -43,7 +84,7 @@ class _CatalogBodyState extends State<CatalogBody> {
             ),
           ));
         }
-        if (state.bundles.isEmpty) {
+        if (state.bundles.isEmpty && state.status == CatalogStatus.loaded) {
           return Center(
               child: Column(
                   mainAxisAlignment:
@@ -76,20 +117,14 @@ class _CatalogBodyState extends State<CatalogBody> {
           child: GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 1.5,
+              childAspectRatio: 0.9,
             ),
             itemCount: state.bundles.length,
             itemBuilder: (context, index) {
               final item = state.bundles[index];
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: CustomItemGrid(
-                  id: item.id,
-                  name: item.name,
-                  imageUrl: item.imageUrl,
-                  price: item.price,
-                  redirect: '/bundle',
-                ),
+                child: CustomItemBundle(current: item, theme: theme),
               );
             },
           ),
@@ -106,9 +141,9 @@ class _CatalogBodyState extends State<CatalogBody> {
     final textStyles = theme.textTheme;
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
-        if (state.status == CatalogStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        }
+        // if (state.status == CatalogStatus.loading) {
+        //   return const Center(child: CircularProgressIndicator());
+        // }
         if (state.status == CatalogStatus.error) {
           return Center(
               child: Text(
@@ -118,7 +153,7 @@ class _CatalogBodyState extends State<CatalogBody> {
             ),
           ));
         }
-        if (state.products.isEmpty) {
+        if (state.products.isEmpty && state.status == CatalogStatus.loaded) {
           return Center(
               child: Column(
                   mainAxisAlignment:
@@ -148,19 +183,26 @@ class _CatalogBodyState extends State<CatalogBody> {
         }
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.9,
-            ),
-            itemCount: state.products.length,
-            itemBuilder: (context, index) {
-              final product = state.products[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomItemProduct(current: product, theme: theme),
-              );
-            },
+          child: Column(
+            children: [
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.9,
+                  ),
+                  itemCount: state.products.length,
+                  itemBuilder: (context, index) {
+                    final product = state.products[index];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CustomItemProduct(current: product, theme: theme),
+                    );
+                  },
+                ),
+              ),
+              if (isLoadingMore) const LinearProgressIndicator(),
+            ],
           ),
         );
       },
@@ -169,6 +211,7 @@ class _CatalogBodyState extends State<CatalogBody> {
 
   @override
   Widget build(BuildContext context) {
+    final language = context.watch<LanguagesCubit>().state.selected.language;
     final categories =
         List<Category>.from(context.watch<CategoriesBloc>().state.categories);
     final textStyle = Theme.of(context).textTheme;
@@ -177,13 +220,12 @@ class _CatalogBodyState extends State<CatalogBody> {
 
     return DefaultTabController(
       length: 2, // Dos pestañas: Bundles y Products
-      child: CustomScrollView(
-        slivers: [
-          // CategoriesSliverCatalog(categories: categories),
+      child: NestedScrollView(
+        controller: _scrollController,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverToBoxAdapter(
             child: const InputSearch(),
           ),
-          // Botón de Filtros
           SliverToBoxAdapter(
             child: Padding(
               padding:
@@ -191,10 +233,15 @@ class _CatalogBodyState extends State<CatalogBody> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Filters',
+                  TranslationWidget(
+                  message: 'Filters',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                    translated,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
+                ),
+                 
                   IconButton(
                     icon: Icon(Icons.filter_list, color: colors.primary),
                     onPressed: () async {
@@ -215,7 +262,6 @@ class _CatalogBodyState extends State<CatalogBody> {
                       );
 
                       if (appliedFilters != null) {
-                        // Actualizar el Bloc con los filtros aplicados
                         if (appliedFilters['categories'] != null) {
                           catalogBloc.add(
                               CategoryListSet(appliedFilters['categories']));
@@ -242,64 +288,49 @@ class _CatalogBodyState extends State<CatalogBody> {
               ),
             ),
           ),
-
-          // const SliverToBoxAdapter(
-          //   child: DiscountPopularPriceFilterCatalog(),
-          // ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 12.0),
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: TabBar(
-                  indicator: BoxDecoration(
-                    color: colors.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  labelColor: Colors.white,
-                  unselectedLabelColor: colors.primary,
-                  tabs: [
-                    Tab(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text('Bundles',
-                            style: TextStyle(
-                              fontSize: textStyle.displaySmall!.fontSize,
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
-                    ),
-                    Tab(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text('Products',
-                            style: TextStyle(
-                              fontSize: textStyle.displaySmall!.fontSize,
-                              fontWeight: FontWeight.bold,
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
+        ],
+        body: Column(
+          children: [
+            TabBar(
+              indicator: BoxDecoration(
+                color: colors.primary,
+                borderRadius: BorderRadius.circular(8.0),
               ),
-            ),
-          ),
-
-          // TabBarView para alternar entre los dos contenidos
-          SliverFillRemaining(
-            child: TabBarView(
-              children: [
-                _buildBundles(context), // Contenido de Bundles
-                _buildProducts(context), // Contenido de Products
+              labelColor: Colors.white,
+              unselectedLabelColor: colors.primary,
+              tabs: [
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text('Bundles',
+                        style: TextStyle(
+                          fontSize: textStyle.displaySmall!.fontSize,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text('Products',
+                        style: TextStyle(
+                          fontSize: textStyle.displaySmall!.fontSize,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _buildBundles(context), // Contenido de Bundles
+                  _buildProducts(context), // Contenido de Products
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -13,18 +13,20 @@ class CatalogState extends Equatable {
   final double discount;
   final double price;
   final String term;
+  final bool hasChanged;
 
-  const CatalogState({
-      this.products = const [],
+  const CatalogState(
+      {this.products = const [],
       this.bundles = const [],
       this.categorySelected = const [],
       this.status = CatalogStatus.initial,
       this.page = 1,
-      this.perPage = 10,
-      this.popular = false,
+      this.perPage = 200,
+      this.popular = true,
       this.discount = 0.0,
       this.price = 0.0,
-      this.term = ''});
+      this.term = '',
+      this.hasChanged = false});
 
   CatalogState copyWith(
       {List<Product>? products,
@@ -36,7 +38,8 @@ class CatalogState extends Equatable {
       bool? popular,
       double? discount,
       double? price,
-      String? term}) {
+      String? term,
+      bool hasChanged = false}) {
     return CatalogState(
         products: products ?? this.products,
         bundles: bundles ?? this.bundles,
@@ -47,7 +50,8 @@ class CatalogState extends Equatable {
         popular: popular ?? this.popular,
         discount: discount ?? this.discount,
         price: price ?? this.price,
-        term: term ?? this.term);
+        term: term ?? this.term,
+        hasChanged: hasChanged);
   }
 
   @override
@@ -61,6 +65,7 @@ class CatalogState extends Equatable {
         popular,
         discount,
         price,
-        term
+        term,
+        hasChanged
       ];
 }
