@@ -19,4 +19,7 @@ abstract class IOrderDatasource {
   Future<void> cancelOrder({required String orderId});
 
   Future<Order> fetchOrderById({required String orderId});
+
+  Future<void> reportOrder(
+      {required String orderId, required String description});
 }

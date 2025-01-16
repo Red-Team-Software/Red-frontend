@@ -90,4 +90,19 @@ class OrderDatasourceImpl implements IOrderDatasource {
 
     return res.getValue();
   }
+
+  @override
+  Future<void> reportOrder(
+      {required String orderId, required String description}) async {
+    final res = await httpService.request(
+      '/order/report',
+      'POST',
+      (json) => true,
+      body: {
+        "orderId": orderId,
+        "description": description,
+      },
+    );
+    if (!res.isSuccessful()) throw Exception(res.getError());
+  }
 }

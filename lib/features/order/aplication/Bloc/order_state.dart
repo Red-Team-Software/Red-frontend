@@ -11,11 +11,12 @@ class OrderInitial extends OrderState {}
 
 class OrderLoaded extends OrderState {
   final Order order;
+  final double shippingFee;
 
-  const OrderLoaded({required this.order});
+  const OrderLoaded({required this.order, required this.shippingFee});
 
   @override
-  List<Object?> get props => [order];
+  List<Object?> get props => [order, shippingFee];
 }
 
 class OrderLoading extends OrderState {}

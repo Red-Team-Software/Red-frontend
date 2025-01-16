@@ -10,15 +10,15 @@ import 'package:http/http.dart' as http;
 class OrderMapWidget extends StatefulWidget {
   final double userLatitude;
   final double userLongitude;
-  final double deliveryLatitude;
-  final double deliveryLongitude;
+  final double? deliveryLatitude; // Make optional
+  final double? deliveryLongitude; // Make optional
 
   const OrderMapWidget({
     super.key,
     required this.userLatitude,
     required this.userLongitude,
-    required this.deliveryLatitude,
-    required this.deliveryLongitude,
+    this.deliveryLatitude, // Make optional
+    this.deliveryLongitude, // Make optional
   });
 
   @override
@@ -42,29 +42,39 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
     return SizedBox(
       height: 300,
       width: double.infinity,
-      child: MapWidget(
-        key: const ValueKey("mapWidget"),
-        cameraOptions: CameraOptions(
-          center: Point(
-            coordinates: Position(
-              (widget.userLongitude + widget.deliveryLongitude) / 2,
-              (widget.userLatitude + widget.deliveryLatitude) / 2,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8.0), // Set the border radius here
+        child: MapWidget(
+          key: const ValueKey("mapWidget"),
+          cameraOptions: CameraOptions(
+            center: Point(
+              coordinates: Position(
+                (widget.userLongitude +
+                        (widget.deliveryLongitude ?? widget.userLongitude)) /
+                    2,
+                (widget.userLatitude +
+                        (widget.deliveryLatitude ?? widget.userLatitude)) /
+                    2,
+              ),
             ),
+            zoom: _calculateZoomLevel(),
           ),
-          zoom: _calculateZoomLevel(),
+          onMapCreated: _onMapCreated,
         ),
-        onMapCreated: _onMapCreated,
       ),
     );
   }
 
   double _calculateZoomLevel() {
+    if (widget.deliveryLatitude == null || widget.deliveryLongitude == null) {
+      return 14.0; // Default zoom level when delivery location is not provided
+    }
     // Calculate the zoom level based on the distance between the two points
     final distance = _calculateDistance(
       widget.userLatitude,
       widget.userLongitude,
-      widget.deliveryLatitude,
-      widget.deliveryLongitude,
+      widget.deliveryLatitude!,
+      widget.deliveryLongitude!,
     );
     return 12.0 - (distance / 10.0); // Adjust the divisor as needed
   }
@@ -81,26 +91,28 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
   void _onMapCreated(MapboxMap map) async {
     mapboxMap = map;
 
-    // Fetch route data from Mapbox Directions API
-    final routeGeoJson = await _fetchRoute();
+    if (widget.deliveryLatitude != null && widget.deliveryLongitude != null) {
+      // Fetch route data from Mapbox Directions API
+      final routeGeoJson = await _fetchRoute();
 
-    // Add source to the map
-    await mapboxMap.style.addSource(
-      GeoJsonSource(
-        id: "route",
-        data: routeGeoJson,
-      ),
-    );
+      // Add source to the map
+      await mapboxMap.style.addSource(
+        GeoJsonSource(
+          id: "route",
+          data: routeGeoJson,
+        ),
+      );
 
-    // Add a line layer to display the route
-    await mapboxMap.style.addLayer(
-      LineLayer(
-        id: "route-layer",
-        sourceId: "route",
-        lineColor: Colors.red.value,
-        lineWidth: 5.0,
-      ),
-    );
+      // Add a line layer to display the route
+      await mapboxMap.style.addLayer(
+        LineLayer(
+          id: "route-layer",
+          sourceId: "route",
+          lineColor: Colors.red.value,
+          lineWidth: 5.0,
+        ),
+      );
+    }
 
     // Add markers for user and delivery locations
     await _addMarkers();
@@ -146,18 +158,20 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
       ),
     );
 
-    // Marker for delivery location
-    await pointAnnotationManager.create(
-      PointAnnotationOptions(
-        geometry: Point(
-          coordinates: Position(
-            widget.deliveryLongitude,
-            widget.deliveryLatitude,
+    if (widget.deliveryLatitude != null && widget.deliveryLongitude != null) {
+      // Marker for delivery location
+      await pointAnnotationManager.create(
+        PointAnnotationOptions(
+          geometry: Point(
+            coordinates: Position(
+              widget.deliveryLongitude!,
+              widget.deliveryLatitude!,
+            ),
           ),
+          image: await _loadAssetImage("images/delivery_marker.png"),
         ),
-        image: await _loadAssetImage("images/delivery_marker.png"),
-      ),
-    );
+      );
+    }
   }
 
   Future<Uint8List> _loadAssetImage(String assetPath) async {

@@ -5,6 +5,8 @@ import 'package:GoDeli/presentation/screens/Order/widgets/order_product_card.dar
 import 'package:GoDeli/presentation/screens/Track/widgets/order_info_widget.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_status_widget.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_map_widget.dart';
+import 'package:GoDeli/presentation/widgets/courier/order_courier.dart';
+import 'package:GoDeli/presentation/widgets/courier/searching_courier.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:go_router/go_router.dart';
@@ -50,12 +52,9 @@ class TrackOrderScreen extends StatelessWidget {
                       totalAmount: order.totalAmount,
                     ),
                     const SizedBox(height: 16),
-                    OrderMapWidget(
-                      userLatitude: order.orderDirection.latitude,
-                      userLongitude: order.orderDirection.longitude,
-                      deliveryLatitude: 10.511052,
-                      deliveryLongitude: -66.906131,
-                    ),
+                    order.orderCourier != null
+                        ? OrderCourierCard(courier: order.orderCourier!)
+                        : const SearchingCourier(),
                     const SizedBox(height: 16),
                     Expanded(
                       child: ListView(
@@ -70,6 +69,11 @@ class TrackOrderScreen extends StatelessWidget {
                             ),
                         ],
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    OrderMapWidget(
+                      userLatitude: order.orderDirection.latitude,
+                      userLongitude: order.orderDirection.longitude,
                     ),
                   ],
                 ),
