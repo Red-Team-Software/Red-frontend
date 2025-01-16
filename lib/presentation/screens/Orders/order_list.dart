@@ -108,9 +108,26 @@ class _OrderListScreenState extends State<OrderListScreen> {
             ),
           ),
           body: TabBarView(
+            physics: const BouncingScrollPhysics(),
             children: [
-              _buildOrderList(filteredOrders, colors, textStyles),
-              _buildOrderList(filteredOrders, colors, textStyles),
+              _buildOrderList(
+                orders
+                    .where((order) =>
+                        order.orderState == 'ongoing' ||
+                        order.orderState == 'delivering')
+                    .toList(),
+                colors,
+                textStyles,
+              ),
+              _buildOrderList(
+                orders
+                    .where((order) =>
+                        order.orderState == 'delivered' ||
+                        order.orderState == 'cancelled')
+                    .toList(),
+                colors,
+                textStyles,
+              ),
             ],
           ),
         ),
