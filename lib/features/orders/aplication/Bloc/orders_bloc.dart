@@ -77,7 +77,15 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     try {
       await orderRepository.reportOrder(
           orderId: event.orderId, description: event.description);
-      emit(OrderReportSuccess());
+      final orders =
+          await orderRepository.fetchAllOrders(page: 1, perPage: 100);
+      print(orders.isSuccessful());
+      print(orders.getValue());
+      emit(OrdersLoadSuccess(
+          orders: Orders(orders: orders.getValue()),
+          selectedTab: 'Active',
+          page: 1,
+          perPage: 10));
     } catch (e) {
       emit(OrderReportFailure(error: e.toString()));
     }
