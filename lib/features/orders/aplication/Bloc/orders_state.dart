@@ -13,41 +13,36 @@ class OrdersInitial extends OrdersState {}
 class OrdersLoadInProgress extends OrdersState {}
 
 class OrdersLoadSuccess extends OrdersState {
-  final Orders orders;
+  final Orders activeOrders;
+  final Orders pastOrders;
   final String selectedTab;
-  final int page;
-  final int perPage;
   final String? orderReportError; // New variable
 
   const OrdersLoadSuccess({
-    required this.orders,
+    required this.activeOrders,
+    required this.pastOrders,
     required this.selectedTab,
-    required this.page,
-    required this.perPage,
     this.orderReportError, // Initialize new variable
   });
 
   @override
   List<Object> get props => [
-        orders,
+        activeOrders,
+        pastOrders,
         selectedTab,
-        page,
-        perPage,
         orderReportError ?? ''
       ]; // Update props
 
   OrdersLoadSuccess copyWith({
-    Orders? orders,
+    Orders? activeOrders,
+    Orders? pastOrders,
     String? selectedTab,
-    int? page,
-    int? perPage,
     String? orderReportError,
   }) {
     return OrdersLoadSuccess(
-      orders: orders ?? this.orders,
+      activeOrders: activeOrders ?? this.activeOrders,
+      pastOrders: pastOrders ?? this.pastOrders,
       selectedTab: selectedTab ?? this.selectedTab,
-      page: page ?? this.page,
-      perPage: perPage ?? this.perPage,
       orderReportError: orderReportError ?? this.orderReportError,
     );
   }
@@ -55,17 +50,15 @@ class OrdersLoadSuccess extends OrdersState {
 
 class OrdersLoadFailure extends OrdersState {
   final String error;
-  final int page;
-  final int perPage;
 
   const OrdersLoadFailure({
     required this.error,
-    required this.page,
-    required this.perPage,
   });
 
   @override
-  List<Object> get props => [error, page, perPage];
+  List<Object> get props => [
+        error,
+      ];
 }
 
 class OrderCancelSuccess extends OrdersState {}

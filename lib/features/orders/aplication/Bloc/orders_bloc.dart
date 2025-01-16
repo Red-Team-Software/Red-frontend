@@ -19,18 +19,25 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   void _onOrdersLoaded(OrdersLoaded event, Emitter<OrdersState> emit) async {
     emit(OrdersLoadInProgress());
     try {
-      final orders = await orderRepository.fetchAllOrders();
+      final activeOrdersResult = await orderRepository.fetchActiveOrders();
+      final pastOrdersResult = await orderRepository.fetchPastOrders();
 
-      emit(OrdersLoadSuccess(
-          orders: Orders(orders: orders.getValue()),
+      if (activeOrdersResult.isSuccessful() &&
+          pastOrdersResult.isSuccessful()) {
+        emit(OrdersLoadSuccess(
+          activeOrders: Orders(orders: activeOrdersResult.getValue()),
+          pastOrders: Orders(orders: pastOrdersResult.getValue()),
           selectedTab: 'Active',
-          page: event.page,
-          perPage: event.perPage));
+        ));
+      } else {
+        emit(const OrdersLoadFailure(
+          error: 'Failed to load orders',
+        ));
+      }
     } catch (e) {
       emit(OrdersLoadFailure(
-          error: extractErrorMessage(e.toString()),
-          page: event.page,
-          perPage: event.perPage));
+        error: extractErrorMessage(e.toString()),
+      ));
     }
   }
 
@@ -38,10 +45,9 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     if (state is OrdersLoadSuccess) {
       final currentState = state as OrdersLoadSuccess;
       emit(OrdersLoadSuccess(
-        orders: currentState.orders,
+        activeOrders: currentState.activeOrders,
+        pastOrders: currentState.pastOrders,
         selectedTab: event.selectedTab,
-        page: currentState.page,
-        perPage: currentState.perPage,
       ));
     }
   }
@@ -55,15 +61,21 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       await orderRepository.cancelOrder(orderId: event.orderId);
 
       // Fetch updated orders
-      final orders = await orderRepository.fetchAllOrders();
+      final activeOrdersResult = await orderRepository.fetchActiveOrders();
+      final pastOrdersResult = await orderRepository.fetchPastOrders();
 
-      print(orders.isSuccessful());
-      print(orders.getValue());
-      emit(OrdersLoadSuccess(
-          orders: Orders(orders: orders.getValue()),
+      if (activeOrdersResult.isSuccessful() &&
+          pastOrdersResult.isSuccessful()) {
+        emit(OrdersLoadSuccess(
+          activeOrders: Orders(orders: activeOrdersResult.getValue()),
+          pastOrders: Orders(orders: pastOrdersResult.getValue()),
           selectedTab: 'Active',
-          page: 1,
-          perPage: 10));
+        ));
+      } else {
+        emit(const OrdersLoadFailure(
+          error: 'Failed to load orders',
+        ));
+      }
     } catch (e) {
       print("error en el cancel");
       print(e);
@@ -83,13 +95,22 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             orderReportError: extractErrorMessage(e.toString())));
       }
     } finally {
-      final orders = await orderRepository.fetchAllOrders();
-      emit(OrdersLoadSuccess(
-          orders: Orders(orders: orders.getValue()),
+      final activeOrdersResult = await orderRepository.fetchActiveOrders();
+      final pastOrdersResult = await orderRepository.fetchPastOrders();
+
+      if (activeOrdersResult.isSuccessful() &&
+          pastOrdersResult.isSuccessful()) {
+        emit(OrdersLoadSuccess(
+          activeOrders: Orders(orders: activeOrdersResult.getValue()),
+          pastOrders: Orders(orders: pastOrdersResult.getValue()),
           selectedTab: 'Active',
-          page: 1,
-          perPage: 10,
-          orderReportError: null));
+          orderReportError: null,
+        ));
+      } else {
+        emit(const OrdersLoadFailure(
+          error: 'Failed to load orders',
+        ));
+      }
     }
   }
 
