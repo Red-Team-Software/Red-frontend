@@ -28,7 +28,7 @@ or run it on the bash, in verbose
 ```bash
 flutter run -v
 ```
-## Here are some important project dependencies located in the pubspec file [pubspec.yaml](/pubspec.yaml)
+## Here are some important project dependencies located in the [pubspec.yaml](/pubspec.yaml) file
 * [bloc](https://pub.dev/packages/bloc) `v: ^8.1.4`
 * [firebase_messaging](https://pub.dev/packages/firebase_messaging) `v: ^15.1.4`
 * [equatable](https://pub.dev/packages/equatable) `v: ^2.0.5`
