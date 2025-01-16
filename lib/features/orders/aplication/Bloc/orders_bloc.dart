@@ -19,8 +19,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   void _onOrdersLoaded(OrdersLoaded event, Emitter<OrdersState> emit) async {
     emit(OrdersLoadInProgress());
     try {
-      final orders = await orderRepository.fetchAllOrders(
-          page: event.page, perPage: event.perPage);
+      final orders = await orderRepository.fetchAllOrders();
 
       emit(OrdersLoadSuccess(
           orders: Orders(orders: orders.getValue()),
@@ -56,8 +55,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       await orderRepository.cancelOrder(orderId: event.orderId);
 
       // Fetch updated orders
-      final orders =
-          await orderRepository.fetchAllOrders(page: 1, perPage: 100);
+      final orders = await orderRepository.fetchAllOrders();
 
       print(orders.isSuccessful());
       print(orders.getValue());
@@ -85,8 +83,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             orderReportError: extractErrorMessage(e.toString())));
       }
     } finally {
-      final orders =
-          await orderRepository.fetchAllOrders(page: 1, perPage: 100);
+      final orders = await orderRepository.fetchAllOrders();
       emit(OrdersLoadSuccess(
           orders: Orders(orders: orders.getValue()),
           selectedTab: 'Active',

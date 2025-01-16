@@ -52,14 +52,18 @@ class OrderDatasourceImpl implements IOrderDatasource {
   }
 
   @override
-  Future<List<OrderItem>> fetchAllOrders(
-      {int page = 1, int perPage = 100}) async {
+  Future<List<OrderItem>> fetchAllOrders({String? state}) async {
+    final queryParams = {
+      if (state != null) 'state': state,
+    };
+
     final res = await httpService.request(
       '/order/user/many',
       'GET',
       (json) => (json['orders'] as List)
           .map((order) => OrderItem.fromJson(order))
           .toList(),
+      queryParameters: queryParams,
     );
 
     print("res de fetch all orders");
