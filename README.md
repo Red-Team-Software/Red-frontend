@@ -28,7 +28,7 @@ cd Red-frontend
 ```bash
 flutter run -v
 ```
-## Here some important project dependecies place in file [pubspec.yaml](/pubspec.yaml)
+## Here some important project dependecies placed in file [pubspec.yaml](/pubspec.yaml)
 * [bloc](https://pub.dev/packages/bloc) `v: ^8.1.4`
 * [firebase_messaging](https://pub.dev/packages/firebase_messaging) `v: ^15.1.4`
 * [equatable](https://pub.dev/packages/equatable) `v: ^2.0.5`
