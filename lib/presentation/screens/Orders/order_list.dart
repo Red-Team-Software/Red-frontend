@@ -41,7 +41,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
       // Filter orders based on the selected tab
       List<OrderItem> filteredOrders = orders.where((order) {
         if (selectedTab == 'Active') {
-          return order.orderState == 'ongoing';
+          return order.orderState == 'ongoing' ||
+              order.orderState == 'delivering';
         } else if (selectedTab == 'Past') {
           return order.orderState == 'delivered' ||
               order.orderState == 'cancelled';
@@ -50,122 +51,68 @@ class _OrderListScreenState extends State<OrderListScreen> {
       }).toList();
 
       // Count the orders for each tab
-      int activeCount =
-          orders.where((order) => order.orderState == 'ongoing').length;
+      int activeCount = orders
+          .where((order) =>
+              order.orderState == 'ongoing' || order.orderState == "delivering")
+          .length;
       int pastCount = orders
           .where((order) =>
               order.orderState == 'delivered' ||
               order.orderState == 'cancelled')
           .length;
 
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Order List', style: textStyles.displayLarge),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.push("/", extra: 0),
-          ),
-        ),
-        body: Column(
-          children: [
-            // Centered Tabs to switch between Active and Past Orders
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedTab = 'Active';
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: selectedTab == 'Active'
-                            ? colors.primary
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Text(
-                        'Active Orders ($activeCount)',
-                        style: textStyles.displaySmall?.copyWith(
-                          color: selectedTab == 'Active'
-                              ? Colors.white
-                              : Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16.0),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedTab = 'Past';
-                      });
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: selectedTab == 'Past'
-                            ? colors.primary
-                            : Colors.transparent,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Text(
-                        'Past Orders ($pastCount)',
-                        style: textStyles.displaySmall?.copyWith(
-                          color: selectedTab == 'Past'
-                              ? Colors.white
-                              : Colors.grey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+      return DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Order List', style: textStyles.displayLarge),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => context.push("/", extra: 0),
+            ),
+            bottom: TabBar(
+              indicator: BoxDecoration(
+                color: colors.primary,
+                borderRadius: BorderRadius.circular(8.0),
               ),
+              labelColor: Colors.white,
+              unselectedLabelColor: colors.primary,
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
+              tabs: [
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text('Active Orders ($activeCount)',
+                        style: TextStyle(
+                          fontSize: textStyles.displaySmall!.fontSize,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
+                Tab(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text('Past Orders ($pastCount)',
+                        style: TextStyle(
+                          fontSize: textStyles.displaySmall!.fontSize,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ),
+                ),
+              ],
+              onTap: (index) {
+                setState(() {
+                  selectedTab = index == 0 ? 'Active' : 'Past';
+                });
+              },
             ),
-            const SizedBox(height: 8.0),
-            // ListView of filtered orders
-            Expanded(
-              child: filteredOrders.isEmpty
-                  ? Column(
-                      mainAxisAlignment:
-                          MainAxisAlignment.center, // Centrar verticalmente
-                      crossAxisAlignment:
-                          CrossAxisAlignment.center, // Centrar horizontalmente
-                      children: [
-                          SvgPicture.asset(
-                            'images/empty_bag.svg',
-                            height: 100,
-                            color: colors.primary,
-                          ),
-                          const SizedBox(height: 16),
-                          Center(
-                              child: Text(
-                            'Aún no dispone de alguna orden',
-                            style: textStyles.displaySmall?.copyWith(
-                              color: colors.primary,
-                            ),
-                          )),
-                        ])
-                  : ListView.builder(
-                      itemCount: filteredOrders.length,
-                      itemBuilder: (context, index) {
-                        final order = filteredOrders[index];
-                        return GestureDetector(
-                          onTap: () {
-                            context.push("/order/${order.orderId}");
-                          },
-                          child: OrderCard(orderItem: order),
-                        );
-                      },
-                    ),
-            ),
-          ],
+          ),
+          body: TabBarView(
+            children: [
+              _buildOrderList(filteredOrders, colors, textStyles),
+              _buildOrderList(filteredOrders, colors, textStyles),
+            ],
+          ),
         ),
       );
     } else if (state is OrdersLoadFailure) {
@@ -178,6 +125,42 @@ class _OrderListScreenState extends State<OrderListScreen> {
     } else {
       return Container();
     }
+  }
+
+  Widget _buildOrderList(
+      List<OrderItem> orders, ColorScheme colors, TextTheme textStyles) {
+    return orders.isEmpty
+        ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SvgPicture.asset(
+                'images/empty_bag.svg',
+                height: 100,
+                color: colors.primary,
+              ),
+              const SizedBox(height: 16),
+              Center(
+                  child: Text(
+                'Aún no dispone de alguna orden',
+                style: textStyles.displaySmall?.copyWith(
+                  color: colors.primary,
+                ),
+              )),
+            ],
+          )
+        : ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return GestureDetector(
+                onTap: () {
+                  context.push("/order/${order.orderId}");
+                },
+                child: OrderCard(orderItem: order),
+              );
+            },
+          );
   }
 }
 
