@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
+import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
@@ -37,6 +38,20 @@ class _OrderListScreenState extends State<OrderListScreen> {
       return const Center(child: CircularProgressIndicator());
     } else if (state is OrdersLoadSuccess) {
       final orders = state.orders.orders;
+
+      // Show snackbar if there is an order report error
+      if (state.orderReportError != null &&
+          state.orderReportError!.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          CustomSnackBar.show(
+            context,
+            type: SnackBarType.error,
+            title: 'Report error',
+            message: state.orderReportError!,
+          );
+          context.read<OrdersBloc>().add(ClearOrderReportErrorEvent());
+        });
+      }
 
       // Filter orders based on the selected tab
       List<OrderItem> filteredOrders = orders.where((order) {

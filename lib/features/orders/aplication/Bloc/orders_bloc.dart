@@ -13,6 +13,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     on<OrdersTabChanged>(_onOrdersTabChanged);
     on<OrderCancelled>(_onOrderCancelled);
     on<OrderReported>(_onOrderReported);
+    on<ClearOrderReportErrorEvent>(_onClearOrderReportError);
   }
 
   void _onOrdersLoaded(OrdersLoaded event, Emitter<OrdersState> emit) async {
@@ -73,21 +74,32 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   }
 
   void _onOrderReported(OrderReported event, Emitter<OrdersState> emit) async {
+    OrdersState currentState = state;
     emit(OrdersLoadInProgress());
     try {
       await orderRepository.reportOrder(
           orderId: event.orderId, description: event.description);
+    } catch (e) {
+      if (currentState is OrdersLoadSuccess) {
+        emit(currentState.copyWith(
+            orderReportError: extractErrorMessage(e.toString())));
+      }
+    } finally {
       final orders =
           await orderRepository.fetchAllOrders(page: 1, perPage: 100);
-      print(orders.isSuccessful());
-      print(orders.getValue());
       emit(OrdersLoadSuccess(
           orders: Orders(orders: orders.getValue()),
           selectedTab: 'Active',
           page: 1,
-          perPage: 10));
-    } catch (e) {
-      emit(OrderReportFailure(error: e.toString()));
+          perPage: 10,
+          orderReportError: null));
+    }
+  }
+
+  void _onClearOrderReportError(
+      ClearOrderReportErrorEvent event, Emitter<OrdersState> emit) {
+    if (state is OrdersLoadSuccess) {
+      emit((state as OrdersLoadSuccess).copyWith(orderReportError: null));
     }
   }
 }

@@ -51,3 +51,5 @@ class OrderReported extends OrdersEvent {
   @override
   List<Object> get props => [orderId, description];
 }
+
+class ClearOrderReportErrorEvent extends OrdersEvent {}
