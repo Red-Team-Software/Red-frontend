@@ -17,6 +17,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       : super(const CatalogState()) {
     on<ItemsFetched>(_onItemsFetched);
     on<CategorySet>(_onCategorySet);
+    on<CategoryListSet>(_onCategoryListSet);
     on<PopularSet>(_onPopularSet);
     on<DiscountSet>(_onDiscountSet);
     on<PriceSet>(_onPriceSet);
@@ -24,6 +25,8 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     on<CatalogLoading>(_onCatalogLoading);
     on<CatalogIsEmpty>(_onCatalogIsEmpty);
     on<CatalogError>(_onCatalogError);
+    on<FetchItems>(fetchItems);
+    add(const FetchItems());
   }
 
   void _onItemsFetched(ItemsFetched event, Emitter<CatalogState> emit) {
@@ -35,7 +38,12 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void _onCategorySet(CategorySet event, Emitter<CatalogState> emit) {
-    print('entre');
+    if (event.category == 'all') {
+      emit(state.copyWith(
+        categorySelected: [],
+      ));
+      return;
+    }
     var cate = List<String>.from(state.categorySelected);
 
     cate.any((element) => element == event.category)
@@ -44,7 +52,12 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     emit(state.copyWith(
       categorySelected: cate,
     ));
-    fetchItems();
+  }
+
+  void _onCategoryListSet(CategoryListSet event, Emitter<CatalogState> emit) {
+    emit(state.copyWith(
+      categorySelected: event.category,
+    ));
   }
 
   void _onPopularSet(PopularSet event, Emitter<CatalogState> emit) {
@@ -52,28 +65,24 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     emit(state.copyWith(
       popular: popular,
     ));
-    fetchItems();
   }
 
   void _onDiscountSet(DiscountSet event, Emitter<CatalogState> emit) {
     emit(state.copyWith(
       discount: event.discount,
     ));
-    fetchItems();
   }
 
   void _onPriceSet(PriceSet event, Emitter<CatalogState> emit) {
     emit(state.copyWith(
       price: event.price,
     ));
-    fetchItems();
   }
 
   void _onTermSet(TermSet event, Emitter<CatalogState> emit) {
     emit(state.copyWith(
       term: event.term,
     ));
-    fetchItems();
   }
 
   void _onCatalogLoading(CatalogLoading event, Emitter<CatalogState> emit) {
@@ -96,9 +105,11 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     ));
   }
 
-  void fetchItems() async {
+  void fetchItems(FetchItems event, Emitter<CatalogState> emit) async {
     print('Categoria tal: ${state.categorySelected}');
     add(const CatalogLoading());
+      print('Pase esto');
+
     try {
       final resPro = await productsRepository.getProducts(
         category: state.categorySelected,
@@ -129,6 +140,7 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
         add(CatalogError(resPro.getError().toString()));
       }
     } catch (e) {
+      print('Entre a error');
       add(CatalogError(e.toString()));
     }
   }

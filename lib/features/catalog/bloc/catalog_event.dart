@@ -48,3 +48,12 @@ class CatalogError extends CatalogEvent {
   final String error;
   const CatalogError(this.error);
 }
+
+class FetchItems extends CatalogEvent {
+  const FetchItems();
+}
+
+class CategoryListSet extends CatalogEvent {
+  final List<String> category;
+  const CategoryListSet(this.category);
+}

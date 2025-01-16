@@ -14,8 +14,8 @@ class CatalogState extends Equatable {
   final double price;
   final String term;
 
-  const CatalogState(
-      {this.products = const [],
+  const CatalogState({
+      this.products = const [],
       this.bundles = const [],
       this.categorySelected = const [],
       this.status = CatalogStatus.initial,
