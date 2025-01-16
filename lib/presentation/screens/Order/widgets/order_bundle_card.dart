@@ -1,6 +1,5 @@
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/cart/domain/product_cart.dart';
 
 class OrderBundleCard extends StatelessWidget {
   final BundleCart item;
