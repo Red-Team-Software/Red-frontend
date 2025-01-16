@@ -15,7 +15,7 @@ class OrderRepositoryImpl implements IOrderRepository {
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,
-    required String address,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   }) async {
@@ -25,7 +25,7 @@ class OrderRepositoryImpl implements IOrderRepository {
         currency: currency,
         paymentMethod: paymentMethod,
         stripePaymentMethod: stripePaymentMethod,
-        address: address,
+        idUserDirection: idUserDirection,
         bundles: bundles,
         products: products,
       );
@@ -72,6 +72,18 @@ class OrderRepositoryImpl implements IOrderRepository {
     } catch (e) {
       print("error en el rerpo");
       print(e);
+    }
+  }
+
+  @override
+  Future<void> reportOrder(
+      {required String orderId, required String description}) async {
+    try {
+      await datasource.reportOrder(orderId: orderId, description: description);
+    } catch (e) {
+      print("error en el reporte de orden");
+      print(e);
+      throw Exception(e);
     }
   }
 }

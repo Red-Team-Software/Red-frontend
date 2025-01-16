@@ -9,7 +9,7 @@ abstract class IOrderDatasource {
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,
-    required String address,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   });
@@ -19,4 +19,7 @@ abstract class IOrderDatasource {
   Future<void> cancelOrder({required String orderId});
 
   Future<Order> fetchOrderById({required String orderId});
+
+  Future<void> reportOrder(
+      {required String orderId, required String description});
 }

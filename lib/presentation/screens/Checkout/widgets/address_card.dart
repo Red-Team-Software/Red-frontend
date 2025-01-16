@@ -1,9 +1,12 @@
+import 'package:GoDeli/presentation/screens/profile/widgets/addess_modal.dart';
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 class AddressCard extends StatelessWidget {
   final String title;
   final String address;
   final bool isSelected;
+  final LatLng location;
   final VoidCallback onSelect;
 
   const AddressCard({
@@ -11,6 +14,7 @@ class AddressCard extends StatelessWidget {
     required this.title,
     required this.address,
     required this.isSelected,
+    required this.location,
     required this.onSelect,
   });
 
@@ -30,7 +34,21 @@ class AddressCard extends StatelessWidget {
         trailing: IconButton(
           icon: const Icon(Icons.edit),
           onPressed: () {
-            // TODO: Lógica para editar dirección
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => AddressModal(
+                onFinished: (LatLng location, String addressName, bool isUpdate,
+                    String locationName) async {
+                  print("FGinal$location");
+                  return;
+                },
+                initialLocation:
+                    location, // Replace with actual initial location
+                initialLocationName: title,
+                initialAddressName: address,
+              ),
+            );
           },
         ),
         onTap: onSelect,

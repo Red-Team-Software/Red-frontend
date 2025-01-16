@@ -41,3 +41,13 @@ class OrderCancelled extends OrdersEvent {
   @override
   List<Object> get props => [orderId];
 }
+
+class OrderReported extends OrdersEvent {
+  final String orderId;
+  final String description;
+
+  const OrderReported({required this.orderId, required this.description});
+
+  @override
+  List<Object> get props => [orderId, description];
+}

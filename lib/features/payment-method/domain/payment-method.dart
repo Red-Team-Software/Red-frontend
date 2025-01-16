@@ -16,7 +16,7 @@ class PaymentMethod {
       id: json['id'],
       name: json['name'],
       state: json['state'],
-      imageUrl: json['imageUrl'],
+      imageUrl: json['image'],
     );
   }
 
@@ -25,7 +25,7 @@ class PaymentMethod {
       'id': id,
       'name': name,
       'state': state,
-      'imageUrl': imageUrl,
+      'image': imageUrl,
     };
   }
 }

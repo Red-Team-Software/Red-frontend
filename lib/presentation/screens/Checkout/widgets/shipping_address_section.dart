@@ -70,6 +70,8 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                     title: address.title,
                     address: address.location,
                     isSelected: address == state.selectedAddress,
+                    location:
+                        LatLng(address.lat.toDouble(), address.lng.toDouble()),
                     onSelect: () {
                       checkoutBloc.add(SelectAddress(address));
                     },
@@ -183,14 +185,17 @@ class _ShippingAddressSectionState extends State<ShippingAddressSection> {
                         ),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: title.isNotEmpty &&
-                                location != 'Select on map'
-                            ? () {
-                                bloc.add(
-                                    AddNewAddress(title: title, location: location, lat: lat, lng: lng));
-                                Navigator.pop(context);
-                              }
-                            : null,
+                        onPressed:
+                            title.isNotEmpty && location != 'Select on map'
+                                ? () {
+                                    bloc.add(AddNewAddress(
+                                        title: title,
+                                        location: location,
+                                        lat: lat,
+                                        lng: lng));
+                                    Navigator.pop(context);
+                                  }
+                                : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
