@@ -93,7 +93,7 @@ class OrderEntity {
         return OrderEntity(
           id: orderJson['orderId'] as String? ?? '',
           orderState: orderJson['orderState'][0]['state'] as String? ?? '',
-          orderCreatedDate: orderJson['orderCreatedDate'] as String? ?? '',
+          orderCreatedDate: orderJson['orderState'][0]['date'] as String? ?? '',
           orderTimeCreated: orderJson['orderTimeCreated'] as String? ?? '',
           totalAmount: (orderJson['totalAmount'] as num).toDouble(),
           orderDirection:

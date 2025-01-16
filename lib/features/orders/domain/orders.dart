@@ -56,8 +56,8 @@ class OrderItem {
           amount: 0.0, // Update as per your requirement
         ),
         orderDirection: OrderDirection(
-          latitude: 0,
-          longitude: 0,
+          latitude: 10.472567,
+          longitude: -66.765795,
         ),
         products: [], // Update as per your requirement
         bundles: [], // Update as per your requirement
