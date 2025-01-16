@@ -3,6 +3,7 @@ import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
 class OrderMapWidget extends StatefulWidget {
   final double userLatitude;
@@ -58,28 +59,14 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
   void _onMapCreated(MapboxMap map) async {
     mapboxMap = map;
 
-    // Define GeoJSON source for the route
-    final routeGeoJson = jsonEncode({
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "geometry": {
-            "type": "LineString",
-            "coordinates": [
-              [widget.userLongitude, widget.userLatitude],
-              [widget.deliveryLongitude, widget.deliveryLatitude]
-            ]
-          }
-        }
-      ]
-    });
+    // Fetch route data from Mapbox Directions API
+    final routeGeoJson = await _fetchRoute();
 
     // Add source to the map
     await mapboxMap.style.addSource(
       GeoJsonSource(
         id: "route",
-        data: routeGeoJson as String?,
+        data: routeGeoJson,
       ),
     );
 
@@ -97,6 +84,29 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
     await _addMarkers();
   }
 
+  Future<String> _fetchRoute() async {
+    final response = await http.get(
+      Uri.parse(
+        'https://api.mapbox.com/directions/v5/mapbox/driving/${widget.userLongitude},${widget.userLatitude};${widget.deliveryLongitude},${widget.deliveryLatitude}?geometries=geojson&access_token=pk.eyJ1IjoiZGltZWJyaWkiLCJhIjoiY201d3B5eWJ0MDBxYzJpcHRleTA2MjBlZyJ9.asGCuRxG-jUItZNv4k-3xw',
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return jsonEncode({
+        "type": "FeatureCollection",
+        "features": [
+          {
+            "type": "Feature",
+            "geometry": data['routes'][0]['geometry'],
+          }
+        ]
+      });
+    } else {
+      throw Exception('Failed to load route');
+    }
+  }
+
   Future<void> _addMarkers() async {
     final pointAnnotationManager =
         await mapboxMap.annotations.createPointAnnotationManager();
@@ -110,7 +120,7 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
             widget.userLatitude,
           ),
         ),
-        image: await _loadAssetImage("assets/user_marker.png"),
+        image: await _loadAssetImage("images/user_marker.png"),
       ),
     );
 
@@ -123,7 +133,7 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
             widget.deliveryLatitude,
           ),
         ),
-        image: await _loadAssetImage("assets/delivery_marker.png"),
+        image: await _loadAssetImage("images/delivery_marker.png"),
       ),
     );
   }
