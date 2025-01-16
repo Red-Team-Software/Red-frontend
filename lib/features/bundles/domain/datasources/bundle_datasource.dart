@@ -1,10 +1,16 @@
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 
-abstract class IBundleDatasource{
-
+abstract class IBundleDatasource {
   Future<Bundle> getBundleById(String id);
-  Future<List<Bundle>> getBundlesPaginated({int page = 1, int perPage = 10, List<String>? category, String? popular, double? discount});
-  
+  Future<List<Bundle>> getBundlesPaginated(
+      {int page = 1,
+      int perPage = 10,
+      List<String>? category,
+      String? popular,
+      double? discount,
+      double? price,
+      String? term});
+
   Future<List<Bundle>> searchBundles(
-    {int page = 1, int perPage = 10, required String term});
+      {int page = 1, int perPage = 10, required String term});
 }

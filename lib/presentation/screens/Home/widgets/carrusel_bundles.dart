@@ -47,7 +47,7 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
     return BlocProvider(
       create: (_) => getIt<BundleOffersBloc>(),
       child: SizedBox(
-        height: 600, // Ajusta la altura según tus necesidades
+        height: 500, // Ajusta la altura según tus necesidades
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -75,7 +75,7 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
             const SizedBox(height: 16),
             // BlocBuilder para los bundles
             SizedBox(
-              height: 500,
+              height: 400,
               child: BlocBuilder<BundleOffersBloc, BundleOffersState>(
                 builder: (context, state) {
                   if (state is BundleOffersError) {

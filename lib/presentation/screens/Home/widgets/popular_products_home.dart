@@ -1,5 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/products/application/popular_products/popular_products_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,7 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return BlocProvider(
       create: (_) => getIt<PopularProductsBloc>(),
@@ -58,15 +61,27 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text('Popular', style: textStyles.displayLarge),
+                TranslationWidget(
+                  message:'Popular',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      style: textStyles.displayLarge
+                    ), 
+                  ),
                 GestureDetector(
                   onTap: () => context.push('/catalog'),
-                  child: Text(
-                    'view all',
-                    textAlign: TextAlign.end,
+                  child: 
+                  TranslationWidget(
+                  message:'view all',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      textAlign: TextAlign.end,
                     style: textStyles.displaySmall?.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold),
+                    ), 
                   ),
                 ),
               ],
@@ -79,7 +94,7 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
               if (state is PopularProductsError) {
                 return Center(
                   child: Text(
-                    'Algo inesperado pasó',
+                    'Something went wrong',
                     style: textStyles.bodyLarge?.copyWith(
                       color: theme.colorScheme.error,
                       fontWeight: FontWeight.bold,
@@ -92,7 +107,7 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
                 if (state.products.isEmpty) {
                   return Center(
                       child: Text(
-                    'No hay productos populares',
+                    'There are no products available',
                     style: textStyles.bodyLarge?.copyWith(
                       color: theme.colorScheme.error,
                       fontWeight: FontWeight.bold,

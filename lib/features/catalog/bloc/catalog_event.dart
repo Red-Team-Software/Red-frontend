@@ -26,6 +26,16 @@ class DiscountSet extends CatalogEvent {
   DiscountSet(double discount) : discount = double.parse(discount.toStringAsFixed(2));
 }
 
+class PriceSet extends CatalogEvent {
+  final double price;
+  PriceSet(double price) : price = double.parse(price.toStringAsFixed(2));
+}
+
+class TermSet extends CatalogEvent {
+  final String term;
+  const TermSet(this.term);
+}
+
 class CatalogLoading extends CatalogEvent {
   const CatalogLoading();
 }
