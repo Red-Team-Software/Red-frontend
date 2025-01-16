@@ -20,24 +20,43 @@ class BundleRepositoryImpl implements IBundleRepository {
   }
 
   @override
-  Future<Result<List<Bundle>>> getBundlesPaginated({ int page = 1, int perPage = 10, List<String>? category, String? popular, double? discount }) async {
+  Future<Result<List<Bundle>>> getBundlesPaginated({
+    int page = 1,
+    int perPage = 10,
+    List<String>? category,
+    String? popular,
+    double? discount,
+    double? price,
+    String? term,
+  }) async {
     try {
-      final bundles = await bundleDatasource.getBundlesPaginated(category: category, discount: discount, page: page, perPage: perPage, popular: popular);
+      final bundles = await bundleDatasource.getBundlesPaginated(
+          category: category,
+          discount: discount,
+          page: page,
+          perPage: perPage,
+          popular: popular,
+          price: price,
+          term: term);
       return Result<List<Bundle>>.success(bundles);
     } catch (error) {
       return Result<List<Bundle>>.makeError(Exception(error.toString()));
     }
   }
-  
+
   @override
-  Future<Result<List<Bundle>>> searchBundles({int page = 1, int perPage = 10, required String term}) async {
+  Future<Result<List<Bundle>>> searchBundles(
+      {int page = 1, int perPage = 10, required String term}) async {
     try {
-      final bundles = await bundleDatasource.searchBundles(page: page, perPage: perPage, term: term);
+      final bundles = await bundleDatasource.searchBundles(
+          page: page, perPage: perPage, term: term);
       return Result<List<Bundle>>.success(bundles);
     } on DioException catch (dioError) {
-      return Result<List<Bundle>>.makeError(Exception('Dio error: ${dioError.toString()}'));
+      return Result<List<Bundle>>.makeError(
+          Exception('Dio error: ${dioError.toString()}'));
     } catch (error, _) {
-      return Result<List<Bundle>>.makeError(Exception('El error es este: ${error.toString()}'));
+      return Result<List<Bundle>>.makeError(
+          Exception('El error es este: ${error.toString()}'));
     }
   }
 }

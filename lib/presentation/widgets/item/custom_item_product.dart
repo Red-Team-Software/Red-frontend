@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
@@ -21,6 +22,7 @@ class CustomItemProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartBloc = context.watch<CartBloc>();
     final textStyle = theme.textTheme;
+    final language = context.watch<LanguagesCubit>().state.selected.language;
 
     return GestureDetector(
       onTap: () {
@@ -78,7 +80,7 @@ class CustomItemProduct extends StatelessWidget {
                   children: [
                     TranslationWidget(
                       message: current.name,
-                      toLanguage: 'Spanish',
+                      toLanguage: language,
                       builder:(translatedMessage) => Text(
                       translatedMessage,
                       style: textStyle.displaySmall?.copyWith(
@@ -91,14 +93,18 @@ class CustomItemProduct extends StatelessWidget {
                     const SizedBox(height: 4),
 
                     // Descripción del producto
-                    Text(
-                      current.description,
+                    TranslationWidget(
+                      message: current.description,
+                      toLanguage: language,
+                      builder:(translatedMessage) => Text(
+                      translatedMessage,
                       style: textStyle.bodySmall?.copyWith(
                         color: Colors.white,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                    ),
+                    )),
+                    
                     const SizedBox(height: 8),
 
                     // Precio y botón de acción

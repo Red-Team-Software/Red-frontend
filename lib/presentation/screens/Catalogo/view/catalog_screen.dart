@@ -38,12 +38,17 @@ class CatalogScreenView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    final textStyle = Theme.of(context).textTheme;
+
     final itemsCountCart =
         context.select((CartBloc bloc) => bloc.state.totalItems);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Top Deals'),
+        title:  Text('Catalog',
+        style: textStyle.displayLarge,
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -62,12 +67,13 @@ class CatalogScreenView extends StatelessWidget {
         onPressed: () => context.push('/cart'),
         isExtended: true,
         label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.00),
+          padding: const EdgeInsets.symmetric(horizontal: 16.00, vertical: 8.0),
           child: Row(
             children: [
               const Icon(Icons.shopping_cart),
               const SizedBox(width: 8.0),
-              Text('$itemsCountCart items in cart'),
+              Text('$itemsCountCart items in cart', style: textStyle.displaySmall!.copyWith(color: Colors.white)
+              ),
             ],
           ),
         ),

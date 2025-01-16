@@ -174,14 +174,14 @@ class BundleHomeCard extends StatelessWidget {
                     current.promotions[0].discount > 0)
                   Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 4.0),
+                        horizontal: 12.0, vertical: 8.0),
                     decoration: BoxDecoration(
                       color: theme.colorScheme.primary,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      '-${current.promotions[0].discount * 100}%',
-                      style: theme.textTheme.bodyLarge?.copyWith(
+                      '${(current.promotions[0].discount * 100).floor()}%',
+                      style: theme.textTheme.displaySmall?.copyWith(
                         color: theme.colorScheme.secondary,
                         fontWeight: FontWeight.bold,
                       ),
