@@ -24,7 +24,7 @@ cd Red-frontend
    
 3. Select the main.dart file in the lib folder and run it. Select the device to use and continue with the development.
 
-   for verboses
+or run it on the bash, in verbose
 ```bash
 flutter run -v
 ```
