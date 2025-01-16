@@ -1,26 +1,32 @@
 # GoDeli
 
-A Flutter project. It's an ecomerce that sales products and bundles and allowed you to trak yours orders
+A Flutter project. It's an ecomerce that sales products and bundles and allowed you to trak yours orders.
+<img src="/images/logo.png" alt="Logo-app" width="350">
 
-<img src="/images/logo.png" alt="Logo-app" width="300">
+Application made for the software development subject project, for the RED-TEAM
+<img src="/images/phoenix.png" alt="Logo-Team" width="300">
+
+## Team Members
+
+*   [Alessandro Valsania](https://github.com/ValsaniaUCAB)
+*   [Brayan Mitchell](https://github.com/bratik121)
+*   [Eduardo Rumbos](https://github.com/rumbose)
 
 ## Getting Started
 
 # Dev
 
-1. Copiar env.template y llenar las variables de entorno
-2. Si hay cambios en entidades de Isar, hay que ejecutar el comando
+1. Clone the repository. Make sure you have the VSCode Flutter and Dart extensions
+   ```bash
+git clone [https://github.com/Red-Team-Software/Red-frontend.git](https://github.com/Red-Team-Software/Red-frontend.git)
+cd Red-frontend
+
+2. Install the dependencies. `flutter pub get`
+   
+3. Select the main.dart file in the lib folder and run it. Select the device to use and continue with the development.
+
+   for verbose
 ```
-flutter pub run build_runner build
+flutter run -v
 ```
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
