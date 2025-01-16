@@ -39,10 +39,11 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
 
   // Password validation
   bool validatePassword(String value) {
-    final hasUppercase = value.contains(RegExp(r'[A-Z]'));
-    final hasLowercase = value.contains(RegExp(r'[a-z]'));
-    final hasDigit = value.contains(RegExp(r'\d'));
-    return value.length >= 8 && hasUppercase && hasLowercase && hasDigit;
+    final hasUppercase = value.contains(RegExp(r'[A-Z]')); // Al menos una mayúscula
+    final hasLowercase = value.contains(RegExp(r'[a-z]')); // Al menos una minúscula
+    final hasDigit = value.contains(RegExp(r'\d')); // Al menos un número
+    final hasSpecialCharacter = value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]')); // Al menos un carácter especial
+    return value.length >= 8 && hasUppercase && hasLowercase && hasDigit && hasSpecialCharacter;
   }
 
   @override
@@ -103,7 +104,7 @@ class _EmailPassComponentState extends State<EmailPassComponent> {
                 passError = validatePassword(pass)
                     ? null
                     : "Password must have at least:\n"
-                        "1 uppercase letter, 1 lowercase letter, 1 digit, and 8 characters";
+                        "1 uppercase letter, 1 lowercase letter, 1 digit, 1 especial character, and 8 characters";
                 confirmPass = '';
                 confirmPassController.clear();
                 confirmPassError = null;
