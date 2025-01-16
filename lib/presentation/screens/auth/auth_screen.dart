@@ -38,6 +38,7 @@ class _AuthScreenState extends State<AuthScreen> {
   // Direction
   LatLng? selectedLocation;
   String addressName = '';
+  String direction = '';
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +64,8 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   Widget _buildAuthScreen(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+
     Future<Uint8List?> compressFile(String file) async {
       return await FlutterImageCompress.compressWithFile(
         file,
@@ -97,15 +100,12 @@ class _AuthScreenState extends State<AuthScreen> {
       } else {
         image = null;
       }
-      final addressDto = AddUserDirectionListDto(
-        directions: [
-          AddUserDirectionDto(
-            name: addressName,
-            favorite: true,
-            lat: selectedLocation!.latitude,
-            lng: selectedLocation!.longitude,
-          ),
-        ],
+      final addressDto = AddUserDirectionDto(
+        name: addressName,
+        direction: direction,
+        favorite: true,
+        lat: selectedLocation!.latitude,
+        lng: selectedLocation!.longitude,
       );
       context.read<AuthBloc>().add(
             RegisterEvent(
@@ -145,21 +145,36 @@ class _AuthScreenState extends State<AuthScreen> {
         onFinished: handleRegister,
         onChangeLocation: (location) => selectedLocation = location,
         onChangeAddressName: (addressName) => this.addressName = addressName,
+        onChangeDirection: (direction) => this.direction = direction,
       ),
     ];
 
     return Scaffold(
-        body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Center(
-        child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              top: MediaQuery.of(context).padding.top,
-              bottom: MediaQuery.of(context).viewInsets.bottom +
-                  20.0, // Ajuste para el teclado
-            ),
-            child: screens[_currentIndex]),
-      ).animate().moveY(begin: 100, end: 0).fadeIn(duration: 500.ms),
-    ));
+      body: Stack(children: [
+        if(_currentIndex > 0) Positioned(
+              top: 40,
+              left: 5,
+              child: IconButton(
+                icon: Icon(Icons.arrow_back, color: colors.primary),
+                onPressed: () {
+                  onChangeIndex(
+                      _currentIndex - 1); // Cambiar a la pantalla de login
+                },
+              ),
+            ).animate().fadeIn(),
+        Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child:Center(
+            child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top,
+                  bottom: MediaQuery.of(context).viewInsets.bottom +
+                      20.0, // Ajuste para el teclado
+                ),
+                child: screens[_currentIndex]),
+          ).animate().moveY(begin: 100, end: 0).fadeIn(duration: 500.ms),
+      ),
+        ]),
+    );
   }
 }

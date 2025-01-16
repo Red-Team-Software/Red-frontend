@@ -12,9 +12,9 @@ class CategoryResponse {
   CategoryResponse({required this.id, required this.name, this.icon = '', this.products = const [], this.bundles = const []});
 
   factory CategoryResponse.fromJson(Map<String, dynamic> json) => CategoryResponse(
-        id: json["categoryId"],
-        name: json["categoryName"],
-        icon: json["categoryImage"] ?? '',
+        id: json["id"],
+        name: json["name"],
+        icon: json["image"] ?? '',
     );
   
   factory CategoryResponse.fromProductJson(Map<String, dynamic> json) => CategoryResponse(

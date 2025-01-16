@@ -9,7 +9,7 @@ class AddUserDirectionResponse {
 
   factory AddUserDirectionResponse.fromJson(Map<String, dynamic> json) {
     return AddUserDirectionResponse(
-      id: json['userId'],
+      id: json['id'],
     );
   }
 

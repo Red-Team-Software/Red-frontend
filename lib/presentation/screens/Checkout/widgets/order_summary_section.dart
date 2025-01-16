@@ -137,6 +137,8 @@ class OrderSummarySection extends StatelessWidget {
             builder: (context, state) {
               return ElevatedButton(
                 onPressed: () {
+                  print(cartBloc.state.bundles.map((bundle) =>
+                      {'id': bundle.bundle.id, 'quantity': bundle.quantity}));
                   context.read<CheckoutBloc>().add(
                         ProcessPayment(
                           paymentId: state.selectedPaymentMethod?.id ?? '',
@@ -144,7 +146,7 @@ class OrderSummarySection extends StatelessWidget {
                           currency: 'usd',
                           paymentMethod: "card",
                           stripePaymentMethod: 'pm_card_threeDSecureOptional',
-                          address: state.selectedAddress?.location ?? '',
+                          address: state.selectedAddress?.id ?? '',
                           bundles: cartBloc.state.bundles
                               .map((bundle) => {
                                     'id': bundle.bundle.id,

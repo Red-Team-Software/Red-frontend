@@ -20,7 +20,6 @@ class AuthDatasource implements IAuthDataSource {
       (json) => LoginResponse.fromJson(json),
       body: loginDto.toJson(),
     );
-    print('Entre en este peo');
     if (!response.isSuccessful()) {
       return Result.makeError(
           Exception('Failed to login: ${response.getError()}'));

@@ -3,6 +3,6 @@ import 'package:GoDeli/features/wallet/application/dto/add_funds_pago_movil_dto.
 import 'package:GoDeli/features/wallet/application/dto/add_funds_zelle_dto.dart';
 
 abstract class IWalletDatasource {
-  Future<Result<void>> addFundsPagoMovil(AddFundsPagoMovilDto addFundsPagoMovilDto);
-  Future<Result<void>> addFundsZelle(AddFundsZelleDto addFundsZelleDto);
+  Future<Result<bool>> addFundsPagoMovil(AddFundsPagoMovilDto addFundsPagoMovilDto);
+  Future<Result<bool>> addFundsZelle(AddFundsZelleDto addFundsZelleDto);
 }

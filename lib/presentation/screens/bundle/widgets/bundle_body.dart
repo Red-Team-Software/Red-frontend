@@ -8,14 +8,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BundleBody extends StatelessWidget {
   final ThemeData theme;
-  const BundleBody({super.key, required this.theme});
+  final String idBundle;
+  const BundleBody({super.key, required this.theme, required this.idBundle});
 
   @override
   Widget build(BuildContext context) {
+
+    final textStyles = Theme.of(context).textTheme;
+
     return SafeArea(
       child: Scaffold(
         body: BlocBuilder<BundleDetailsBloc, BundleDetailsState>(
           builder: (context, state) {
+            final Bundle newBundle = Bundle(
+              id: idBundle,
+              name: state.bundle.name,
+              description: state.bundle.description,
+              price: state.bundle.price,
+              imageUrl: state.bundle.imageUrl,
+              currency: state.bundle.currency,
+              categories: state.bundle.categories,
+              promotions: state.bundle.promotions,
+              products: state.bundle.products,
+              expirationDate: state.bundle.expirationDate,
+              inStock: state.bundle.inStock,
+              measurement: state.bundle.measurement,
+              weight: state.bundle.weight,
+            );
             switch (state.status) {
               case BundleDetailsStatus.loading:
               case BundleDetailsStatus.initial:
@@ -31,15 +50,16 @@ class BundleBody extends StatelessWidget {
 
               case BundleDetailsStatus.loaded:
                 return DetailsView(
-                    images: state.bundle.imageUrl,
-                    name: state.bundle.name,
-                    description: state.bundle.description,
-                    price: state.bundle.price,
-                    currency: state.bundle.currency,
-                    promotions: state.bundle.promotions,
-                    categories: state.bundle.categories,
-                    bundleProducts: state.bundle.products,
-                    buttonWidget: buttonWidget(context, state.bundle));
+                    images: newBundle.imageUrl,
+                    name: newBundle.name,
+                    description: newBundle.description,
+                    price: newBundle.price,
+                    currency: newBundle.currency,
+                    promotions: newBundle.promotions,
+                    categories: newBundle.categories,
+                    bundleProducts: newBundle.products,
+                    expirationDate: newBundle.expirationDate,
+                    buttonWidget: buttonWidget(context, newBundle));
             }
           },
         ),
@@ -49,6 +69,8 @@ class BundleBody extends StatelessWidget {
 
   Widget buttonWidget(BuildContext context, Bundle bundle) {
     final cartBloc = context.watch<CartBloc>();
+    final textStyles = Theme.of(context).textTheme;
+
     return Flex(
       direction: Axis.vertical,
       children: [
@@ -58,16 +80,14 @@ class BundleBody extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.symmetric(vertical: 24),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
                 'Add to Cart',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
+                style: textStyles.displaySmall?.copyWith(
                   color: Colors.white,
                 ),
               ),

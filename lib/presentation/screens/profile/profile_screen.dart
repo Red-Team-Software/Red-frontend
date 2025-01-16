@@ -2,7 +2,8 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
-import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/delete_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/update_user_direction_dto.dart';
 import 'package:GoDeli/features/user/domain/dto/update_user_dto.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
@@ -96,57 +97,36 @@ class _ProfileScreenState extends State<_ProfileScreen> {
     );
   }
 
-  DeleteUpdateUserDirectionListDto _buildDeleteUserDirectionDto(
+  DeleteUserDirectionDto _buildDeleteUserDirectionDto(
       UserDirection direction) {
-    return DeleteUpdateUserDirectionListDto(
-      directions: [
-        DeleteUpdateUserDirectionDto(
-          id: direction.id,
-          name: direction.addressName,
-          favorite: direction.isFavorite,
-          lat: direction.latitude.toDouble(),
-          lng: direction.longitude.toDouble(),
-        ),
-      ],
+    return DeleteUserDirectionDto(
+      id: direction.id,
     );
   }
 
-  DeleteUpdateUserDirectionListDto _buildUpdateUserDirectionDto(
-      {required UserDirection direction,
-      String? newName,
-      LatLng? newLocation,
-      required List<UserDirection> directions}) {
+  UpdateUserDirectionDto _buildUpdateUserDirectionDto({
+    required UserDirection direction,
+    String? newName,
+    LatLng? newLocation,
+    required List<UserDirection> directions,
+    String? newDirectionName,
+  }) {
     newName ??= direction.addressName;
     newLocation ??=
         LatLng(direction.latitude.toDouble(), direction.longitude.toDouble());
+    newDirectionName ??= direction.direction;
 
-    final newDto = DeleteUpdateUserDirectionDto(
+    return UpdateUserDirectionDto(
       id: direction.id,
       name: newName,
       favorite: direction.isFavorite,
       lat: newLocation.latitude.toDouble(),
       lng: newLocation.longitude.toDouble(),
-    );
-
-    final dtoList = directions
-        .map((e) => DeleteUpdateUserDirectionDto(
-              id: e.id,
-              name: e.addressName,
-              favorite: e.isFavorite,
-              lat: e.latitude.toDouble(),
-              lng: e.longitude.toDouble(),
-            ))
-        .toList();
-
-    dtoList.removeWhere((element) => element.id == direction.id);
-    dtoList.add(newDto);
-
-    return DeleteUpdateUserDirectionListDto(
-      directions: dtoList,
+      direction: newDirectionName,
     );
   }
 
-  DeleteUpdateUserDirectionListDto _buildUpdateFavoriteUserDirectionDto(
+  UpdateUserDirectionDto _buildUpdateFavoriteUserDirectionDto(
       {required UserDirection newFavoriteDirection,
       required List<UserDirection> directions}) {
     for (var element in directions) {
@@ -161,32 +141,24 @@ class _ProfileScreenState extends State<_ProfileScreen> {
       }
     }
 
-    final dtoList = directions
-        .map((e) => DeleteUpdateUserDirectionDto(
-              id: e.id,
-              name: e.addressName,
-              favorite: e.isFavorite,
-              lat: e.latitude.toDouble(),
-              lng: e.longitude.toDouble(),
-            ))
-        .toList();
-
-    return DeleteUpdateUserDirectionListDto(
-      directions: dtoList,
+    return UpdateUserDirectionDto(
+      id: newFavoriteDirection.id,
+      name: newFavoriteDirection.addressName,
+      favorite: newFavoriteDirection.isFavorite,
+      lat: newFavoriteDirection.latitude.toDouble(),
+      lng: newFavoriteDirection.longitude.toDouble(),
+      direction: newFavoriteDirection.direction,
     );
   }
 
-  AddUserDirectionListDto _buildAddUserDirectionDto(
-      LatLng location, String name) {
-    return AddUserDirectionListDto(
-      directions: [
-        AddUserDirectionDto(
-          name: name,
-          favorite: false,
-          lat: location.latitude,
-          lng: location.longitude,
-        ),
-      ],
+  AddUserDirectionDto _buildAddUserDirectionDto(
+      LatLng location, String name, String direction) {
+    return AddUserDirectionDto(
+      direction: direction,
+      name: name,
+      favorite: false,
+      lat: location.latitude,
+      lng: location.longitude,
     );
   }
 
@@ -252,7 +224,10 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                 context.push('/auth');
                               },
                               child: Text('Log out',
-                                  style: TextStyle(color: theme.primaryColor, fontSize: scales.bodyMedium?.fontSize, fontWeight: FontWeight.bold)),
+                                  style: TextStyle(
+                                      color: theme.primaryColor,
+                                      fontSize: scales.bodyMedium?.fontSize,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ],
                         )
@@ -266,13 +241,16 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                   thickness: 1,
                 ),
                 const SizedBox(height: 10),
-                WalletCard(wallet: widget.user.wallet!,),
+                WalletCard(
+                  wallet: widget.user.wallet!,
+                ),
                 Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left
                   child: Text('User:',
-                      style:
-                          TextStyle(fontSize: scales.bodyLarge?.fontSize, fontWeight: FontWeight.bold)),
+                      style: TextStyle(
+                          fontSize: scales.bodyLarge?.fontSize,
+                          fontWeight: FontWeight.bold)),
                 ),
                 CustomTextField(
                   label: 'Email',
@@ -349,11 +327,13 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           isScrollControlled: true,
                           builder: (BuildContext context) {
                             return AddressModal(
-                              onFinished: (location, name, isUpdate) async {
+                              onFinished:
+                                  (location, name, isUpdate, direction) async {
                                 Navigator.pop(context);
                                 // Add the address
                                 final addDirectionDto =
-                                    _buildAddUserDirectionDto(location, name);
+                                    _buildAddUserDirectionDto(
+                                        location, name, direction);
                                 this.context.read<UserBloc>().add(
                                     AddUserDirectionEvent(
                                         userDirection: addDirectionDto));
@@ -401,7 +381,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           longitude: direction.longitude.toDouble(),
                           isFavorite: direction.isFavorite,
                           id: direction.id,
-                          address: direction.address,
+                          address: direction.direction,
                           onFavoriteChanged: (id, isFavorite) async {
                             if (direction.isFavorite) {
                               return;
@@ -424,8 +404,9 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                   initialLocation: LatLng(
                                       direction.latitude.toDouble(),
                                       direction.longitude.toDouble()),
-                                  initialLocationName: direction.address,
-                                  onFinished: (location, name, isUpdate) async {
+                                  initialLocationName: direction.direction,
+                                  onFinished: (location, name, isUpdate,
+                                      directionName) async {
                                     Navigator.pop(context);
                                     // update the address
                                     final updateUserDto =
@@ -433,7 +414,8 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                             direction: direction,
                                             newName: name,
                                             newLocation: location,
-                                            directions: widget.user.directions);
+                                            directions: widget.user.directions,
+                                            newDirectionName: directionName);
                                     this.context.read<UserBloc>().add(
                                         UpdateUserDirectionEvent(
                                             userDirection: updateUserDto));

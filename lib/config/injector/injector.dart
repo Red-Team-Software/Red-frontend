@@ -13,6 +13,7 @@ import 'package:GoDeli/features/auth/infrastructure/datasource/isar_auth_local_s
 import 'package:GoDeli/features/auth/infrastructure/repository/auth_repository.dart';
 import 'package:GoDeli/features/auth/infrastructure/repository/isar_auth_local_storage_repository.dart';
 import 'package:GoDeli/features/bundles/application/bundle_details/bundle_details_bloc.dart';
+import 'package:GoDeli/features/bundles/application/bundle_offers/bundle_offers_bloc.dart';
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
 import 'package:GoDeli/features/bundles/infraestructure/datasources/bundles_datasource_impl.dart';
@@ -36,6 +37,7 @@ import 'package:GoDeli/features/payment-method/application/use_cases/get_payment
 import 'package:GoDeli/features/payment-method/domain/repositories/payment-method_repository.dart';
 import 'package:GoDeli/features/payment-method/infraestructure/datasource/payment-method_datasource_imp.dart';
 import 'package:GoDeli/features/payment-method/infraestructure/repositories/payment-method_respository_imp.dart';
+import 'package:GoDeli/features/products/application/popular_products/popular_products_bloc.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:GoDeli/features/products/domain/repositories/products_repository.dart';
@@ -60,6 +62,7 @@ import 'package:GoDeli/features/wallet/application/bloc/wallet_bloc.dart';
 import 'package:GoDeli/features/wallet/application/datasource/wallet_datasource.dart';
 import 'package:GoDeli/features/wallet/application/repository/wallet_repository.dart';
 import 'package:GoDeli/features/wallet/application/use_cases/pay_pago_movil_use_case.dart';
+import 'package:GoDeli/features/wallet/application/use_cases/pay_zelle_use_case.dart';
 import 'package:GoDeli/features/wallet/infrastructure/datasource/wallet_datasource_impl.dart';
 import 'package:GoDeli/features/wallet/infrastructure/repository/wallet_repository_impl.dart';
 import 'package:get_it/get_it.dart';
@@ -147,6 +150,8 @@ class Injector {
         () => AllProductsBloc(productsRepository: productsRepository));
     getIt.registerFactory<ProductDetailsBloc>(
         () => ProductDetailsBloc(productsRepository: productsRepository));
+    getIt.registerFactory<PopularProductsBloc>(
+        () => PopularProductsBloc(productsRepository: productsRepository));
 
     //? inicializando las dependencias de modulo combos
     final bundleDatasource = BundlesDatasourceImpl(httpService);
@@ -157,6 +162,8 @@ class Injector {
         () => AllBundlesBloc(bundleRepository: bundleRepository));
     getIt.registerFactory<BundleDetailsBloc>(
         () => BundleDetailsBloc(bundleRepository: bundleRepository));
+    getIt.registerFactory<BundleOffersBloc>(
+        () => BundleOffersBloc(bundleRepository: bundleRepository));
 
     //? inicializando las dependencias de modulo search
     getIt.registerFactory<SearchBloc>(
@@ -208,9 +215,11 @@ class Injector {
         WalletRepositoryImpl(walletDatasource);
     final PayPagoMovilUseCase payPagoMovilUseCase =
         PayPagoMovilUseCase(walletRepository);
+    final PayZelleUseCase payZelleUseCase = PayZelleUseCase(walletRepository);
 
     getIt.registerFactory<WalletBloc>(() => WalletBloc(
           payPagoMovilUseCase: payPagoMovilUseCase,
+          payZelleUseCase: payZelleUseCase,
         ));
   }
 }

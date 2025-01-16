@@ -8,7 +8,7 @@ class NotificationDatasource {
 
   Future<Result<String>> saveToken(String token) async {
     final response = await _httpService.request(
-        '/notification/savetoken', 'POST', (json) => {},
+        '/notifications/savetoken', 'POST', (json) => {},
         body: {'token': token});
 
     if (!response.isSuccessful()) {

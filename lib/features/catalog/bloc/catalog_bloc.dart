@@ -12,11 +12,15 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   final IProductsRepository productsRepository;
   final IBundleRepository bundleRepository;
 
-  CatalogBloc({ required this.bundleRepository, required this.productsRepository }) : super(const CatalogState()) {
+  CatalogBloc(
+      {required this.bundleRepository, required this.productsRepository})
+      : super(const CatalogState()) {
     on<ItemsFetched>(_onItemsFetched);
     on<CategorySet>(_onCategorySet);
     on<PopularSet>(_onPopularSet);
     on<DiscountSet>(_onDiscountSet);
+    on<PriceSet>(_onPriceSet);
+    on<TermSet>(_onTermSet);
     on<CatalogLoading>(_onCatalogLoading);
     on<CatalogIsEmpty>(_onCatalogIsEmpty);
     on<CatalogError>(_onCatalogError);
@@ -31,9 +35,12 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void _onCategorySet(CategorySet event, Emitter<CatalogState> emit) {
+    print('entre');
     var cate = List<String>.from(state.categorySelected);
-    
-    cate.any((element) => element == event.category) ? cate.remove(event.category) : cate.add(event.category);
+
+    cate.any((element) => element == event.category)
+        ? cate.remove(event.category)
+        : cate.add(event.category);
     emit(state.copyWith(
       categorySelected: cate,
     ));
@@ -51,6 +58,20 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   void _onDiscountSet(DiscountSet event, Emitter<CatalogState> emit) {
     emit(state.copyWith(
       discount: event.discount,
+    ));
+    fetchItems();
+  }
+
+  void _onPriceSet(PriceSet event, Emitter<CatalogState> emit) {
+    emit(state.copyWith(
+      price: event.price,
+    ));
+    fetchItems();
+  }
+
+  void _onTermSet(TermSet event, Emitter<CatalogState> emit) {
+    emit(state.copyWith(
+      term: event.term,
     ));
     fetchItems();
   }
@@ -81,18 +102,22 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
     try {
       final resPro = await productsRepository.getProducts(
         category: state.categorySelected,
-        discount: state.discount==0.0 ? null : state.discount,
+        discount: state.discount == 0.0 ? null : state.discount,
         popular: state.popular ? 'popular' : null,
         page: state.page,
         perPage: state.perPage,
+        price: state.price == 0.0 ? null : state.price,
+        term: state.term == '' ? null : state.term,
       );
 
       final resBun = await bundleRepository.getBundlesPaginated(
         category: state.categorySelected,
-        discount: state.discount==0.0 ? null : state.discount,
+        discount: state.discount == 0.0 ? null : state.discount,
         popular: state.popular ? 'popular' : null,
         page: state.page,
         perPage: state.perPage,
+        price: state.price == 0.0 ? null : state.price,
+        term: state.term == '' ? null : state.term,
       );
 
       if (resPro.isSuccessful() && resBun.isSuccessful()) {

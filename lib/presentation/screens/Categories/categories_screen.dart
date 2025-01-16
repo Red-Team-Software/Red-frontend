@@ -1,5 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -78,10 +80,15 @@ class _CategoriesView extends StatelessWidget {
                               width: 70.00,
                             ),
                           ),
-                          Text(
-                            category.name,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w700),
+                          
+                          TranslationWidget(
+                            message: category.name,
+                            toLanguage: context.read<LanguagesCubit>().state.selected.language,
+                            builder: (translated) => Text(
+                              translated,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w700),
+                            ),
                           ),
                           const SizedBox(height: 8.00,)
                         ],

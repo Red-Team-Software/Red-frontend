@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:http/http.dart' as http;
 
 class AddressModal extends StatefulWidget {
-  final Future<void> Function(LatLng, String, bool) onFinished;
+  final Future<void> Function(LatLng, String, bool, String) onFinished;
   final LatLng? initialLocation; // Optional initial location for update
   final String? initialLocationName;
   final String? initialAddressName;
@@ -34,7 +34,6 @@ class _AddressModalState extends State<AddressModal> {
 
   final addressNameTextController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
@@ -43,18 +42,20 @@ class _AddressModalState extends State<AddressModal> {
       _selectedLocationName = widget.initialLocationName ?? "";
       _currentLocation = widget.initialLocation!;
       addressNameTextController.text = widget.initialAddressName ?? '';
-      if(widget.initialLocationName == null) {
+      _currentAddressName = widget.initialAddressName ?? '';
+      if (widget.initialLocationName == null) {
         print('Fetching initial location name');
         _fetchInitialLocationName();
       }
     } else {
       _fetchCurrentLocation();
-    } 
+    }
   }
 
   Future<void> _fetchInitialLocationName() async {
-    final locationName = await _getLocationName(_selectedLocation!) ?? 'Unknown Location';
-    
+    final locationName =
+        await _getLocationName(_selectedLocation!) ?? 'Unknown Location';
+
     setState(() {
       _selectedLocationName = locationName;
     });
@@ -148,9 +149,16 @@ class _AddressModalState extends State<AddressModal> {
   }
 
   bool isFinishButtonEnabled() {
+    print(
+        "Selected Location: $_selectedLocation, Current Address Name: $_currentAddressName, Address Name Error: $addressNameError");
+
     return _selectedLocation != null &&
-        _currentAddressName.isNotEmpty &&
-        addressNameError == null;
+            _currentAddressName.isNotEmpty &&
+            addressNameError == null ||
+        (widget.initialAddressName != null &&
+            _selectedLocation != widget.initialLocation &&
+            _currentAddressName.isNotEmpty &&
+            addressNameError == null);
   }
 
   @override
@@ -242,12 +250,14 @@ class _AddressModalState extends State<AddressModal> {
                           widget.onFinished(
                               _selectedLocation!,
                               _currentAddressName,
-                              true); // Finish the address update
+                              true,
+                              _selectedLocationName); // Finish the address update
                         } else {
                           widget.onFinished(
                               _selectedLocation!,
                               _currentAddressName,
-                              false); // Finish the address addition
+                              false,
+                              _selectedLocationName); // Finish the address addition
                         }
                       }
                     }

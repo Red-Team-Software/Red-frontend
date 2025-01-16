@@ -45,17 +45,13 @@ class OrderEntity {
 
         return OrderEntity(
           id: json['id'] as String,
-          orderState: json['orderState'] as String,
-          orderCreatedDate: json['orderCreatedDate'] as String,
-          totalAmount: (json['totalAmount'] as num).toDouble(),
+          orderState: json['orderState'][0]["state"] as String,
+          orderCreatedDate: '',
+          totalAmount: 0,
           orderTimeCreated: json['orderTimeCreated'] as String,
-          orderDirection: OrderDirectionEntity.fromJson(json['orderDirection']),
-          products: (json['products'] as List? ?? [])
-              .map((product) => ProductCart.fromJson(product))
-              .toList(),
-          bundles: (json['bundles'] as List? ?? [])
-              .map((bundle) => BundleCart.fromJson(bundle))
-              .toList(),
+          orderDirection: OrderDirectionEntity.fromDummy(),
+          products: [],
+          bundles: [],
           orderReceivedDate: json['orderReceivedDate'] as String? ?? '',
           orderPayment:
               OrderPaymentEntity.fromPaymentJson(json['orderPayment']),
@@ -83,6 +79,8 @@ class OrderEntity {
         // Depuración de valores clave
         print('ID: ${orderJson['orderId']}');
         print('State: ${orderJson['orderState']}');
+        print(orderJson['orderState'][0]);
+        print(orderJson['orderState'][0]["state"]);
         print('Created Date: ${orderJson['orderCreatedDate']}');
         print('Time Created: ${orderJson['orderTimeCreated']}');
         print('Total Amount: ${orderJson['totalAmount']}');
@@ -94,8 +92,8 @@ class OrderEntity {
 
         return OrderEntity(
           id: orderJson['orderId'] as String? ?? '',
-          orderState: orderJson['orderState'] as String? ?? '',
-          orderCreatedDate: orderJson['orderCreatedDate'] as String? ?? '',
+          orderState: orderJson['orderState'][0]['state'] as String? ?? '',
+          orderCreatedDate: orderJson['orderState'][0]['date'] as String? ?? '',
           orderTimeCreated: orderJson['orderTimeCreated'] as String? ?? '',
           totalAmount: (orderJson['totalAmount'] as num).toDouble(),
           orderDirection:
@@ -134,8 +132,15 @@ class OrderDirectionEntity {
 
   factory OrderDirectionEntity.fromJson(Map<String, dynamic> json) {
     return OrderDirectionEntity(
-      latitude: (json['lat'] as num).toDouble(),
-      longitude: (json['long'] as num).toDouble(),
+      latitude: num.parse(json['lat']).toDouble(),
+      longitude: num.parse(json['long']).toDouble(),
+    );
+  }
+
+  factory OrderDirectionEntity.fromDummy() {
+    return OrderDirectionEntity(
+      latitude: 10.472567,
+      longitude: -66.765795,
     );
   }
 }
@@ -163,7 +168,10 @@ class OrderPaymentEntity {
     return OrderPaymentEntity(
       paymentMethod: json['payementMethod'] as String,
       currency: json['paymentCurrency'] as String,
-      amount: (json['paymetAmount'] as num).toDouble(),
+      amount: (json['paymetAmount'] is String
+              ? num.parse(json['paymetAmount']).toDouble()
+              : json['paymetAmount'] as num)
+          .toDouble(),
     );
   }
 }

@@ -12,21 +12,31 @@ class ProductsDatasourceImpl implements IProductsDatasource {
 
   @override
   Future<Product> getProductById(String id) async {
-    final res = await _httpService.request(
+    var res = await _httpService.request(
         '/product/$id', 'GET', (json) => ProductResponse.fromJson(json));
     return ProductMapper.productToDomain(res.getValue());
   }
 
   @override
-  Future<List<Product>> getProducts({ List<String>? category, double? discount, int page = 1, int perPage = 10, String? popular }) async {
+  Future<List<Product>> getProducts(
+      {List<String>? category,
+      double? discount,
+      int page = 1,
+      int perPage = 10,
+      String? popular,
+      double? price,
+      String? term
+      }) async {
     final res = await _httpService.request(
         '/product/many', 'GET', (json) => ProductResponse.fromJsonList(json),
         queryParameters: {
           'page': page,
-          'perPage': perPage,
+          'perpage': perPage,
           if (discount != null) 'discount': discount,
           if (category != null) 'category': category,
           if (popular != null) 'popular': popular,
+          if (price != null) 'price': price,
+          if (term != null) 'name': term
         });
 
     final List<Product> products = [];
@@ -45,7 +55,7 @@ class ProductsDatasourceImpl implements IProductsDatasource {
       {int page = 1, int perPage = 10, required String term}) async {
     final resProduct = await _httpService.request('/product/all-product-bundle',
         'GET', (json) => SearchResponse.fromJson(json),
-        queryParameters: {'page': page, 'perPage': perPage, 'term': term});
+        queryParameters: {'page': page, 'perpage': perPage, 'term': term});
 
     // print(res);
     final List<Product> products = [];

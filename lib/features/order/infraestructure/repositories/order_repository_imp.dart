@@ -15,7 +15,7 @@ class OrderRepositoryImpl implements IOrderRepository {
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,
-    required String address,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   }) async {
@@ -25,7 +25,7 @@ class OrderRepositoryImpl implements IOrderRepository {
         currency: currency,
         paymentMethod: paymentMethod,
         stripePaymentMethod: stripePaymentMethod,
-        address: address,
+        idUserDirection: idUserDirection,
         bundles: bundles,
         products: products,
       );

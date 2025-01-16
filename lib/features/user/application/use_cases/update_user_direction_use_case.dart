@@ -1,16 +1,16 @@
 import 'package:GoDeli/features/common/application/use_case.dart';
 import 'package:GoDeli/features/common/domain/result.dart';
-import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/update_user_direction_dto.dart';
 import 'package:GoDeli/features/user/domain/repositories/user_repository.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
 
-class UpdateUserDirectionUseCase implements IUseCase<DeleteUpdateUserDirectionListDto, User>{
+class UpdateUserDirectionUseCase implements IUseCase<UpdateUserDirectionDto, User>{
   final IUserRepository _userRepository;
 
   UpdateUserDirectionUseCase(this._userRepository);
   
   @override
-  Future<Result<User>> execute(DeleteUpdateUserDirectionListDto dto) async {
+  Future<Result<User>> execute(UpdateUserDirectionDto dto) async {
     final resultDirectionAdded = await _userRepository.updateUserDirection(dto);
 
     if( !resultDirectionAdded.isSuccessful() ) {

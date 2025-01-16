@@ -39,18 +39,16 @@ class _LoginComponentState extends State<LoginComponent> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ImageComponent(),
         const SizedBox(height: 20),
-        const Text(
+        Text(
           "Login",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textStyles.displayMedium,
         ),
         const SizedBox(height: 20),
 
@@ -76,7 +74,7 @@ class _LoginComponentState extends State<LoginComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.email),
+            suffixIcon: Icon(Icons.email, color: colors.primary,),
           ),
         ),
         const SizedBox(height: 20),
@@ -101,25 +99,10 @@ class _LoginComponentState extends State<LoginComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.lock),
+            suffixIcon: Icon(Icons.lock,color: colors.primary,),
           ),
         ),
-        const SizedBox(height: 10),
-
-        // Forgot Password Button
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () {},
-            child: Text(
-              "Forgot password?",
-              style: TextStyle(color: colors.primary),
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-
-        // Login Button
+        const SizedBox(height: 30),
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -137,35 +120,42 @@ class _LoginComponentState extends State<LoginComponent> {
                     await widget.onHandleLogin();
                   }
                 : null, // Disable button if conditions are not met
-            child: const Text(
+            child:  Text(
               "Login",
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              style: textStyles.displaySmall?.copyWith(color: Colors.white),
             ),
           ),
         ),
-        const SizedBox(height: 10),
-
-        // Sign Up Button
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: colors.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+        const SizedBox(height: 20),
+        // Forgot Password Button
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton(
+                onPressed: () {},
+                child: Text(
+                  "Forgot password?",
+                  style: TextStyle(color: colors.primary),
+                ),
               ),
-            ),
-            onPressed: () {
-              widget.onChangeIndex(1); // Go to Sign Up screen
-            },
-            child: Text(
-              "Sign Up",
-              style: TextStyle(fontSize: 18, color: colors.primary),
-            ),
-          ),
+              TextButton(
+                onPressed: () {
+                  widget.onChangeIndex(1); 
+                },
+                child: Text(
+                  "Don't have an account\nRegister here!",
+                  textAlign: TextAlign.center,
+                  style: textStyles.bodyLarge?.copyWith(color: colors.primary, ),
+                ),
+              ),
+          ],
         ),
+        
+        const SizedBox(height: 20),
+       
+
+        // Login Button
       ],
-    );
+    ).animate().moveX(begin: 100, end: 0).fadeIn(duration: 500.ms);
   }
 }

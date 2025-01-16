@@ -7,7 +7,7 @@ class UpdateUserResponse {
 
   factory UpdateUserResponse.fromJson(Map<String, dynamic> json) {
     return UpdateUserResponse(
-      id: json['userId'],
+      id: json['userId'] != null ? json['userId'] : '',
     );
   }
 }

@@ -15,8 +15,8 @@ class DrawerItems {
       DrawerItemModel(icon: Icons.local_offer, title: 'Top Deals', route: '/catalog');
   static const makeRequest =
       DrawerItemModel(icon: Icons.request_page, title: 'Make product request');
-  static const track =
-      DrawerItemModel(icon: Icons.gps_fixed_rounded, title: 'Track your Order');
+  static const language =
+      DrawerItemModel(icon: Icons.assignment_rounded, title: 'Languages', route: '/languages');
   static const cupons =
       DrawerItemModel(icon: Icons.card_giftcard, title: 'Cupons');
 
@@ -24,7 +24,7 @@ class DrawerItems {
     categories,
     topDeals,
     makeRequest,
-    track,
+    language,
     cupons,
   ];
 }

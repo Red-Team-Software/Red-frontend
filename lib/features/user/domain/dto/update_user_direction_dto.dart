@@ -1,34 +1,37 @@
 
-class DeleteUpdateUserDirectionDto {
+class UpdateUserDirectionDto {
   final String id;
   final String name;
   final bool favorite;
   final num lat;
   final num lng;
-  DeleteUpdateUserDirectionDto({
+  final String direction;
+  UpdateUserDirectionDto({
     required this.id,
     required this.name,
     required this.favorite,
     required this.lat,
     required this.lng,
+    required this.direction,
   });
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'directionId': id,
       'name': name,
+      'direction': direction,
       'favorite': favorite,
-      'lat': lat,
-      'lng': lng,
+      'lat': lat.toString(),
+      'long': lng.toString(),
     };
   }
 }
 
-class DeleteUpdateUserDirectionListDto {
+class UpdateUserDirectionListDto {
 
-  final List<DeleteUpdateUserDirectionDto> directions;
+  final List<UpdateUserDirectionDto> directions;
 
-  DeleteUpdateUserDirectionListDto({
+  UpdateUserDirectionListDto({
     required this.directions,
   });
 
