@@ -74,4 +74,16 @@ class OrderRepositoryImpl implements IOrderRepository {
       print(e);
     }
   }
+
+  @override
+  Future<void> reportOrder(
+      {required String orderId, required String description}) async {
+    try {
+      await datasource.reportOrder(orderId: orderId, description: description);
+    } catch (e) {
+      print("error en el reporte de orden");
+      print(e);
+      throw Exception(e);
+    }
+  }
 }

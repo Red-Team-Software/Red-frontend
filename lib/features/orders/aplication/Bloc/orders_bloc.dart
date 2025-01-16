@@ -12,7 +12,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
     on<OrdersLoaded>(_onOrdersLoaded);
     on<OrdersTabChanged>(_onOrdersTabChanged);
     on<OrderCancelled>(_onOrderCancelled);
-    // Remove the FetchAllOrders event handler
+    on<OrderReported>(_onOrderReported);
   }
 
   void _onOrdersLoaded(OrdersLoaded event, Emitter<OrdersState> emit) async {
@@ -50,7 +50,6 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       OrderCancelled event, Emitter<OrdersState> emit) async {
     emit(OrdersLoadInProgress());
     try {
-      print("cancelando");
       print(event.orderId);
 
       await orderRepository.cancelOrder(orderId: event.orderId);
@@ -59,7 +58,6 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       final orders =
           await orderRepository.fetchAllOrders(page: 1, perPage: 100);
 
-      print("daleee brii");
       print(orders.isSuccessful());
       print(orders.getValue());
       emit(OrdersLoadSuccess(
@@ -71,6 +69,17 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       print("error en el cancel");
       print(e);
       emit(OrderCancelFailure(error: e.toString()));
+    }
+  }
+
+  void _onOrderReported(OrderReported event, Emitter<OrdersState> emit) async {
+    emit(OrdersLoadInProgress());
+    try {
+      await orderRepository.reportOrder(
+          orderId: event.orderId, description: event.description);
+      emit(OrderReportSuccess());
+    } catch (e) {
+      emit(OrderReportFailure(error: e.toString()));
     }
   }
 }

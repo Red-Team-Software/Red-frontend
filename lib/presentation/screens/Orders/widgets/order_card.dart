@@ -217,7 +217,9 @@ class OrderCard extends StatelessWidget {
                       ElevatedButton(
                         onPressed: reportDescription.isNotEmpty
                             ? () {
-                                // Implement report order logic here
+                                context.read<OrdersBloc>().add(OrderReported(
+                                    orderId: orderItem.orderId,
+                                    description: reportDescription));
                                 Navigator.pop(context);
                               }
                             : null,
