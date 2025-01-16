@@ -14,8 +14,6 @@ This application is compatible with Flutter versions >= 3.4.3 < 4.0.0.
 *   [Eduardo Rumbos](https://github.com/rumbose)
 
 ## Getting Started
-
-# Dev
 1. Clone the repository. Make sure you have the VSCode Flutter and Dart extensions
 ```bash
 git clone https://github.com/Red-Team-Software/Red-frontend.git
@@ -26,11 +24,11 @@ cd Red-frontend
    
 3. Select the main.dart file in the lib folder and run it. Select the device to use and continue with the development.
 
-   for verbose
+   for verboses
 ```bash
 flutter run -v
 ```
-# Here some important project dependecies place in file [pubspec.yaml](/pubspec.yaml)
+## Here some important project dependecies place in file [pubspec.yaml](/pubspec.yaml)
 * [bloc](https://pub.dev/packages/bloc) `v: ^8.1.4`
 * [firebase_messaging](https://pub.dev/packages/firebase_messaging) `v: ^15.1.4`
 * [equatable](https://pub.dev/packages/equatable) `v: ^2.0.5`
