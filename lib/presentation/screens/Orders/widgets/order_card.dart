@@ -114,6 +114,7 @@ class OrderCard extends StatelessWidget {
 
   Widget _buildActionButton(BuildContext context, String orderState) {
     switch (orderState) {
+      case "delivering":
       case 'ongoing':
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -171,7 +172,84 @@ class OrderCard extends StatelessWidget {
     // Implement reorder item logic here
   }
 
+  void _reportOrder(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        String reportDescription = '';
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Report Order Issue',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            reportDescription = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: reportDescription.isNotEmpty
+                            ? () {
+                                // Implement report order logic here
+                                Navigator.pop(context);
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          minimumSize: const Size.fromHeight(48),
+                        ),
+                        child: const Text(
+                          'Report',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _reportProblem(BuildContext context) {
-    // Implement report problem logic here
+    _reportOrder(context);
   }
 }
