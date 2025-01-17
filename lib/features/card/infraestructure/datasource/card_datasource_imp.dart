@@ -12,7 +12,7 @@ class CardDatasourceImpl implements ICardDatasource {
     final res = await httpService.request(
       '/payment/method/user/add/card',
       'POST',
-      (json) => null,
+      (json) => true,
       body: {
         "idCard": idCard,
       },

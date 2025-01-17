@@ -82,7 +82,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
   @override
   Future<void> cancelOrder({required String orderId}) async {
     final res = await httpService.request(
-        '/order/cancel/$orderId', 'GET', (json) => null);
+        '/order/cancel/$orderId', 'GET', (json) => true);
 
     if (!res.isSuccessful()) throw Exception(res.getError());
   }
