@@ -35,7 +35,6 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void _onCategorySet(CategorySet event, Emitter<CatalogState> emit) {
-    print('entre');
     var cate = List<String>.from(state.categorySelected);
 
     cate.any((element) => element == event.category)
