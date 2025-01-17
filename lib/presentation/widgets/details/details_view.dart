@@ -207,66 +207,71 @@ class _ScrollableDetails extends StatelessWidget {
                       ],
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              if (promotions.isNotEmpty) ...[
-                                TextSpan(
-                                  text:
-                                      '$price ${currency == 'usd' ? '\$' : currency}\n',
-                                  style: textStyles.displayMedium?.copyWith(
-                                    fontSize: 40,
-                                    color: Colors.black38,
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationColor: colors.primary,
-                                    decorationThickness: 2
+                        child: 
+                        TranslationWidget(
+                          message: 'piece',
+                          toLanguage: idiom,
+                          builder: (translated) => RichText(
+                            text: TextSpan(
+                              children: [
+                                if (promotions.isNotEmpty) ...[
+                                  TextSpan(
+                                    text:
+                                        '$price ${currency == 'usd' ? '\$' : currency}\n',
+                                    style: textStyles.displayMedium?.copyWith(
+                                      fontSize: 40,
+                                      color: Colors.black38,
+                                      decoration: TextDecoration.lineThrough,
+                                      decorationColor: colors.primary,
+                                      decorationThickness: 2
+                                    ),
                                   ),
-                                ),
-                                TextSpan(
-                                    text: '${_calculateDiscount(promotions, price).toStringAsFixed(2)}${currency == 'usd' ? '\$' : currency}',
+                                  TextSpan(
+                                      text: '${_calculateDiscount(promotions, price).toStringAsFixed(2)}${currency == 'usd' ? '\$' : currency}',
+                                      style: TextStyle(
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '  / $translated\n',
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  Theme.of(context).brightness ==
+                                                          Brightness.light
+                                                      ? Colors.black87
+                                                      : Colors.white70),
+                                        ),
+                                      ]),
+                                  
+                                ] else ...[
+                                  TextSpan(
+                                    text: price.toStringAsFixed(2),
                                     style: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold,
                                       color:
                                           Theme.of(context).colorScheme.primary,
                                     ),
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                            '  / piece\n',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? Colors.black87
-                                                    : Colors.white70),
-                                      ),
-                                    ]),
-                                
-                              ] else ...[
-                                TextSpan(
-                                  text: price.toStringAsFixed(2),
-                                  style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
                                   ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      ' ${currency == 'usd' ? '\$' : currency} / piece',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.black87,
+                                  TextSpan(
+                                    text:
+                                        ' ${currency == 'usd' ? '\$' : currency} / $translated',
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.black87,
+                                    ),
                                   ),
-                                ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
                       ),

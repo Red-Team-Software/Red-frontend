@@ -2,12 +2,10 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
-import 'package:GoDeli/presentation/screens/Home/widgets/banner_carrousel.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/carrusel_categories.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/drawer_widget.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/popular_products_home.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
-import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
@@ -198,7 +196,7 @@ class HomeScreenView extends StatelessWidget {
                           builder: (tGet) => TranslationWidget(
                             message: ' groceries',
                             toLanguage: language,
-                            builder:(tGro) => TranslationWidget(
+                            builder: (tGro) => TranslationWidget(
                               message: ' delivered quickly',
                               toLanguage: language,
                               builder: (tDel) => RichText(

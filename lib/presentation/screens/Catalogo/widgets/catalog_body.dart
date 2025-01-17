@@ -310,22 +310,35 @@ class _CatalogBodyState extends State<CatalogBody> {
               tabs: [
                 Tab(
                   child: Align(
-                    alignment: Alignment.center,
-                    child: Text('Bundles',
-                        style: TextStyle(
-                          fontSize: textStyle.displaySmall!.fontSize,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    alignment: Alignment.center, 
+                    child: TranslationWidget(
+                      message:'Bundles',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                          translated,
+                          style: TextStyle(
+                            fontSize: textStyle.displaySmall!.fontSize,
+                            fontWeight: FontWeight.bold,
+                          )
+                      ), 
+                    ),
                   ),
                 ),
                 Tab(
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text('Products',
+                    child: 
+                    TranslationWidget(
+                      message:'Products',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                        translated,
                         style: TextStyle(
                           fontSize: textStyle.displaySmall!.fontSize,
                           fontWeight: FontWeight.bold,
-                        )),
+                        )
+                      ), 
+                    ),
                   ),
                 ),
               ],
@@ -384,26 +397,32 @@ class InputSearchState extends State<InputSearch> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      child: TextField(
-        controller: controller,
-        onChanged: _onTextChanged,
-        decoration: InputDecoration(
-          hintText: 'Search for products or bundles',
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon: controller.text.isNotEmpty
-              ? IconButton(
-                  icon: Icon(Icons.clear, color: colors.primary),
-                  onPressed: () {
-                    controller.clear();
-                    _onTextChanged('');
-                  },
-                )
-              : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
+      child: TranslationWidget(
+        message: 'Search for products or bundles',
+        toLanguage: language,
+        builder: (traduced) => TextField(
+          controller: controller,
+          onChanged: _onTextChanged,
+          decoration: InputDecoration(
+            hintText: traduced,
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: controller.text.isNotEmpty
+                ? IconButton(
+                    icon: Icon(Icons.clear, color: colors.primary),
+                    onPressed: () {
+                      controller.clear();
+                      _onTextChanged('');
+                    },
+                  )
+                : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
           ),
         ),
       ),

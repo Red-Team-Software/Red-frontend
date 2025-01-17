@@ -1,5 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/wallet/application/bloc/wallet_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet/wallet_custom_close_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -18,6 +20,7 @@ class ZellePaymentForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -73,11 +76,14 @@ class ZellePaymentForm extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            'Zelle Payment',
-                            style: textStyles.displayMedium,
+                          TranslationWidget(
+                            message: 'Zelle Payment',
+                            toLanguage: language,
+                            builder: (translated) => Text(
+                              translated,
+                              style: textStyles.displayMedium
+                            )
                           ),
-                          // Amount Field
                           TextFormField(
                             controller: _amountController,
                             decoration: InputDecoration(

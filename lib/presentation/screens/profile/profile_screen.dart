@@ -201,10 +201,14 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                     const SizedBox(width: 20),
                     Column(
                       children: [
-                        Text(
-                          'Hello, ${widget.user.fullName}!',
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        TranslationWidget(
+                          message: 'Hello, ${widget.user.fullName}!',
+                          toLanguage: language,
+                          builder: (translated) => Text(
+                            translated,
+                            style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)
+                          )
                         ),
                         Row(
                           children: [
@@ -289,16 +293,19 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                     readOnly: _readOnly,
                   ),
                 const SizedBox(height: 20),
-                const Align(
+                Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left
                   child: 
-                  
-                  Text('Profile:',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-
-                          
+                  TranslationWidget(
+                    message:'Profile:',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        style:
+                          const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                    ), 
+                  ),        
                 ),
                 CustomTextField(
                   label: 'Full Name',
@@ -333,12 +340,19 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Align(
+                    Align(
                       alignment:
                           Alignment.centerLeft, // Align the titles to the left
-                      child: Text('Addresses:',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      child: 
+                      TranslationWidget(
+                        message: 'Addresses:',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                            translated,
+                            style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)
+                        ), 
+                      ),
                     ),
                     IconButton(
                       icon:

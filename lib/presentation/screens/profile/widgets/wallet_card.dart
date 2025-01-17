@@ -1,6 +1,8 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet_add_funds_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,7 @@ class _WalletCardState extends State<WalletCard> {
   @override
   Widget build(BuildContext context) {
     final textScale = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return BlocProvider(
       create: (_) => getIt<UserBloc>(),
@@ -29,9 +32,14 @@ class _WalletCardState extends State<WalletCard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Your Balance',
-                style: textScale.displaySmall,
+              TranslationWidget(
+                message: 'Your Balance',
+                toLanguage: language,
+                builder: (translated) => Text(
+                    translated,
+                    style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold)
+                ), 
               ),
               const SizedBox(height: 8),
               Row(
@@ -62,9 +70,14 @@ class _WalletCardState extends State<WalletCard> {
                         });
                       }
                     },
-                    child: const Text(
-                      'Add Funds',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    child: 
+                    TranslationWidget(
+                      message: 'Add Funds',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                          translated,
+                          style: const TextStyle(fontWeight: FontWeight.bold)
+                      ), 
                     ),
                   ),
                 ],
