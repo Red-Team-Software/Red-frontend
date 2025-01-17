@@ -68,6 +68,10 @@ import 'package:GoDeli/features/wallet/infrastructure/datasource/wallet_datasour
 import 'package:GoDeli/features/wallet/infrastructure/repository/wallet_repository_impl.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
+import 'package:GoDeli/features/card/domain/datasource/card_datasource.dart';
+import 'package:GoDeli/features/card/domain/repositories/card_repository.dart';
+import 'package:GoDeli/features/card/infraestructure/datasource/card_datasource_imp.dart';
+import 'package:GoDeli/features/card/infraestructure/repositories/card_repository_imp.dart';
 
 final getIt = GetIt.instance;
 
@@ -229,5 +233,13 @@ class Injector {
           payPagoMovilUseCase: payPagoMovilUseCase,
           payZelleUseCase: payZelleUseCase,
         ));
+
+    //? inicializando las dependencias de modulo tarjeta
+    final ICardDatasource cardDatasource =
+        CardDatasourceImpl(httpService: httpService);
+    final ICardRepository cardRepository =
+        CardRepositoryImpl(datasource: cardDatasource);
+    getIt.registerFactory<ICardDatasource>(() => cardDatasource);
+    getIt.registerFactory<ICardRepository>(() => cardRepository);
   }
 }
