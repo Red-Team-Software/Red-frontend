@@ -2,6 +2,7 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/Home/widgets/banner_carrousel.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/carrusel_categories.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/drawer_widget.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/popular_products_home.dart';
