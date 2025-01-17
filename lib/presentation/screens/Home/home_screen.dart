@@ -184,27 +184,39 @@ class HomeScreenView extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: RichText(
-                          text: TextSpan(
-                              text: 'Get your',
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w100,
-                                color: theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                              children: [
-                                TextSpan(
-                                    text: ' groceries',
+                        child: TranslationWidget(
+                          message: 'Get Your',
+                          toLanguage: language,
+                          builder: (tGet) => TranslationWidget(
+                            message: ' groceries',
+                            toLanguage: language,
+                            builder:(tGro) => TranslationWidget(
+                              message: ' delivered quickly',
+                              toLanguage: language,
+                              builder: (tDel) => RichText(
+                                text: TextSpan(
+                                    text: tGet,
                                     style: TextStyle(
-                                        fontSize: 40,
-                                        color: theme.colorScheme.primary,
-                                        fontWeight: FontWeight.bold)),
-                                const TextSpan(
-                                  text: ' delivered quikly',
-                                ),
-                              ]),
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.w100,
+                                      color: theme.brightness == Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                          text: tGro,
+                                          style: TextStyle(
+                                              fontSize: 40,
+                                              color: theme.colorScheme.primary,
+                                              fontWeight: FontWeight.bold)),
+                                      TextSpan(
+                                        text: tDel,
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(

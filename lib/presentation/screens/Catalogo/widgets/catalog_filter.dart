@@ -60,8 +60,14 @@ class DiscountPopularPriceFilterCatalog extends StatelessWidget {
           icon: const Icon(Icons.star),
         ),
         const SizedBox(width: 12),
-        Text('Max Price: ${context.watch<CatalogBloc>().state.price}',
-            style: textStyles.displaySmall),
+        TranslationWidget(
+          message:'Max Price: ${context.watch<CatalogBloc>().state.price}',
+          toLanguage: language,
+          builder: (translated) => Text(
+            translated,
+            style:textStyles.displaySmall,
+          ), 
+        ),
         Expanded(
           child: Slider(
             divisions: 100,
