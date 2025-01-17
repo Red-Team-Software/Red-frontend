@@ -1,10 +1,16 @@
 import 'dart:async';
 
+import 'package:GoDeli/config/injector/injector.dart';
+import 'package:GoDeli/features/common/application/bloc/select_datasource_bloc_bloc.dart';
 import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
+// import 'package:get_it/get_it.dart';
 
 class HomeBannerCarrousel extends StatefulWidget {
-  final List<String> cards = [
+
+  final SelectDatasourceBloc selectDatasourceBloc = getIt<SelectDatasourceBloc>();
+
+  final List<String> redCards = [
     'images/banner_red_alessandro.jpg',
     'images/banner_red_alfredo.jpg',
     // 'images/red_banner_bryant.jpg',
@@ -13,7 +19,15 @@ class HomeBannerCarrousel extends StatefulWidget {
     'images/banner_red_gabriel.jpg',
   ];
 
+  final List<String> blueCards = [
+    'images/banner_blue_estefany.jpg',
+    'images/banner_blue_christian.jpg',
+    'images/banner_blue_gustavo.jpg',
+  ];
+
+
   HomeBannerCarrousel({
+    
     super.key,
   });
 
@@ -23,7 +37,7 @@ class HomeBannerCarrousel extends StatefulWidget {
 
 class _HomeBannerCarrouselState extends State<HomeBannerCarrousel> {
   late PageController _pageController;
-
+  late List<String> cards;
   int _currentPage = 0;
 
   Timer? _timer;
@@ -32,10 +46,11 @@ class _HomeBannerCarrouselState extends State<HomeBannerCarrousel> {
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _currentPage);
+    cards = widget.selectDatasourceBloc.state.isRed == true ? widget.redCards : widget.blueCards;
 
     // Configura un temporizador para cambiar automáticamente cada 10 segundos
     _timer = Timer.periodic(const Duration(seconds: 10), (Timer timer) {
-      if (_currentPage < widget.cards.length - 1) {
+      if (_currentPage < cards.length - 1) {
         _currentPage++;
       } else {
         _currentPage = 0;
@@ -62,25 +77,25 @@ class _HomeBannerCarrouselState extends State<HomeBannerCarrousel> {
       children: [
         Stack(children: [
           SizedBox(
-            height: 300,
+            height: 250,
             width: 450,
             child: PageView.builder(
               controller: _pageController,
-              itemCount: widget.cards.length,
+              itemCount: cards.length,
               onPageChanged: (int page) {
                 setState(() {
                   _currentPage = page;
                 });
               },
               itemBuilder: (BuildContext context, int index) {
-                return BannerCard(assetImage: AssetImage(widget.cards[index]));
+                return BannerCard(assetImage: AssetImage(cards[index]));
               },
             ),
           ),
         ]),
         const SizedBox(height: 12),
         CustomDotsList(
-            currentPage: _currentPage, theme: theme, list: widget.cards),
+            currentPage: _currentPage, theme: theme, list: cards),
       ],
     );
   }
