@@ -8,29 +8,57 @@ import 'package:GoDeli/presentation/screens/Track/widgets/order_map_widget.dart'
 import 'package:GoDeli/presentation/widgets/courier/order_courier.dart';
 import 'package:GoDeli/presentation/widgets/courier/searching_courier.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 
-class TrackOrderScreen extends StatelessWidget {
+class TrackOrderScreen extends StatefulWidget {
   static const String name = 'track_order_screen';
 
-  final OrderItem orderItem;
+  final String orderId;
 
-  const TrackOrderScreen({super.key, required this.orderItem});
+  const TrackOrderScreen({super.key, required this.orderId});
+
+  @override
+  _TrackOrderScreenState createState() => _TrackOrderScreenState();
+}
+
+class _TrackOrderScreenState extends State<TrackOrderScreen> {
+  late OrderBloc _orderBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _orderBloc = OrderBloc(orderRepository: getIt<IOrderRepository>());
+    _fetchOrder();
+  }
+
+  @override
+  void didUpdateWidget(covariant TrackOrderScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.orderId != widget.orderId) {
+      _fetchOrder();
+    }
+  }
+
+  void _fetchOrder() {
+    print('TrackOrderScreen orderId: ${widget.orderId}');
+    _orderBloc.add(FetchOrderById(orderId: widget.orderId));
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => OrderBloc(orderRepository: getIt<IOrderRepository>())
-        ..add(FetchOrderById(orderId: orderItem.orderId)),
+      create: (context) => _orderBloc,
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Track Order'),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => context.push("/", extra: 3),
+            onPressed: () {
+              _orderBloc.add(ClearOrderState()); // Clear the state
+              context.push("/", extra: 3);
+            },
           ),
         ),
         body: BlocBuilder<OrderBloc, OrderState>(
@@ -74,6 +102,9 @@ class TrackOrderScreen extends StatelessWidget {
                     OrderMapWidget(
                       userLatitude: order.orderDirection.latitude,
                       userLongitude: order.orderDirection.longitude,
+                      deliveryLatitude: order.orderCourier?.location?.latitude,
+                      deliveryLongitude:
+                          order.orderCourier?.location?.longitude,
                     ),
                   ],
                 ),
@@ -88,5 +119,11 @@ class TrackOrderScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _orderBloc.close();
+    super.dispose();
   }
 }
