@@ -13,8 +13,7 @@ abstract class IOrderRepository {
     required List<Map<String, dynamic>> products,
   });
 
-  Future<Result<List<OrderItem>>> fetchAllOrders(
-      {int page = 1, int perPage = 100});
+  Future<Result<List<OrderItem>>> fetchAllOrders();
 
   Future<Result<Order>> fetchOrderById({required String orderId});
 
@@ -22,4 +21,10 @@ abstract class IOrderRepository {
 
   Future<void> reportOrder(
       {required String orderId, required String description});
+
+  Future<Result<List<OrderItem>>> fetchPastOrders();
+
+  Future<Result<List<OrderItem>>> fetchActiveOrders();
+
+  Future<Result<Location>> fetchCourierPosition({required String orderId});
 }

@@ -10,6 +10,7 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
 
   OrderBloc({required this.orderRepository}) : super(OrderInitial()) {
     on<FetchOrderById>(_onFetchOrderById);
+    on<ClearOrderState>(_onClearOrderState);
   }
 
   Future<void> _onFetchOrderById(
@@ -26,9 +27,30 @@ class OrderBloc extends Bloc<OrderEvent, OrderState> {
       final double shippingFee =
           order.totalAmount - (productTotal + bundleTotal);
 
+      // Check if the order has a courier
+      if (order.orderCourier != null) {
+        final courierResult =
+            await orderRepository.fetchCourierPosition(orderId: order.id);
+        if (courierResult.isSuccessful()) {
+          final courierPosition = courierResult.getValue();
+          // Update the order's courier location
+
+          print("la posicion del courier");
+          print(courierPosition);
+          order.orderCourier!.location = courierPosition;
+        } else {
+          emit(const OrderError(message: 'Failed to fetch courier position'));
+          return;
+        }
+      }
+
       emit(OrderLoaded(order: order, shippingFee: shippingFee));
     } else {
       emit(const OrderError(message: 'Failed to load order'));
     }
+  }
+
+  void _onClearOrderState(ClearOrderState event, Emitter<OrderState> emit) {
+    emit(OrderInitial());
   }
 }

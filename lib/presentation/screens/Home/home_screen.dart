@@ -5,12 +5,9 @@ import 'package:GoDeli/presentation/screens/Home/widgets/banner_carrousel.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/carrusel_categories.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/drawer_widget.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/popular_products_home.dart';
-import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/products/application/products/all_products_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String name = 'home_screen';
@@ -51,7 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WillPopScope(
+      onWillPop: () async {
+        if (isDrawerOpen) {
+          closeDrawer();
+          return false;
+        }
+        return true;
+      },
+      child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
@@ -62,7 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        child: Stack(children: [buildDrawer(), buildPage()]));
+        child: Stack(children: [buildDrawer(), buildPage()]),
+      ),
+    );
   }
 
   Widget buildPage() {
@@ -214,8 +221,3 @@ class HomeScreenView extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
