@@ -40,10 +40,14 @@ flutter run -v
 * [isar](https://pub.dev/packages/isar)
 
 # App Architecture Diagrams
-[[app-architecture]('/images/Diagram-flutter-front.png')]
+<p align="center">
+   <img src="/images/Diagram-flutter-front.png" alt="app-architecture">
+</p>
 
 ### Hexagonal Architecture
-[[feature-architecture]('/images/HexagonalProducts.png')]
+<p align="center">
+   <img src="/images/HexagonalProducts.png" alt="feature-architecture">
+</p>
 
 
 
