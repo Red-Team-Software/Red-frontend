@@ -1,5 +1,7 @@
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -14,26 +16,30 @@ class ProductWidget extends StatelessWidget {
 
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return Slidable(
       endActionPane: ActionPane(
           motion: const ScrollMotion(),
           extentRatio: 0.25,
           children: [
-            SlidableAction(
-              onPressed: (context) {
-                cartBloc.add(RemoveProduct(product));
-              },
-              backgroundColor: colors.primary,
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: 'Delete',
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(8),
-                bottomRight: Radius.circular(8),
+            TranslationWidget(
+              message: 'Delete',
+              toLanguage: language,
+              builder: (translated) => SlidableAction(
+                onPressed: (context) {
+                  cartBloc.add(RemoveProduct(product));
+                },
+                backgroundColor: colors.primary,
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: translated,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
               ),
             )
-
           ]),
       child: Container(
         padding: const EdgeInsets.all(8),
@@ -69,16 +75,27 @@ class ProductWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(product.product.name, style: textStyles.displayMedium),
+                  TranslationWidget(
+                    message: product.product.name,
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        style: textStyles.displayMedium
+                    ), 
+                  ),
                   const SizedBox(
                       width: 8), // Espacio entre la imagen y el texto
-                  Text(
-                    product.product.description,
-                    style: textStyles.bodyMedium?.copyWith(
-                      color: Colors.grey[700]
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  TranslationWidget(
+                    message: product.product.description,
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                      translated,
+                      style: textStyles.bodyMedium?.copyWith(
+                        color: Colors.grey[700]
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis
+                    ), 
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

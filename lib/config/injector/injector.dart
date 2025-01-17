@@ -89,8 +89,8 @@ class Injector {
 
     //? Iniciando modulo de Stripe
 
-    Stripe.publishableKey = Environment.getStripePublishableKey();
-    await Stripe.instance.applySettings();
+    // Stripe.publishableKey = Environment.getStripePublishableKey();
+    // await Stripe.instance.applySettings();
 
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();

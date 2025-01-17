@@ -1,6 +1,8 @@
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/Cart/widgets/custom_cart_bundle.dart';
 import 'package:GoDeli/presentation/screens/Cart/widgets/custom_cart_product.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -29,15 +31,22 @@ class _CartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final totalItems = context.watch<CartBloc>().state.totalItems;
     final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: Text(
-          'Cart',
-          style: textStyles.displayLarge,
+        title: 
+        TranslationWidget(
+          message: 'Cart',
+          toLanguage: language,
+          builder: (translated) => Text(
+            translated,
+            style: textStyles.displayLarge
+          ), 
         ),
         actions: <Widget>[
           Padding(
@@ -66,6 +75,7 @@ class _CartView extends StatelessWidget {
 
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
 
     return Container(
@@ -87,11 +97,15 @@ class _CartView extends StatelessWidget {
                         color: Colors.grey[400],
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        'Your cart is empty',
-                        style: textStyles.displayMedium?.copyWith(
-                          color: Colors.grey[400],
-                        ),
+                      TranslationWidget(
+                        message: 'Your cart is empty',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                            translated,
+                            style: textStyles.displayMedium?.copyWith(
+                              color: Colors.grey[400],
+                            ),
+                        ), 
                       ),
                     ],
                   ),
@@ -166,9 +180,13 @@ class _CartView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Total
-                      Text(
-                        'Subtotal',
-                        style: textStyles.displayLarge
+                      TranslationWidget(
+                        message: 'Subtotal',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                            translated,
+                            style: textStyles.displayLarge
+                        ), 
                       ),
                       Text(
                         '\$${cartBloc.state.total.toStringAsFixed(2)}',
@@ -189,12 +207,17 @@ class _CartView extends StatelessWidget {
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                       ),
-                      child: Text(
-                        'Proceed to checkout',
-                        style: textStyles.displayMedium?.copyWith(
-                          color: Colors.white
-                        ),
-                      ))
+                      child: TranslationWidget(
+                        message: 'Proceed to checkout',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                            translated,
+                            style: textStyles.displayMedium?.copyWith(
+                            color: Colors.white
+                          )
+                        ), 
+                      )
+                  )
                 ],
               ),
             )
