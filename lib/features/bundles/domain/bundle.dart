@@ -1,4 +1,3 @@
-import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
 import 'package:equatable/equatable.dart';
 
@@ -17,7 +16,6 @@ class Bundle extends Equatable {
   final List<Promotion> promotions;
   final List<BundleProduct> products;
 
-
   const Bundle(
       {required this.id,
       required this.name,
@@ -31,8 +29,7 @@ class Bundle extends Equatable {
       this.expirationDate,
       this.categories = const [],
       this.promotions = const [],
-      this.products = const []
-      });
+      this.products = const []});
 
   @override
   List<Object?> get props => [
@@ -52,18 +49,17 @@ class Bundle extends Equatable {
       ];
 }
 
-class BundleProduct extends Equatable{
+class BundleProduct extends Equatable {
   final String id;
   final String name;
 
   const BundleProduct({required this.id, required this.name});
-  
+
   @override
   List<Object> get props => [id, name];
 
-  
   factory BundleProduct.fromJson(Map<String, dynamic> json) => BundleProduct(
         id: json["id"],
         name: json["name"],
-    );
+      );
 }
