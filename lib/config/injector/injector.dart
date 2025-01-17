@@ -19,6 +19,7 @@ import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dar
 import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
 import 'package:GoDeli/features/bundles/infraestructure/datasources/bundles_datasource_impl.dart';
 import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repository_impl.dart';
+import 'package:GoDeli/features/card/aplication/Blocs/card_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/infraestructure/datasources/cart_isar_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/infraestructure/repositories/cart_local_storage_repository_impl.dart';
@@ -241,5 +242,7 @@ class Injector {
         CardRepositoryImpl(datasource: cardDatasource);
     getIt.registerFactory<ICardDatasource>(() => cardDatasource);
     getIt.registerFactory<ICardRepository>(() => cardRepository);
+    getIt.registerFactory<CardBloc>(
+        () => CardBloc(cardRepository: cardRepository));
   }
 }

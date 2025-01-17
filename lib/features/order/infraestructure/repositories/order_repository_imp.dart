@@ -11,18 +11,14 @@ class OrderRepositoryImpl implements IOrderRepository {
 
   @override
   Future<Result<Order>> processPayment({
-    required String paymentId,
-    required String currency,
     required String paymentMethod,
-    required String stripePaymentMethod,
+    String? stripePaymentMethod,
     required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   }) async {
     try {
       final order = await datasource.processPayment(
-        paymentId: paymentId,
-        currency: currency,
         paymentMethod: paymentMethod,
         stripePaymentMethod: stripePaymentMethod,
         idUserDirection: idUserDirection,

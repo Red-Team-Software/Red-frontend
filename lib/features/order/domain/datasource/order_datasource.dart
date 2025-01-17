@@ -5,10 +5,8 @@ import '../../../orders/domain/orders.dart';
 
 abstract class IOrderDatasource {
   Future<Result<Order>> processPayment({
-    required String paymentId,
-    required String currency,
     required String paymentMethod,
-    required String stripePaymentMethod,
+    String? stripePaymentMethod,
     required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,

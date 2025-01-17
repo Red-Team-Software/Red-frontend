@@ -25,7 +25,11 @@ class AddNewAddress extends CheckoutEvent {
   final String location;
   final num lat;
   final num lng;
-  const AddNewAddress({required this.title, required this.location, required this.lat, required this.lng });
+  const AddNewAddress(
+      {required this.title,
+      required this.location,
+      required this.lat,
+      required this.lng});
 
   @override
   List<Object?> get props => [title, location];
@@ -42,20 +46,16 @@ class SelectPaymentMethod extends CheckoutEvent {
 class ProceedToCheckout extends CheckoutEvent {}
 
 class ProcessPayment extends CheckoutEvent {
-  final String paymentId;
-  final String currency;
   final String paymentMethod;
-  final String stripePaymentMethod;
+  final String? stripePaymentMethod; // Make it optional
   final String address;
   final List<Map<String, dynamic>> bundles;
   final List<Map<String, dynamic>> products;
   final BuildContext context;
 
   const ProcessPayment({
-    required this.paymentId,
-    required this.currency,
     required this.paymentMethod,
-    required this.stripePaymentMethod,
+    this.stripePaymentMethod, // Make it optional
     required this.address,
     required this.bundles,
     required this.products,
@@ -63,15 +63,8 @@ class ProcessPayment extends CheckoutEvent {
   });
 
   @override
-  List<Object?> get props => [
-        paymentId,
-        currency,
-        paymentMethod,
-        stripePaymentMethod,
-        address,
-        bundles,
-        products
-      ];
+  List<Object?> get props =>
+      [paymentMethod, stripePaymentMethod, address, bundles, products];
 }
 
 class FetchAddressesEvent extends CheckoutEvent {}

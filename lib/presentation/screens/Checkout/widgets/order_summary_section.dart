@@ -1,9 +1,11 @@
+import 'package:GoDeli/features/card/aplication/Blocs/card_state.dart';
 import 'package:GoDeli/features/checkout/aplication/checkout/checkout_state.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/checkout/checkout_bloc.dart';
 import 'package:GoDeli/features/checkout/aplication/checkout/checkout_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:GoDeli/features/card/aplication/Blocs/card_bloc.dart';
 
 class OrderSummarySection extends StatelessWidget {
   const OrderSummarySection({super.key});
@@ -12,6 +14,7 @@ class OrderSummarySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartBloc = context.watch<CartBloc>();
     final checkoutBloc = context.watch<CheckoutBloc>();
+    final cardBloc = context.watch<CardBloc>();
     final colors = Theme.of(context).colorScheme;
 
     return Container(
@@ -141,11 +144,15 @@ class OrderSummarySection extends StatelessWidget {
                       {'id': bundle.bundle.id, 'quantity': bundle.quantity}));
                   context.read<CheckoutBloc>().add(
                         ProcessPayment(
-                          paymentId: state.selectedPaymentMethod?.id ?? '',
-                          //amount: cartBloc.state.total,
-                          currency: 'usd',
-                          paymentMethod: "card",
-                          stripePaymentMethod: 'pm_card_threeDSecureOptional',
+                          paymentMethod: "credit",
+                          stripePaymentMethod:
+                              state.selectedPaymentMethod?.name == "stripe"
+                                  ? cardBloc.state is CardLoadSuccess
+                                      ? (cardBloc.state as CardLoadSuccess)
+                                          .selectedCard
+                                          ?.id
+                                      : null
+                                  : null,
                           address: state.selectedAddress?.id ?? '',
                           bundles: cartBloc.state.bundles
                               .map((bundle) => {
