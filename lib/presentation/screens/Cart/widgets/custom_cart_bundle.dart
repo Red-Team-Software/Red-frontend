@@ -1,5 +1,7 @@
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -14,23 +16,29 @@ class BundleWidget extends StatelessWidget {
 
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     return Slidable(
       endActionPane: ActionPane(
           motion: const ScrollMotion(),
           extentRatio: 0.25,
           children: [
-            SlidableAction(
-              onPressed: (context) {
-                cartBloc.add(RemoveBundle(bundle));
-              },
-              backgroundColor: colors.primary,
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: 'Delete',
-              borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(8),
-                bottomRight: Radius.circular(8),
+            TranslationWidget(
+              message: 'Delete',
+              toLanguage: language,
+              builder: (translated) => SlidableAction(
+                onPressed: (context) {
+                  cartBloc.add(RemoveBundle(bundle));
+                },
+                backgroundColor: colors.primary,
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: translated,
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(8),
+                  bottomRight: Radius.circular(8),
+                ),
               ),
             )
           ]),
@@ -67,28 +75,38 @@ class BundleWidget extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(bundle.bundle.name, style: textStyles.displayMedium),
+                children: [TranslationWidget(
+                    message: bundle.bundle.name,
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        style: textStyles.displayMedium
+                    ), 
+                  ),
                   const SizedBox(
                       width: 8), // Espacio entre la imagen y el texto
-                  Text(
-                    bundle.bundle.description,
-                    style: textStyles.bodyMedium
-                        ?.copyWith(color: Colors.grey[700]),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  TranslationWidget(
+                    message: bundle.bundle.description,
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        style: textStyles.bodyMedium
+                          ?.copyWith(color: Colors.grey[700]),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis
+                    ), 
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8.0),
-                        child: Text(
-                          '\$${bundle.bundle.price}',
-                          style: textStyles.displayMedium
-                        ),
+                        child: Text('\$${bundle.bundle.price}',
+                            style: textStyles.displayMedium),
                       ),
-                      const SizedBox(width:16), // Espacio entre el precio y el control de cantidad
+                      const SizedBox(
+                          width:
+                              16), // Espacio entre el precio y el control de cantidad
                       // Control de cantidad
                       Container(
                         decoration: BoxDecoration(
@@ -107,7 +125,7 @@ class BundleWidget extends StatelessWidget {
                                 }),
                             Text(
                               '${bundle.quantity}', // Aquí muestra la cantidad actual
-                              style:textStyles.displaySmall,
+                              style: textStyles.displaySmall,
                             ),
                             QuantityButton(
                                 isMinus: false,
@@ -159,6 +177,7 @@ class QuantityButton extends StatelessWidget {
     }
 
     return IconButton(
-        icon: Icon(icon, color: colors.primary, size: 20), onPressed: onPressed);
+        icon: Icon(icon, color: colors.primary, size: 20),
+        onPressed: onPressed);
   }
 }
