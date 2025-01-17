@@ -25,4 +25,6 @@ abstract class IOrderRepository {
   Future<Result<List<OrderItem>>> fetchPastOrders();
 
   Future<Result<List<OrderItem>>> fetchActiveOrders();
+
+  Future<Result<Location>> fetchCourierPosition({required String orderId});
 }

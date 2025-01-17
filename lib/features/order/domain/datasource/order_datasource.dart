@@ -22,4 +22,6 @@ abstract class IOrderDatasource {
 
   Future<void> reportOrder(
       {required String orderId, required String description});
+
+  Future<Location> fetchCourierPosition({required String orderId});
 }

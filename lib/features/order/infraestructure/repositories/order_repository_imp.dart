@@ -108,4 +108,18 @@ class OrderRepositoryImpl implements IOrderRepository {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<Result<Location>> fetchCourierPosition(
+      {required String orderId}) async {
+    try {
+      final position = await datasource.fetchCourierPosition(orderId: orderId);
+      print("position");
+      return Result.success(position);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
+    }
+  }
 }

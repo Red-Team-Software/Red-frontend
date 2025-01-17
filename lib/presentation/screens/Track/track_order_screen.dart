@@ -74,6 +74,9 @@ class TrackOrderScreen extends StatelessWidget {
                     OrderMapWidget(
                       userLatitude: order.orderDirection.latitude,
                       userLongitude: order.orderDirection.longitude,
+                      deliveryLatitude: order.orderCourier?.location?.latitude,
+                      deliveryLongitude:
+                          order.orderCourier?.location?.longitude,
                     ),
                   ],
                 ),

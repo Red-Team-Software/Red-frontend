@@ -71,13 +71,13 @@ class Courier {
   final String courierName;
   final String courierImage;
   final String courierPhone;
-  final Location location;
+  Location? location;
 
   Courier({
     required this.courierName,
     required this.courierImage,
     required this.courierPhone,
-    required this.location,
+    this.location,
   });
 
   factory Courier.fromJson(Map<String, dynamic> json) {
@@ -85,10 +85,7 @@ class Courier {
       courierName: json['courierName'] as String,
       courierImage: json['courierImage'] as String,
       courierPhone: json['phone'] as String,
-      location: Location(
-        latitude: 10.387448,
-        longitude: -67.682030,
-      ),
+      location: null,
     );
   }
 }
@@ -101,4 +98,11 @@ class Location {
     required this.latitude,
     required this.longitude,
   });
+
+  factory Location.fromJson(Map<String, dynamic> json) {
+    return Location(
+      latitude: num.parse(json['latActual']).toDouble(),
+      longitude: num.parse(json['longActual']).toDouble(),
+    );
+  }
 }

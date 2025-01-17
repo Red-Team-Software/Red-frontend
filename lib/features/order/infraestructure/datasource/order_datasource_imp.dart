@@ -109,4 +109,19 @@ class OrderDatasourceImpl implements IOrderDatasource {
     );
     if (!res.isSuccessful()) throw Exception(res.getError());
   }
+
+  @override
+  Future<Location> fetchCourierPosition({required String orderId}) async {
+    final res = await httpService.request(
+      '/order/courier/position/$orderId',
+      'GET',
+      (json) => Location.fromJson(json),
+    );
+
+    if (!res.isSuccessful()) throw Exception(res.getError());
+    print("Retorno del get location");
+    print(res.getValue());
+
+    return res.getValue();
+  }
 }
