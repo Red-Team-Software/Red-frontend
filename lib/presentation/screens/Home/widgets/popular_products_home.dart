@@ -2,6 +2,7 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/products/application/popular_products/popular_products_bloc.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
+import 'package:GoDeli/presentation/screens/skeleton/skeleton_screen.dart';
 import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,7 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
-    final language =  context.watch<LanguagesCubit>().state.selected.language;
+    final language = context.watch<LanguagesCubit>().state.selected.language;
 
     return BlocProvider(
       create: (_) => getIt<PopularProductsBloc>(),
@@ -62,26 +63,23 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 TranslationWidget(
-                  message:'Popular',
+                  message: 'Popular',
                   toLanguage: language,
-                  builder: (translated) => Text(
-                      translated,
-                      style: textStyles.displayLarge
-                  ), 
+                  builder: (translated) =>
+                      Text(translated, style: textStyles.displayLarge),
                 ),
                 GestureDetector(
                   onTap: () => context.push('/catalog'),
-                  child: 
-                  TranslationWidget(
-                  message:'view all',
-                  toLanguage: language,
-                  builder: (translated) => Text(
+                  child: TranslationWidget(
+                    message: 'view all',
+                    toLanguage: language,
+                    builder: (translated) => Text(
                       translated,
                       textAlign: TextAlign.end,
-                    style: textStyles.displaySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold),
-                    ), 
+                      style: textStyles.displaySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ],
@@ -102,22 +100,36 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
                   ),
                 );
               }
-
+              if (state is PopularProductsLoading) {
+                return SizedBox(
+                  height: 400,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: 3,
+                    itemBuilder: (BuildContext context, int index) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4.0),
+                        child: SkeletonWidget(
+                          height: 400,
+                          width: double.infinity,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
               if (state is PopularProductsLoaded) {
                 if (state.products.isEmpty) {
                   return Center(
                       child: TranslationWidget(
-                        message:'There are no products available',
-                        toLanguage: language,
-                        builder: (translated) => Text(
-                          translated,
-                            style: textStyles.bodyLarge?.copyWith(
-                            color: theme.colorScheme.error,
-                            fontWeight: FontWeight.bold,
-                            )     
-                        ), 
-                      ) 
-                  );
+                    message: 'There are no products available',
+                    toLanguage: language,
+                    builder: (translated) => Text(translated,
+                        style: textStyles.bodyLarge?.copyWith(
+                          color: theme.colorScheme.error,
+                          fontWeight: FontWeight.bold,
+                        )),
+                  ));
                 }
                 return Column(
                   children: [

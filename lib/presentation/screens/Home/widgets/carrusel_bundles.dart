@@ -1,6 +1,5 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/bundles/application/bundle_offers/bundle_offers_bloc.dart';
-import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
@@ -127,6 +126,7 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
                           )
                       );
                     }
+
                     // PageView con los Bundles
                     return Column(
                       children: [

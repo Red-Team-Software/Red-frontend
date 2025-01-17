@@ -6,6 +6,7 @@ import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/Catalogo/widgets/filter_modal.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
+import 'package:GoDeli/presentation/screens/skeleton/skeleton_screen.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_bundle.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';
 import 'package:flutter/material.dart';
@@ -72,9 +73,22 @@ class _CatalogBodyState extends State<CatalogBody> {
     final textStyles = theme.textTheme;
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
-        // if (state.status == CatalogStatus.loading) {
-        //   return const Center(child: CircularProgressIndicator());
-        // }
+        if (state.status == CatalogStatus.loading) {
+          return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.9,
+                ),
+                itemCount: 6,
+                itemBuilder: (context, index) => const Padding(
+                  padding:  EdgeInsets.symmetric(
+                    horizontal: 14.0, vertical: 18.0
+                  ),
+                  child: SkeletonWidget(  
+                  ),
+                ),
+              );
+        }
         if (state.status == CatalogStatus.error) {
           return Center(child: 
             TranslationWidget(
