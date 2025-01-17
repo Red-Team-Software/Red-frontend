@@ -27,23 +27,25 @@ class _CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final totalItems = context.watch<CartBloc>().state.totalItems;
+    final textStyles = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Text(
+        title: Text(
           'Cart',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          style: textStyles.displayLarge,
         ),
         actions: <Widget>[
-          Text(
-            '${context.watch<CartBloc>().state.totalItems} items',
-            style: TextStyle(
-                color: colors.primary,
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
+          Padding(
+            padding: const EdgeInsets.only(top: 12, right: 16),
+            child: Text(
+              '$totalItems ${totalItems == 1 ? 'item' : 'items'}',
+              style: textStyles.displaySmall?.copyWith(color: colors.primary),
+            ),
           ),
           const SizedBox(
             width: 8,
@@ -63,6 +65,8 @@ class _CartView extends StatelessWidget {
     final cart = cartBloc.state;
 
     final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
+
 
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
@@ -85,10 +89,8 @@ class _CartView extends StatelessWidget {
                       const SizedBox(height: 16),
                       Text(
                         'Your cart is empty',
-                        style: TextStyle(
+                        style: textStyles.displayMedium?.copyWith(
                           color: Colors.grey[400],
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
@@ -106,7 +108,10 @@ class _CartView extends StatelessWidget {
                           return Column(
                             children: [
                               ProductWidget(product: product),
-                              const Divider(),
+                              Divider(
+                                
+                                color: Colors.grey[300],
+                              ),
                             ],
                           );
                         },
@@ -120,7 +125,9 @@ class _CartView extends StatelessWidget {
                           return Column(
                             children: [
                               BundleWidget(bundle: bundle),
-                              const Divider(),
+                              Divider(
+                                color: Colors.grey[300],
+                              ),
                             ],
                           );
                         },
@@ -138,8 +145,8 @@ class _CartView extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30),
-                  topRight: Radius.circular(30),
+                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(16),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -153,84 +160,19 @@ class _CartView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      //TODO: Aquí iría la lógica para aplicar un cupón de descuento
-                    },
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.local_offer, color: colors.primary),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Apply coupon',
-                            style: TextStyle(
-                              color: colors.primary,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ]),
-                  ),
                   const SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Subtotal',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Color.fromARGB(255, 4, 4, 4),
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        '\$${cartBloc.state.subtotal.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Discount',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[700],
-                        ),
-                      ),
-                      Text(
-                        '%${cart.discount.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Divider(height: 24, color: Colors.grey[400]),
+                 
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Total
-                      const Text(
-                        'Total',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                      Text(
+                        'Subtotal',
+                        style: textStyles.displayLarge
                       ),
                       Text(
                         '\$${cartBloc.state.total.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+                        style: textStyles.displayLarge
                       ),
                     ],
                   ),
@@ -243,16 +185,14 @@ class _CartView extends StatelessWidget {
                         backgroundColor:
                             colors.primary, // Color de fondo del botón
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Proceed to checkout',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+                        style: textStyles.displayMedium?.copyWith(
+                          color: Colors.white
                         ),
                       ))
                 ],
