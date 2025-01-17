@@ -67,8 +67,8 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
                   builder: (translated) => Text(
                       translated,
                       style: textStyles.displayLarge
-                    ), 
-                  ),
+                  ), 
+                ),
                 GestureDetector(
                   onTap: () => context.push('/catalog'),
                   child: 
@@ -106,13 +106,18 @@ class _PopularProductsHomeState extends State<PopularProductsHome> {
               if (state is PopularProductsLoaded) {
                 if (state.products.isEmpty) {
                   return Center(
-                      child: Text(
-                    'There are no products available',
-                    style: textStyles.bodyLarge?.copyWith(
-                      color: theme.colorScheme.error,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ));
+                      child: TranslationWidget(
+                        message:'There are no products available',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                          translated,
+                            style: textStyles.bodyLarge?.copyWith(
+                            color: theme.colorScheme.error,
+                            fontWeight: FontWeight.bold,
+                            )     
+                        ), 
+                      ) 
+                  );
                 }
                 return Column(
                   children: [

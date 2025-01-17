@@ -1,12 +1,15 @@
 import 'package:GoDeli/presentation/core/router/app_router.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/Order/widgets/order_bundle_card.dart';
 import 'package:GoDeli/presentation/screens/Order/widgets/order_product_card.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_info_widget.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_items_widget.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_status_widget.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_map_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class TrackOrderScreen extends StatelessWidget {
@@ -18,9 +21,18 @@ class TrackOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Track Order'),
+        title: 
+        TranslationWidget(
+          message:'Track Order',
+          toLanguage: language,
+          builder: (translated) => Text(
+            translated,
+          ), 
+        ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.push("/", extra: 3),

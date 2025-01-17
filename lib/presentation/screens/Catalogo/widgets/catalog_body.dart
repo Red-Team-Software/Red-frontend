@@ -23,19 +23,38 @@ class CatalogBody extends StatefulWidget {
 
 class _CatalogBodyState extends State<CatalogBody> {
   bool showProducts = true;
+  
+
 
   // Método para construir el contenido de Bundles
   Widget _buildBundles(BuildContext context) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
         if (state.status == CatalogStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
         if (state.status == CatalogStatus.error) {
-          return const Center(child: Text('Error loading bundles'));
+          return Center(child: 
+            TranslationWidget(
+              message:'Error loading bundles',
+              toLanguage: language,
+              builder: (translated) => Text(
+                translated
+              ), 
+            )
+          );
         }
         if (state.bundles.isEmpty) {
-          return const Center(child: Text('No bundles available'));
+          return Center(child:
+            TranslationWidget(
+              message:'No bundles available',
+              toLanguage: language,
+              builder: (translated) => Text(
+                translated
+              ), 
+            )
+          );
         }
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -67,16 +86,34 @@ class _CatalogBodyState extends State<CatalogBody> {
   // Método para construir el contenido de Products
   Widget _buildProducts(BuildContext context) {
     final theme = Theme.of(context);
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
         if (state.status == CatalogStatus.loading) {
           return const Center(child: CircularProgressIndicator());
         }
         if (state.status == CatalogStatus.error) {
-          return const Center(child: Text('Error loading products'));
+          return Center(child: 
+            TranslationWidget(
+              message:'Error loading products',
+              toLanguage: language,
+              builder: (translated) => Text(
+                translated
+              ), 
+            )
+          );
         }
         if (state.products.isEmpty) {
-          return const Center(child: Text('No products available'));
+          return Center(child: 
+            TranslationWidget(
+              message:'No products available',
+              toLanguage: language,
+              builder: (translated) => Text(
+                translated
+              ), 
+            )
+          );
         }
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -105,6 +142,8 @@ class _CatalogBodyState extends State<CatalogBody> {
         List<Category>.from(context.watch<CategoriesBloc>().state.categories);
     final textStyle = Theme.of(context).textTheme;
     final colors = Theme.of(context).colorScheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     return DefaultTabController(
       length: 2, // Dos pestañas: Bundles y Products
@@ -120,9 +159,13 @@ class _CatalogBodyState extends State<CatalogBody> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Filters',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                  TranslationWidget(
+                  message:'Filters',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                      translated,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)
+                    ), 
                   ),
                   IconButton(
                     icon: Icon(Icons.filter_list, color: colors.primary),
@@ -165,21 +208,35 @@ class _CatalogBodyState extends State<CatalogBody> {
                     Tab(
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text('Bundles',
-                            style: TextStyle(
+                        child: 
+                          TranslationWidget(
+                            message:'Bundles',
+                            toLanguage: language,
+                            builder: (translated) => Text(
+                              translated,
+                              style: TextStyle(
                               fontSize: textStyle.displaySmall!.fontSize,
                               fontWeight: FontWeight.bold,
-                            )),
+                              )
+                            ), 
+                          ),
                       ),
                     ),
                     Tab(
                       child: Align(
                         alignment: Alignment.center,
-                        child: Text('Products',
-                            style: TextStyle(
+                        child: 
+                          TranslationWidget(
+                            message:'Products',
+                            toLanguage: language,
+                            builder: (translated) => Text(
+                              translated,
+                              style: TextStyle(
                               fontSize: textStyle.displaySmall!.fontSize,
                               fontWeight: FontWeight.bold,
-                            )),
+                              )
+                            ), 
+                          ),
                       ),
                     ),
                   ],
@@ -211,6 +268,8 @@ class _FilterModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     return BlocProvider(
       create: (context) => getIt<CatalogBloc>(),
@@ -224,9 +283,13 @@ class _FilterModal extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Filters',
-                style: textStyle.displayMedium,
+              TranslationWidget(
+                message:'Filters',
+                toLanguage: language,
+                builder: (translated) => Text(
+                  translated,
+                  style: textStyle.displayMedium
+                ), 
               ),
               const Divider(),
               _CategoriesList(categories: categories),
@@ -235,7 +298,13 @@ class _FilterModal extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text('Apply Filters'),
+                child: TranslationWidget(
+                  message:'Apply Filters',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                    translated
+                  ), 
+                ),
               ),
             ],
           ),
@@ -256,6 +325,7 @@ class CategoriesSliverCatalog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme;
+    
     return SliverPersistentHeader(
       pinned: true,
       delegate: _SliverAppBarDelegate(

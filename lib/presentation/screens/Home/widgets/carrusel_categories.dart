@@ -13,6 +13,7 @@ class CategoriesCarrusel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return SizedBox(
       height: 350,
@@ -25,16 +26,26 @@ class CategoriesCarrusel extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Categories', style: textStyles.displayLarge),
+              children: [ TranslationWidget(
+                  message:'Categories',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      style: textStyles.displayLarge
+                  ), 
+                ),
                 GestureDetector(
                   onTap: () => context.push('/catalog'),
-                  child: Text(
-                    'view all',
-                    textAlign: TextAlign.end,
-                    style: textStyles.displaySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold),
+                  child: TranslationWidget(
+                    message:'view all',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        textAlign: TextAlign.end,
+                          style: textStyles.displaySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold),
+                    ), 
                   ),
                 ),
               ],
@@ -130,6 +141,8 @@ class CustomCategoryHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+    
     return SizedBox(
       height: 250,
       width: 150,
@@ -183,7 +196,7 @@ class CustomCategoryHome extends StatelessWidget {
                           children: [
                             TranslationWidget(
                                 message: current.name,
-                                toLanguage: 'English',
+                                toLanguage: language,
                                 builder: (translatedMessage) => Text(
                                       translatedMessage,
                                       style: textStyles.displaySmall?.copyWith(
@@ -198,7 +211,7 @@ class CustomCategoryHome extends StatelessWidget {
                             // Descripción del producto
                             TranslationWidget(
                                 message: 'More Details',
-                                toLanguage: 'English',
+                                toLanguage: language,
                                 builder: (translatedMessage) => Text(
                                       translatedMessage,
                                       style: textStyles.bodySmall?.copyWith(

@@ -1,6 +1,8 @@
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +21,7 @@ class BundleHomeCard extends StatelessWidget {
     final cartBloc = context.watch<CartBloc>();
     final theme = Theme.of(context);
     final textStyle = theme.textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return GestureDetector(
       onTap: () {
@@ -81,12 +84,17 @@ class BundleHomeCard extends StatelessWidget {
                               color: theme.colorScheme.primary,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Text(
-                              'Offer of the day!',
-                              style: textStyle.bodyLarge?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: 
+                            TranslationWidget(
+                              message:'Offer of the day!',
+                              toLanguage: language,
+                                builder: (translated) => Text(
+                                  translated,
+                                  style: textStyle.bodyLarge?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  )
+                                ), 
                             ),
                           )
                         : const SizedBox(),
@@ -142,24 +150,32 @@ class BundleHomeCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                current.name,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: textStyle.displaySmall,
+              child: TranslationWidget(
+                message:current.name,
+                toLanguage: language,
+                builder: (translated) => Text(
+                  translated,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: textStyle.displaySmall,
+                ), 
               ),
             ),
 
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  current.description,
-                  style: textStyle.bodyLarge?.copyWith(
-                      // color: Colors.white,
+                child: 
+                TranslationWidget(
+                  message:current.description,
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      style: textStyle.bodyLarge?.copyWith(// color: Colors.white,
                       ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                  ), 
                 ),
               ),
             ),
@@ -181,7 +197,7 @@ class BundleHomeCard extends StatelessWidget {
                     ),
                     child: Text(
                       '${(current.promotions[0].discount * 100).floor()}%',
-                      style: theme.textTheme.displaySmall?.copyWith(
+                        style: theme.textTheme.displaySmall?.copyWith(
                         color: theme.colorScheme.secondary,
                         fontWeight: FontWeight.bold,
                       ),
@@ -193,7 +209,7 @@ class BundleHomeCard extends StatelessWidget {
                       current.promotions[0].discount > 0)
                     Text(
                       '\$${current.price}',
-                      style: theme.textTheme.displaySmall?.copyWith(
+                        style: theme.textTheme.displaySmall?.copyWith(
                         color: Colors.grey,
                         decoration: TextDecoration.lineThrough,
                         fontWeight: FontWeight.bold,

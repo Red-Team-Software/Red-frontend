@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 
@@ -10,6 +12,7 @@ class SearchBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -28,8 +31,15 @@ class SearchBody extends StatelessWidget {
           listener: (context, state) {
             if (state.status == SearchStatus.error) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('An error occurred'),
+                SnackBar(
+                  content: 
+                  TranslationWidget(
+                    message:'An error occurred',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated
+                    ), 
+                  ),
                 ),
               );
             }
@@ -50,14 +60,20 @@ class SearchBody extends StatelessWidget {
             if (state.products.isEmpty &&
                 state.bundles.isEmpty &&
                 state.status != SearchStatus.initial) {
-              return const SliverFillRemaining(
+              return SliverFillRemaining(
                 child: Center(
                     child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.search_off_outlined, size: 64),
-                    SizedBox(height: 16),
-                    Text('Nothing found'),
+                    const Icon(Icons.search_off_outlined, size: 64),
+                    const SizedBox(height: 16),
+                    TranslationWidget(
+                      message:'An error occurred',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                          translated
+                      ), 
+                    ),
                   ],
                 )),
               );
@@ -69,15 +85,19 @@ class SearchBody extends StatelessWidget {
                 delegate: SliverChildListDelegate(
                   [
                     if (state.bundles.isNotEmpty) ...[
-                      Text(
-                        'Bundles',
-                        style: TextStyle(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                        ),
+                      TranslationWidget(
+                        message:'Bundles',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                          translated,
+                          style: TextStyle(
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32,
+                          ),
+                        ), 
                       ),
                       SizedBox(
                         height: 260,
@@ -99,15 +119,19 @@ class SearchBody extends StatelessWidget {
                       )
                     ],
                     if (state.products.isNotEmpty) ...[
-                      Text(
-                        'Products',
-                        style: TextStyle(
-                          color: Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32,
-                        ),
+                      TranslationWidget(
+                        message:'Products',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                          translated,
+                          style: TextStyle(
+                            color: Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 32,
+                          ),
+                        ), 
                       ),
                       ListView.separated(
                         separatorBuilder: (context, index) =>
@@ -134,21 +158,35 @@ class SearchBody extends StatelessWidget {
   }
 
   SliverFillRemaining initialSearchBody(BuildContext context) {
-    return const SliverFillRemaining(
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
+    return SliverFillRemaining(
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(Icons.search, size: 64),
-              SizedBox(height: 16),
-              Text('Start searching for products and bundles'),
-              SizedBox(height: 16),
-              Text('Here some popular searches...'),
-              SizedBox(height: 8),
+              const Icon(Icons.search, size: 64),
+              const SizedBox(height: 16),
+              TranslationWidget(
+                message:'Start searching for products and bundles',
+                toLanguage: language,
+                builder: (translated) => Text(
+                  translated,
+                ), 
+              ),
+              const SizedBox(height: 16),
+              TranslationWidget(
+                message:'Here some popular searches...',
+                toLanguage: language,
+                builder: (translated) => Text(
+                  translated,
+                ), 
+              ),
+              const SizedBox(height: 8),
               // CardBundleCarrusel(),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
             ],
           ),
         ),
@@ -190,6 +228,8 @@ class _InputSearchState extends State<_InputSearch> {
   @override
   @override
   Widget build(BuildContext context) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
         return SearchBar(
@@ -197,7 +237,7 @@ class _InputSearchState extends State<_InputSearch> {
           onChanged: (text) {
             _onTextChanged(text);
           },
-          hintText: 'Search for products or bundles',
+          hintText:'Search for products or bundles',
           backgroundColor: WidgetStateProperty.all(Colors.grey[300]),
           trailing: [
             AnimatedSwitcher(

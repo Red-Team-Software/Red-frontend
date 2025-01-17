@@ -16,6 +16,7 @@ class DrawerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final authBloc = context.watch<AuthBloc>();
     final cartBloc = context.watch<CartBloc>();
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -34,28 +35,32 @@ class DrawerWidget extends StatelessWidget {
             Container(
               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
               padding: const EdgeInsets.symmetric(vertical: 8),
-              child: const Row(
+              child: Row(
                 children: [
-                  CircleAvatar(
+                  const CircleAvatar(
                     radius: 25,
                     backgroundImage: NetworkImage(
                         'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 16.0,
                   ),
                   Flex(
                     direction: Axis.vertical,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Mi nombre',
-                        style: TextStyle(
+                      TranslationWidget(
+                        message:'Mi nombre',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                          translated,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.w800,
                             fontSize: 16),
-                      ),
-                      Text('O412-1231231',
+                        )
+                      ), 
+                      const Text('O412-1231231',
                           style: TextStyle(color: Colors.white, fontSize: 14))
                     ],
                   )
@@ -73,7 +78,14 @@ class DrawerWidget extends StatelessWidget {
           context.push('/auth');
         },
         backgroundColor: Colors.transparent,
-        label: const Text('Logout'),
+        label: 
+        TranslationWidget(
+          message:'Logout',
+          toLanguage: language,
+          builder: (translated) => Text(
+            translated
+          ), 
+        ),
         icon: const Icon(Icons.logout),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
