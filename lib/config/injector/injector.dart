@@ -19,6 +19,7 @@ import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dar
 import 'package:GoDeli/features/bundles/domain/repositories/bundle_repository.dart';
 import 'package:GoDeli/features/bundles/infraestructure/datasources/bundles_datasource_impl.dart';
 import 'package:GoDeli/features/bundles/infraestructure/repositories/bundle_repository_impl.dart';
+import 'package:GoDeli/features/card/aplication/Blocs/card_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/infraestructure/datasources/cart_isar_local_storage_datasource.dart';
 import 'package:GoDeli/features/cart/infraestructure/repositories/cart_local_storage_repository_impl.dart';
@@ -69,6 +70,10 @@ import 'package:GoDeli/features/wallet/infrastructure/datasource/wallet_datasour
 import 'package:GoDeli/features/wallet/infrastructure/repository/wallet_repository_impl.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
+import 'package:GoDeli/features/card/domain/datasource/card_datasource.dart';
+import 'package:GoDeli/features/card/domain/repositories/card_repository.dart';
+import 'package:GoDeli/features/card/infraestructure/datasource/card_datasource_imp.dart';
+import 'package:GoDeli/features/card/infraestructure/repositories/card_repository_imp.dart';
 
 final getIt = GetIt.instance;
 
@@ -83,8 +88,11 @@ class Injector {
     await Environment.initEnvironment(selectDatasourceBloc);
 
     //? Iniciando modulo de Stripe
-    // Stripe.publishableKey = Environment.stripePublishableKey;
-    // await Stripe.instance.applySettings();
+
+    print('Stripe publishable key: ${Environment.stripePublishableKey}');
+    Stripe.publishableKey = Environment.stripePublishableKey;
+    await Stripe.instance.applySettings();
+
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
     // getIt.registerSingleton<IHttpService>(httpService);
@@ -237,5 +245,15 @@ class Injector {
         ));
     getIt.registerSingleton<IHttpService>(httpService);
     getIt.registerSingleton<SelectDatasourceBloc>(selectDatasourceBloc);
+
+    //? inicializando las dependencias de modulo tarjeta
+    final ICardDatasource cardDatasource =
+        CardDatasourceImpl(httpService: httpService);
+    final ICardRepository cardRepository =
+        CardRepositoryImpl(datasource: cardDatasource);
+    getIt.registerFactory<ICardDatasource>(() => cardDatasource);
+    getIt.registerFactory<ICardRepository>(() => cardRepository);
+    getIt.registerFactory<CardBloc>(
+        () => CardBloc(cardRepository: cardRepository));
   }
 }

@@ -13,22 +13,25 @@ class OrderDatasourceImpl implements IOrderDatasource {
 
   @override
   Future<Result<Order>> processPayment({
-    required String paymentId,
-    required String currency,
-    required String paymentMethod,
-    required String stripePaymentMethod,
+    required paymentMethod,
+    String? stripePaymentMethod,
     required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   }) async {
+    print("req");
+    print(paymentMethod);
+    print(stripePaymentMethod);
+    print(idUserDirection);
+    print(bundles);
+    print(products);
+
     final res = await httpService.request(
       '/order/pay/stripe',
       'POST',
       (json) =>
           OrderMapper.mapEntityToDomain(OrderEntity.fromPaymentJson(json)),
       body: {
-        "paymentId": paymentId,
-        // "currency": currency,
         "paymentMethod": paymentMethod,
         "stripePaymentMethod": stripePaymentMethod,
         "idUserDirection": idUserDirection,

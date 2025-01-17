@@ -33,20 +33,20 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
   }
 
   void _onItemsFetched(ItemsFetched event, Emitter<CatalogState> emit) {
-  if (event.isPagination) {
-    emit(state.copyWith(
-      products: [...state.products, ...event.product],
-      bundles: [...state.bundles, ...event.bundle],
-      status: CatalogStatus.loaded,
-    ));
-  } else {
-    emit(state.copyWith(
-      products: event.product,
-      bundles: event.bundle,
-      status: CatalogStatus.loaded,
-    ));
+    if (event.isPagination) {
+      emit(state.copyWith(
+        products: [...state.products, ...event.product],
+        bundles: [...state.bundles, ...event.bundle],
+        status: CatalogStatus.loaded,
+      ));
+    } else {
+      emit(state.copyWith(
+        products: event.product,
+        bundles: event.bundle,
+        status: CatalogStatus.loaded,
+      ));
+    }
   }
-}
 
   void _onCategorySet(CategorySet event, Emitter<CatalogState> emit) {
     var selectedCategories = List<String>.from(state.categorySelected);
@@ -150,17 +150,18 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
 
   void _fetchItems(FetchItems event, Emitter<CatalogState> emit) async {
     if (!event.isPagination) {
-    emit(state.copyWith(
-      products: [],
-      bundles: [],
-      page: 1,
-      status: CatalogStatus.loading,
-    ));
-  }
+      emit(state.copyWith(
+        products: [],
+        bundles: [],
+        page: 1,
+        status: CatalogStatus.loading,
+      ));
+    }
     add(const CatalogLoading());
     try {
       final resPro = await productsRepository.getProducts(
-        category: state.categorySelected.isEmpty ? null : state.categorySelected,
+        category:
+            state.categorySelected.isEmpty ? null : state.categorySelected,
         discount: state.discount == 0.0 ? null : state.discount,
         popular: state.popular ? 'popular' : null,
         page: state.page,
@@ -170,7 +171,8 @@ class CatalogBloc extends Bloc<CatalogEvent, CatalogState> {
       );
 
       final resBun = await bundleRepository.getBundlesPaginated(
-        category: state.categorySelected.isEmpty ? null : state.categorySelected,
+        category:
+            state.categorySelected.isEmpty ? null : state.categorySelected,
         discount: state.discount == 0.0 ? null : state.discount,
         popular: state.popular ? 'popular' : null,
         page: state.page,

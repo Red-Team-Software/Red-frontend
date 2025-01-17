@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
+import 'package:GoDeli/features/card/aplication/Blocs/card_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:GoDeli/features/common/application/bloc/select_datasource_bloc_bloc.dart';
@@ -55,6 +56,7 @@ class BlocsProviders extends StatelessWidget {
         BlocProvider(
             create: (context) =>
                 getIt<OrdersBloc>()..add(const OrdersLoaded())),
+        BlocProvider(create: (context) => getIt<CardBloc>()),
       ],
       child: const GoDeli(),
     );

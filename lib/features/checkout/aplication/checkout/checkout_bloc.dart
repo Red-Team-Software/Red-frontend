@@ -210,8 +210,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       ProcessPayment event, Emitter<CheckoutState> emit) async {
     emit(state.copyWith(isProcessing: true));
     final result = await orderRepository.processPayment(
-      paymentId: event.paymentId,
-      currency: event.currency,
       paymentMethod: event.paymentMethod,
       stripePaymentMethod: event.stripePaymentMethod,
       idUserDirection: event.address,
