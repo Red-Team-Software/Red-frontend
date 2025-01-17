@@ -6,6 +6,7 @@ import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/Catalogo/widgets/filter_modal.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
+import 'package:GoDeli/presentation/screens/skeleton/skeleton_screen.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_bundle.dart';
 import 'package:GoDeli/presentation/widgets/item/custom_item_product.dart';
 import 'package:flutter/material.dart';
@@ -72,17 +73,32 @@ class _CatalogBodyState extends State<CatalogBody> {
     final textStyles = theme.textTheme;
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
-        // if (state.status == CatalogStatus.loading) {
-        //   return const Center(child: CircularProgressIndicator());
-        // }
+        if (state.status == CatalogStatus.loading) {
+          return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.9,
+                ),
+                itemCount: 6,
+                itemBuilder: (context, index) => const Padding(
+                  padding:  EdgeInsets.symmetric(
+                    horizontal: 14.0, vertical: 18.0
+                  ),
+                  child: SkeletonWidget(  
+                  ),
+                ),
+              );
+        }
         if (state.status == CatalogStatus.error) {
-          return Center(
-              child: Text(
-            'Error loading bundles',
-            style: textStyles.displaySmall?.copyWith(
-              color: colors.error,
-            ),
-          ));
+          return Center(child: 
+            TranslationWidget(
+              message:'Error loading bundles',
+              toLanguage: language,
+              builder: (translated) => Text(
+                translated
+              ), 
+            )
+          );
         }
         if (state.bundles.isEmpty && state.status == CatalogStatus.loaded) {
           return Center(
@@ -139,19 +155,25 @@ class _CatalogBodyState extends State<CatalogBody> {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
     final textStyles = theme.textTheme;
+
     return BlocBuilder<CatalogBloc, CatalogState>(
       builder: (context, state) {
         // if (state.status == CatalogStatus.loading) {
         //   return const Center(child: CircularProgressIndicator());
         // }
         if (state.status == CatalogStatus.error) {
-          return Center(
-              child: Text(
-            'Error loading products',
-            style: textStyles.displaySmall?.copyWith(
-              color: colors.error,
-            ),
-          ));
+          return Center(child: 
+            TranslationWidget(
+              message:'Error loading products',
+              toLanguage: language,
+              builder: (translated) => Text(
+                translated,
+                style: textStyles.displaySmall?.copyWith(
+                color: colors.error,
+              )
+              ), 
+            )
+          );
         }
         if (state.products.isEmpty && state.status == CatalogStatus.loaded) {
           return Center(
@@ -218,13 +240,14 @@ class _CatalogBodyState extends State<CatalogBody> {
     final colors = Theme.of(context).colorScheme;
     final catalogBloc = context.read<CatalogBloc>();
 
+
     return DefaultTabController(
       length: 2, // Dos pestañas: Bundles y Products
       child: NestedScrollView(
         controller: _scrollController,
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          SliverToBoxAdapter(
-            child: const InputSearch(),
+          const SliverToBoxAdapter(
+            child: InputSearch(),
           ),
           SliverToBoxAdapter(
             child: Padding(
@@ -238,7 +261,7 @@ class _CatalogBodyState extends State<CatalogBody> {
                   toLanguage: language,
                   builder: (translated) => Text(
                     translated,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                 ),
                  
@@ -301,22 +324,35 @@ class _CatalogBodyState extends State<CatalogBody> {
               tabs: [
                 Tab(
                   child: Align(
-                    alignment: Alignment.center,
-                    child: Text('Bundles',
-                        style: TextStyle(
-                          fontSize: textStyle.displaySmall!.fontSize,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    alignment: Alignment.center, 
+                    child: TranslationWidget(
+                      message:'Bundles',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                          translated,
+                          style: TextStyle(
+                            fontSize: textStyle.displaySmall!.fontSize,
+                            fontWeight: FontWeight.bold,
+                          )
+                      ), 
+                    ),
                   ),
                 ),
                 Tab(
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text('Products',
+                    child: 
+                    TranslationWidget(
+                      message:'Products',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                        translated,
                         style: TextStyle(
                           fontSize: textStyle.displaySmall!.fontSize,
                           fontWeight: FontWeight.bold,
-                        )),
+                        )
+                      ), 
+                    ),
                   ),
                 ),
               ],
@@ -375,26 +411,32 @@ class InputSearchState extends State<InputSearch> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      child: TextField(
-        controller: controller,
-        onChanged: _onTextChanged,
-        decoration: InputDecoration(
-          hintText: 'Search for products or bundles',
-          prefixIcon: const Icon(Icons.search),
-          suffixIcon: controller.text.isNotEmpty
-              ? IconButton(
-                  icon: Icon(Icons.clear, color: colors.primary),
-                  onPressed: () {
-                    controller.clear();
-                    _onTextChanged('');
-                  },
-                )
-              : null,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8.0),
+      child: TranslationWidget(
+        message: 'Search for products or bundles',
+        toLanguage: language,
+        builder: (traduced) => TextField(
+          controller: controller,
+          onChanged: _onTextChanged,
+          decoration: InputDecoration(
+            hintText: traduced,
+            prefixIcon: const Icon(Icons.search),
+            suffixIcon: controller.text.isNotEmpty
+                ? IconButton(
+                    icon: Icon(Icons.clear, color: colors.primary),
+                    onPressed: () {
+                      controller.clear();
+                      _onTextChanged('');
+                    },
+                  )
+                : null,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
           ),
         ),
       ),

@@ -2,6 +2,8 @@ import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/products/application/productDetails/product_details_bloc.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +16,7 @@ class ProductBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return SafeArea(
       child: Scaffold(
@@ -44,10 +47,15 @@ class ProductBody extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
 
               case ProductDetailsStatus.error:
-                return const Center(
-                  child: Text(
-                    'Ups! Something went wrong',
-                    style: TextStyle(color: Colors.red),
+                return Center(
+                  child: 
+                  TranslationWidget(
+                    message:'Ups! Something went wrong',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                      translated,
+                      style: const TextStyle(color: Colors.red)
+                    ), 
                   ),
                 );
 
@@ -68,6 +76,7 @@ class ProductBody extends StatelessWidget {
   }
 
   Widget buttonWidget(BuildContext context, Product product) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
     final cartBloc = context.watch<CartBloc>();
     return Flex(
       direction: Axis.vertical,
@@ -82,15 +91,20 @@ class ProductBody extends StatelessWidget {
               ),
               padding: const EdgeInsets.symmetric(vertical: 24),
             ),
-            child: const Center(
-              child: Text(
-                'Add to Cart',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+            child: Center(
+              child: 
+              TranslationWidget(
+                  message:'Add to Cart',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )
+                  ), 
                 ),
-              ),
             ),
           ),
         if (cartBloc
@@ -106,14 +120,19 @@ class ProductBody extends StatelessWidget {
                 width: 3,
               ),
             ),
-            child: const Center(
-              child: Text(
-                'Already in Cart',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+            child: Center(
+              child: 
+              TranslationWidget(
+                  message:'Add to Cart',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      )
+                  ), 
               ),
             ),
           ),
@@ -123,6 +142,7 @@ class ProductBody extends StatelessWidget {
 
   Future<dynamic> _showModal(
       BuildContext context, ThemeData theme, Product product) {
+        final language =  context.watch<LanguagesCubit>().state.selected.language;
     int quantity = 1;
     return showModalBottomSheet(
       context: context,
@@ -202,14 +222,18 @@ class ProductBody extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Confirm and Add to Cart',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    child: Center(
+                      child: TranslationWidget(
+                        message:'Confirm and Add to Cart',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                            translated,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            )
+                        ), 
                       ),
                     ),
                   ),

@@ -1,5 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/search/widgets/search_body.dart';
 
@@ -21,9 +23,18 @@ class SearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Search'),
+          title: 
+          TranslationWidget(
+            message:'Search',
+            toLanguage: language,
+            builder: (translated) => Text(
+                translated
+            ), 
+          ),
         ),
         body: const SearchBody(),
         );

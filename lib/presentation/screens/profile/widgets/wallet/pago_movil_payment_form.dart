@@ -1,6 +1,8 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/wallet/application/bloc/wallet_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet/wallet_custom_close_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +22,7 @@ class PagoMovilPaymentForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return Dialog(
         shape: RoundedRectangleBorder(
@@ -78,9 +81,13 @@ class PagoMovilPaymentForm extends StatelessWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(
-                                'Pago Movil Payment',
-                                style: textStyles.displayMedium,
+                              TranslationWidget(
+                                message: 'Pago Movil Payment',
+                                toLanguage: language,
+                                builder: (translated) => Text(
+                                  translated,
+                                  style: textStyles.displayMedium
+                                )
                               ),
                               TextFormField(
                                 controller: _amountController,
@@ -104,20 +111,20 @@ class PagoMovilPaymentForm extends StatelessWidget {
                                 },
                               ),
                               TextFormField(
-                                controller: _referenceController,
-                                decoration: InputDecoration(
-                                  labelText: 'Reference',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                  controller: _referenceController,
+                                  decoration: InputDecoration(
+                                    labelText: 'Reference',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
                                   ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter a reference';
+                                    }
+                                    return null;
+                                  },
                                 ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please enter a reference';
-                                  }
-                                  return null;
-                                },
-                              ),
                               TextFormField(
                                 controller: _bankController,
                                 decoration: InputDecoration(
@@ -161,7 +168,7 @@ class PagoMovilPaymentForm extends StatelessWidget {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter your phone number';
                                   }
-                                  if (value.length != 11) {
+                                  if (value.length != 12) {
                                     return 'Phone must be 11 digits';
                                   }
                                   if (!RegExp(r'^[0-9]+$').hasMatch(value)) {

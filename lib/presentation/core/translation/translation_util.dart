@@ -10,7 +10,7 @@ class Translations {
       Translations('French', 'https://th.bing.com/th/id/OIP.mO2EfRE-TxiZgZ20kE6aOwHaE7?rs=1&pid=ImgDetMain'),
       Translations('Italian', 'https://th.bing.com/th/id/OIP.TpVkVp5HY5O7gIlMeAP8dQHaE8?rs=1&pid=ImgDetMain'),
       Translations('Español', 'https://th.bing.com/th/id/OIP.YsBdn_5ODBeaAYawGmu_8wHaE8?rs=1&pid=ImgDetMain'),
-      Translations('Russian', 'https://th.bing.com/th/id/OIP.uW9Hi1USsULyX2e4Y7iy-gHaE7?w=248&h=180&c=7&r=0&o=5&pid=1.7'),
+      Translations('Portuguese', 'https://media.istockphoto.com/id/483663073/es/vector/bandera-de-portugal.jpg?s=612x612&w=0&k=20&c=AhsHvnIM0tfsPcSaNdVbjsy5uCJ10gQ3mKwUqvBVuGc='),
       Translations('German', 'https://th.bing.com/th/id/OIP.-0JgOkcYn_kcem1JsgQnKwHaE8?rs=1&pid=ImgDetMain'),
       Translations('Chino', 'https://th.bing.com/th/id/OIP.VN_BoEQP-W7YtNN-LhR4OgHaE8?w=552&h=368&rs=1&pid=ImgDetMain'),
 
@@ -25,8 +25,8 @@ class Translations {
         return 'fr';
       case 'Italian':
         return 'it';
-      case 'Russian':
-        return 'ru';
+      case 'Portuguese':
+        return 'pt';
       case 'Español':
         return 'es';
       case 'German':

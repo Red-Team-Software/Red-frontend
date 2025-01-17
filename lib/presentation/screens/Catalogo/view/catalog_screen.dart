@@ -2,6 +2,8 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/catalog/bloc/catalog_bloc.dart';
 import 'package:GoDeli/features/search/application/bloc/bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../widgets/catalog_body.dart';
@@ -38,16 +40,34 @@ class CatalogScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     
     final textStyle = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     final itemsCountCart =
         context.select((CartBloc bloc) => bloc.state.totalItems);
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Catalog',
-        style: textStyle.displayLarge,
+        title:  
+        TranslationWidget(
+          message:'Catalog',
+          toLanguage: language,
+          builder: (translated) => Text(
+            translated,
+            style: textStyle.displayLarge
+          ), 
         ),
-        
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: CatalogSearchDelegate(),
+              );
+            },
+          )
+        ],
       ),
       body: const CatalogBody(),
 
@@ -96,15 +116,29 @@ class CatalogSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
+  final language =  context.watch<LanguagesCubit>().state.selected.language;
     return Center(
-      child: Text('Search result for "$query"'),
+      child: TranslationWidget(
+        message:'Search result for "$query"',
+        toLanguage: language,
+        builder: (translated) => Text(
+          translated
+        ), 
+      ),
     );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
+  final language =  context.watch<LanguagesCubit>().state.selected.language;
     return Center(
-      child: Text('Suggestions for "$query"'),
+      child: TranslationWidget(
+        message:'Suggestions for "$query"',
+        toLanguage: language,
+        builder: (translated) => Text(
+          translated
+        ), 
+      ),
     );
   }
 }

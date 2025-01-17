@@ -1,5 +1,9 @@
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:GoDeli/features/cart/domain/product_cart.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderBundleCard extends StatelessWidget {
   final BundleCart item;
@@ -9,6 +13,8 @@ class OrderBundleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     return Container(
       margin: const EdgeInsets.all(8.0),
@@ -42,22 +48,30 @@ class OrderBundleCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '${item.bundle.name} (x${item.quantity})',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                  TranslationWidget(
+                    message: '${item.bundle.name} (x${item.quantity})',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                      translated,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      )
+                    ), 
                   ),
-                  Text(
-                    item.bundle.description,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[700],
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  TranslationWidget(
+                    message: item.bundle.description,
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                      translated,
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.grey[700],
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis
+                    ), 
                   ),
                 ],
               ),

@@ -54,9 +54,20 @@ class OrderDatasourceImpl implements IOrderDatasource {
     final res = await httpService.request(
       '/order/user/many',
       'GET',
-      (json) => (json['orders'] as List)
-          .map((order) => OrderItem.fromJson(order))
-          .toList(),
+      (json) {
+        // Verifica si el JSON es un mapa con la clave "orders"
+        if (json is Map<String, dynamic> && json['orders'] != null) {
+          // Es un objeto que contiene "orders"
+          return (json['orders'] as List)
+              .map((order) => OrderItem.fromJson(order))
+              .toList();
+        } else if (json is List) {
+          // Es una lista directamente
+          return json.map((order) => OrderItem.fromJson(order)).toList();
+        } else {
+          throw Exception('Formato de respuesta desconocido');
+        }
+      },
       queryParameters: queryParams,
     );
 
@@ -81,9 +92,22 @@ class OrderDatasourceImpl implements IOrderDatasource {
     final res = await httpService.request(
       '/order/$orderId',
       'GET',
-      (json) => OrderMapper.mapEntityToDomain(OrderEntity.fromJson(json)),
+      (json) {
+        // Verifica si el JSON contiene la clave "orders"
+        if (json is Map<String, dynamic> && json.containsKey('orders')) {
+          return OrderMapper.mapEntityToDomain(
+            OrderEntity.fromJson(json['orders']),
+          );
+        } else if (json is Map<String, dynamic>) {
+          // El JSON está directamente en la raíz
+          return OrderMapper.mapEntityToDomain(
+            OrderEntity.fromJson(json),
+          );
+        } else {
+          throw Exception('Formato de respuesta desconocido');
+        }
+      },
     );
-
     if (!res.isSuccessful()) throw Exception(res.getError());
 
     return res.getValue();

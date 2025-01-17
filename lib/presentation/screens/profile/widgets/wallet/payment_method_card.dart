@@ -1,5 +1,8 @@
 
 import 'package:GoDeli/features/payment-method/domain/payment-method.dart';
+import 'package:GoDeli/features/search/application/bloc/bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet/pago_movil_payment_form.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet/zelle_payment_form.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,8 @@ class PaymentMethodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textScale = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     if (paymentMethod.name.toUpperCase() == 'WALLET') {
       return const SizedBox();
@@ -75,11 +80,15 @@ class PaymentMethodCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                paymentMethod.name,
-                                style: textScale.displayMedium?.copyWith(
-                                  color: Colors.white,
-                                ),
+                              TranslationWidget(
+                                message: paymentMethod.name,
+                                toLanguage: language,
+                                builder: (translated) => Text(
+                                  translated,
+                                  style: textScale.displayMedium?.copyWith(
+                                    color: Colors.white,
+                                  )
+                                )
                               )
                             ]))
                   ],

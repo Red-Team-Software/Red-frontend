@@ -1,3 +1,6 @@
+import 'package:GoDeli/features/search/application/bloc/bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_item.dart';
 import 'package:flutter/material.dart';
 
@@ -72,7 +75,7 @@ class _CustomIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = currentIndex == index;
-
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
     final theme = Theme.of(context);
 
     return GestureDetector(
@@ -103,14 +106,18 @@ class _CustomIconButton extends StatelessWidget {
                 children: [
                   isSelected ? activeIcon : icon,
                   const SizedBox(height: 4), // Espacio entre icono y texto
-                  FittedBox(
-                    fit: BoxFit.scaleDown, // Ajusta el texto si es largo
-                    child: Text(
-                      label,
-                      style: TextStyle(
-                        color: isSelected ? colors.primary : Colors.black26,
+                  TranslationWidget(
+                      message: label ,
+                      toLanguage: language,
+                      builder: (translated) => FittedBox(
+                      fit: BoxFit.scaleDown, // Ajusta el texto si es largo
+                      child: Text(
+                        translated,
+                        style: TextStyle(
+                          color: isSelected ? colors.primary : Colors.black26,
+                        ),
                       ),
-                    ),
+                    )
                   ),
                 ],
               ),

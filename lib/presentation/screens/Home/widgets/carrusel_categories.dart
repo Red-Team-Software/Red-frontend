@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/categories/domain/category.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
+import 'package:GoDeli/presentation/screens/skeleton/skeleton_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ class CategoriesCarrusel extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return SizedBox(
       height: 200,
@@ -25,16 +27,26 @@ class CategoriesCarrusel extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text('Categories', style: textStyles.displayLarge),
+              children: [ TranslationWidget(
+                  message:'Categories',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      style: textStyles.displayLarge
+                  ), 
+                ),
                 GestureDetector(
                   onTap: () => context.push('/catalog'),
-                  child: Text(
-                    'view all',
-                    textAlign: TextAlign.end,
-                    style: textStyles.displaySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold),
+                  child: TranslationWidget(
+                    message:'view all',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        textAlign: TextAlign.end,
+                          style: textStyles.displaySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.bold),
+                    ), 
                   ),
                 ),
               ],
@@ -48,7 +60,25 @@ class CategoriesCarrusel extends StatelessWidget {
               builder: (context, state) {
                 if (state.status == CategoriesStatus.loading &&
                     state.categories.isEmpty) {
-                  return const Center(child: CircularProgressIndicator());
+                  return SizedBox(
+                    height: 200,
+                    child: SingleChildScrollView(
+                      scrollDirection:
+                          Axis.horizontal, // Desplazamiento horizontal
+                      child: Row(
+                        children: List.generate(4, (index) {
+                          return const Padding(
+                            padding: EdgeInsets.only(
+                                right: 8.0), // Espaciado entre elementos
+                            child: SkeletonWidget(
+                              width: 150, // Ancho de cada elemento
+                              height: 175,
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+                  );
                 }
 
                 if (state.categories.isEmpty &&
@@ -130,6 +160,8 @@ class CustomCategoryHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+    
     return SizedBox(
       height: 175,
       width: 150,
@@ -183,7 +215,7 @@ class CustomCategoryHome extends StatelessWidget {
                           children: [
                             TranslationWidget(
                                 message: current.name,
-                                toLanguage: 'English',
+                                toLanguage: language,
                                 builder: (translatedMessage) => Text(
                                       translatedMessage,
                                       style: textStyles.displaySmall?.copyWith(
@@ -198,7 +230,7 @@ class CustomCategoryHome extends StatelessWidget {
                             // Descripción del producto
                             TranslationWidget(
                                 message: 'More Details',
-                                toLanguage: 'English',
+                                toLanguage: language,
                                 builder: (translatedMessage) => Text(
                                       translatedMessage,
                                       style: textStyles.bodySmall?.copyWith(

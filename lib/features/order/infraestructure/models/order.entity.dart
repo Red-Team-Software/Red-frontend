@@ -69,27 +69,10 @@ class OrderEntity {
     }
   }
 
-  factory OrderEntity.fromJson(dynamic json) {
+  factory OrderEntity.fromJson(dynamic orderJson) {
     try {
       // Verifica que el JSON sea del tipo esperado
-      if (json is Map<String, dynamic> && json.containsKey('orders')) {
-        final orderJson = json['orders'];
-        print('Parsing OrderEntity from JSON...');
-        print('JSON: $orderJson');
-        // Depuración de valores clave
-        print('ID: ${orderJson['orderId']}');
-        print('State: ${orderJson['orderState']}');
-        print(orderJson['orderState'][0]);
-        print(orderJson['orderState'][0]["state"]);
-        print('Created Date: ${orderJson['orderCreatedDate']}');
-        print('Time Created: ${orderJson['orderTimeCreated']}');
-        print('Total Amount: ${orderJson['totalAmount']}');
-        print('Direction: ${orderJson['orderDirection']}');
-        print('Products: ${orderJson['products']}');
-        print('Bundles: ${orderJson['bundles']}');
-        print('Received Date: ${orderJson['orderReceivedDate']}');
-        print('Payment: ${orderJson['orderPayment']}');
-
+      
         return OrderEntity(
           id: orderJson['orderId'] as String? ?? '',
           orderState: orderJson['orderState'][0]['state'] as String? ?? '',
@@ -110,10 +93,7 @@ class OrderEntity {
               ? Courier.fromJson(orderJson['orderCourier'])
               : null,
         );
-      } else {
-        print('Invalid JSON type or missing "orders" key: ${json.runtimeType}');
-        throw Exception('Invalid JSON format for OrderEntity');
-      }
+
     } catch (e, stackTrace) {
       // Log detallado del error y el stack trace para depuración
       print('Error parsing OrderEntity: $e');
@@ -132,8 +112,8 @@ class OrderDirectionEntity {
 
   factory OrderDirectionEntity.fromJson(Map<String, dynamic> json) {
     return OrderDirectionEntity(
-      latitude: num.parse(json['lat']).toDouble(),
-      longitude: num.parse(json['long']).toDouble(),
+      latitude: _parseToDouble(json['lat']),
+      longitude: _parseToDouble(json['long']),
     );
   }
 
@@ -143,6 +123,17 @@ class OrderDirectionEntity {
       longitude: -66.765795,
     );
   }
+}
+
+double _parseToDouble(dynamic value) {
+  if (value is double) {
+    return value; // El valor ya es un double
+  } else if (value is int) {
+    return value.toDouble(); // Convertir int a double
+  } else if (value is String) {
+    return double.tryParse(value) ?? 0.0; // Intentar convertir cadena a double
+  }
+  throw ArgumentError('El valor no se puede convertir a double: $value');
 }
 
 class OrderPaymentEntity {
@@ -166,7 +157,7 @@ class OrderPaymentEntity {
 
   factory OrderPaymentEntity.fromJson(Map<String, dynamic> json) {
     return OrderPaymentEntity(
-      paymentMethod: json['payementMethod'] as String,
+      paymentMethod: json['paymentMethod'] as String,
       currency: json['paymentCurrency'] as String,
       amount: (json['paymetAmount'] is String
               ? num.parse(json['paymetAmount']).toDouble()

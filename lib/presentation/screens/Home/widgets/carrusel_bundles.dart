@@ -1,6 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/bundles/application/bundle_offers/bundle_offers_bloc.dart';
-import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/dot_list/custom_dots_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,6 +44,7 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textStyles = theme.textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return BlocProvider(
       create: (_) => getIt<BundleOffersBloc>(),
@@ -57,18 +59,30 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Bundle Offers', style: textStyles.displayLarge),
+                  TranslationWidget(
+                  message:'Bundle Offers',
+                  toLanguage: language,
+                  builder: (translated) => Text(
+                      translated,
+                      style: textStyles.displayLarge
+                    ), 
+                  ),
                   GestureDetector(
                     onTap: () => context.push('/catalog'),
-                    child: Text(
-                      'view all',
-                      textAlign: TextAlign.end,
-                      style: textStyles.displaySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.bold,
+                    child: 
+                      TranslationWidget(
+                        message:'view all',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                          translated,
+                          textAlign: TextAlign.end,
+                          style: textStyles.displaySmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          )
+                        ), 
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -80,12 +94,17 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
                 builder: (context, state) {
                   if (state is BundleOffersError) {
                     return Center(
-                      child: Text(
-                        'Algo inesperado pasó',
-                        style: textStyles.bodyLarge?.copyWith(
-                          color: theme.colorScheme.error,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: 
+                      TranslationWidget(
+                        message:'Algo inesperado pasó',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                          translated,
+                          style: textStyles.bodyLarge?.copyWith(
+                            color: theme.colorScheme.error,
+                            fontWeight: FontWeight.bold,
+                          ), 
+                        )
                       ),
                     );
                   }
@@ -93,14 +112,21 @@ class _CardBundleCarruselState extends State<CardBundleCarrusel> {
                   if (state is BundleOffersLoaded) {
                     if (state.bundles.isEmpty) {
                       return Center(
-                          child: Text(
-                        'No hay bundles',
-                        style: textStyles.bodyLarge?.copyWith(
-                          color: theme.colorScheme.error,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ));
+                          child: 
+                          TranslationWidget(
+                            message:'No hay bundles',
+                            toLanguage: language,
+                            builder: (translated) => Text(
+                              translated,
+                              style: textStyles.bodyLarge?.copyWith(
+                                color: theme.colorScheme.error,
+                                fontWeight: FontWeight.bold,
+                              ), 
+                            )
+                          )
+                      );
                     }
+
                     // PageView con los Bundles
                     return Column(
                       children: [
