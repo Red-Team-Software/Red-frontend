@@ -1,5 +1,7 @@
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +35,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
     final colors = theme.colorScheme;
     final textStyles = theme.textTheme;
     final state = context.watch<OrdersBloc>().state;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     if (state is OrdersLoadInProgress) {
       return const Center(child: CircularProgressIndicator());
@@ -62,7 +66,14 @@ class _OrderListScreenState extends State<OrderListScreen> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Order List', style: textStyles.displayLarge),
+            title: TranslationWidget(
+              message: 'Order List',
+              toLanguage: language,
+              builder: (translated) => Text(
+                  translated,
+                  style: textStyles.displayLarge
+              ), 
+            ),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () => context.push("/", extra: 0),
@@ -79,21 +90,34 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 Tab(
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text('Active Orders ($activeCount)',
-                        style: TextStyle(
+                    child: 
+                    TranslationWidget(
+                      message: 'Active Orders ($activeCount)',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                          translated,
+                          style: TextStyle(
                           fontSize: textStyles.displaySmall!.fontSize,
                           fontWeight: FontWeight.bold,
-                        )),
+                        )
+                      ), 
+                    ),
                   ),
                 ),
                 Tab(
                   child: Align(
                     alignment: Alignment.center,
-                    child: Text('Past Orders ($pastCount)',
-                        style: TextStyle(
-                          fontSize: textStyles.displaySmall!.fontSize,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    child: TranslationWidget(
+                      message: 'Past Orders ($pastCount)',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                          translated,
+                          style: TextStyle(
+                            fontSize: textStyles.displaySmall!.fontSize,
+                            fontWeight: FontWeight.bold,
+                        )
+                      )
+                    ),
                   ),
                 ),
               ],
