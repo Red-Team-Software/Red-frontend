@@ -1,4 +1,8 @@
 import 'package:GoDeli/config/constants/enviroments.dart';
+import 'package:GoDeli/config/injector/injector.dart';
+import 'package:GoDeli/features/common/application/bloc/select_datasource_bloc_bloc.dart';
+import 'package:GoDeli/features/common/infrastructure/http_service.dart';
+import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -42,6 +46,7 @@ class _LoginComponentState extends State<LoginComponent> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
+    final dataSourceBloc = context.watch<SelectDatasourceBloc>();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -171,28 +176,31 @@ class _LoginComponentState extends State<LoginComponent> {
             children: [
               Text("Switch team: ", style: textStyles.bodyLarge),
               Switch(
-          value: _primaryColor == Colors.blue,
-          onChanged: (value) {
-            setState(() {
-              _primaryColor = value ? Colors.blue : Colors.red;
-              // Change the primary color of the app
-              Theme.of(context).copyWith(
-                colorScheme: Theme.of(context)
-              .colorScheme
-              .copyWith(primary: _primaryColor),
-              );
-              // Change environment variables based on switch value
-              if (value) {
-                // Use blue environment variables
-                // Environment().setEnvironment('blue');
-              } else {
-                // Use red environment variables
-                // Example: Environment().setEnvironment('red');
-              }
-            });
-          },
-          activeColor: Colors.blue,
-          inactiveThumbColor: Colors.red,
+               value: dataSourceBloc.state.isRed ? false : true,
+                onChanged: (value) {
+                  setState(() {
+                    _primaryColor = value ? Colors.blue : Colors.red;
+                    // Change the primary color of the app
+                    Theme.of(context).copyWith(
+                      colorScheme: Theme.of(context)
+                          .colorScheme
+                          .copyWith(primary: _primaryColor),
+                    );
+                    // Change environment variables based on switch value
+                    if (value) {
+                      dataSourceBloc.add(const SelectDatasource(isRed: false));
+                      // final apiUrl = Environment.getApiUrl();
+                      // getIt<IHttpService>().updateBaseUrl(apiUrl);
+                    } else {
+                      dataSourceBloc.add(const SelectDatasource(isRed: true));
+                      // final apiUrl = Environment.getApiUrl();
+                      // context.read<IHttpService>().updateBaseUrl(apiUrl);
+                    }
+                  });
+                },
+                activeColor: const Color(0xFF2000B1),
+                inactiveThumbColor: const Color(0xFFAD0101),
+                
               ),
             ],
           ),

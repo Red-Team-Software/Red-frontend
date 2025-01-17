@@ -2,6 +2,7 @@ import 'package:GoDeli/features/bundles/application/bundles/all_bundles_bloc.dar
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/config/constants/enviroments.dart';
+import 'package:GoDeli/features/common/application/bloc/select_datasource_bloc_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
@@ -18,7 +19,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Initialize environment variables
-  await Environment.initEnvironment();
   await Firebase.initializeApp();
 
   // Register Blocs in service locator
@@ -34,6 +34,7 @@ class BlocsProviders extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => getIt<SelectDatasourceBloc>()),
         BlocProvider(create: (context) => getIt<CartBloc>()),
         BlocProvider(
           create: (context) => LanguagesCubit(),
@@ -69,7 +70,7 @@ class GoDeli extends StatelessWidget {
       title: 'Red Team',
       debugShowCheckedModeBanner: false,
       routerConfig: appRouter,
-      theme: AppTheme().getTheme(),
+      theme: context.watch<SelectDatasourceBloc>().state.isRed == true ?  RedAppTheme().getTheme() : BlueAppTheme().getTheme(), 
     );
   }
 }
