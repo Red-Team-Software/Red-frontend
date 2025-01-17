@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
+import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
@@ -36,30 +37,26 @@ class _OrderListScreenState extends State<OrderListScreen> {
     if (state is OrdersLoadInProgress) {
       return const Center(child: CircularProgressIndicator());
     } else if (state is OrdersLoadSuccess) {
-      final orders = state.orders.orders;
+      final activeOrders = state.activeOrders.orders;
+      final pastOrders = state.pastOrders.orders;
 
-      // Filter orders based on the selected tab
-      List<OrderItem> filteredOrders = orders.where((order) {
-        if (selectedTab == 'Active') {
-          return order.orderState == 'ongoing' ||
-              order.orderState == 'delivering';
-        } else if (selectedTab == 'Past') {
-          return order.orderState == 'delivered' ||
-              order.orderState == 'cancelled';
-        }
-        return false;
-      }).toList();
+      // Show snackbar if there is an order report error
+      if (state.orderReportError != null &&
+          state.orderReportError!.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          CustomSnackBar.show(
+            context,
+            type: SnackBarType.error,
+            title: 'Report error',
+            message: state.orderReportError!,
+          );
+          context.read<OrdersBloc>().add(ClearOrderReportErrorEvent());
+        });
+      }
 
       // Count the orders for each tab
-      int activeCount = orders
-          .where((order) =>
-              order.orderState == 'ongoing' || order.orderState == "delivering")
-          .length;
-      int pastCount = orders
-          .where((order) =>
-              order.orderState == 'delivered' ||
-              order.orderState == 'cancelled')
-          .length;
+      int activeCount = activeOrders.length;
+      int pastCount = pastOrders.length;
 
       return DefaultTabController(
         length: 2,
@@ -110,24 +107,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
           body: TabBarView(
             physics: const BouncingScrollPhysics(),
             children: [
-              _buildOrderList(
-                orders
-                    .where((order) =>
-                        order.orderState == 'ongoing' ||
-                        order.orderState == 'delivering')
-                    .toList(),
-                colors,
-                textStyles,
-              ),
-              _buildOrderList(
-                orders
-                    .where((order) =>
-                        order.orderState == 'delivered' ||
-                        order.orderState == 'cancelled')
-                    .toList(),
-                colors,
-                textStyles,
-              ),
+              _buildOrderList(activeOrders, colors, textStyles),
+              _buildOrderList(pastOrders, colors, textStyles),
             ],
           ),
         ),

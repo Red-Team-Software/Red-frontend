@@ -14,7 +14,7 @@ abstract class IOrderDatasource {
     required List<Map<String, dynamic>> products,
   });
 
-  Future<List<OrderItem>> fetchAllOrders({int page = 1, int perPage = 100});
+  Future<List<OrderItem>> fetchAllOrders({String? state});
 
   Future<void> cancelOrder({required String orderId});
 
@@ -22,4 +22,6 @@ abstract class IOrderDatasource {
 
   Future<void> reportOrder(
       {required String orderId, required String description});
+
+  Future<Location> fetchCourierPosition({required String orderId});
 }

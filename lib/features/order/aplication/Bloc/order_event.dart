@@ -15,3 +15,5 @@ class FetchOrderById extends OrderEvent {
   @override
   List<Object?> get props => [orderId];
 }
+
+class ClearOrderState extends OrderEvent {}

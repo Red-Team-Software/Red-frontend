@@ -67,6 +67,7 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('Estoy en el index');
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(

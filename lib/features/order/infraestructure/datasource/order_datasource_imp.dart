@@ -52,14 +52,18 @@ class OrderDatasourceImpl implements IOrderDatasource {
   }
 
   @override
-  Future<List<OrderItem>> fetchAllOrders(
-      {int page = 1, int perPage = 100}) async {
+  Future<List<OrderItem>> fetchAllOrders({String? state}) async {
+    final queryParams = {
+      if (state != null) 'state': state,
+    };
+
     final res = await httpService.request(
       '/order/user/many',
       'GET',
       (json) => (json['orders'] as List)
           .map((order) => OrderItem.fromJson(order))
           .toList(),
+      queryParameters: queryParams,
     );
 
     print("res de fetch all orders");
@@ -104,5 +108,20 @@ class OrderDatasourceImpl implements IOrderDatasource {
       },
     );
     if (!res.isSuccessful()) throw Exception(res.getError());
+  }
+
+  @override
+  Future<Location> fetchCourierPosition({required String orderId}) async {
+    final res = await httpService.request(
+      '/order/courier/position/$orderId',
+      'GET',
+      (json) => Location.fromJson(json),
+    );
+
+    if (!res.isSuccessful()) throw Exception(res.getError());
+    print("Retorno del get location");
+    print(res.getValue());
+
+    return res.getValue();
   }
 }
