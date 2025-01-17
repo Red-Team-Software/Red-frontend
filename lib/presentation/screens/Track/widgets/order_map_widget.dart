@@ -110,7 +110,7 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
         LineLayer(
           id: "route-layer",
           sourceId: "route",
-          lineColor: Colors.red.value,
+          lineColor: Theme.of(context).colorScheme.primary.value,
           lineWidth: 5.0,
         ),
       );
