@@ -74,8 +74,8 @@ final getIt = GetIt.instance;
 class Injector {
   Future<void> setUp() async {
     //? Iniciando modulo de Stripe
-    Stripe.publishableKey = Environment.stripePublishableKey;
-    await Stripe.instance.applySettings();
+    // Stripe.publishableKey = Environment.stripePublishableKey;
+    // await Stripe.instance.applySettings();
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
     getIt.registerSingleton<IHttpService>(httpService);
