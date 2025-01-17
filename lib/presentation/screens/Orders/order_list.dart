@@ -37,7 +37,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
     if (state is OrdersLoadInProgress) {
       return const Center(child: CircularProgressIndicator());
     } else if (state is OrdersLoadSuccess) {
-      final orders = state.orders.orders;
+      final activeOrders = state.activeOrders.orders;
+      final pastOrders = state.pastOrders.orders;
 
       // Show snackbar if there is an order report error
       if (state.orderReportError != null &&
@@ -53,28 +54,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
         });
       }
 
-      // Filter orders based on the selected tab
-      List<OrderItem> filteredOrders = orders.where((order) {
-        if (selectedTab == 'Active') {
-          return order.orderState == 'ongoing' ||
-              order.orderState == 'delivering';
-        } else if (selectedTab == 'Past') {
-          return order.orderState == 'delivered' ||
-              order.orderState == 'cancelled';
-        }
-        return false;
-      }).toList();
-
       // Count the orders for each tab
-      int activeCount = orders
-          .where((order) =>
-              order.orderState == 'ongoing' || order.orderState == "delivering")
-          .length;
-      int pastCount = orders
-          .where((order) =>
-              order.orderState == 'delivered' ||
-              order.orderState == 'cancelled')
-          .length;
+      int activeCount = activeOrders.length;
+      int pastCount = pastOrders.length;
 
       return DefaultTabController(
         length: 2,
@@ -125,24 +107,8 @@ class _OrderListScreenState extends State<OrderListScreen> {
           body: TabBarView(
             physics: const BouncingScrollPhysics(),
             children: [
-              _buildOrderList(
-                orders
-                    .where((order) =>
-                        order.orderState == 'ongoing' ||
-                        order.orderState == 'delivering')
-                    .toList(),
-                colors,
-                textStyles,
-              ),
-              _buildOrderList(
-                orders
-                    .where((order) =>
-                        order.orderState == 'delivered' ||
-                        order.orderState == 'cancelled')
-                    .toList(),
-                colors,
-                textStyles,
-              ),
+              _buildOrderList(activeOrders, colors, textStyles),
+              _buildOrderList(pastOrders, colors, textStyles),
             ],
           ),
         ),

@@ -40,11 +40,33 @@ class OrderRepositoryImpl implements IOrderRepository {
   }
 
   @override
-  Future<Result<List<OrderItem>>> fetchAllOrders(
-      {int page = 1, int perPage = 100}) async {
+  Future<Result<List<OrderItem>>> fetchAllOrders() async {
     try {
-      final orders =
-          await datasource.fetchAllOrders(page: page, perPage: perPage);
+      final orders = await datasource.fetchAllOrders();
+      return Result.success(orders);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
+    }
+  }
+
+  @override
+  Future<Result<List<OrderItem>>> fetchPastOrders() async {
+    try {
+      final orders = await datasource.fetchAllOrders(state: "past");
+      return Result.success(orders);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
+    }
+  }
+
+  @override
+  Future<Result<List<OrderItem>>> fetchActiveOrders() async {
+    try {
+      final orders = await datasource.fetchAllOrders(state: "active");
       return Result.success(orders);
     } catch (e) {
       print("error en el rerpo");
@@ -84,6 +106,20 @@ class OrderRepositoryImpl implements IOrderRepository {
       print("error en el reporte de orden");
       print(e);
       throw Exception(e);
+    }
+  }
+
+  @override
+  Future<Result<Location>> fetchCourierPosition(
+      {required String orderId}) async {
+    try {
+      final position = await datasource.fetchCourierPosition(orderId: orderId);
+      print("position");
+      return Result.success(position);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
     }
   }
 }

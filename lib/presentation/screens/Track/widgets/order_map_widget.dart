@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mapbox_maps_flutter/mapbox_maps_flutter.dart';
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
@@ -92,6 +90,10 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
     mapboxMap = map;
 
     if (widget.deliveryLatitude != null && widget.deliveryLongitude != null) {
+      // Print the courier's coordinates
+      print(
+          'Courier coordinates: Latitude ${widget.deliveryLatitude}, Longitude ${widget.deliveryLongitude}');
+
       // Fetch route data from Mapbox Directions API
       final routeGeoJson = await _fetchRoute();
 
@@ -154,7 +156,7 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
             widget.userLatitude,
           ),
         ),
-        image: await _loadAssetImage("images/user_marker.png"),
+        image: await _loadAssetImage("images/user.png"),
       ),
     );
 
@@ -168,7 +170,7 @@ class _OrderMapWidgetState extends State<OrderMapWidget> {
               widget.deliveryLatitude!,
             ),
           ),
-          image: await _loadAssetImage("images/delivery_marker.png"),
+          image: await _loadAssetImage("images/cou.png"),
         ),
       );
     }
