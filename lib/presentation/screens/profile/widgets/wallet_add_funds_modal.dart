@@ -1,5 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/payment-method/application/bloc/payment_method_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet/payment_method_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,6 +18,8 @@ class _WalletAddFundsModalState extends State<WalletAddFundsModal> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
 
     return BlocProvider(
       create: (_) => getIt<PaymentMethodBloc>(),
@@ -31,7 +35,14 @@ class _WalletAddFundsModalState extends State<WalletAddFundsModal> {
                     if (state is PaymentMethodError)
                       {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.message)),
+                          SnackBar(content: 
+                          TranslationWidget(
+                            message: state.message,
+                            toLanguage: language,
+                            builder: (translated) => Text(
+                              translated
+                            ), 
+                          )),
                         )
                       }
                   },
@@ -48,9 +59,13 @@ class _WalletAddFundsModalState extends State<WalletAddFundsModal> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            'Add Funds',
-                            style: textStyles.displayMedium,
+                          TranslationWidget(
+                            message:'Add Funds',
+                            toLanguage: language,
+                            builder: (translated) => Text(
+                                translated,
+                                style: textStyles.displayLarge
+                            ), 
                           ),
                           const SizedBox(height: 20),
                           // Listado de métodos de pago
@@ -62,8 +77,16 @@ class _WalletAddFundsModalState extends State<WalletAddFundsModal> {
                             child: ListView.builder(
                               itemBuilder: (context, index) {
                                 if (state.paymentMethods.isEmpty) {
-                                  return const Center(
-                                    child: Text('No payment methods'),
+                                  return Center(
+                                    child: 
+                                    TranslationWidget(
+                                      message:'No payment methods',
+                                      toLanguage: language,
+                                      builder: (translated) => Text(
+                                          translated,
+                                          style: textStyles.displayLarge
+                                      ), 
+                                    ),
                                   );
                                 }
                                 return PaymentMethodCard(

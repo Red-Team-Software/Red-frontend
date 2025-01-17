@@ -1,15 +1,18 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/Order/widgets/order_bundle_card.dart';
 import 'package:GoDeli/presentation/screens/Order/widgets/order_product_card.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_info_widget.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_status_widget.dart';
 import 'package:GoDeli/presentation/screens/Track/widgets/order_map_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/courier/order_courier.dart';
 import 'package:GoDeli/presentation/widgets/courier/searching_courier.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 
 class TrackOrderScreen extends StatefulWidget {
@@ -48,11 +51,18 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
     return BlocProvider(
       create: (context) => _orderBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Track Order'),
+          title: TranslationWidget(
+            message:'Track Order',
+            toLanguage: language,
+            builder: (translated) => Text(
+              translated,
+            ), 
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

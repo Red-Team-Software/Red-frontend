@@ -48,6 +48,7 @@ class _FilterModalState extends State<FilterModal> {
 Widget build(BuildContext context) {
   final textStyle = Theme.of(context).textTheme;
   final colors = Theme.of(context).colorScheme;
+  final language =  context.watch<LanguagesCubit>().state.selected.language;
 
   return Dialog(
     shape: RoundedRectangleBorder(
@@ -124,7 +125,14 @@ Widget build(BuildContext context) {
                 // Switch Discounts
                 Row(
                   children: [
-                    Text('Discounts', style: textStyle.displaySmall),
+                    TranslationWidget(
+                      message:'Discounts',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                        translated,
+                        style: textStyle.displaySmall
+                      ), 
+                    ),
                     const SizedBox(width: 8),
                     Switch(
                       value: _discount == 0.5,

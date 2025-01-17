@@ -3,6 +3,8 @@ import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,16 +22,21 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyles = Theme.of(context).textTheme;
     final colors = Theme.of(context).colorScheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Order: ${orderItem.orderId}',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+          children: [ TranslationWidget(
+              message: 'Order: ${orderItem.orderId}',
+              toLanguage: language,
+              builder: (translated) => Text(
+                  translated,
+                  style: const TextStyle(fontSize: 14, color: Colors.grey)
+              ), 
             ),
             const SizedBox(height: 4),
             Row(

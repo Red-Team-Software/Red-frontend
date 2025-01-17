@@ -1,10 +1,11 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
-import 'package:GoDeli/presentation/screens/Home/widgets/banner_carrousel.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/carrusel_categories.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/drawer_widget.dart';
 import 'package:GoDeli/presentation/screens/Home/widgets/popular_products_home.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
@@ -119,6 +120,7 @@ class HomeScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return BlocProvider(
       create: (_) => getIt<UserBloc>(),
@@ -146,16 +148,33 @@ class HomeScreenView extends StatelessWidget {
                   direction: Axis.vertical,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Deliver to',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold)),
-                    Text(favoriteDirection.direction,
+                    TranslationWidget(
+                      message:'Deliver to',
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                        translated,
                         style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w400)),
+                              fontSize: 20, fontWeight: FontWeight.bold))
+                    ),
+                    TranslationWidget(
+                      message:favoriteDirection.direction,
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                        translated,
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w400))
+                    ),
                   ],
                 );
               }
-              return const Text('Loading...');
+              return TranslationWidget(
+                      message:"Loading...",
+                      toLanguage: language,
+                      builder: (translated) => Text(
+                        translated,
+                        style: const TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.w400))
+                    );
             },
           ),
         ),
@@ -171,27 +190,39 @@ class HomeScreenView extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 8, right: 8),
-                        child: RichText(
-                          text: TextSpan(
-                              text: 'Get your',
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w100,
-                                color: theme.brightness == Brightness.dark
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                              children: [
-                                TextSpan(
-                                    text: ' groceries',
+                        child: TranslationWidget(
+                          message: 'Get Your',
+                          toLanguage: language,
+                          builder: (tGet) => TranslationWidget(
+                            message: ' groceries',
+                            toLanguage: language,
+                            builder: (tGro) => TranslationWidget(
+                              message: ' delivered quickly',
+                              toLanguage: language,
+                              builder: (tDel) => RichText(
+                                text: TextSpan(
+                                    text: tGet,
                                     style: TextStyle(
-                                        fontSize: 40,
-                                        color: theme.colorScheme.primary,
-                                        fontWeight: FontWeight.bold)),
-                                const TextSpan(
-                                  text: ' delivered quikly',
-                                ),
-                              ]),
+                                      fontSize: 40,
+                                      fontWeight: FontWeight.w100,
+                                      color: theme.brightness == Brightness.dark
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    children: [
+                                      TextSpan(
+                                          text: tGro,
+                                          style: TextStyle(
+                                              fontSize: 40,
+                                              color: theme.colorScheme.primary,
+                                              fontWeight: FontWeight.bold)),
+                                      TextSpan(
+                                        text: tDel,
+                                      ),
+                                    ]),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(

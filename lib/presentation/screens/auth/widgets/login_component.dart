@@ -1,3 +1,4 @@
+import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,6 +25,7 @@ class _LoginComponentState extends State<LoginComponent> {
   String email = '';
   String password = '';
   String? emailError;
+  Color _primaryColor = Colors.red; // Define _primaryColor
 
   // Email validation
   bool validateEmail(String value) {
@@ -74,7 +76,10 @@ class _LoginComponentState extends State<LoginComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: Icon(Icons.email, color: colors.primary,),
+            suffixIcon: Icon(
+              Icons.email,
+              color: colors.primary,
+            ),
           ),
         ),
         const SizedBox(height: 20),
@@ -99,7 +104,10 @@ class _LoginComponentState extends State<LoginComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: Icon(Icons.lock,color: colors.primary,),
+            suffixIcon: Icon(
+              Icons.lock,
+              color: colors.primary,
+            ),
           ),
         ),
         const SizedBox(height: 30),
@@ -120,7 +128,7 @@ class _LoginComponentState extends State<LoginComponent> {
                     await widget.onHandleLogin();
                   }
                 : null, // Disable button if conditions are not met
-            child:  Text(
+            child: Text(
               "Login",
               style: textStyles.displaySmall?.copyWith(color: Colors.white),
             ),
@@ -132,29 +140,63 @@ class _LoginComponentState extends State<LoginComponent> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-                onPressed: () {},
-                child: Text(
-                  "Forgot password?",
-                  style: TextStyle(color: colors.primary),
+              onPressed: () {},
+              child: Text(
+                "Forgot password?",
+                style: TextStyle(color: colors.primary),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                widget.onChangeIndex(1);
+              },
+              child: Text(
+                "Don't have an account\nRegister here!",
+                textAlign: TextAlign.center,
+                style: textStyles.bodyLarge?.copyWith(
+                  color: colors.primary,
                 ),
               ),
-              TextButton(
-                onPressed: () {
-                  widget.onChangeIndex(1); 
-                },
-                child: Text(
-                  "Don't have an account\nRegister here!",
-                  textAlign: TextAlign.center,
-                  style: textStyles.bodyLarge?.copyWith(color: colors.primary, ),
-                ),
-              ),
+            ),
           ],
         ),
-        
+
         const SizedBox(height: 20),
-       
 
         // Login Button
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Switch team: ", style: textStyles.bodyLarge),
+              Switch(
+          value: _primaryColor == Colors.blue,
+          onChanged: (value) {
+            setState(() {
+              _primaryColor = value ? Colors.blue : Colors.red;
+              // Change the primary color of the app
+              Theme.of(context).copyWith(
+                colorScheme: Theme.of(context)
+              .colorScheme
+              .copyWith(primary: _primaryColor),
+              );
+              // Change environment variables based on switch value
+              if (value) {
+                // Use blue environment variables
+                // Environment().setEnvironment('blue');
+              } else {
+                // Use red environment variables
+                // Example: Environment().setEnvironment('red');
+              }
+            });
+          },
+          activeColor: Colors.blue,
+          inactiveThumbColor: Colors.red,
+              ),
+            ],
+          ),
+        ),
       ],
     ).animate().moveX(begin: 100, end: 0).fadeIn(duration: 500.ms);
   }
