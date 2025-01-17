@@ -8,7 +8,6 @@ import 'package:GoDeli/presentation/screens/Track/widgets/order_map_widget.dart'
 import 'package:GoDeli/presentation/widgets/courier/order_courier.dart';
 import 'package:GoDeli/presentation/widgets/courier/searching_courier.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
@@ -16,15 +15,15 @@ import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
 class TrackOrderScreen extends StatelessWidget {
   static const String name = 'track_order_screen';
 
-  final OrderItem orderItem;
+  final String orderId;
 
-  const TrackOrderScreen({super.key, required this.orderItem});
+  const TrackOrderScreen({super.key, required this.orderId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => OrderBloc(orderRepository: getIt<IOrderRepository>())
-        ..add(FetchOrderById(orderId: orderItem.orderId)),
+        ..add(FetchOrderById(orderId: orderId)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Track Order'),

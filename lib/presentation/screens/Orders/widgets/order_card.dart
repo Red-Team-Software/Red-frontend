@@ -165,7 +165,7 @@ class OrderCard extends StatelessWidget {
   }
 
   void _trackOrder(BuildContext context) {
-    context.go('/track_order/${orderItem.orderId}', extra: orderItem);
+    context.go('/track_order/${orderItem.orderId}');
   }
 
   void _reOrderItem(BuildContext context) {

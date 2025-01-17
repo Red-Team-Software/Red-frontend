@@ -56,7 +56,8 @@ final appRouter = GoRouter(
     GoRoute(
       path: '/catalog/:category',
       name: '${CatalogScreen.name}_category',
-      builder: (context, state) => CatalogScreen( category: state.pathParameters['category']?? ''),
+      builder: (context, state) =>
+          CatalogScreen(category: state.pathParameters['category'] ?? ''),
     ),
     GoRoute(
       path: '/languages',
@@ -101,8 +102,8 @@ final appRouter = GoRouter(
       path: '/track_order/:orderId',
       name: TrackOrderScreen.name,
       builder: (context, state) {
-        final orderItem = state.extra as OrderItem;
-        return TrackOrderScreen(orderItem: orderItem);
+        final orderId = state.pathParameters['orderId'] ?? '';
+        return TrackOrderScreen(orderId: orderId);
       },
     ),
   ],
