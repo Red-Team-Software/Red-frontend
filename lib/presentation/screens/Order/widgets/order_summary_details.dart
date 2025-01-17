@@ -123,7 +123,7 @@ class OrderSummaryDetails extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: colors.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),

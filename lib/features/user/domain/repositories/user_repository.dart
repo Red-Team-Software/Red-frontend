@@ -1,5 +1,6 @@
 
 
+import 'package:GoDeli/features/auth/application/dto/update_image_dto.dart';
 import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
 import 'package:GoDeli/features/user/domain/dto/delete_user_direction_dto.dart';
@@ -25,5 +26,6 @@ abstract class IUserRepository {
 
   Future<Result<UpdateUserDirectionResponse>> updateUserDirection(UpdateUserDirectionDto updateUserDirectionDto);
 
+  Future<Result<bool>> updateImage(UpdateImageDto updateImageDto);
 
 }

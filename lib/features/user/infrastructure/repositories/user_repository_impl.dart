@@ -1,5 +1,6 @@
 
 
+import 'package:GoDeli/features/auth/application/dto/update_image_dto.dart';
 import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/user/domain/datasources/user_datasource.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
@@ -47,5 +48,10 @@ class UserRepositoryImpl implements IUserRepository{
   @override
   Future<Result<UpdateUserDirectionResponse>> updateUserDirection(UpdateUserDirectionDto updateUserDirectionDto) {
     return _userDatasource.updateUserDirection(updateUserDirectionDto);
+  }
+
+  @override
+  Future<Result<bool>> updateImage(UpdateImageDto updateImageDto) {
+    return _userDatasource.updateImage(updateImageDto);
   }
 }

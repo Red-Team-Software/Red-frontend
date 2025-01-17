@@ -26,7 +26,7 @@ class ProfileComponent extends StatefulWidget {
 
 class _ProfileComponentState extends State<ProfileComponent> {
   File? _selectedImage; // Variable para almacenar la imagen seleccionada
-  String selectedPhoneCode = '0414'; // Valor inicial del Dropdown
+  String selectedPhoneCode = '414'; // Valor inicial del Dropdown
   String fullname = '';
   String phone = '';
 

@@ -4,6 +4,7 @@ import 'package:GoDeli/presentation/screens/Orders/order_list.dart';
 import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_bar.dart';
 import 'package:GoDeli/presentation/widgets/custom_bottom_navigation_bar/custom_bottom_navigation_item.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 class IndexPage extends StatefulWidget {
@@ -17,6 +18,39 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   late int _pageIndex = widget.pageIndex ?? 0;
+
+  @override
+    void initState() {
+     super.initState();
+      _requestNotificationPermissions();
+    }
+
+   Future<void> _requestNotificationPermissions() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+
+    
+
+    // Solicitar permisos para iOS
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
 
   final pages = [
     const HomeScreen(),

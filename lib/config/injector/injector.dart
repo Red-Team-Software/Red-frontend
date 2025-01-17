@@ -9,6 +9,7 @@ import 'package:GoDeli/features/auth/application/use_cases/check_auth_use_case.d
 import 'package:GoDeli/features/auth/application/use_cases/log_out_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/login_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/register_use_case.dart';
+import 'package:GoDeli/features/auth/application/use_cases/update_image_use_case.dart';
 import 'package:GoDeli/features/auth/infrastructure/datasource/auth_datasource.dart';
 import 'package:GoDeli/features/auth/infrastructure/datasource/isar_auth_local_storage_datasource.dart';
 import 'package:GoDeli/features/auth/infrastructure/repository/auth_repository.dart';
@@ -89,8 +90,8 @@ class Injector {
 
     //? Iniciando modulo de Stripe
 
-    // Stripe.publishableKey = Environment.getStripePublishableKey();
-    // await Stripe.instance.applySettings();
+    Stripe.publishableKey = Environment.getStripePublishableKey();
+    await Stripe.instance.applySettings();
 
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
@@ -135,6 +136,8 @@ class Injector {
         LogoutUseCase(httpService, authLocalStorageRepository, cartRepository);
     final CheckAuthUseCase checkAuthUseCase = CheckAuthUseCase(
         httpService, authLocalStorageRepository, cartRepository);
+    final UpdateImageUseCase updateImageUseCase =
+        UpdateImageUseCase(userRepository);
 
     // getIt.registerSingleton<IAuthRepository>(authRepository);
     getIt.registerFactory<AuthBloc>(() => AuthBloc(
@@ -143,7 +146,9 @@ class Injector {
         logoutUseCase: logoutUseCase,
         checkAuthUseCase: checkAuthUseCase,
         updateUserUseCase: updateUserUseCase,
-        addUserDirectionUseCase: addUserDirectionUseCase));
+        addUserDirectionUseCase: addUserDirectionUseCase,
+        updateimageUseCase: updateImageUseCase
+        ));
 
     getIt.registerFactory<UserBloc>(() => UserBloc(
         getUserUseCase: getUserUseCase,

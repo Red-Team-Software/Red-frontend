@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:GoDeli/features/auth/application/dto/login_dto.dart';
 import 'package:GoDeli/features/auth/application/dto/register_dto.dart';
+import 'package:GoDeli/features/auth/application/dto/update_image_dto.dart';
 import 'package:GoDeli/features/auth/application/use_cases/check_auth_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/log_out_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/login_use_case.dart';
 import 'package:GoDeli/features/auth/application/use_cases/register_use_case.dart';
+import 'package:GoDeli/features/auth/application/use_cases/update_image_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/update_user_use_case.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
@@ -21,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LogoutUseCase logoutUseCase;
   final CheckAuthUseCase checkAuthUseCase;
   final UpdateUserUseCase updateUserUseCase;
+  final UpdateImageUseCase updateimageUseCase;
   final AddUserDirectionUseCase addUserDirectionUseCase;
   AuthBloc(
       {required this.loginUseCase,
@@ -28,7 +33,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       required this.logoutUseCase,
       required this.checkAuthUseCase,
       required this.updateUserUseCase,
-      required this.addUserDirectionUseCase})
+      required this.addUserDirectionUseCase,
+      required this.updateimageUseCase})
       : super(AuthState()) {
     on<LoginEvent>(_onLoginEvent);
     on<RegisterEvent>(_onRegisterEvent);
@@ -62,8 +68,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
     if (event.image != null) {
-      final resUpdate = await updateUserUseCase.execute(UpdateUserDto(
-        image: event.image,
+      final resUpdate = await updateimageUseCase.execute(UpdateImageDto(
+         event.image!,
       ));
       if (!resUpdate.isSuccessful()) {
         emit(AuthError('Updating user failed'));

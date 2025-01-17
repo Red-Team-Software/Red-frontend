@@ -51,17 +51,23 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final language =  context.watch<LanguagesCubit>().state.selected.language;
+    final textStyle = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
+    final language = context.watch<LanguagesCubit>().state.selected.language;
     return BlocProvider(
       create: (context) => _orderBloc,
       child: Scaffold(
         appBar: AppBar(
-          title: TranslationWidget(
-            message:'Track Order',
-            toLanguage: language,
-            builder: (translated) => Text(
-              translated,
-            ), 
+          title: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: TranslationWidget(
+              message: 'Track Order',
+              toLanguage: language,
+              builder: (translated) => Text(
+                translated,
+                style: textStyle.displayLarge,
+              ),
+            ),
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
@@ -80,41 +86,62 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    OrderStatusWidget(orderId: order.id),
-                    const SizedBox(height: 16),
-                    OrderInfoWidget(
-                      orderId: order.id,
-                      orderCreatedDate: order.orderCreatedDate,
-                      totalAmount: order.totalAmount,
-                    ),
-                    const SizedBox(height: 16),
-                    order.orderCourier != null
-                        ? OrderCourierCard(courier: order.orderCourier!)
-                        : const SearchingCourier(),
-                    const SizedBox(height: 16),
-                    Expanded(
-                      child: ListView(
-                        children: [
-                          if (order.products.isNotEmpty)
-                            ...order.products.map(
-                              (product) => OrderProductCard(item: product),
-                            ),
-                          if (order.bundles.isNotEmpty)
-                            ...order.bundles.map(
-                              (bundle) => OrderBundleCard(item: bundle),
-                            ),
-                        ],
+                     Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 320.0), // Espacio para el mapa
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              OrderStatusWidget(orderId: order.id),
+                              const SizedBox(height: 16),
+                              OrderInfoWidget(
+                                orderId: order.id,
+                                orderCreatedDate: order.orderCreatedDate,
+                                totalAmount: order.totalAmount,
+                              ),
+                              const SizedBox(height: 16),
+                              order.orderCourier != null
+                                  ? OrderCourierCard(courier: order.orderCourier!)
+                                  : const SearchingCourier(),
+                              const SizedBox(height: 16),
+                              if (order.products.isNotEmpty)
+                                ...order.products.map(
+                                  (product) => OrderProductCard(item: product),
+                                ),
+                              if (order.bundles.isNotEmpty)
+                                ...order.bundles.map(
+                                  (bundle) => OrderBundleCard(item: bundle),
+                                ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    OrderMapWidget(
-                      userLatitude: order.orderDirection.latitude,
-                      userLongitude: order.orderDirection.longitude,
-                      deliveryLatitude: order.orderCourier?.location?.latitude,
-                      deliveryLongitude:
-                          order.orderCourier?.location?.longitude,
+                    // Mapa fijo en la parte inferior
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.5),
+                            blurRadius: 8,
+                            offset: const Offset(0, -2),
+                          ),
+                        ],
+                      ),
+                      height: 300, // Altura fija para el mapa
+                      child: OrderMapWidget(
+                        userLatitude: order.orderDirection.latitude,
+                        userLongitude: order.orderDirection.longitude,
+                        deliveryLatitude:
+                            order.orderCourier?.location?.latitude,
+                        deliveryLongitude:
+                            order.orderCourier?.location?.longitude,
+                      ),
                     ),
                   ],
                 ),

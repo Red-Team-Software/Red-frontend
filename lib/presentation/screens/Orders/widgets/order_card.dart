@@ -31,11 +31,13 @@ class OrderCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [ TranslationWidget(
-              message: 'Order: ${orderItem.orderId}',
+                message: 'Order: ${orderItem.orderId.substring(orderItem.orderId.length - 6)}',
               toLanguage: language,
               builder: (translated) => Text(
                   translated,
-                  style: const TextStyle(fontSize: 14, color: Colors.grey)
+                  style: textStyles.bodyLarge?.copyWith(
+                    color: Colors.grey
+                  )
               ), 
             ),
             const SizedBox(height: 4),
@@ -115,19 +117,35 @@ class OrderCard extends StatelessWidget {
   }
 
   Widget _buildActionButton(BuildContext context, String orderState) {
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     switch (orderState) {
       case "delivering":
-      case 'ongoing':
+      case 'ongoing' || 'CREATED':
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
               onPressed: () => _cancelOrder(context),
-              child: const Text('Cancel Order'),
-            ),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+              )),
+              child: Text('Cancel Order',
+              style: textStyles.bodyLarge?.copyWith(
+                color: colors.primary
+              ),
+            ),),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+              )),
               onPressed: () => _trackOrder(context),
-              child: const Text('Track Order'),
+              child: Text('Track Order',
+              style: textStyles.bodyLarge?.copyWith(
+                color: colors.primary
+              ),)
             ),
           ],
         );
@@ -175,6 +193,8 @@ class OrderCard extends StatelessWidget {
   }
 
   void _reportOrder(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -196,10 +216,10 @@ class OrderCard extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
+                      Text(
                         'Report Order Issue',
-                        style: TextStyle(
-                          fontSize: 18,
+                        style: textStyles.bodyLarge?.copyWith(
+                          color: colors.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -228,18 +248,17 @@ class OrderCard extends StatelessWidget {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 16.0),
                           minimumSize: const Size.fromHeight(48),
                         ),
-                        child: const Text(
+                        child: Text(
                           'Report',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:textStyles.bodyLarge?.copyWith(
+                          color: colors.primary,
+                          fontWeight: FontWeight.bold,
+                        ) ,
                         ),
                       ),
                     ],

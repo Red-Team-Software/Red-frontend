@@ -91,15 +91,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
     Future<void> handleRegister() async {
       final realPhone = '58$phoneCode$phone';
-      String? image;
-      if (selectedImage != null) {
-        final compressedImage = await compressFile(selectedImage!.path);
-        image = compressedImage != null
-            ? await converToBase64(compressedImage)
-            : null;
-      } else {
-        image = null;
-      }
       final addressDto = AddUserDirectionDto(
         name: addressName,
         direction: direction,
@@ -114,7 +105,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 fullName: fullname,
                 phoneNumber: realPhone,
                 address: addressDto,
-                image: image),
+                image: selectedImage),
           );
       onChangeIndex(1);
     }

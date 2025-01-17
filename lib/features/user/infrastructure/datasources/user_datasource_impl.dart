@@ -1,3 +1,4 @@
+import 'package:GoDeli/features/auth/application/dto/update_image_dto.dart';
 import 'package:GoDeli/features/common/domain/result.dart';
 import 'package:GoDeli/features/common/infrastructure/http_service.dart';
 import 'package:GoDeli/features/user/domain/datasources/user_datasource.dart';
@@ -77,6 +78,17 @@ class UserDatasourceImpl implements IUserDatasource {
     final res = await _httpService.request('/user/update/address', 'PATCH',
         (json) => UpdateUserDirectionResponse.fromJson(json),
         body: updateUserDirectionDto.toJson());
+
+    if (!res.isSuccessful()) return Result.makeError(res.getError());
+
+    return Result.success(res.getValue());
+  }
+
+  @override
+  Future<Result<bool>> updateImage(UpdateImageDto updateImageDto) async {
+    final res = await _httpService.request('/user/update/image', 'PATCH',
+        (json) => true,
+        body: updateImageDto.toJson());
 
     if (!res.isSuccessful()) return Result.makeError(res.getError());
 
