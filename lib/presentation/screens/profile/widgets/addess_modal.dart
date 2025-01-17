@@ -97,7 +97,6 @@ class _AddressModalState extends State<AddressModal> {
   Future<void> _selectLocationOnMap(BuildContext context) async {
     LatLng? location;
     String? locationName;
-    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
 
     await showModalBottomSheet(
@@ -105,14 +104,7 @@ class _AddressModalState extends State<AddressModal> {
       isScrollControlled: true,
       builder: (context) => Scaffold(
         appBar: AppBar(
-          title: 
-          TranslationWidget(
-            message:'Select Location',
-            toLanguage: language,
-            builder: (translated) => Text(
-              translated,
-            ), 
-          ),
+          title: const Text('Select Location'),
         ),
         body: FlutterMap(
           options: MapOptions(
@@ -176,7 +168,6 @@ class _AddressModalState extends State<AddressModal> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
 
     return Padding(
@@ -276,19 +267,14 @@ class _AddressModalState extends State<AddressModal> {
                       }
                     }
                   : null,
-              child: 
-              TranslationWidget(
-                message: widget.initialLocation == null
+              child:  Text(
+                    widget.initialLocation == null
                     ? "Add Address"
                     : "Update Address",
-                toLanguage: language,
-                builder: (translated) => Text(
-                    translated,
                     style: const TextStyle(fontSize: 18, color: Colors.white)
                 ), 
               ),
             ),
-          ),
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
@@ -303,15 +289,11 @@ class _AddressModalState extends State<AddressModal> {
               onPressed: () {
                 Navigator.pop(context); // Close the modal
               },
-              child: 
-              TranslationWidget(
-                message:'Cancel',
-                toLanguage: language,
-                builder: (translated) => Text(
-                    translated,
-                    style: TextStyle(fontSize: 18, color: colors.primary)
-                ), 
-              ),
+              child: Text(
+                'Cancel',
+                style: TextStyle(fontSize: 18, color: colors.primary)
+              ), 
+              
             ),
           ),
         ],
