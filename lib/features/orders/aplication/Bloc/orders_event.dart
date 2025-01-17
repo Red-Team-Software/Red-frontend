@@ -8,13 +8,10 @@ abstract class OrdersEvent extends Equatable {
 }
 
 class OrdersLoaded extends OrdersEvent {
-  final int page;
-  final int perPage;
-
-  const OrdersLoaded({this.page = 1, this.perPage = 10});
+  const OrdersLoaded();
 
   @override
-  List<Object> get props => [page, perPage];
+  List<Object> get props => [];
 }
 
 class OrdersTabChanged extends OrdersEvent {
@@ -27,10 +24,7 @@ class OrdersTabChanged extends OrdersEvent {
 }
 
 class FetchAllOrders extends OrdersEvent {
-  final int page;
-  final int perPage;
-
-  const FetchAllOrders({this.page = 1, this.perPage = 10});
+  const FetchAllOrders();
 }
 
 class OrderCancelled extends OrdersEvent {
@@ -41,3 +35,15 @@ class OrderCancelled extends OrdersEvent {
   @override
   List<Object> get props => [orderId];
 }
+
+class OrderReported extends OrdersEvent {
+  final String orderId;
+  final String description;
+
+  const OrderReported({required this.orderId, required this.description});
+
+  @override
+  List<Object> get props => [orderId, description];
+}
+
+class ClearOrderReportErrorEvent extends OrdersEvent {}

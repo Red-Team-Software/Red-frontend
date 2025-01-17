@@ -1,13 +1,15 @@
 import 'package:GoDeli/config/injector/injector.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_bloc.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_event.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_state.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
+import 'package:GoDeli/features/payment-method/domain/repositories/payment-method_repository.dart';
 import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';
 import 'package:GoDeli/features/user/application/use_cases/add_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/delete_user_direction_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/get_user_directions_use_case.dart';
 import 'package:GoDeli/features/user/application/use_cases/update_user_direction_use_case.dart';
+import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -30,6 +32,7 @@ class CheckoutScreen extends StatelessWidget {
         cartBloc: context.read<CartBloc>(),
         orderRepository: getIt<IOrderRepository>(),
         onOrderCreated: (order) {
+          context.read<CartBloc>().add(ClearCart());
           GoRouter.of(context).push(
             '/order/${order.id}',
             extra: order, // Pasar la orden completa
@@ -40,6 +43,7 @@ class CheckoutScreen extends StatelessWidget {
         deleteUserDirectionUseCase: getIt<DeleteUserDirectionUseCase>(),
         updateUserDirectionUseCase: getIt<UpdateUserDirectionUseCase>(),
         taxRepository: getIt<ITaxShippinRepository>(),
+        paymentMethodRepository: getIt<IPaymentMethodRepository>(),
       )..add(LoadCheckoutData()), // Ensure LoadCheckoutData is dispatched once
       child: Scaffold(
         appBar: AppBar(
@@ -98,13 +102,24 @@ class CheckoutScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: BlocBuilder<CheckoutBloc, CheckoutState>(
+        body: BlocConsumer<CheckoutBloc, CheckoutState>(
+          listener: (context, state) {
+            if (state.errorMessage.isNotEmpty) {
+              CustomSnackBar.show(
+                context,
+                type: SnackBarType.error,
+                title: 'Error',
+                message: state.errorMessage,
+              );
+              context.read<CheckoutBloc>().add(ClearErrorEvent());
+            }
+          },
           builder: (context, state) {
             if (state.isProcessing) {
               return const Center(child: CircularProgressIndicator());
             }
             return const SingleChildScrollView(
-              padding: EdgeInsets.fromLTRB( 16, 16, 16, 0),
+              padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -2,12 +2,16 @@ import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/features/user/domain/dto/add_direction_dto.dart';
-import 'package:GoDeli/features/user/domain/dto/delete_update_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/delete_user_direction_dto.dart';
+import 'package:GoDeli/features/user/domain/dto/update_user_direction_dto.dart';
 import 'package:GoDeli/features/user/domain/dto/update_user_dto.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
 import 'package:GoDeli/features/user/domain/user_direction.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/addess_modal.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/profile_address_card.dart';
+import 'package:GoDeli/presentation/screens/profile/widgets/wallet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -95,57 +99,36 @@ class _ProfileScreenState extends State<_ProfileScreen> {
     );
   }
 
-  DeleteUpdateUserDirectionListDto _buildDeleteUserDirectionDto(
+  DeleteUserDirectionDto _buildDeleteUserDirectionDto(
       UserDirection direction) {
-    return DeleteUpdateUserDirectionListDto(
-      directions: [
-        DeleteUpdateUserDirectionDto(
-          id: direction.id,
-          name: direction.addressName,
-          favorite: direction.isFavorite,
-          lat: direction.latitude.toDouble(),
-          lng: direction.longitude.toDouble(),
-        ),
-      ],
+    return DeleteUserDirectionDto(
+      id: direction.id,
     );
   }
 
-  DeleteUpdateUserDirectionListDto _buildUpdateUserDirectionDto(
-      {required UserDirection direction,
-      String? newName,
-      LatLng? newLocation,
-      required List<UserDirection> directions}) {
+  UpdateUserDirectionDto _buildUpdateUserDirectionDto({
+    required UserDirection direction,
+    String? newName,
+    LatLng? newLocation,
+    required List<UserDirection> directions,
+    String? newDirectionName,
+  }) {
     newName ??= direction.addressName;
     newLocation ??=
         LatLng(direction.latitude.toDouble(), direction.longitude.toDouble());
+    newDirectionName ??= direction.direction;
 
-    final newDto = DeleteUpdateUserDirectionDto(
+    return UpdateUserDirectionDto(
       id: direction.id,
       name: newName,
       favorite: direction.isFavorite,
       lat: newLocation.latitude.toDouble(),
       lng: newLocation.longitude.toDouble(),
-    );
-
-    final dtoList = directions
-        .map((e) => DeleteUpdateUserDirectionDto(
-              id: e.id,
-              name: e.addressName,
-              favorite: e.isFavorite,
-              lat: e.latitude.toDouble(),
-              lng: e.longitude.toDouble(),
-            ))
-        .toList();
-
-    dtoList.removeWhere((element) => element.id == direction.id);
-    dtoList.add(newDto);
-
-    return DeleteUpdateUserDirectionListDto(
-      directions: dtoList,
+      direction: newDirectionName,
     );
   }
 
-  DeleteUpdateUserDirectionListDto _buildUpdateFavoriteUserDirectionDto(
+  UpdateUserDirectionDto _buildUpdateFavoriteUserDirectionDto(
       {required UserDirection newFavoriteDirection,
       required List<UserDirection> directions}) {
     for (var element in directions) {
@@ -160,38 +143,35 @@ class _ProfileScreenState extends State<_ProfileScreen> {
       }
     }
 
-    final dtoList = directions
-        .map((e) => DeleteUpdateUserDirectionDto(
-              id: e.id,
-              name: e.addressName,
-              favorite: e.isFavorite,
-              lat: e.latitude.toDouble(),
-              lng: e.longitude.toDouble(),
-            ))
-        .toList();
-
-    return DeleteUpdateUserDirectionListDto(
-      directions: dtoList,
+    return UpdateUserDirectionDto(
+      id: newFavoriteDirection.id,
+      name: newFavoriteDirection.addressName,
+      favorite: newFavoriteDirection.isFavorite,
+      lat: newFavoriteDirection.latitude.toDouble(),
+      lng: newFavoriteDirection.longitude.toDouble(),
+      direction: newFavoriteDirection.direction,
     );
   }
 
-  AddUserDirectionListDto _buildAddUserDirectionDto(
-      LatLng location, String name) {
-    return AddUserDirectionListDto(
-      directions: [
-        AddUserDirectionDto(
-          name: name,
-          favorite: false,
-          lat: location.latitude,
-          lng: location.longitude,
-        ),
-      ],
+  AddUserDirectionDto _buildAddUserDirectionDto(
+      LatLng location, String name, String direction) {
+    return AddUserDirectionDto(
+      direction: direction,
+      name: name,
+      favorite: false,
+      lat: location.latitude,
+      lng: location.longitude,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     initializeControllers();
+
+    final theme = Theme.of(context);
+
+    final scales = theme.textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -204,47 +184,95 @@ class _ProfileScreenState extends State<_ProfileScreen> {
               crossAxisAlignment:
                   CrossAxisAlignment.center, // Keep everything centered
               children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.grey[300],
-                  child: widget.user.image != null
-                      ? Image.network(widget.user.image!)
-                      : Icon(Icons.person, size: 50, color: Colors.grey[700]),
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 60,
+                          backgroundColor: Colors.grey[300],
+                          child: widget.user.image != null
+                              ? Image.network(widget.user.image!)
+                              : Icon(Icons.person,
+                                  size: 50, color: Colors.grey[700]),
+                        )
+                      ],
+                    ),
+                    const SizedBox(width: 20),
+                    Column(
+                      children: [
+                        TranslationWidget(
+                          message: 'Hello, ${widget.user.fullName}!',
+                          toLanguage: language,
+                          builder: (translated) => Text(
+                            translated,
+                            style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)
+                          )
+                        ),
+                        Row(
+                          children: [
+                            TextButton.icon(
+                              onPressed: () {
+                                setState(() {
+                                  _readOnly = !_readOnly;
+                                  initializeControllers();
+                                });
+                              },
+                              icon: Icon(_readOnly ? Icons.edit : Icons.cancel,
+                                  color: Colors.grey),
+                              label: Text(_readOnly ? 'Edit' : 'Cancel',
+                                  style: const TextStyle(color: Colors.grey)),
+                            ),
+                            const SizedBox(width: 20),
+                            TextButton(
+                              onPressed: () {
+                                context.read<AuthBloc>().add(LogoutEvent());
+                                context.push('/auth');
+                              },
+                              child: 
+                              TranslationWidget(
+                                message:'Log out',
+                                toLanguage: language,
+                                builder: (translated) => Text(
+                                    translated,
+                                    style: TextStyle(
+                                      color: theme.primaryColor,
+                                      fontSize: scales.bodyMedium?.fontSize,
+                                      fontWeight: FontWeight.bold
+                                    )
+                                ), 
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 10),
-                TextButton.icon(
-                  onPressed: () {
-                    setState(() {
-                      _readOnly = !_readOnly;
-                      initializeControllers();
-                    });
-                  },
-                  icon: Icon(_readOnly ? Icons.edit : Icons.cancel,
-                      color: Colors.grey),
-                  label: Text(_readOnly ? 'Edit' : 'Cancel',
-                      style: const TextStyle(color: Colors.grey)),
+                const Divider(
+                  color: Colors.grey,
+                  thickness: 1,
                 ),
                 const SizedBox(height: 10),
-                Text(
-                  'Hello, ${widget.user.fullName}!',
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                WalletCard(
+                  wallet: widget.user.wallet!,
                 ),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(LogoutEvent());
-                    context.push('/auth');
-                  },
-                  child: const Text('Log out',
-                      style: TextStyle(color: Colors.red)),
-                ),
-                const SizedBox(height: 20),
-                const Align(
+                Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left
-                  child: Text('User:',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  child: 
+                  TranslationWidget(
+                    message:'User:',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        style: TextStyle(
+                          fontSize: scales.bodyLarge?.fontSize,
+                          fontWeight: FontWeight.bold)
+                    ), 
+                  ),
                 ),
                 CustomTextField(
                   label: 'Email',
@@ -265,12 +293,19 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                     readOnly: _readOnly,
                   ),
                 const SizedBox(height: 20),
-                const Align(
+                Align(
                   alignment:
                       Alignment.centerLeft, // Align the titles to the left
-                  child: Text('Profile:',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  child: 
+                  TranslationWidget(
+                    message:'Profile:',
+                    toLanguage: language,
+                    builder: (translated) => Text(
+                        translated,
+                        style:
+                          const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)
+                    ), 
+                  ),        
                 ),
                 CustomTextField(
                   label: 'Full Name',
@@ -305,26 +340,36 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Align(
+                    Align(
                       alignment:
                           Alignment.centerLeft, // Align the titles to the left
-                      child: Text('Addresses:',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      child: 
+                      TranslationWidget(
+                        message: 'Addresses:',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                            translated,
+                            style: const TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)
+                        ), 
+                      ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.add, color: Colors.red, size: 30),
+                      icon:
+                          Icon(Icons.add, color: theme.primaryColor, size: 30),
                       onPressed: () {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
                           builder: (BuildContext context) {
                             return AddressModal(
-                              onFinished: (location, name, isUpdate) async {
+                              onFinished:
+                                  (location, name, isUpdate, direction) async {
                                 Navigator.pop(context);
                                 // Add the address
                                 final addDirectionDto =
-                                    _buildAddUserDirectionDto(location, name);
+                                    _buildAddUserDirectionDto(
+                                        location, name, direction);
                                 this.context.read<UserBloc>().add(
                                     AddUserDirectionEvent(
                                         userDirection: addDirectionDto));
@@ -356,7 +401,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                       DeleteUserDirectionEvent(
                                           userDirection: dto));
                                 },
-                                backgroundColor: Colors.red,
+                                backgroundColor: theme.primaryColor,
                                 foregroundColor: Colors.white,
                                 icon: Icons.delete,
                                 label: 'Delete',
@@ -372,7 +417,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                           longitude: direction.longitude.toDouble(),
                           isFavorite: direction.isFavorite,
                           id: direction.id,
-                          address: direction.address,
+                          address: direction.direction,
                           onFavoriteChanged: (id, isFavorite) async {
                             if (direction.isFavorite) {
                               return;
@@ -395,8 +440,9 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                   initialLocation: LatLng(
                                       direction.latitude.toDouble(),
                                       direction.longitude.toDouble()),
-                                  initialLocationName: direction.address,
-                                  onFinished: (location, name, isUpdate) async {
+                                  initialLocationName: direction.direction,
+                                  onFinished: (location, name, isUpdate,
+                                      directionName) async {
                                     Navigator.pop(context);
                                     // update the address
                                     final updateUserDto =
@@ -404,7 +450,8 @@ class _ProfileScreenState extends State<_ProfileScreen> {
                                             direction: direction,
                                             newName: name,
                                             newLocation: location,
-                                            directions: widget.user.directions);
+                                            directions: widget.user.directions,
+                                            newDirectionName: directionName);
                                     this.context.read<UserBloc>().add(
                                         UpdateUserDirectionEvent(
                                             userDirection: updateUserDto));
@@ -421,7 +468,7 @@ class _ProfileScreenState extends State<_ProfileScreen> {
           ),
         ),
       ),
-    ).animate().fadeIn(duration: 500.ms );
+    ).animate().fadeIn(duration: 500.ms);
   }
 }
 

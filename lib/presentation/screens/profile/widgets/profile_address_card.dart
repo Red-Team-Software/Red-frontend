@@ -83,6 +83,9 @@ class _ProfileAddressCardState extends State<ProfileAddressCard> {
 
   @override
   Widget build(BuildContext context) {
+
+    final theme = Theme.of(context);
+
     return Card(
       color: _isFavorite ? Colors.grey[300] : Colors.white,
       shape: RoundedRectangleBorder(
@@ -94,7 +97,7 @@ class _ProfileAddressCardState extends State<ProfileAddressCard> {
               ? const CircularProgressIndicator()
               : Icon(
                   _isFavorite ? Icons.favorite : Icons.favorite_border,
-                  color: _isFavorite ? Colors.red : Colors.grey,
+                  color: _isFavorite ? theme.primaryColor : Colors.grey,
                 ),
           onPressed: _isLoading ? null : _toggleFavorite,
         ),

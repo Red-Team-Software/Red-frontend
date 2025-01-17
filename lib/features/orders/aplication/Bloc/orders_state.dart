@@ -13,35 +13,52 @@ class OrdersInitial extends OrdersState {}
 class OrdersLoadInProgress extends OrdersState {}
 
 class OrdersLoadSuccess extends OrdersState {
-  final Orders orders;
+  final Orders activeOrders;
+  final Orders pastOrders;
   final String selectedTab;
-  final int page;
-  final int perPage;
+  final String? orderReportError; // New variable
 
   const OrdersLoadSuccess({
-    required this.orders,
+    required this.activeOrders,
+    required this.pastOrders,
     required this.selectedTab,
-    required this.page,
-    required this.perPage,
+    this.orderReportError, // Initialize new variable
   });
 
   @override
-  List<Object> get props => [orders, selectedTab, page, perPage];
+  List<Object> get props => [
+        activeOrders,
+        pastOrders,
+        selectedTab,
+        orderReportError ?? ''
+      ]; // Update props
+
+  OrdersLoadSuccess copyWith({
+    Orders? activeOrders,
+    Orders? pastOrders,
+    String? selectedTab,
+    String? orderReportError,
+  }) {
+    return OrdersLoadSuccess(
+      activeOrders: activeOrders ?? this.activeOrders,
+      pastOrders: pastOrders ?? this.pastOrders,
+      selectedTab: selectedTab ?? this.selectedTab,
+      orderReportError: orderReportError ?? this.orderReportError,
+    );
+  }
 }
 
 class OrdersLoadFailure extends OrdersState {
   final String error;
-  final int page;
-  final int perPage;
 
   const OrdersLoadFailure({
     required this.error,
-    required this.page,
-    required this.perPage,
   });
 
   @override
-  List<Object> get props => [error, page, perPage];
+  List<Object> get props => [
+        error,
+      ];
 }
 
 class OrderCancelSuccess extends OrdersState {}
@@ -50,6 +67,17 @@ class OrderCancelFailure extends OrdersState {
   final String error;
 
   const OrderCancelFailure({required this.error});
+
+  @override
+  List<Object> get props => [error];
+}
+
+class OrderReportSuccess extends OrdersState {}
+
+class OrderReportFailure extends OrdersState {
+  final String error;
+
+  const OrderReportFailure({required this.error});
 
   @override
   List<Object> get props => [error];

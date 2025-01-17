@@ -11,27 +11,24 @@ class OrderRepositoryImpl implements IOrderRepository {
 
   @override
   Future<Result<Order>> processPayment({
-    required String paymentId,
-    required String currency,
     required String paymentMethod,
-    required String stripePaymentMethod,
-    required String address,
+    String? stripePaymentMethod,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   }) async {
     try {
       final order = await datasource.processPayment(
-        paymentId: paymentId,
-        currency: currency,
         paymentMethod: paymentMethod,
         stripePaymentMethod: stripePaymentMethod,
-        address: address,
+        idUserDirection: idUserDirection,
         bundles: bundles,
         products: products,
       );
 
       return order;
     } catch (e) {
+      print("error en el rerpo pago");
       print("error en el rerpo");
       print(e);
       return Result.makeError(e as Exception);
@@ -39,12 +36,46 @@ class OrderRepositoryImpl implements IOrderRepository {
   }
 
   @override
-  Future<Result<List<OrderItem>>> fetchAllOrders(
-      {int page = 1, int perPage = 10}) async {
+  Future<Result<List<OrderItem>>> fetchAllOrders() async {
     try {
-      final orders =
-          await datasource.fetchAllOrders(page: page, perPage: perPage);
+      final orders = await datasource.fetchAllOrders();
       return Result.success(orders);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
+    }
+  }
+
+  @override
+  Future<Result<List<OrderItem>>> fetchPastOrders() async {
+    try {
+      final orders = await datasource.fetchAllOrders(state: "past");
+      return Result.success(orders);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
+    }
+  }
+
+  @override
+  Future<Result<List<OrderItem>>> fetchActiveOrders() async {
+    try {
+      final orders = await datasource.fetchAllOrders(state: "active");
+      return Result.success(orders);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
+    }
+  }
+
+  @override
+  Future<Result<Order>> fetchOrderById({required String orderId}) async {
+    try {
+      final order = await datasource.fetchOrderById(orderId: orderId);
+      return Result.success(order);
     } catch (e) {
       print("error en el rerpo");
       print(e);
@@ -59,6 +90,32 @@ class OrderRepositoryImpl implements IOrderRepository {
     } catch (e) {
       print("error en el rerpo");
       print(e);
+    }
+  }
+
+  @override
+  Future<void> reportOrder(
+      {required String orderId, required String description}) async {
+    try {
+      await datasource.reportOrder(orderId: orderId, description: description);
+    } catch (e) {
+      print("error en el reporte de orden");
+      print(e);
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<Result<Location>> fetchCourierPosition(
+      {required String orderId}) async {
+    try {
+      final position = await datasource.fetchCourierPosition(orderId: orderId);
+      print("position");
+      return Result.success(position);
+    } catch (e) {
+      print("error en el rerpo");
+      print(e);
+      return Result.makeError(Exception(e));
     }
   }
 }

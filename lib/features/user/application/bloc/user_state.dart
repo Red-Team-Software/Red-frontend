@@ -11,6 +11,9 @@ final class UserSuccess extends UserState {
   final User user;
 
   UserSuccess(this.user);
+
+  @override
+  List<Object> get props => [user];
 }
 
 final class UserLoading extends UserState {}

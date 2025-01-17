@@ -1,3 +1,8 @@
+import 'package:GoDeli/config/constants/enviroments.dart';
+import 'package:GoDeli/config/injector/injector.dart';
+import 'package:GoDeli/features/common/application/bloc/select_datasource_bloc_bloc.dart';
+import 'package:GoDeli/features/common/infrastructure/http_service.dart';
+import 'package:GoDeli/features/search/application/bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/presentation/screens/auth/widgets/image_component.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -24,6 +29,7 @@ class _LoginComponentState extends State<LoginComponent> {
   String email = '';
   String password = '';
   String? emailError;
+  Color _primaryColor = Colors.red; // Define _primaryColor
 
   // Email validation
   bool validateEmail(String value) {
@@ -39,18 +45,17 @@ class _LoginComponentState extends State<LoginComponent> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
+    final dataSourceBloc = context.watch<SelectDatasourceBloc>();
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ImageComponent(),
         const SizedBox(height: 20),
-        const Text(
+        Text(
           "Login",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textStyles.displayMedium,
         ),
         const SizedBox(height: 20),
 
@@ -76,7 +81,10 @@ class _LoginComponentState extends State<LoginComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.email),
+            suffixIcon: Icon(
+              Icons.email,
+              color: colors.primary,
+            ),
           ),
         ),
         const SizedBox(height: 20),
@@ -101,25 +109,13 @@ class _LoginComponentState extends State<LoginComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.lock),
-          ),
-        ),
-        const SizedBox(height: 10),
-
-        // Forgot Password Button
-        Align(
-          alignment: Alignment.centerRight,
-          child: TextButton(
-            onPressed: () {},
-            child: Text(
-              "Forgot password?",
-              style: TextStyle(color: colors.primary),
+            suffixIcon: Icon(
+              Icons.lock,
+              color: colors.primary,
             ),
           ),
         ),
-        const SizedBox(height: 20),
-
-        // Login Button
+        const SizedBox(height: 30),
         SizedBox(
           width: double.infinity,
           height: 50,
@@ -137,35 +133,80 @@ class _LoginComponentState extends State<LoginComponent> {
                     await widget.onHandleLogin();
                   }
                 : null, // Disable button if conditions are not met
-            child: const Text(
+            child: Text(
               "Login",
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              style: textStyles.displaySmall?.copyWith(color: Colors.white),
             ),
           ),
         ),
-        const SizedBox(height: 10),
-
-        // Sign Up Button
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: colors.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+        const SizedBox(height: 20),
+        // Forgot Password Button
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                "Forgot password?",
+                style: TextStyle(color: colors.primary),
               ),
             ),
-            onPressed: () {
-              widget.onChangeIndex(1); // Go to Sign Up screen
-            },
-            child: Text(
-              "Sign Up",
-              style: TextStyle(fontSize: 18, color: colors.primary),
+            TextButton(
+              onPressed: () {
+                widget.onChangeIndex(1);
+              },
+              child: Text(
+                "Don't have an account\nRegister here!",
+                textAlign: TextAlign.center,
+                style: textStyles.bodyLarge?.copyWith(
+                  color: colors.primary,
+                ),
+              ),
             ),
+          ],
+        ),
+
+        const SizedBox(height: 20),
+
+        // Login Button
+        Align(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Switch team`", style: textStyles.displayMedium),
+              Switch(
+
+               value: dataSourceBloc.state.isRed ? false : true,
+                onChanged: (value) {
+                  setState(() {
+                    _primaryColor = value ? Colors.blue : Colors.red;
+                    // Change the primary color of the app
+                    Theme.of(context).copyWith(
+                      colorScheme: Theme.of(context)
+                          .colorScheme
+                          .copyWith(primary: _primaryColor),
+                    );
+                    // Change environment variables based on switch value
+                    if (value) {
+                      dataSourceBloc.add(const SelectDatasource(isRed: false));
+                      // final apiUrl = Environment.getApiUrl();
+                      // getIt<IHttpService>().updateBaseUrl(apiUrl);
+                    } else {
+                      dataSourceBloc.add(const SelectDatasource(isRed: true));
+                      // final apiUrl = Environment.getApiUrl();
+                      // context.read<IHttpService>().updateBaseUrl(apiUrl);
+                    }
+                  });
+                },
+                activeColor: const Color(0xFF2000B1),
+                inactiveThumbColor: const Color(0xFFAD0101),
+                
+              ),
+            ],
           ),
         ),
       ],
-    );
+    ).animate().moveX(begin: 100, end: 0).fadeIn(duration: 500.ms);
   }
 }

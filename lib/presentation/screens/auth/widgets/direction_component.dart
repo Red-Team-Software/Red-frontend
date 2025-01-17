@@ -9,6 +9,7 @@ class DirectionComponent extends StatefulWidget {
   final void Function(int) onChangeIndex;
   final void Function(LatLng) onChangeLocation;
   final void Function(String) onChangeAddressName;
+  final void Function(String) onChangeDirection;
   final Future<void> Function() onFinished;
 
 
@@ -17,6 +18,7 @@ class DirectionComponent extends StatefulWidget {
     required this.onChangeIndex,
     required this.onChangeLocation,
     required this.onChangeAddressName,
+    required this.onChangeDirection,
     required this.onFinished,
   });
 
@@ -134,7 +136,7 @@ class _DirectionComponentState extends State<DirectionComponent> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
+    final textStyles = Theme.of(context).textTheme;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -175,7 +177,9 @@ class _DirectionComponentState extends State<DirectionComponent> {
         Text(
           _selectedAddress,
           textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: 16, color: Colors.grey),
+          style: textStyles.bodyLarge?.copyWith(
+            color: Colors.grey,
+          ),
         ),
         const SizedBox(height: 20),
         TextField(
@@ -199,7 +203,7 @@ class _DirectionComponentState extends State<DirectionComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.pin_drop),
+            suffixIcon: Icon(Icons.pin_drop, color: colors.primary),
           ),
         ),
         const SizedBox(height: 20),
@@ -219,37 +223,18 @@ class _DirectionComponentState extends State<DirectionComponent> {
             if (_selectedLocation != null) {
               widget.onChangeLocation(_selectedLocation!);
               widget.onChangeAddressName(_currentAddressName);
+              widget.onChangeDirection(_selectedAddress);
               widget.onFinished(); // Llama al registro en AuthScreen
             }
           }
         : null,
-            child: const Text(
-              "Finish",
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: colors.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () {
-              widget.onChangeIndex(2); // Regresar a la pantalla anterior
-            },
             child: Text(
-              "Back",
-              style: TextStyle(fontSize: 18, color: colors.primary),
+              "Finish",
+              style:  textStyles.displaySmall?.copyWith(color: Colors.white),
             ),
           ),
         ),
-      ],
+],
     );
   }
 }

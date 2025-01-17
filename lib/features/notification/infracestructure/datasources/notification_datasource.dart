@@ -8,7 +8,7 @@ class NotificationDatasource {
 
   Future<Result<String>> saveToken(String token) async {
     final response = await _httpService.request(
-        '/notification/savetoken', 'POST', (json) => {},
+        '/notifications/savetoken', 'POST', (json) => {},
         body: {'token': token});
 
     if (!response.isSuccessful()) {
@@ -16,7 +16,7 @@ class NotificationDatasource {
       return Result.makeError(
           Exception('Failed to save token: ${response.getError()}'));
     }
-    print('Token guardado exitosamente');
+    print('Firebase Token guardado exitosamente');
     return Result.success('Token guardado exitosamente');
   }
 }

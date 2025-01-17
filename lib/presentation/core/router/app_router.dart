@@ -1,11 +1,13 @@
+import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/order/aplication/Bloc/order_bloc.dart';
-import 'package:GoDeli/features/order/domain/order.dart';
+import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:GoDeli/presentation/core/router/index.dart';
 import 'package:GoDeli/presentation/screens/Catalogo/view/catalog_screen.dart';
 import 'package:GoDeli/presentation/screens/Checkout/checkout_screen.dart';
 import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:GoDeli/presentation/screens/auth/auth_screen.dart';
+import 'package:GoDeli/presentation/screens/languages/language_screen.dart';
 import 'package:GoDeli/presentation/screens/profile/profile_screen.dart';
 import 'package:GoDeli/presentation/screens/Search/search.dart';
 import 'package:GoDeli/presentation/screens/Bundle/bundle.dart';
@@ -52,9 +54,20 @@ final appRouter = GoRouter(
       builder: (context, state) => const CategoriesScreen(),
     ),
     GoRoute(
+      path: '/languages',
+      name: LanguageScreen.name,
+      builder: (context, state) => const LanguageScreen(),
+    ),
+    GoRoute(
       path: '/catalog',
       name: CatalogScreen.name,
       builder: (context, state) => const CatalogScreen(),
+    ),
+    GoRoute(
+      path: '/catalog/:category',
+      name: '${CatalogScreen.name}_category',
+      builder: (context, state) =>
+          CatalogScreen(category: state.pathParameters['category'] ?? ''),
     ),
     GoRoute(
       path: '/product/:idProduct',
@@ -77,14 +90,8 @@ final appRouter = GoRouter(
       path: "/order/:idOrder",
       name: OrderSummaryScreen.name,
       builder: (context, state) {
-        final order = state.extra
-            as Order; // Asegúrate de pasar la orden desde el `CheckoutBloc`
         return BlocProvider(
-          create: (_) {
-            final orderBloc = OrderBloc();
-            orderBloc.add(LoadOrder(order: order)); // Disparar el evento aquí
-            return orderBloc;
-          },
+          create: (_) => OrderBloc(orderRepository: getIt<IOrderRepository>()),
           child: OrderSummaryScreen(
             idOrder: state.pathParameters['idOrder'] ?? '',
           ),
@@ -95,8 +102,8 @@ final appRouter = GoRouter(
       path: '/track_order/:orderId',
       name: TrackOrderScreen.name,
       builder: (context, state) {
-        final orderItem = state.extra as OrderItem;
-        return TrackOrderScreen(orderItem: orderItem);
+        final orderId = state.pathParameters['orderId'] ?? '';
+        return TrackOrderScreen(orderId: orderId);
       },
     ),
   ],

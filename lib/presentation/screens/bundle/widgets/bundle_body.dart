@@ -2,20 +2,41 @@ import 'package:GoDeli/features/bundles/application/bundle_details/bundle_detail
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BundleBody extends StatelessWidget {
   final ThemeData theme;
-  const BundleBody({super.key, required this.theme});
+  final String idBundle;
+  const BundleBody({super.key, required this.theme, required this.idBundle});
 
   @override
   Widget build(BuildContext context) {
+
+    final textStyles = Theme.of(context).textTheme;
+
     return SafeArea(
       child: Scaffold(
         body: BlocBuilder<BundleDetailsBloc, BundleDetailsState>(
           builder: (context, state) {
+            final Bundle newBundle = Bundle(
+              id: idBundle,
+              name: state.bundle.name,
+              description: state.bundle.description,
+              price: state.bundle.price,
+              imageUrl: state.bundle.imageUrl,
+              currency: state.bundle.currency,
+              categories: state.bundle.categories,
+              promotions: state.bundle.promotions,
+              products: state.bundle.products,
+              expirationDate: state.bundle.expirationDate,
+              inStock: state.bundle.inStock,
+              measurement: state.bundle.measurement,
+              weight: state.bundle.weight,
+            );
             switch (state.status) {
               case BundleDetailsStatus.loading:
               case BundleDetailsStatus.initial:
@@ -31,15 +52,16 @@ class BundleBody extends StatelessWidget {
 
               case BundleDetailsStatus.loaded:
                 return DetailsView(
-                    images: state.bundle.imageUrl,
-                    name: state.bundle.name,
-                    description: state.bundle.description,
-                    price: state.bundle.price,
-                    currency: state.bundle.currency,
-                    promotions: state.bundle.promotions,
-                    categories: state.bundle.categories,
-                    bundleProducts: state.bundle.products,
-                    buttonWidget: buttonWidget(context, state.bundle));
+                    images: newBundle.imageUrl,
+                    name: newBundle.name,
+                    description: newBundle.description,
+                    price: newBundle.price,
+                    currency: newBundle.currency,
+                    promotions: newBundle.promotions,
+                    categories: newBundle.categories,
+                    bundleProducts: newBundle.products,
+                    expirationDate: newBundle.expirationDate,
+                    buttonWidget: buttonWidget(context, newBundle));
             }
           },
         ),
@@ -49,6 +71,9 @@ class BundleBody extends StatelessWidget {
 
   Widget buttonWidget(BuildContext context, Bundle bundle) {
     final cartBloc = context.watch<CartBloc>();
+    final textStyles = Theme.of(context).textTheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return Flex(
       direction: Axis.vertical,
       children: [
@@ -58,18 +83,20 @@ class BundleBody extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: theme.colorScheme.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.symmetric(vertical: 24),
             ),
-            child: const Center(
-              child: Text(
-                'Add to Cart',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+            child: Center(
+              child: TranslationWidget(
+                message:'Add to Cart',
+                toLanguage: language,
+                builder: (translated) => Text(
+                    translated,
+                    style: textStyles.displaySmall?.copyWith(
+                      color: Colors.white,
+                    )
+                ), 
               ),
             ),
           ),
@@ -85,14 +112,19 @@ class BundleBody extends StatelessWidget {
                 width: 3,
               ),
             ),
-            child: const Center(
-              child: Text(
-                'Already in Cart',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+            child: Center(
+              child: 
+              TranslationWidget(
+                message:'Already in Cart',
+                toLanguage: language,
+                builder: (translated) => Text(
+                    translated,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    )
+                ), 
               ),
             ),
           )
@@ -102,6 +134,7 @@ class BundleBody extends StatelessWidget {
 
   Future<dynamic> _showModal(
       BuildContext context, ThemeData theme, Bundle bundle) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
     int quantity = 1;
     return showModalBottomSheet(
       context: context,
@@ -181,14 +214,18 @@ class BundleBody extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Confirm and Add to Cart',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
+                    child: Center(
+                      child: TranslationWidget(
+                        message:'Confirm and Add to Cart',
+                        toLanguage: language,
+                        builder: (translated) => Text(
+                          translated,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                        )
+                        ), 
                       ),
                     ),
                   ),

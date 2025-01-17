@@ -5,13 +5,13 @@ import 'package:GoDeli/features/user/domain/repositories/user_repository.dart';
 import 'package:GoDeli/features/user/domain/user.dart';
 
 class AddUserDirectionUseCase
-    implements IUseCase<AddUserDirectionListDto, User> {
+    implements IUseCase<AddUserDirectionDto, User> {
   final IUserRepository _userRepository;
 
   AddUserDirectionUseCase(this._userRepository);
 
   @override
-  Future<Result<User>> execute(AddUserDirectionListDto dto) async {
+  Future<Result<User>> execute(AddUserDirectionDto dto) async {
     final resultDirectionAdded = await _userRepository.addUserDirection(dto);
 
     if (!resultDirectionAdded.isSuccessful()) {

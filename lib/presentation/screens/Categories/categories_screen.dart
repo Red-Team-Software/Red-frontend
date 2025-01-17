@@ -1,5 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
 import 'package:GoDeli/features/categories/application/all-categories/categories_bloc.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -23,13 +25,22 @@ class _CategoriesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => context.pop(),
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Text('All Categories'),
+        title: 
+        TranslationWidget(
+            message:'All Categories',
+            toLanguage: language,
+            builder: (translated) => Text(
+              translated
+          ), 
+        ),
         actions: const [
           Icon(Icons.search, size: 32,),
           SizedBox(width: 8,)
@@ -42,11 +53,17 @@ class _CategoriesView extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (state.status == CategoriesStatus.error) {
-            return const Center(
-              child: Text('Algo inesperado paso', style: TextStyle(color: Colors.red)),
+            return Center(
+              child: TranslationWidget(
+                message:'Algo inesperado paso',
+                toLanguage: language,
+                builder: (translated) => Text(
+                    translated,
+                    style: const TextStyle(color: Colors.red)
+                ), 
+              ),
             );
           }
-      
           return Padding(
             padding: const EdgeInsets.only(top: 16.00, left:16.00, right: 16.00),
             child: GridView.builder(
@@ -59,30 +76,37 @@ class _CategoriesView extends StatelessWidget {
               itemCount: state.categories.length,
               itemBuilder: (context, index) {
                 final category = state.categories[index];
-                return Card(
-                  elevation: 6.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: Image.network(
-                            category.icon,
-                            fit: BoxFit.contain,
-                            width: 70.00,
+                return InkWell(
+                  onTap: () => context.push('/catalog/${category.name}'),
+                  child: Card(
+                    elevation: 6.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Expanded(
+                            child: Image.network(
+                              category.icon!,
+                              fit: BoxFit.contain,
+                              width: 70.00,
+                            ),
                           ),
-                        ),
-                        Text(
-                          category.name,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(height: 8.00,)
-                      ],
+                          TranslationWidget(
+                            message: category.name,
+                            toLanguage: context.read<LanguagesCubit>().state.selected.language,
+                            builder: (translated) => Text(
+                              translated,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 14.0, color: Colors.black54, fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                          const SizedBox(height: 8.00,)
+                        ],
+                      ),
                     ),
                   ),
                 );

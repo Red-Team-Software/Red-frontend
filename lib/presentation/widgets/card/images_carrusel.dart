@@ -15,7 +15,7 @@ class ImagesCarrusel extends StatelessWidget {
         width: double.infinity,
         child: Image.network(
           images[0],
-          fit: BoxFit.fill,
+          fit: BoxFit.cover,
         ),
       );
     }

@@ -11,7 +11,7 @@ void configureFCM(IHttpService httpService) async {
   if (fcmToken != null) {
     // Llamar al servicio para guardar el token en el backend
     final notificationDatasource = NotificationDatasource(httpService);
-    final res = await notificationDatasource.saveToken(fcmToken);
+    await notificationDatasource.saveToken(fcmToken);
   }
 
   // Suscribir al tema

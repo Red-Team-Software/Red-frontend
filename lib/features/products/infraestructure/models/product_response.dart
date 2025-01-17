@@ -4,18 +4,17 @@ import 'package:GoDeli/features/products/domain/product.dart';
 
 class ProductResponse {
   final String id;
-  final String description;
-  final String? caducityDate;
   final String name;
-  final int? stock;
-  final List<String> images;
+  final String description;
+  final List<String> image;
   final double price;
   final String currency;
   final double? weigth;
   final String? measurement;
-  final List<Category> categories;
+  final int? stock;
+  final String? caducityDate;
+  final List<CategoryProduct> categories;
   final List<Promotion> promotion;
-
 
   ProductResponse({
     required this.id,
@@ -23,38 +22,37 @@ class ProductResponse {
     required this.description,
     required this.price,
     required this.currency,
-    required this.images,
+    required this.image,
     this.caducityDate, 
     this.stock, 
     this.weigth, 
     this.measurement, 
     this.categories = const [], 
     this.promotion = const [],
-
   });
 
-  factory ProductResponse.fromJson(Map<String, dynamic> json) {
+  factory ProductResponse.fromJson(Map<String, dynamic> json, {String id = ''}) {
     return ProductResponse(
-      id: json['id'],
-      description: json['description'],
-      caducityDate: json['caducityDate'],
+      id: json['id'] ?? id,
       name: json['name'],
-      stock: json['stock'],
-      images: json['images'] != null
+      description: json['description'] ?? '',
+      image: json['images'] != null
             ? List<String>.from(json['images'].map((img) => img))
             : [],
       price: json['price'] is double
           ? json['price']
-          : double.tryParse(json['price'].toString()) ?? 0.0, // Maneja casos de String o null,  
+          : double.tryParse(json['price'].toString()) ?? 0.0,
       currency: json['currency'],
-      weigth: json['weigth'] is int
-          ? json['weigth'].toDouble()
-          : json['weigth'] is double
-          ? json['weigth']
-          : double.tryParse(json['weigth'].toString()) ?? 0.0,
+      weigth: json['weight'] is int
+          ? json['weight'].toDouble()
+          : json['weight'] is double
+          ? json['weight']
+          : double.tryParse(json['weight'].toString()) ?? 0.0,
       measurement: json['measurement'],
-      categories: json['categories'] != null ? List<Category>.from(json["categories"].map((x) => CategoryResponse.categoryToDomain(CategoryResponse.fromJson(json)))): [],
-      promotion: json['promotion'] != null ? List<Promotion>.from(json["promotion"].map((x) => Promotion.fromJson(x))) : []
+      stock: json['stock'],
+      caducityDate: json['caducityDate'],
+      categories: json['category'] != null ? List<CategoryProduct>.from(json["category"].map((c) => CategoryProduct.fromJson(c))) : [],
+      promotion: json['discount'] != null ? List<Promotion>.from(json["discount"].map((x) => Promotion.fromJson(x))) : []
     );
   }
 

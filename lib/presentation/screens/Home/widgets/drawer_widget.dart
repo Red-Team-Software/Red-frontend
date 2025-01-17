@@ -1,7 +1,9 @@
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
+import 'package:GoDeli/features/user/application/bloc/user_bloc.dart';
 import 'package:GoDeli/presentation/core/drawer/drawer_items.dart';
-import 'package:GoDeli/presentation/screens/Cart/cart_screen.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -13,10 +15,11 @@ class DrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final authBloc = context.watch<AuthBloc>();
     final cartBloc = context.watch<CartBloc>();
-
+    final language = context.watch<LanguagesCubit>().state.selected.language;
+    final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -28,43 +31,56 @@ class DrawerWidget extends StatelessWidget {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: const Row(
-                children: [
-                  CircleAvatar(
-                    radius: 25,
-                    backgroundImage: NetworkImage(
-                        'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
-                  ),
-                  SizedBox(
-                    width: 16.0,
-                  ),
-                  Flex(
-                    direction: Axis.vertical,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: BlocBuilder<UserBloc, UserState>(
+        builder: (context, state) {
+
+          if(state is UserSuccess){
+            return SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
                     children: [
-                      Text(
-                        'Mi nombre',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 16),
+                      const CircleAvatar(
+                        radius: 25,
+                        backgroundImage: NetworkImage(
+                            'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png'),
                       ),
-                      Text('O412-1231231',
-                          style: TextStyle(color: Colors.white, fontSize: 14))
+                      const SizedBox(
+                        width: 16.0,
+                      ),
+                      Flex(
+                        direction: Axis.vertical,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TranslationWidget(
+                              message: state.user.fullName,
+                              toLanguage: language,
+                              builder: (translated) => Text(
+                                    translated,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 16),
+                                  )),
+                          Text(state.user.phone,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14))
+                        ],
+                      )
                     ],
-                  )
-                ],
-              ),
+                  ),
+                ),
+                buildDrawerItems(context),
+              ],
             ),
-            buildDrawerItems(context),
-          ],
-        ),
+          );
+          }
+            return Center(child: CircularProgressIndicator( color: colors.secondary,));
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -72,9 +88,15 @@ class DrawerWidget extends StatelessWidget {
           cartBloc.add(ClearCart());
           context.push('/auth');
         },
-        backgroundColor: Colors.transparent,
-        label: const Text('Logout'),
-        icon: const Icon(Icons.logout),
+        backgroundColor: Colors.white,
+        label: TranslationWidget(
+          message: 'Logout',
+          toLanguage: language,
+          builder: (translated) => Text(translated,
+              style: textStyles.displaySmall?.copyWith(color: colors.primary),
+          ),
+        ),
+        icon: Icon(Icons.logout, color: colors.primary,),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
@@ -89,14 +111,20 @@ class DrawerWidget extends StatelessWidget {
                     item.icon,
                     color: Colors.white,
                   ),
-                  title: Text(
-                    item.title,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
+                  title: TranslationWidget(
+                    message: item.title,
+                    toLanguage:
+                        context.watch<LanguagesCubit>().state.selected.language,
+                    builder: (translated) => Text(
+                      translated,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                  onTap: () => item.route != null? context.push(item.route!): null,
+                  onTap: () =>
+                      item.route != null ? context.push(item.route!) : null,
                 ))
             .toList(),
       );

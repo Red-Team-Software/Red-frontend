@@ -16,6 +16,7 @@ class TaxShippingDatasourceImpl implements ITaxShippingDatasource {
     required String currency,
     required String address,
   }) async {
+    print('Calculating tax and shipping fee= $amount, $currency, $address');
     final res = await httpService.request(
       '/order/tax-shipping-fee',
       'POST',

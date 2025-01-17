@@ -21,6 +21,7 @@ class OrderItem {
   final String orderState;
   final String orderCreatedDate;
   final double totalAmount;
+  final String summaryOrder;
   final String? orderReceivedDate;
   final OrderPayment orderPayment;
   final OrderDirection orderDirection;
@@ -32,6 +33,7 @@ class OrderItem {
     required this.orderState,
     required this.orderCreatedDate,
     required this.totalAmount,
+    required this.summaryOrder,
     this.orderReceivedDate,
     required this.orderPayment,
     required this.orderDirection,
@@ -41,58 +43,28 @@ class OrderItem {
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     try {
-      print('orderId: ${json['orderId']}');
-      print('orderState: ${json['orderState']}');
-      print('orderCreatedDate: ${json['orderCreatedDate']}');
-      print('totalAmount: ${json['totalAmount']}');
-      print('orderReceivedDate: ${json['orderReceivedDate']}');
-      print('orderPayment: ${json['orderPayment']}');
-      print('orderDirection: ${json['orderDirection']}');
-      print('products: ${json['products']}');
-      print('bundles: ${json['bundles']}');
-
-      print('casteando id: ${json['orderId']} as String');
-      print('casteando estado: ${json['orderState']} as String');
-      print(
-          'casteando orderCreatedDate: ${json['orderCreatedDate']} as String');
-      print('casteando totalAmount : ${json['totalAmount']} as num');
-      print(
-          'casteando orderReceivedDate: ${json['orderReceivedDate']} as String');
-      print(
-          'casteando orderPayment payementMethod: ${json['orderPayment']['payementMethod']} as String');
-      print(
-          'casteando orderPayment paymentCurrency: ${json['orderPayment']['paymentCurrency']} as String');
-      print(
-          'casteando orderPayment paymetAmount: ${json['orderPayment']['paymetAmount']} as num');
-      print(
-          'casteando orderDirection lat: ${json['orderDirection']['lat']} as double');
-      print(
-          'casteando orderDirection long: ${json['orderDirection']['long']} as double');
-
       return OrderItem(
-        orderId: json['orderId'] as String,
-        orderState: json['orderState'] as String,
-        orderCreatedDate: json['orderCreatedDate'] as String,
+        orderId: json['id'] as String,
+        orderState: json['last_state']['state'] as String,
+        orderCreatedDate: json['last_state']['date'] as String,
         totalAmount: (json['totalAmount'] as num).toDouble(),
-        orderReceivedDate: "",
+        summaryOrder: json['summary_order'] as String,
+        orderReceivedDate: null,
         orderPayment: OrderPayment(
-          paymentMethod: json['orderPayment']['payementMethod'] as String,
-          currency: json['orderPayment']['paymentCurrency'] as String,
-          amount: (json['orderPayment']['paymetAmount'] as num).toDouble(),
+          paymentMethod: "", // Update as per your requirement
+          currency: "", // Update as per your requirement
+          amount: 0.0, // Update as per your requirement
         ),
         orderDirection: OrderDirection(
-          latitude: json['orderDirection']['lat'] as double,
-          longitude: json['orderDirection']['long'] as double,
+          latitude: 10.472567,
+          longitude: -66.765795,
         ),
-        products: (json['products'] as List)
-            .map((product) => ProductCart.fromJson(product))
-            .toList(),
-        bundles: (json['bundles'] as List)
-            .map((bundle) => BundleCart.fromJson(bundle))
-            .toList(),
+        products: [], // Update as per your requirement
+        bundles: [], // Update as per your requirement
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Error parsing OrderItem: $e');
+      print('StackTrace: $stackTrace');
       rethrow;
     }
   }

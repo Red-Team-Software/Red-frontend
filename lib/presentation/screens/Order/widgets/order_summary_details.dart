@@ -1,13 +1,13 @@
 import 'package:GoDeli/features/order/domain/order.dart';
-import 'package:GoDeli/presentation/screens/Order/order_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderSummaryDetails extends StatelessWidget {
   final Order orderSummary;
+  final double shippingFee;
 
-  const OrderSummaryDetails({super.key, required this.orderSummary});
+  const OrderSummaryDetails(
+      {super.key, required this.orderSummary, required this.shippingFee});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class OrderSummaryDetails extends StatelessWidget {
                 ),
               ),
               Text(
-                '\$${orderSummary.orderPayment.amount.toStringAsFixed(2)}', //! Revisar lo del subtotal
+                '\$${(orderSummary.orderPayment.amount - shippingFee).toStringAsFixed(2)}', //! Revisar lo del subtotal
                 style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
@@ -65,9 +65,9 @@ class OrderSummaryDetails extends StatelessWidget {
                   color: Colors.grey[700],
                 ),
               ),
-              const Text(
-                '\$${0.0}', //TODO: Agregar el costo de envío desde el BloC
-                style: TextStyle(
+              Text(
+                '\$${shippingFee.toStringAsFixed(2)}',
+                style: const TextStyle(
                   fontSize: 16,
                   color: Colors.black,
                 ),
@@ -119,17 +119,17 @@ class OrderSummaryDetails extends StatelessWidget {
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              // Aquí puedes agregar la lógica para volver a pedir
+              GoRouter.of(context).go("/", extra: 3);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: colors.primary,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(16),
               ),
               padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),
             child: const Text(
-              'Volver a pedir',
+              'Siguiente',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,

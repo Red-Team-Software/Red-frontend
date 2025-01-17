@@ -1,7 +1,10 @@
+import 'package:GoDeli/common/Date/date.dart';
 import 'package:GoDeli/features/cart/domain/bundle_cart.dart';
 import 'package:GoDeli/features/cart/domain/product_cart.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_bloc.dart';
 import 'package:GoDeli/features/orders/aplication/Bloc/orders_event.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/orders/domain/orders.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,64 +20,73 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: [ TranslationWidget(
+                message: 'Order: ${orderItem.orderId.substring(orderItem.orderId.length - 6)}',
+              toLanguage: language,
+              builder: (translated) => Text(
+                  translated,
+                  style: textStyles.bodyLarge?.copyWith(
+                    color: Colors.grey
+                  )
+              ), 
+            ),
+            const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Date: ${orderItem.orderCreatedDate}',
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                  'Date: ${DateMapper.isoToDDMMYY(orderItem.orderCreatedDate)}',
+                  style: textStyles.displaySmall,
                 ),
                 Text(
-                  'Total: \$${orderItem.totalAmount.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                  'Time: ${DateMapper.isoToHHMMAM(orderItem.orderCreatedDate)}',
+                  style: textStyles.displaySmall,
                 ),
               ],
             ),
             const SizedBox(height: 4),
             Text(
-              'Order: ${orderItem.orderId}',
-              style: const TextStyle(fontSize: 14, color: Colors.grey),
+              'Total: \$${orderItem.totalAmount.toStringAsFixed(2)}',
+              style:textStyles.displaySmall,
             ),
             const SizedBox(height: 8),
-            const Row(
+            Row(
               children: [
                 Icon(
                   Icons.shopping_bag,
-                  color: Colors.red,
+                  color: colors.primary,
                 ),
-                SizedBox(width: 4),
-                Text(
-                  'Items',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Items',
+                    style: textStyles.displaySmall?.copyWith(
+                      color: colors.primary,
+                    ),
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            _buildItemList(orderItem.products,
-                orderItem.bundles), // Build the product and bundle list
+            _buildItemList(orderItem.summaryOrder),
             const SizedBox(height: 8),
             Text(
               'Status: ${orderItem.orderState}',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: orderItem.orderState == 'ongoing'
+                color: orderItem.orderState == 'ongoing' || orderItem.orderState ==  'CREATED'
                     ? Colors.green
                     : (orderItem.orderState == 'delivered'
                         ? Colors.black
@@ -90,46 +102,50 @@ class OrderCard extends StatelessWidget {
     );
   }
 
-  Widget _buildItemList(List<ProductCart> products, List<BundleCart> bundles) {
-    final List<Map<String, dynamic>> allItems = [
-      ...products.map((product) =>
-          {'name': product.product.name, 'quantity': product.quantity}),
-      ...bundles.map(
-          (bundle) => {'name': bundle.bundle.name, 'quantity': bundle.quantity})
-    ];
-    const int maxItemsToShow = 3;
-
-    final List<Map<String, dynamic>> displayedItems =
-        allItems.length <= maxItemsToShow
-            ? allItems
-            : allItems.sublist(0, maxItemsToShow);
+  Widget _buildItemList(String itemDescription) {
+    print("Item Description: $itemDescription");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: displayedItems.map((item) {
-        final String name = item['name'];
-        final int quantity = item['quantity'];
-        return Text(
-          '$name ($quantity)',
+      children: [
+        Text(
+          itemDescription,
           style: const TextStyle(fontSize: 14, color: Colors.grey),
-        );
-      }).toList(),
+        ),
+      ],
     );
   }
 
   Widget _buildActionButton(BuildContext context, String orderState) {
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     switch (orderState) {
-      case 'ongoing':
+      case "delivering":
+      case 'ongoing' || 'CREATED':
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton(
               onPressed: () => _cancelOrder(context),
-              child: const Text('Cancel Order'),
-            ),
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+              )),
+              child: Text('Cancel Order',
+              style: textStyles.bodyLarge?.copyWith(
+                color: colors.primary
+              ),
+            ),),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+              )),
               onPressed: () => _trackOrder(context),
-              child: const Text('Track Order'),
+              child: Text('Track Order',
+              style: textStyles.bodyLarge?.copyWith(
+                color: colors.primary
+              ),)
             ),
           ],
         );
@@ -169,14 +185,94 @@ class OrderCard extends StatelessWidget {
   }
 
   void _trackOrder(BuildContext context) {
-    context.go('/track_order/${orderItem.orderId}', extra: orderItem);
+    context.go('/track_order/${orderItem.orderId}');
   }
 
   void _reOrderItem(BuildContext context) {
     // Implement reorder item logic here
   }
 
+  void _reportOrder(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        String reportDescription = '';
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Report Order Issue',
+                        style: textStyles.bodyLarge?.copyWith(
+                          color: colors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        decoration: const InputDecoration(
+                          labelText: 'Description',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            reportDescription = value;
+                          });
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: reportDescription.isNotEmpty
+                            ? () {
+                                context.read<OrdersBloc>().add(OrderReported(
+                                    orderId: orderItem.orderId,
+                                    description: reportDescription));
+                                Navigator.pop(context);
+                              }
+                            : null,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          padding: const EdgeInsets.symmetric(vertical: 16.0),
+                          minimumSize: const Size.fromHeight(48),
+                        ),
+                        child: Text(
+                          'Report',
+                          style:textStyles.bodyLarge?.copyWith(
+                          color: colors.primary,
+                          fontWeight: FontWeight.bold,
+                        ) ,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _reportProblem(BuildContext context) {
-    // Implement report problem logic here
+    _reportOrder(context);
   }
 }

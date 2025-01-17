@@ -1,9 +1,11 @@
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
+import 'package:GoDeli/features/card/aplication/Blocs/card_state.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_state.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_bloc.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:GoDeli/features/card/aplication/Blocs/card_bloc.dart';
 
 class OrderSummarySection extends StatelessWidget {
   const OrderSummarySection({super.key});
@@ -12,6 +14,7 @@ class OrderSummarySection extends StatelessWidget {
   Widget build(BuildContext context) {
     final cartBloc = context.watch<CartBloc>();
     final checkoutBloc = context.watch<CheckoutBloc>();
+    final cardBloc = context.watch<CardBloc>();
     final colors = Theme.of(context).colorScheme;
 
     return Container(
@@ -137,14 +140,20 @@ class OrderSummarySection extends StatelessWidget {
             builder: (context, state) {
               return ElevatedButton(
                 onPressed: () {
+                  print(cartBloc.state.bundles.map((bundle) =>
+                      {'id': bundle.bundle.id, 'quantity': bundle.quantity}));
                   context.read<CheckoutBloc>().add(
                         ProcessPayment(
-                          paymentId: "feb39169-bc63-4814-9ac2-f8f98fe0a328",
-                          //amount: cartBloc.state.total,
-                          currency: 'usd',
-                          paymentMethod: "card",
-                          stripePaymentMethod: 'pm_card_threeDSecureOptional',
-                          address: state.selectedAddress?.location ?? '',
+                          paymentMethod: "credit",
+                          stripePaymentMethod:
+                              state.selectedPaymentMethod?.name == "stripe"
+                                  ? cardBloc.state is CardLoadSuccess
+                                      ? (cardBloc.state as CardLoadSuccess)
+                                          .selectedCard
+                                          ?.id
+                                      : null
+                                  : null,
+                          address: state.selectedAddress?.id ?? '',
                           bundles: cartBloc.state.bundles
                               .map((bundle) => {
                                     'id': bundle.bundle.id,
@@ -160,7 +169,7 @@ class OrderSummarySection extends StatelessWidget {
                           context: context,
                         ),
                       );
-                  context.read<CartBloc>().add(ClearCart());
+                  // context.read<CartBloc>().add(ClearCart());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: colors.primary,

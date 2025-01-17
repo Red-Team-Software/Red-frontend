@@ -5,16 +5,21 @@ import '../../../orders/domain/orders.dart';
 
 abstract class IOrderDatasource {
   Future<Result<Order>> processPayment({
-    required String paymentId,
-    required String currency,
     required String paymentMethod,
-    required String stripePaymentMethod,
-    required String address,
+    String? stripePaymentMethod,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   });
 
-  Future<List<OrderItem>> fetchAllOrders({int page = 1, int perPage = 10});
+  Future<List<OrderItem>> fetchAllOrders({String? state});
 
   Future<void> cancelOrder({required String orderId});
+
+  Future<Order> fetchOrderById({required String orderId});
+
+  Future<void> reportOrder(
+      {required String orderId, required String description});
+
+  Future<Location> fetchCourierPosition({required String orderId});
 }

@@ -9,7 +9,7 @@ class DioHttpServiceImpl<T> implements IHttpService {
   DioHttpServiceImpl()
       : _dio = Dio(
           BaseOptions(
-              baseUrl: Environment.backendApi,
+              // baseUrl: Environment.getApiUrl(),
               headers: {'Content-Type': 'application/json'}),
         );
 
@@ -24,22 +24,28 @@ class DioHttpServiceImpl<T> implements IHttpService {
       String url, String method, T Function(dynamic json) mapper,
       {Map<String, dynamic>? body,
       Map<String, dynamic>? queryParameters}) async {
+        print('URL: ${_dio.options.baseUrl}');
     try {
       final response = await _dio.request(
-        url,
+        Environment.getApiUrl() + url,
         data: body,
         queryParameters: queryParameters,
         options: Options(method: method),
       );
+      print(response.data);
       return Result<T>.success(mapper(response.data));
     } on DioException catch (e) {
-      print("a");
-      print(e);
-      print("b");
+      print("--------------");
       print(e.response);
-
-      return Result.makeError(e);
+      print("--------------");
+      return Result.makeError(Exception(e.response));
+    } catch (e) {
+      return Result.makeError(Exception('Error en request: ${e.toString()}'));
     }
+  }
+
+  void updateBaseUrl(String url) {
+    _dio.options.baseUrl = url;
   }
 
   @override

@@ -13,7 +13,7 @@ class Product extends Equatable{
   final String? measurement;
   final int? inStock;
   final List<String> imageUrl;
-  final List<Category> categories;
+  final List<CategoryProduct> categories;
   final List<Promotion> promotions;
 
 
@@ -51,6 +51,21 @@ class Product extends Equatable{
 
 }
 
+class CategoryProduct extends Equatable{
+  final String id;
+  final String name;
+
+  const CategoryProduct({required this.id, required this.name});
+
+  factory CategoryProduct.fromJson(Map<String, dynamic> json) => CategoryProduct(
+        id: json["id"],
+        name: json["name"],
+    );
+
+  @override
+  List<Object> get props => [id, name];
+}
+
 class Promotion extends Equatable{
 
   final String id;
@@ -61,11 +76,11 @@ class Promotion extends Equatable{
 
   factory Promotion.fromJson(Map<String, dynamic> json) => Promotion(
         id: json["id"],
-        name: json["name"],
-        discount: json["discount"]?.toDouble(),
+        name: json["name"] ?? '',
+        discount: json["percentage"]?.toDouble() >= 1 ? json["percentage"]?.toDouble() / 100 : json["percentage"]?.toDouble() ?? 0.0,
     );
   
   @override
-  List<Object> get props => [id, name, discount];
+  List<Object> get props => [id, discount];
 
 }

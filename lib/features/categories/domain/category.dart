@@ -1,25 +1,28 @@
 class Category {
   final String id;
   final String name;
-  final String icon;
-  final List<ProductCategory> products;
+  final String? icon;
+  final List<ItemCategory> products;
+  final List<ItemCategory> bundles;
+
   Category(
       {required this.id,
       required this.name,
-      required this.icon,
-      this.products = const []});
+      this.icon,
+      this.products = const [],
+      this.bundles = const []
+      });
 }
 
-class ProductCategory {
+class ItemCategory {
   final String id;
   final String name;
-  final List<String> images;
-  final String description;
-  final double price;
-  ProductCategory(
+  final String imageUrl;
+  final double? price;
+  ItemCategory(
       {required this.id,
       required this.name,
-      required this.images,
-      required this.description,
-      required this.price});
+      required this.imageUrl,
+      this.price
+      });
 }

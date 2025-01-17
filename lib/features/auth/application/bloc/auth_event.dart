@@ -24,8 +24,8 @@ class RegisterEvent extends AuthEvent {
   final String password;
   final String fullName;
   final String phoneNumber;
-  final AddUserDirectionListDto address;
-  final String? image;
+  final AddUserDirectionDto address;
+  final File? image;
 
   const RegisterEvent({
     required this.email,

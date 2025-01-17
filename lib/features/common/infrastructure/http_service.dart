@@ -7,5 +7,6 @@ abstract class IHttpService {
   void addHeader(String key, String value);
   removeHeader(String key);
   dynamic getHeaders();
-  Map<String,dynamic> getHeaderByKey(String key);
+  Map<String, dynamic> getHeaderByKey(String key);
+void updateBaseUrl(String url) {}
 }

@@ -12,7 +12,7 @@ class ProfileComponent extends StatefulWidget {
   final void Function(String) onChangePhone;
 
   const ProfileComponent({
-    super.key, 
+    super.key,
     required this.onChangeIndex,
     required this.onChangeImage,
     required this.onChangeFullname,
@@ -26,10 +26,10 @@ class ProfileComponent extends StatefulWidget {
 
 class _ProfileComponentState extends State<ProfileComponent> {
   File? _selectedImage; // Variable para almacenar la imagen seleccionada
-  String selectedPhoneCode = '0414'; // Valor inicial del Dropdown
+  String selectedPhoneCode = '414'; // Valor inicial del Dropdown
   String fullname = '';
   String phone = '';
-  
+
   String? fullnameError;
   String? phoneError;
 
@@ -44,7 +44,8 @@ class _ProfileComponentState extends State<ProfileComponent> {
 
     if (pickedImage != null) {
       setState(() {
-        _selectedImage = File(pickedImage.path); // Guardar la imagen seleccionada
+        _selectedImage =
+            File(pickedImage.path); // Guardar la imagen seleccionada
       });
     }
   }
@@ -62,6 +63,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    final textStyles = Theme.of(context).textTheme;
 
     bool isNextButtonEnabled() {
       return fullname.isNotEmpty &&
@@ -76,12 +78,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
         // Uploader de imagen de perfil
         ImageComponent(),
         // Título del formulario
-        const Text(
+        Text(
           "Sign Up",
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
+          style: textStyles.displayMedium,
         ),
         const SizedBox(height: 20),
         Stack(
@@ -146,7 +145,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             border: UnderlineInputBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            suffixIcon: const Icon(Icons.person),
+            suffixIcon: Icon(Icons.person, color: colors.primary,),
           ),
         ),
         const SizedBox(height: 20),
@@ -169,11 +168,11 @@ class _ProfileComponentState extends State<ProfileComponent> {
                   }
                 },
                 items: <String>[
-                  '0414',
-                  '0424',
-                  '0416',
-                  '0426',
-                  '0412'
+                  '414',
+                  '424',
+                  '416',
+                  '426',
+                  '412'
                 ] // Lista de códigos de teléfono
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -201,6 +200,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                   });
                 },
                 maxLength: 7,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   floatingLabelBehavior: FloatingLabelBehavior.always,
                   labelText: "Phone",
@@ -213,7 +213,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
                   border: UnderlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  suffixIcon: const Icon(Icons.phone),
+                  suffixIcon: Icon(Icons.phone, color: colors.primary,),
                 ),
               ),
             ),
@@ -232,7 +232,7 @@ class _ProfileComponentState extends State<ProfileComponent> {
             ),
             onPressed: isNextButtonEnabled()
                 ? () {
-                    if( _selectedImage != null){
+                    if (_selectedImage != null) {
                       widget.onChangeImage(_selectedImage!);
                     }
                     widget.onChangeFullname(fullname);
@@ -241,29 +241,9 @@ class _ProfileComponentState extends State<ProfileComponent> {
                     widget.onChangeIndex(3);
                   }
                 : null,
-            child: const Text(
-              "Next",
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: double.infinity,
-          height: 50,
-          child: OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: colors.primary),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            onPressed: () {
-              widget.onChangeIndex(1); // Cambiar a la pantalla de login
-            },
             child: Text(
-              "Back",
-              style: TextStyle(fontSize: 18, color: colors.primary),
+              "Next",
+              style: textStyles.displaySmall?.copyWith(color: Colors.white),
             ),
           ),
         ),

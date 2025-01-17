@@ -1,6 +1,7 @@
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
-import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
-import 'package:GoDeli/features/categories/domain/category.dart';
+import 'package:GoDeli/features/products/domain/product.dart';
+import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
+import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/widgets/card/images_carrusel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,24 +21,24 @@ class DetailsView extends StatelessWidget {
   final int? inStock;
   final List<Promotion> promotions;
   final List<BundleProduct> bundleProducts;
-  final List<Category> categories;
+  final List<CategoryProduct> categories;
   final Widget buttonWidget;
 
-  const DetailsView({super.key, 
-  required this.images, 
-  required this.name, 
-  required this.description, 
-  required this.price, 
-  required this.currency, 
-  this.weigth, 
-  this.measurement, 
-  this.expirationDate, 
-  this.inStock, 
-  this.promotions = const [], 
-  this.bundleProducts = const [], 
-  this.categories = const [], 
-  required this.buttonWidget
-});
+  const DetailsView(
+      {super.key,
+      required this.images,
+      required this.name,
+      required this.description,
+      required this.price,
+      required this.currency,
+      this.weigth,
+      this.measurement,
+      this.expirationDate,
+      this.inStock,
+      this.promotions = const [],
+      this.bundleProducts = const [],
+      this.categories = const [],
+      required this.buttonWidget});
 
   @override
   Widget build(BuildContext context) {
@@ -106,13 +107,9 @@ class DetailsView extends StatelessWidget {
       ],
     );
   }
-
-  
 }
 
-
 class _ScrollableDetails extends StatelessWidget {
-  
   final String name;
   final String description;
   final double price;
@@ -123,27 +120,29 @@ class _ScrollableDetails extends StatelessWidget {
   final int? inStock;
   final List<Promotion> promotions;
   final List<BundleProduct> bundleProducts;
-  final List<Category> categories;
+  final List<CategoryProduct> categories;
   final Widget buttonWidget;
 
-
   const _ScrollableDetails({
-    required this.name, 
-    required this.description, 
-    required this.price, 
-    required this.currency, 
+    required this.name,
+    required this.description,
+    required this.price,
+    required this.currency,
     required this.buttonWidget,
-    this.weigth, 
-    this.measurement, 
-    this.expirationDate, 
-    this.inStock, 
-    this.promotions = const [], 
-    this.bundleProducts = const [], 
+    this.weigth,
+    this.measurement,
+    this.expirationDate,
+    this.inStock,
+    this.promotions = const [],
+    this.bundleProducts = const [],
     this.categories = const [],
   });
 
   @override
   Widget build(BuildContext context) {
+    final idiom = context.read<LanguagesCubit>().state.selected.language;
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     return DraggableScrollableSheet(
       initialChildSize: 0.7,
       minChildSize: 0.68,
@@ -154,8 +153,8 @@ class _ScrollableDetails extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
             borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(40),
-              topRight: Radius.circular(40),
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
             ),
           ),
           child: Column(
@@ -166,25 +165,28 @@ class _ScrollableDetails extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontStyle: FontStyle.italic,
-                          fontSize: 40,
+                      TranslationWidget(
+                        message: name,
+                        toLanguage: idiom,
+                        builder: (translated) => Text(
+                          translated,
+                          style: textStyles.displayLarge?.copyWith(
+                          fontSize: 40
+                          ),
                         ),
                       ),
                       if (promotions.isNotEmpty) ...[
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 4.0),
                           child: Wrap(
-                            spacing: 8,
+                            spacing: 12,
                             children: promotions
                                 .map((promotion) => Chip(
                                       label: Text(
                                         '${promotion.discount * 100}% off',
-                                        style: const TextStyle(
-                                          color: Colors.white,
+                                        style:textStyles.displaySmall?.copyWith(
+                                          fontSize: 16,
+                                          color:colors.secondary,
                                         ),
                                       ),
                                       backgroundColor:
@@ -195,76 +197,81 @@ class _ScrollableDetails extends StatelessWidget {
                         ),
                       ] else ...[
                         const SizedBox(height: 8),
-                        const Text(
-                          'No promotions available',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black38,
-                          ),
-                        ),
+                        // const Text(
+                        //   'No promotions available',
+                        //   style: TextStyle(
+                        //     fontSize: 16,
+                        //     color: Colors.black38,
+                        //   ),
+                        // ),
                       ],
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              if (promotions.isNotEmpty) ...[
-                                TextSpan(
-                                    text: _calculateDiscount(promotions, price)
-                                        .toStringAsFixed(2),
+                        child: 
+                        TranslationWidget(
+                          message: 'piece',
+                          toLanguage: idiom,
+                          builder: (translated) => RichText(
+                            text: TextSpan(
+                              children: [
+                                if (promotions.isNotEmpty) ...[
+                                  TextSpan(
+                                    text:
+                                        '$price ${currency == 'usd' ? '\$' : currency}\n',
+                                    style: textStyles.displayMedium?.copyWith(
+                                      fontSize: 40,
+                                      color: Colors.black38,
+                                      decoration: TextDecoration.lineThrough,
+                                      decorationColor: colors.primary,
+                                      decorationThickness: 2
+                                    ),
+                                  ),
+                                  TextSpan(
+                                      text: '${_calculateDiscount(promotions, price).toStringAsFixed(2)}${currency == 'usd' ? '\$' : currency}',
+                                      style: TextStyle(
+                                        fontSize: 40,
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            Theme.of(context).colorScheme.primary,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              '  / $translated\n',
+                                          style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  Theme.of(context).brightness ==
+                                                          Brightness.light
+                                                      ? Colors.black87
+                                                      : Colors.white70),
+                                        ),
+                                      ]),
+                                  
+                                ] else ...[
+                                  TextSpan(
+                                    text: price.toStringAsFixed(2),
                                     style: TextStyle(
                                       fontSize: 40,
                                       fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).colorScheme.primary,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                                    children: [
-                                      TextSpan(
-                                        text:
-                                            ' ${currency == 'usd' ? '\$' : currency} / piece\n',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            fontStyle: FontStyle.italic,
-                                            color:
-                                                Theme.of(context).brightness ==
-                                                        Brightness.light
-                                                    ? Colors.black87
-                                                    : Colors.white70),
-                                      ),
-                                    ]),
-                                TextSpan(
-                                  text:
-                                      '$price ${currency == 'usd' ? '\$' : currency}',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black38,
-                                    decoration: TextDecoration.lineThrough,
-                                    decorationColor: Colors.red,
-                                    decorationThickness: 2,
                                   ),
-                                ),
-                              ] else ...[
-                                TextSpan(
-                                  text: price.toStringAsFixed(2),
-                                  style: TextStyle(
-                                    fontSize: 40,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).colorScheme.primary,
+                                  TextSpan(
+                                    text:
+                                        ' ${currency == 'usd' ? '\$' : currency} / $translated',
+                                    style: const TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      color: Colors.black87,
+                                    ),
                                   ),
-                                ),
-                                TextSpan(
-                                  text:
-                                      ' ${currency == 'usd' ? '\$' : currency} / piece',
-                                  style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FontStyle.italic,
-                                    color: Colors.black87,
-                                  ),
-                                ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -273,66 +280,98 @@ class _ScrollableDetails extends StatelessWidget {
                               direction: Axis.vertical,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Categories',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24,
+                                TranslationWidget(
+                                  message: 'Categories',
+                                  toLanguage: idiom,
+                                  builder: (translated) => Text(
+                                    translated,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 24,
+                                    ),
                                   ),
                                 ),
                                 Wrap(
                                   spacing: 8,
                                   children: categories
-                                      .map((category) =>
-                                          Chip(label: Text(category.name)))
+                                      .map((category) => Chip(
+                                            label: TranslationWidget(
+                                                message: category.name,
+                                                toLanguage: idiom,
+                                                builder: (translated) =>
+                                                    Text(translated)),
+                                            labelStyle: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                            backgroundColor:
+                                                Theme.of(context).primaryColor,
+                                          ))
                                       .toList(),
                                 ),
                               ],
                             )
                           : const SizedBox(height: 8),
-                      const Text(
-                        'Description',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
+                      TranslationWidget(
+                        message: 'Description',
+                        toLanguage: idiom,
+                        builder: (translated) => Text(
+                          translated,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
                         ),
                       ),
-                      Text(
-                        description,
-                        style: const TextStyle(fontSize: 16),
+                      TranslationWidget(
+                        message: description,
+                        toLanguage: idiom,
+                        builder: (translated) => Text(
+                          translated,
+                          style: const TextStyle(fontSize: 16),
+                        ),
                       ),
                       const SizedBox(
-                        height: 12.00,
+                        height: 8,
                       ),
                       bundleProducts.isNotEmpty
                           ? Flex(
                               direction: Axis.vertical,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                  const Text(
-                                    'Products included',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 24,
+                                  TranslationWidget(
+                                    message: 'Productos incluidos',
+                                    toLanguage: idiom,
+                                    builder: (translated) => Text(
+                                      translated,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 24,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(
                                     height: 8.00,
                                   ),
                                   ListView.separated(
-                                    separatorBuilder: (context, index) => const Divider(),
+                                    separatorBuilder: (context, index) =>
+                                        const Divider(),
                                     shrinkWrap: true,
                                     itemCount: bundleProducts.length,
                                     itemBuilder: (context, index) {
                                       final item = bundleProducts[index];
                                       return ListTile(
-                                        title: Text(
-                                          item.name,
-                                          style: const TextStyle(
+                                        
+                                        title: TranslationWidget(
+                                          message: item.name,
+                                          toLanguage: idiom,
+                                          builder: (translated) => Text(
+                                            translated,
+                                            style: const TextStyle(
                                               fontStyle: FontStyle.italic,
                                               decoration:
                                                   TextDecoration.underline),
-                                        ),
+                                          ),
+                                        ), 
                                         trailing: IconButton(
                                           icon: const Icon(
                                               Icons.arrow_forward_ios),
@@ -356,7 +395,6 @@ class _ScrollableDetails extends StatelessWidget {
       },
     );
   }
-
 
   double _calculateDiscount(List<Promotion> promotions, double price) {
     if (promotions.isNotEmpty) {

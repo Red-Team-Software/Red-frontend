@@ -40,12 +40,13 @@ class ProductDetailsBloc
     if (state.status == ProductDetailsStatus.loading) return;
     add(LoadingStarted());
     final res = await productsRepository.getProductById(id);
-
+    print('Res es ${res.getValue()}');
     if (res.isSuccessful()) {
       final product = res.getValue();
       add(ProductLoaded(product: product));
       return;
     }
+    print('Error es ${res.getError()}');
     add(ErrorOnProductLoading());
     return;
   }
