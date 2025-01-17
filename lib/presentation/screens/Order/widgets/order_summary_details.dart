@@ -1,5 +1,6 @@
 import 'package:GoDeli/features/order/domain/order.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderSummaryDetails extends StatelessWidget {
   final Order orderSummary;
@@ -118,7 +119,7 @@ class OrderSummaryDetails extends StatelessWidget {
           const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () {
-              // Aquí puedes agregar la lógica para volver a pedir
+              GoRouter.of(context).go("/", extra: 3);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: colors.primary,
@@ -128,7 +129,7 @@ class OrderSummaryDetails extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 16.0),
             ),
             child: const Text(
-              'Volver a pedir',
+              'Siguiente',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
