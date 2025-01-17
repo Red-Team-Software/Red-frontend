@@ -1,10 +1,12 @@
 # GoDeli
 
 A Flutter project. It's an ecomerce that sales products and bundles and allowed you to trak yours orders.
-<img src="/images/logo.png" alt="Logo-app" width="350">
+<p align="center">
+   <img src="/images/logo.png" alt="Logo-app" width="350">
+   <img src="/images/phoenix.png" alt="Logo-Team" width="350">
+</p>
 
 Application made for the software development subject project, by the RED-TEAM.<br>
-<img src="/images/phoenix.png" alt="Logo-Team" width="300"><br>
 
 This application is compatible with Flutter versions >= 3.4.3 < 4.0.0.
 
@@ -36,4 +38,12 @@ flutter run -v
 * [geocoding](https://pub.dev/packages/geocoding) `v: ^3.0.0`
 * [geolocator](https://pub.dev/packages/geolocator) `v: ^9.0.2`
 * [isar](https://pub.dev/packages/isar)
+
+# App Architecture Diagrams
+[[app-architecture]('/images/Diagram-flutter-front.png')]
+
+### Hexagonal Architecture
+[[feature-architecture]('/images/HexagonalProducts.png')]
+
+
 
