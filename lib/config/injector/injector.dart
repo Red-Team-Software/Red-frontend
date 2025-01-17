@@ -79,12 +79,8 @@ import 'package:GoDeli/features/card/infraestructure/repositories/card_repositor
 final getIt = GetIt.instance;
 
 class Injector {
-
-  
   Future<void> setUp() async {
-
     final selectDatasourceBloc = SelectDatasourceBloc();
-
 
     await Environment.initEnvironment(selectDatasourceBloc);
 

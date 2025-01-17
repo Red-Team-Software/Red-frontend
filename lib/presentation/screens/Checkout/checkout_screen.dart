@@ -32,6 +32,7 @@ class CheckoutScreen extends StatelessWidget {
         cartBloc: context.read<CartBloc>(),
         orderRepository: getIt<IOrderRepository>(),
         onOrderCreated: (order) {
+          context.read<CartBloc>().add(ClearCart());
           GoRouter.of(context).push(
             '/order/${order.id}',
             extra: order, // Pasar la orden completa

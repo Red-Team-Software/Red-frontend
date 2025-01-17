@@ -1,6 +1,4 @@
 import 'package:GoDeli/features/bundles/domain/bundle.dart';
-import 'package:GoDeli/features/categories/domain/category.dart';
-import 'package:GoDeli/features/categories/infraestructure/models/category_response.dart';
 import 'package:GoDeli/features/products/domain/product.dart';
 
 class BundleResponse {

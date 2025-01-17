@@ -209,6 +209,11 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   Future<void> _onProcessPayment(
       ProcessPayment event, Emitter<CheckoutState> emit) async {
     emit(state.copyWith(isProcessing: true));
+
+    print("Procesando pago...");
+    print("selectedPaymentMethod: ${event.paymentMethod}");
+    print("stripePaymentMethod: ${event.stripePaymentMethod}");
+
     final result = await orderRepository.processPayment(
       paymentMethod: event.paymentMethod,
       stripePaymentMethod: event.stripePaymentMethod,
@@ -221,7 +226,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       final order = result.getValue();
       emit(state.copyWith(isProcessing: false));
       onOrderCreated(order);
-      event.context.read<CartBloc>().add(ClearCart());
     } else {
       emit(state.copyWith(
           isProcessing: false,

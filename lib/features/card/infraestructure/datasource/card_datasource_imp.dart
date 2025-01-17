@@ -17,8 +17,6 @@ class CardDatasourceImpl implements ICardDatasource {
         "idCard": idCard,
       },
     );
-
-    if (!res.isSuccessful()) throw Exception(res.getError());
   }
 
   @override
