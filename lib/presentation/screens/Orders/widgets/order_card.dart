@@ -18,6 +18,8 @@ class OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyles = Theme.of(context).textTheme;
+    final colors = Theme.of(context).colorScheme;
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Padding(
@@ -35,42 +37,35 @@ class OrderCard extends StatelessWidget {
               children: [
                 Text(
                   'Date: ${DateMapper.isoToDDMMYY(orderItem.orderCreatedDate)}',
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                  style: textStyles.displaySmall,
                 ),
                 Text(
                   'Time: ${DateMapper.isoToHHMMAM(orderItem.orderCreatedDate)}',
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                  style: textStyles.displaySmall,
                 ),
               ],
             ),
             const SizedBox(height: 4),
             Text(
               'Total: \$${orderItem.totalAmount.toStringAsFixed(2)}',
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
+              style:textStyles.displaySmall,
             ),
             const SizedBox(height: 8),
-            const Row(
+            Row(
               children: [
                 Icon(
                   Icons.shopping_bag,
-                  color: Colors.red,
+                  color: colors.primary,
                 ),
-                SizedBox(width: 4),
-                Text(
-                  'Items',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
+                const SizedBox(width: 8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 4),
+                  child: Text(
+                    'Items',
+                    style: textStyles.displaySmall?.copyWith(
+                      color: colors.primary,
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -82,7 +77,7 @@ class OrderCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: orderItem.orderState == 'ongoing'
+                color: orderItem.orderState == 'ongoing || CREATED'
                     ? Colors.green
                     : (orderItem.orderState == 'delivered'
                         ? Colors.black

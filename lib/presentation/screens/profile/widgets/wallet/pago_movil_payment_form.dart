@@ -161,7 +161,7 @@ class PagoMovilPaymentForm extends StatelessWidget {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter your phone number';
                                   }
-                                  if (value.length != 11) {
+                                  if (value.length != 12) {
                                     return 'Phone must be 11 digits';
                                   }
                                   if (!RegExp(r'^[0-9]+$').hasMatch(value)) {

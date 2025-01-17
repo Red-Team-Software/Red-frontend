@@ -80,20 +80,16 @@ class _OrderListScreenState extends State<OrderListScreen> {
                   child: Align(
                     alignment: Alignment.center,
                     child: Text('Active Orders ($activeCount)',
-                        style: TextStyle(
-                          fontSize: textStyles.displaySmall!.fontSize,
-                          fontWeight: FontWeight.bold,
-                        )),
+                        style: TextStyle(fontSize: textStyles.displaySmall?.fontSize, 
+                        fontWeight: textStyles.displaySmall?.fontWeight,)),
                   ),
                 ),
                 Tab(
                   child: Align(
                     alignment: Alignment.center,
                     child: Text('Past Orders ($pastCount)',
-                        style: TextStyle(
-                          fontSize: textStyles.displaySmall!.fontSize,
-                          fontWeight: FontWeight.bold,
-                        )),
+                        style: TextStyle(fontSize: textStyles.displaySmall?.fontSize, 
+                        fontWeight: textStyles.displaySmall?.fontWeight,)),
                   ),
                 ),
               ],
