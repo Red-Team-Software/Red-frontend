@@ -6,4 +6,5 @@ class Environment {
   }
 
   static String backendApi = dotenv.env['API_URL'] ?? 'no hay api key';
+  static String stripePublishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY'] ?? 'no hay stripe key';
 }

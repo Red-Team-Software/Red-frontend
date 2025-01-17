@@ -1,7 +1,7 @@
 import 'package:GoDeli/config/injector/injector.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_bloc.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_event.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_state.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
 import 'package:GoDeli/features/payment-method/domain/repositories/payment-method_repository.dart';
 import 'package:GoDeli/features/tax-shipping/domain/repositories/tax-shipping_repository.dart';

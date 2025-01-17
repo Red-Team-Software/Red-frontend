@@ -198,6 +198,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   void _onSelectPaymentMethod(
       SelectPaymentMethod event, Emitter<CheckoutState> emit) {
     emit(state.copyWith(selectedPaymentMethod: event.paymentMethod));
+    print("Selected payment method: ${state.selectedPaymentMethod?.name}");
   }
 
   void _onProceedToCheckout(

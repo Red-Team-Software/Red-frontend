@@ -38,6 +38,7 @@ dependencies:
   firebase_messaging: ^15.1.4
   flutter:
     sdk: flutter
+  flutter_stripe: ^11.3.0
   flutter_animate: ^4.0.3
   flutter_bloc: ^8.1.6
   flutter_dotenv: ^5.2.1
