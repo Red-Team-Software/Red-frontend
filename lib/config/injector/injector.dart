@@ -1,3 +1,4 @@
+import 'package:GoDeli/config/constants/enviroments.dart';
 import 'package:GoDeli/config/locar_storage/isar_local_storage.dart';
 import 'package:GoDeli/features/auth/application/bloc/auth_bloc.dart';
 import 'package:GoDeli/features/auth/application/datasources/auth_datasource.dart';
@@ -65,12 +66,16 @@ import 'package:GoDeli/features/wallet/application/use_cases/pay_pago_movil_use_
 import 'package:GoDeli/features/wallet/application/use_cases/pay_zelle_use_case.dart';
 import 'package:GoDeli/features/wallet/infrastructure/datasource/wallet_datasource_impl.dart';
 import 'package:GoDeli/features/wallet/infrastructure/repository/wallet_repository_impl.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
 
 class Injector {
   Future<void> setUp() async {
+    //? Iniciando modulo de Stripe
+    // Stripe.publishableKey = Environment.stripePublishableKey;
+    // await Stripe.instance.applySettings();
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
     getIt.registerSingleton<IHttpService>(httpService);

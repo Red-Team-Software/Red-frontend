@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   final bool isDarkMode;
   // final Color primaryColor = const Color(0xFFFF0000);
-  final Color primaryColor = const Color(0xFFad0101);
+  final Color primaryColor = const Color(0xFFAD0101);
   final Color accentColor = const Color(0xFFFFADAD);
   final Color darkIcons = const Color(0xFF2B0A0A);
   final Color lightBackgroundColor = const Color(0xFFF2F4F7);

@@ -90,7 +90,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     Future<void> handleRegister() async {
-      final realPhone = '$phoneCode$phone';
+      final realPhone = '58$phoneCode$phone';
       String? image;
       if (selectedImage != null) {
         final compressedImage = await compressFile(selectedImage!.path);

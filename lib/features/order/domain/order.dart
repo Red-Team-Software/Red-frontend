@@ -70,11 +70,13 @@ class OrderPayment {
 class Courier {
   final String courierName;
   final String courierImage;
+  final String courierPhone;
   final Location location;
 
   Courier({
     required this.courierName,
     required this.courierImage,
+    required this.courierPhone,
     required this.location,
   });
 
@@ -82,9 +84,10 @@ class Courier {
     return Courier(
       courierName: json['courierName'] as String,
       courierImage: json['courierImage'] as String,
+      courierPhone: json['phone'] as String,
       location: Location(
-        latitude: num.parse(json['location']['lat']).toDouble(),
-        longitude: num.parse(json['location']['long']).toDouble(),
+        latitude: 10.387448,
+        longitude: -67.682030,
       ),
     );
   }

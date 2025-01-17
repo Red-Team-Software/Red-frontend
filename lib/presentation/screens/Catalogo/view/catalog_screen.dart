@@ -6,8 +6,6 @@ import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-
 import '../widgets/catalog_body.dart';
 
 class CatalogScreen extends StatelessWidget {
@@ -73,28 +71,22 @@ class CatalogScreenView extends StatelessWidget {
       ),
       body: const CatalogBody(),
 
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/cart'),
-        isExtended: true,
-        label: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.00, vertical: 8.0),
-          child: Row(
-            children: [
-              const Icon(Icons.shopping_cart),
-              const SizedBox(width: 8.0),
-              TranslationWidget(
-                message:'$itemsCountCart items in cart',
-                toLanguage: language,
-                builder: (translated) => Text(
-                  translated,
-                  style: textStyle.displaySmall!.copyWith(color: Colors.white)
-                ), 
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: () => context.push('/cart'),
+      //   isExtended: true,
+      //   label: Padding(
+      //     padding: const EdgeInsets.symmetric(horizontal: 16.00, vertical: 8.0),
+      //     child: Row(
+      //       children: [
+      //         const Icon(Icons.shopping_cart),
+      //         const SizedBox(width: 8.0),
+      //         Text('$itemsCountCart items in cart', style: textStyle.displaySmall!.copyWith(color: Colors.white)
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

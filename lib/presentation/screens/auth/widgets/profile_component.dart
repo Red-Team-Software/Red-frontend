@@ -168,11 +168,11 @@ class _ProfileComponentState extends State<ProfileComponent> {
                   }
                 },
                 items: <String>[
-                  '0414',
-                  '0424',
-                  '0416',
-                  '0426',
-                  '0412'
+                  '414',
+                  '424',
+                  '416',
+                  '426',
+                  '412'
                 ] // Lista de códigos de teléfono
                     .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(

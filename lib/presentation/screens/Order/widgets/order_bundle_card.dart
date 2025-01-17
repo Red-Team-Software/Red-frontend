@@ -49,7 +49,7 @@ class OrderBundleCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TranslationWidget(
-                    message: item.bundle.name,
+                    message: '${item.bundle.name} (x${item.quantity})',
                     toLanguage: language,
                     builder: (translated) => Text(
                       translated,
@@ -76,13 +76,25 @@ class OrderBundleCard extends StatelessWidget {
                 ],
               ),
             ),
-            Text(
-              '\$${item.bundle.price.toStringAsFixed(2)}',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '\$${(item.bundle.price * item.quantity).toStringAsFixed(2)}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  '\$${item.bundle.price.toStringAsFixed(2)}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
             ),
           ],
         ),

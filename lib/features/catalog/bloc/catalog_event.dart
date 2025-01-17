@@ -8,7 +8,9 @@ sealed class CatalogEvent {
 class ItemsFetched extends CatalogEvent {
   final List<Product> product;
   final List<Bundle> bundle;
-  const ItemsFetched(this.product, this.bundle);
+  final bool isPagination;
+
+  const ItemsFetched(this.product, this.bundle, {this.isPagination = false});
 }
 
 class CategorySet extends CatalogEvent {
@@ -36,6 +38,16 @@ class TermSet extends CatalogEvent {
   const TermSet(this.term);
 }
 
+class PageSet extends CatalogEvent {
+  final int page;
+  const PageSet(this.page);
+}
+
+class PerPageSet extends CatalogEvent {
+  final int perPage;
+  const PerPageSet(this.perPage);
+}
+
 class CatalogLoading extends CatalogEvent {
   const CatalogLoading();
 }
@@ -47,4 +59,14 @@ class CatalogIsEmpty extends CatalogEvent {
 class CatalogError extends CatalogEvent {
   final String error;
   const CatalogError(this.error);
+}
+
+class FetchItems extends CatalogEvent {
+  final bool isPagination;
+
+  const FetchItems({this.isPagination = false});
+}
+class CategoryListSet extends CatalogEvent {
+  final List<String> category;
+  const CategoryListSet(this.category);
 }

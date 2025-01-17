@@ -1,8 +1,8 @@
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_state.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_state.dart';
 import 'package:flutter/material.dart';
 import 'package:GoDeli/features/cart/application/bloc/cart_bloc.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_bloc.dart';
-import 'package:GoDeli/features/checkout/aplication/Bloc/checkout_event.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_bloc.dart';
+import 'package:GoDeli/features/checkout/aplication/checkout/checkout_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class OrderSummarySection extends StatelessWidget {
@@ -137,6 +137,8 @@ class OrderSummarySection extends StatelessWidget {
             builder: (context, state) {
               return ElevatedButton(
                 onPressed: () {
+                  print(cartBloc.state.bundles.map((bundle) =>
+                      {'id': bundle.bundle.id, 'quantity': bundle.quantity}));
                   context.read<CheckoutBloc>().add(
                         ProcessPayment(
                           paymentId: state.selectedPaymentMethod?.id ?? '',
@@ -144,7 +146,7 @@ class OrderSummarySection extends StatelessWidget {
                           currency: 'usd',
                           paymentMethod: "card",
                           stripePaymentMethod: 'pm_card_threeDSecureOptional',
-                          address: state.selectedAddress?.location ?? '',
+                          address: state.selectedAddress?.id ?? '',
                           bundles: cartBloc.state.bundles
                               .map((bundle) => {
                                     'id': bundle.bundle.id,

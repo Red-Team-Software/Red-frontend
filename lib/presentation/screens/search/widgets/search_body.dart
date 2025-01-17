@@ -24,7 +24,7 @@ class SearchBody extends StatelessWidget {
           flexibleSpace: Container(
             padding:
                 const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
-            child: _InputSearch(),
+            child: InputSearch(),
           ),
         ),
         BlocConsumer<SearchBloc, SearchState>(
@@ -195,12 +195,12 @@ class SearchBody extends StatelessWidget {
   }
 }
 
-class _InputSearch extends StatefulWidget {
+class InputSearch extends StatefulWidget {
   @override
-  _InputSearchState createState() => _InputSearchState();
+  InputSearchState createState() => InputSearchState();
 }
 
-class _InputSearchState extends State<_InputSearch> {
+class InputSearchState extends State<InputSearch> {
   final TextEditingController controller = TextEditingController();
   Timer? _debounce;
 

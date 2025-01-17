@@ -86,7 +86,7 @@ class CustomItemProduct extends StatelessWidget {
                       style: textStyle.displaySmall?.copyWith(
                         color: Colors.white,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.clip,
                     )),
                     

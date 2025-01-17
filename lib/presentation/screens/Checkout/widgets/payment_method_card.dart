@@ -15,7 +15,7 @@ class PaymentMethodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSelected = method == selectedMethod;
+    final isSelected = method.name == selectedMethod?.name;
     final colors = Theme.of(context).colorScheme;
 
     return GestureDetector(
@@ -40,7 +40,12 @@ class PaymentMethodCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.network(
+                child: method.imageUrl=='stripe' ?  Image.asset(
+                  'images/stripe_logo.png',
+                  width: 60,
+                  height: 60,
+                  fit: BoxFit.cover,
+                ) : Image.network(
                   method.imageUrl,
                   width: 60,
                   height: 60,

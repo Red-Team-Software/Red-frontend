@@ -16,7 +16,7 @@ class CategoriesCarrusel extends StatelessWidget {
     final language =  context.watch<LanguagesCubit>().state.selected.language;
 
     return SizedBox(
-      height: 350,
+      height: 200,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -54,7 +54,7 @@ class CategoriesCarrusel extends StatelessWidget {
           const SizedBox(height: 8),
           // BlocBuilder para categorías
           SizedBox(
-            height: 300,
+            height: 150,
             child: BlocBuilder<CategoriesBloc, CategoriesState>(
               builder: (context, state) {
                 if (state.status == CategoriesStatus.loading &&
@@ -144,7 +144,7 @@ class CustomCategoryHome extends StatelessWidget {
     final language =  context.watch<LanguagesCubit>().state.selected.language;
     
     return SizedBox(
-      height: 250,
+      height: 175,
       width: 150,
       child: GestureDetector(
           onTap: () {
@@ -202,8 +202,8 @@ class CustomCategoryHome extends StatelessWidget {
                                       style: textStyles.displaySmall?.copyWith(
                                         color: Colors.white,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.clip,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     )),
 
                             const SizedBox(height: 4),

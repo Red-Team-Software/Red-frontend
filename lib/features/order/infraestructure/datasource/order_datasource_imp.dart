@@ -17,10 +17,19 @@ class OrderDatasourceImpl implements IOrderDatasource {
     required String currency,
     required String paymentMethod,
     required String stripePaymentMethod,
-    required String address,
+    required String idUserDirection,
     required List<Map<String, dynamic>> bundles,
     required List<Map<String, dynamic>> products,
   }) async {
+    print("req");
+    print(paymentId);
+    print(currency);
+    print(paymentMethod);
+    print(stripePaymentMethod);
+    print(idUserDirection);
+    print(bundles);
+    print(products);
+
     final res = await httpService.request(
       '/order/pay/stripe',
       'POST',
@@ -31,7 +40,7 @@ class OrderDatasourceImpl implements IOrderDatasource {
         "currency": currency,
         "paymentMethod": paymentMethod,
         "stripePaymentMethod": stripePaymentMethod,
-        "address": address,
+        "idUserDirection": idUserDirection,
         "bundles": bundles,
         "products": products,
       },
@@ -51,10 +60,6 @@ class OrderDatasourceImpl implements IOrderDatasource {
       (json) => (json['orders'] as List)
           .map((order) => OrderItem.fromJson(order))
           .toList(),
-      queryParameters: {
-        'page': page,
-        'perpage': perPage,
-      },
     );
 
     print("res de fetch all orders");
@@ -84,5 +89,20 @@ class OrderDatasourceImpl implements IOrderDatasource {
     if (!res.isSuccessful()) throw Exception(res.getError());
 
     return res.getValue();
+  }
+
+  @override
+  Future<void> reportOrder(
+      {required String orderId, required String description}) async {
+    final res = await httpService.request(
+      '/order/report',
+      'POST',
+      (json) => true,
+      body: {
+        "orderId": orderId,
+        "description": description,
+      },
+    );
+    if (!res.isSuccessful()) throw Exception(res.getError());
   }
 }

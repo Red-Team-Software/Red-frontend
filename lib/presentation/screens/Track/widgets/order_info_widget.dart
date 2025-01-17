@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 
 class OrderInfoWidget extends StatelessWidget {
   final String orderId;
+  final String orderCreatedDate;
+  final double totalAmount;
 
-  const OrderInfoWidget({super.key, required this.orderId});
+  const OrderInfoWidget({
+    super.key,
+    required this.orderId,
+    required this.orderCreatedDate,
+    required this.totalAmount,
+  });
 
   @override
   Widget build(BuildContext context) {
-    // Aquí podrías obtener la información de la orden desde el backend
-    // Usaré valores ficticios para ilustrar el ejemplo.
-    String orderCreatedDate = "2024-12-06";
-    String orderReceivedDate = "2024-12-08";
-    double totalAmount = 61.27;
-
     return Card(
       elevation: 4.0,
       child: Padding(
@@ -23,9 +24,6 @@ class OrderInfoWidget extends StatelessWidget {
             Text('Order ID: $orderId', style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 8),
             Text('Created Date: $orderCreatedDate',
-                style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 8),
-            Text('Estimated Delivery: $orderReceivedDate',
                 style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 8),
             Text('Total Amount: \$$totalAmount',

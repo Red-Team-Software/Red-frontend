@@ -198,6 +198,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   void _onSelectPaymentMethod(
       SelectPaymentMethod event, Emitter<CheckoutState> emit) {
     emit(state.copyWith(selectedPaymentMethod: event.paymentMethod));
+    print("Selected payment method: ${state.selectedPaymentMethod?.name}");
   }
 
   void _onProceedToCheckout(
@@ -213,7 +214,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       currency: event.currency,
       paymentMethod: event.paymentMethod,
       stripePaymentMethod: event.stripePaymentMethod,
-      address: event.address,
+      idUserDirection: event.address,
       bundles: event.bundles,
       products: event.products,
     );
@@ -241,12 +242,9 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   void _onRemoveAddress(
       RemoveAddressEvent event, Emitter<CheckoutState> emit) async {
     emit(state.copyWith(isProcessing: true));
-    final res = await deleteUserDirectionUseCase
-        .execute(
-      DeleteUserDirectionDto(
-        id: event.address.id,
-      )
-  );
+    final res = await deleteUserDirectionUseCase.execute(DeleteUserDirectionDto(
+      id: event.address.id,
+    ));
 
     if (res.isSuccessful()) {
       final resDirections = await getUserDirectionsUseCase.execute(null);

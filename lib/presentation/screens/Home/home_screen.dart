@@ -222,7 +222,7 @@ class HomeScreenView extends StatelessWidget {
                       const SizedBox(
                         height: 24,
                       ),
-                      HomeBannerCarrousel(),
+                      // HomeBannerCarrousel(),
                       const SizedBox(
                         height: 24,
                       ),
