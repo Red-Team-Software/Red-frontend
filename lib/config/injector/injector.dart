@@ -28,6 +28,7 @@ import 'package:GoDeli/features/categories/application/all-categories/categories
 import 'package:GoDeli/features/categories/domain/repositories/categories_repository.dart';
 import 'package:GoDeli/features/categories/infraestructure/datasources/categories_datasource_impl.dart';
 import 'package:GoDeli/features/categories/infraestructure/repositories/categories_repository_impl.dart';
+import 'package:GoDeli/features/common/application/bloc/select_datasource_bloc_bloc.dart';
 import 'package:GoDeli/features/common/infrastructure/http_service.dart';
 import 'package:GoDeli/features/common/infrastructure/dio_http_service_impl.dart';
 import 'package:GoDeli/features/order/domain/repositories/order_repository.dart';
@@ -77,16 +78,23 @@ import 'package:GoDeli/features/card/infraestructure/repositories/card_repositor
 final getIt = GetIt.instance;
 
 class Injector {
+
+  
   Future<void> setUp() async {
+
+    final selectDatasourceBloc = SelectDatasourceBloc();
+
+
+    await Environment.initEnvironment(selectDatasourceBloc);
+
     //? Iniciando modulo de Stripe
 
-    print('Stripe publishable key: ${Environment.stripePublishableKey}');
-    Stripe.publishableKey = Environment.stripePublishableKey;
-    await Stripe.instance.applySettings();
+    // Stripe.publishableKey = Environment.getStripePublishableKey();
+    // await Stripe.instance.applySettings();
 
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();
-    getIt.registerSingleton<IHttpService>(httpService);
+    // getIt.registerSingleton<IHttpService>(httpService);
 
     final isarLocalStorage = IsarLocalStorage();
     getIt.registerSingleton<IsarLocalStorage>(isarLocalStorage);
@@ -234,6 +242,8 @@ class Injector {
           payPagoMovilUseCase: payPagoMovilUseCase,
           payZelleUseCase: payZelleUseCase,
         ));
+    getIt.registerSingleton<IHttpService>(httpService);
+    getIt.registerSingleton<SelectDatasourceBloc>(selectDatasourceBloc);
 
     //? inicializando las dependencias de modulo tarjeta
     final ICardDatasource cardDatasource =

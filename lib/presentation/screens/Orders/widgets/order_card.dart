@@ -84,7 +84,7 @@ class OrderCard extends StatelessWidget {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: orderItem.orderState == 'ongoing || CREATED'
+                color: orderItem.orderState == 'ongoing' || orderItem.orderState ==  'CREATED'
                     ? Colors.green
                     : (orderItem.orderState == 'delivered'
                         ? Colors.black
