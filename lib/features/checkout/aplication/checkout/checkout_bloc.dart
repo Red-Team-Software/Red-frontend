@@ -226,7 +226,6 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
       final order = result.getValue();
       emit(state.copyWith(isProcessing: false));
       onOrderCreated(order);
-      event.context.read<CartBloc>().add(ClearCart());
     } else {
       emit(state.copyWith(
           isProcessing: false,

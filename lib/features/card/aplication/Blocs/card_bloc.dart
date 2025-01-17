@@ -30,8 +30,16 @@ class CardBloc extends Bloc<CardEvent, CardState> {
     emit(CardLoadInProgress());
     try {
       final result = await cardRepository.addCard(idCard: event.idCard);
+
+      print("Resultado de l add card bloc");
+      print(result.isSuccessful());
+
       if (result.isSuccessful()) {
         final fetchResult = await cardRepository.fetchAllCards();
+        print("Resultado de l add card trayendo bloc");
+        print(fetchResult.isSuccessful());
+        print(fetchResult.getValue());
+
         if (fetchResult.isSuccessful()) {
           emit(CardLoadSuccess(cards: fetchResult.getValue()));
         } else {

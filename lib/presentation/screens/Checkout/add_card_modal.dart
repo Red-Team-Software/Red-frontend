@@ -139,15 +139,8 @@ class _AddCardModalState extends State<AddCardModal> {
             BlocListener<CardBloc, CardState>(
               listener: (context, state) {
                 if (state is CardLoadInProgress) {
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) =>
-                        const Center(child: CircularProgressIndicator()),
-                  );
                 } else {
                   Navigator.pop(context);
-
                   if (state is CardLoadSuccess) {
                     CustomSnackBar.show(
                       context,
@@ -176,11 +169,9 @@ class _AddCardModalState extends State<AddCardModal> {
                     ),
                     minimumSize: const Size(200, 50),
                   ),
-                  child: Text(
-                    "Save Card",
-                    style: textStyles.displaySmall?.copyWith(
-                      color: colors.primary)
-                  ),
+                  child: Text("Save Card",
+                      style: textStyles.displaySmall
+                          ?.copyWith(color: colors.primary)),
                 ),
               ),
             ),

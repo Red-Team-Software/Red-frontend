@@ -78,19 +78,15 @@ import 'package:GoDeli/features/card/infraestructure/repositories/card_repositor
 final getIt = GetIt.instance;
 
 class Injector {
-
-  
   Future<void> setUp() async {
-
     final selectDatasourceBloc = SelectDatasourceBloc();
-
 
     await Environment.initEnvironment(selectDatasourceBloc);
 
     //? Iniciando modulo de Stripe
 
-    // Stripe.publishableKey = Environment.getStripePublishableKey();
-    // await Stripe.instance.applySettings();
+    Stripe.publishableKey = Environment.getStripePublishableKey();
+    await Stripe.instance.applySettings();
 
     //? inicializando las dependencias de modulo comun
     final httpService = DioHttpServiceImpl();

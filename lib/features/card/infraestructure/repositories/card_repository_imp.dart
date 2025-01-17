@@ -12,9 +12,10 @@ class CardRepositoryImpl implements ICardRepository {
   Future<Result<void>> addCard({required String idCard}) async {
     try {
       await datasource.addCard(idCard: idCard);
-      return Result.success(null);
-    } catch (e) {
+      return Result.success("a");
+    } catch (e, staacktrace) {
       print("Error adding card: $e");
+      print("Stacktrace: $staacktrace");
       return Result.makeError(Exception(e));
     }
   }
@@ -24,8 +25,9 @@ class CardRepositoryImpl implements ICardRepository {
     try {
       final cards = await datasource.fetchAllCards();
       return Result.success(cards);
-    } catch (e) {
+    } catch (e, stactrace) {
       print("Error fetching cards: $e");
+      print("Stacktrace: $stactrace");
       return Result.makeError(Exception(e));
     }
   }
