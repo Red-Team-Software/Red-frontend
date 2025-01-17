@@ -16,7 +16,8 @@ class ProductBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  final language =  context.watch<LanguagesCubit>().state.selected.language;
+    final language =  context.watch<LanguagesCubit>().state.selected.language;
+    final textStyles = Theme.of(context).textTheme;
 
     return SafeArea(
       child: Scaffold(

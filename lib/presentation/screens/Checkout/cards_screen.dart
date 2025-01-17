@@ -131,7 +131,7 @@ class CardCatalogItem extends StatelessWidget {
         margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: isSelected ? colors.primary : Colors.white,
+          color:  Colors.white,
           borderRadius: BorderRadius.circular(12.0),
           border: Border.all(
             color: isSelected ? Colors.blue : Colors.grey.shade300,

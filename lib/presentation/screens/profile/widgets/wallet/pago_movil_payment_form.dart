@@ -4,6 +4,7 @@ import 'package:GoDeli/features/wallet/application/bloc/wallet_bloc.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet/wallet_custom_close_button.dart';
+import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,13 +37,12 @@ class PagoMovilPaymentForm extends StatelessWidget {
           child: BlocListener<WalletBloc, WalletState>(
             listener: (context, state) {
               if (state is PayingSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Payment successful'),
-                  backgroundColor: colors.primary,
-                ),
+              CustomSnackBar.show(
+                context,
+                message: 'Payment successful',
+                type: SnackBarType.success,
+                title: 'Success',
               );
-              print('PagoMovilPaymentForm: ${state.amount}');
               Navigator.pop(context, state.amount);
               context.read<WalletBloc>().add(Reset());
             }

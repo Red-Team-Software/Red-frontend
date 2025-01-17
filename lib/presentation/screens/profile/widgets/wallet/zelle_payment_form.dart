@@ -3,6 +3,7 @@ import 'package:GoDeli/features/wallet/application/bloc/wallet_bloc.dart';
 import 'package:GoDeli/presentation/core/translation/translation_widget.dart';
 import 'package:GoDeli/presentation/screens/languages/cubit/languages_cubit.dart';
 import 'package:GoDeli/presentation/screens/profile/widgets/wallet/wallet_custom_close_button.dart';
+import 'package:GoDeli/presentation/widgets/snackbar/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class ZellePaymentForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
     final textStyles = Theme.of(context).textTheme;
-    final language =  context.watch<LanguagesCubit>().state.selected.language;
+    final language = context.watch<LanguagesCubit>().state.selected.language;
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -33,12 +34,13 @@ class ZellePaymentForm extends StatelessWidget {
         child: BlocListener<WalletBloc, WalletState>(
           listener: (context, state) {
             if (state is PayingSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: const Text('Payment successful'),
-                  backgroundColor: colors.primary,
-                ),
+              CustomSnackBar.show(
+                context,
+                message: 'Payment successful',
+                type: SnackBarType.success,
+                title: 'Success',
               );
+              
               Navigator.pop(context, state.amount);
               context.read<WalletBloc>().add(Reset());
             }
@@ -77,13 +79,10 @@ class ZellePaymentForm extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           TranslationWidget(
-                            message: 'Zelle Payment',
-                            toLanguage: language,
-                            builder: (translated) => Text(
-                              translated,
-                              style: textStyles.displayMedium
-                            )
-                          ),
+                              message: 'Zelle Payment',
+                              toLanguage: language,
+                              builder: (translated) => Text(translated,
+                                  style: textStyles.displayMedium)),
                           TextFormField(
                             controller: _amountController,
                             decoration: InputDecoration(

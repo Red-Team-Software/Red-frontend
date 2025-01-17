@@ -170,12 +170,13 @@ class _LoginComponentState extends State<LoginComponent> {
 
         // Login Button
         Align(
-          alignment: Alignment.bottomRight,
-          child: Row(
+          alignment: Alignment.center,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Switch team: ", style: textStyles.bodyLarge),
+              Text("Switch team`", style: textStyles.displayMedium),
               Switch(
+
                value: dataSourceBloc.state.isRed ? false : true,
                 onChanged: (value) {
                   setState(() {
